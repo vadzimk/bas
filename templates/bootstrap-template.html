@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello, Bootstrap Table!</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.12.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2.6.0/hint.min.css">
+    <!--    <link rel="stylesheet" href="assets/css/docs.min.css">-->
+    <!--    <link rel="stylesheet" href="assets/css/template.css?v=813">-->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <link href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table-locale-all.min.js"></script>
+
+    <!--Sticky header-->
+    <link href="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.css"
+          rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+    <!-- resizible columns -->
+<link rel="stylesheet" href="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css">
+
+<script src="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/resizable/bootstrap-table-resizable.min.js"></script>
+
+    <!--    Another plugin-->
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+    <style>
+        .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
+            min-width: 16em;
+        }
+
+        .too-big {
+            max-width: 10em; /* Customise it accordingly */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .narrow {
+            max-width: 5em;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="toolbar">
+    <button id="remove" class="btn btn-danger" disabled>
+        <i class="fa fa-trash"></i> Delete
+    </button>
+</div>
+{{ dataframe }}
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+<!--Markdown to html https://github.com/markedjs/marked -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!--Html to markdown  https://github.com/mixmark-io/turndown -->
+<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+
+<!--Markdown to text-->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+<script>
+
+    $("#table").attr({
+        // "data-card-view": "true", // card-view on load
+        "data-locale": "en-GB",
+        "data-toggle": "table",
+        "data-sticky-header": "true",
+        "data-toolbar": "#toolbar",
+        "data-search": "true",
+        // "data-show-refresh": "true",
+        "data-show-toggle": "true",
+        "data-show-fullscreen": "true",
+        "data-show-columns": "true",
+        "data-show-columns-toggle-all": "true",
+        "data-detail-view": "true",
+        "detail-view-by-click": "true",
+        "data-detail-formatter": "detailFormatter",
+        "data-card-view-detail-view-formatter": "detailFormatter",
+        "data-show-export": "true",
+        "data-click-to-select": "false",
+        "data-minimum-count-columns": "0",
+        "data-show-pagination-switch": "true",
+        "data-pagination": "true",
+        "data-id-field": "id",
+        "data-page-list": "[10, 25, 50, 100, all]",
+        "data-show-footer": "true",
+        "data-side-pagination": "client",
+        "data-resizable":"true",
+        // "data-response-handler": "responseHandler"
+    })
+
+</script>
+<script>
+    var $table = $('#table')
+    var $remove = $('#remove')
+    var selections = []
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function responseHandler(res) {
+        $.each(res.rows, function (i, row) {
+            row.state = $.inArray(row.id, selections) !== -1
+        })
+        return res
+    }
+
+    function detailFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+            if (key.startsWith('description')) {
+                html.push('<div><b>' + key + ':</b> ' + value + '</div>')
+            }
+        })
+        return html.join('')
+
+    }
+
+    // https://stackoverflow.com/questions/1291942/what-does-javascriptvoid0-mean
+    // https://examples.bootstrap-table.com/#welcome.html
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="like" href="javascript:void(0)" title="Like">',
+            '<i class="fa fa-heart"></i>',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '<i class="fa fa-trash"></i>',
+            '</a>'
+        ].join('')
+    }
+
+    window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row))
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            })
+        }
+    }
+
+
+    function totalPriceFormatter(data) {
+        var field = this.field
+        return '$' + data.map(function (row) {
+            return +row[field].substring(1)
+        }).reduce(function (sum, i) {
+            return sum + i
+        }, 0)
+    }
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            height: "80vh",
+            locale: $('#locale').val(),
+            columns: [
+                {
+                    field: 'checkbox',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: () => 'T'
+                },
+                {
+                    field: 'company_rating',
+                    title: 'company_rating',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    class: 'narrow',
+                    footerFormatter: () => ''
+                },
+                {
+                    field: 'company_name',
+                    title: 'company_name',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    footerFormatter: (data) => data.length
+
+                }, {
+                    field: 'multiple_candidates',
+                    title: 'multiple_candidates',
+                    align: 'left',
+                    class: 'narrow',
+                    valign: 'middle',
+
+                    sortable: true,
+                    footerFormatter: (data) => data.length
+                }, {
+                    field: 'date_posted',
+                    title: 'date_posted',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'title',
+                    title: 'title',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'company_location',
+                    title: 'company_location',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'salary',
+                    title: 'salary',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'estimated_salary',
+                    title: 'estimated_salary',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'job_type',
+                    title: 'job_type',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'qualifications',
+                    title: 'qualifications',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'description_text',
+                    title: 'Description',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    class: 'too-big',
+                    // formatter: (value) =>{
+                    //     desciption = marked.parse(value)
+                    //     return desciption
+                    // }
+
+                }, {
+                    field: 'benefits',
+                    title: 'benefits',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'hiring_insights',
+                    title: 'hiring_insights',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'company_indeed_profile_url',
+                    title: 'Company Profile',
+                    align: 'left',
+                    valign: 'middle',
+
+                    formatter: (value, row, index) => (`<button><a href=${value} target="_blank">Company Profile</a></button>`)
+                }, {
+                    field: 'url',
+                    title: 'Job Url',
+                    align: 'left',
+                    valign: 'middle',
+
+                    formatter: (value, row, index) => (`<button><a href=${value} target="_blank">Job Post</a></button>`),
+                    detailFormatter: ()=> (`<button><a href=${value} target="_blank">Job Post</a></button>`),
+
+                }
+            ]
+
+        })
+
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+                // save your data, here just save the current page
+                selections = getIdSelections()
+                // push or splice the selections if you want to save all data selections
+            })
+        $table.on('all.bs.table', function (e, name, args) {
+            console.log(name, args)
+        })
+        $remove.click(function () {
+            var ids = getIdSelections()
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            })
+            $remove.prop('disabled', true)
+        })
+    }
+
+    $(function () {
+        initTable()
+
+        $('#locale').change(initTable)
+    })
+</script>
+</body>
+</html>

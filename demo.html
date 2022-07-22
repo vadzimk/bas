@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello, Bootstrap Table!</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@5.12.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2.6.0/hint.min.css">
+    <!--    <link rel="stylesheet" href="assets/css/docs.min.css">-->
+    <!--    <link rel="stylesheet" href="assets/css/template.css?v=813">-->
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <link href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table-locale-all.min.js"></script>
+
+    <!--Sticky header-->
+    <link href="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.css"
+          rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+    <!-- resizible columns -->
+<link rel="stylesheet" href="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css">
+
+<script src="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/resizable/bootstrap-table-resizable.min.js"></script>
+
+    <!--    Another plugin-->
+    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+    <style>
+        .bootstrap-table .fixed-table-container .table tbody tr .card-view .card-view-title {
+            min-width: 16em;
+        }
+
+        .too-big {
+            max-width: 10em; /* Customise it accordingly */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .narrow {
+            max-width: 5em;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="toolbar">
+    <button id="remove" class="btn btn-danger" disabled>
+        <i class="fa fa-trash"></i> Delete
+    </button>
+</div>
+<table border="0" class="dataframe" id="table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>company_rating</th>
+      <th>company_name</th>
+      <th>multiple_candidates</th>
+      <th>date_posted</th>
+      <th>title</th>
+      <th>company_location</th>
+      <th>salary</th>
+      <th>estimated_salary</th>
+      <th>job_type</th>
+      <th>qualifications</th>
+      <th>description_text</th>
+      <th>benefits</th>
+      <th>hiring_insights</th>
+      <th>company_indeed_profile_url</th>
+      <th>url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4</th>
+      <td>4.4</td>
+      <td>BairesDev</td>
+      <td></td>
+      <td>5 days ago</td>
+      <td>FrontEnd Developer</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $92.9K - $118K a year</td>
+      <td></td>
+      <td></td>
+      <td>\nWho We are\n BairesDev is proud to be the fastest-growing company in America. With people in five continents and world-class clients, we are only as strong as the multicultural teams at the heart of our business. To consistently deliver the highest quality solutions to our clients, we only hire the Top 1% of the best talents and nurture their professional growth on exciting projects. \nWe are looking for FrontEnd Developers to work from home and join our Development team and participate in different projects made up of multicultural teams distributed throughout the world. We are looking for proactive people, team players passionate about programming in this language and oriented to provide the best experience to the end user. This is an excellent opportunity for those professionals looking to develop in one of the fastest growing companies in the industry!\n These developers will face numerous technical challenges, so they must use current technologies, get involved in the mobile world, web applications, devices, etc.\nMain Activities:\n\nDesign, build, and implement data-driven applications that consume service-oriented RESTful APIs to drive functionality and optimize front-end performance.\nProduce prototypes and effectively articulate design decisions.\nIdentify and resolve performance and scalability issues, troubleshoot problems, and improve product quality.\n\nWhat are we looking for:\n\n5+ years of experience in Front End / Javascript development.\nExperience and total understanding of the challenges of large-scale CSS code bases and CSS architecture (web application, e-commerce, etc.).\nExpertise in positioning with CSS, inheritance and specificity.\nFamiliarity with the concepts of basic programming, JavaScript and data structures, types of variables and idiosyncrasies.\nAccustomed to the use of debuggers and code tracking.\nSolid experience with Angular, Backbone, Node or React.\nAdvanced English level.\n\nHow we do make your work (and your life) easier:\n\n100% remote work.\nHardware setup for you to work from home.\n - Flexible hours - make your schedule.\n \n\nPaid parental leave, vacation &amp; holidays.\nDiverse and multicultural work environment.\nAn innovative environment with the structure and resources of a leading multinational.\nExcellent compensation — well above the market average.\nHere you can grow at the speed of your learning curve.\n\nOur people work remotely but with a consistent and robust culture that promotes diversity and teamwork. To continue being the leading software development company in Latin America, we want to ensure that every BairesDev member gets the best growth and professional development opportunities in a diverse, welcoming, and innovative environment.  Every BairesDev team member brings something unique to our company. We want to hear your story. Apply now!\n\n</td>
+      <td>Flexible schedule, Parental leave, Work from home</td>
+      <td>Posted 5 days ago</td>
+      <td>https://www.indeed.com/cmp/Bairesdev?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd73hrkc1l800&amp;fromjk=b053feb7bc5b25e8</td>
+      <td>https://www.indeed.com/rc/clk?jk=b053feb7bc5b25e8&amp;fccid=29707109e86166e5&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>4.4</td>
+      <td>BairesDev</td>
+      <td></td>
+      <td>5 days ago</td>
+      <td>React Native Developer Work</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $94.8K - $120K a year</td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\nWho We are\n BairesDev is proud to be the fastest-growing company in America. With people in five continents and world-class clients, we are only as strong as the multicultural teams at the heart of our business. To consistently deliver the highest quality solutions to our clients, we only hire the Top 1% of the best talents and nurture their professional growth on exciting projects. \nReact Native Developer at BairesDev\n Being a React Native Senior Developer in our Development Team is just like being a full-time problem solver. We expect your abilities to be a combination of experience, knowledge, and independence. Innovation is also at the heart of the BairesDev strategy. So, if you were willing to take on the most complex tasks and be a master of your tech stack, React Native Senior Developer, then you are probably one of those unique we’re looking for.  You will face numerous technical challenges, so you must use current technologies, get involved in the mobile world, web applications, devices, etc.\nWhat You’ll Do:\n\nBuild and Maintain features for our React Native-based iOS Apps.\nDeliver high quality, scalable and heavily tested software.\nWork on a cross-functional team, partnering across engineering, product, design, and business functions.\n\nHere’s what we are looking for:\n\n5+ years of experience in Front End development with strong skills in Javascript, CSS3 and HTML5.\nExperience with SQL and NoSQL Databases.\nExperience with Microservices and the Cloud.\nAdvanced algorithm knowledge.\nIT infrastructure knowledge.\nIntermediate agile methodologies management.\nStrong understanding of best practices, SOLID principles, CLEAN Code, and scalable solutions.\nDesign Patterns knowledge.\nExperience developing entire applications from scratch.\nExperience in automated tests, CI/CD pipelines.\nStrong experience with Version control.\nStrong experience with Unit testing, integration testing, and code coverage.\nAdvanced English level.\n\nHow we do make your work (and your life) easier:\n\n100% remote work.\nHardware setup for you to work from home.\n - Flexible hours - make your schedule.\n \n\nPaid parental leave, vacation &amp; holidays.\nDiverse and multicultural work environment.\nAn innovative environment with the structure and resources of a leading multinational.\nExcellent compensation — well above the market average.\nHere you can grow at the speed of your learning curve.\n\nOur people work remotely but with a consistent and robust culture that promotes diversity and teamwork. To continue being the leading software development company in Latin America, we want to ensure that every BairesDev member gets the best growth and professional development opportunities in a diverse, welcoming, and innovative environment.  Every BairesDev team member brings something unique to our company. We want to hear your story. Apply now!\n\n</td>
+      <td>Flexible schedule, Parental leave, Work from home</td>
+      <td>Posted 5 days ago</td>
+      <td>https://www.indeed.com/cmp/Bairesdev?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8nf2is9d801&amp;fromjk=ad9062fd8d0d8512</td>
+      <td>https://www.indeed.com/rc/clk?jk=ad9062fd8d0d8512&amp;fccid=29707109e86166e5&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>4.4</td>
+      <td>BairesDev</td>
+      <td></td>
+      <td>5 days ago</td>
+      <td>Software Developer Angular 2+ Work</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $94K - $119K a year</td>
+      <td></td>
+      <td></td>
+      <td>\nWho We are\n BairesDev is proud to be the fastest-growing company in America. With people in five continents and world-class clients, we are only as strong as the multicultural teams at the heart of our business. To consistently deliver the highest quality solutions to our clients, we only hire the Top 1% of the best talents and nurture their professional growth on exciting projects. \nWe are looking for Angular 2+ Developers to work from home and join our Development team and participate in different projects made up of multicultural teams distributed throughout the world. We are looking for proactive people, team players passionate about programming in this language and oriented to provide the best experience to the end user. This is an excellent opportunity for those professionals looking to develop in one of the fastest growing companies in the industry!\n These developers will face numerous technical challenges, so they must use current technologies, get involved in the mobile world, web applications, devices, etc.\nMain Activities:\n\nDevelop, code, test, and debug application programs of varying degree of complexity.\nCode user interfaces with the latest frontend technologies\nWork with business users to develop and implement acceptance tests to ensure that product meets customer requirements and expectations.\nEnsure high performance of all systems developed.\nCollaborate with business analysts, other developers, and test engineers on the team to produce high quality software that delivers business value and follows established design patterns and processes.\n\nWhat are we looking for:\n\n5+ years of experience in Angular 2+.\nExperience in developing applications using Angular/Java technology stack.\nSolid experience with HTML, CSS, and writing cross-browser compatible code.\nStrong knowledge of AJAX and JavaScript Dom manipulation Techniques.\nExperience with MSSQL and/or PostgresSQL\nExperience with React is a plus.\nAdvanced English level.\n\nHow we do make your work (and your life) easier:\n\n100% remote work.\nHardware setup for you to work from home.\n - Flexible hours - make your schedule.\n \n\nPaid parental leave, vacation &amp; holidays.\nDiverse and multicultural work environment.\nAn innovative environment with the structure and resources of a leading multinational.\nExcellent compensation — well above the market average.\nHere you can grow at the speed of your learning curve.\n\nOur people work remotely but with a consistent and robust culture that promotes diversity and teamwork. To continue being the leading software development company in Latin America, we want to ensure that every BairesDev member gets the best growth and professional development opportunities in a diverse, welcoming, and innovative environment.  Every BairesDev team member brings something unique to our company. We want to hear your story. Apply now!\n\n</td>
+      <td>Flexible schedule, Parental leave, Work from home</td>
+      <td>Posted 5 days ago</td>
+      <td>https://www.indeed.com/cmp/Bairesdev?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd7ohalemo800&amp;fromjk=a06dd473a6e698dc</td>
+      <td>https://www.indeed.com/rc/clk?jk=a06dd473a6e698dc&amp;fccid=29707109e86166e5&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>4.1</td>
+      <td>ITAC Solutions</td>
+      <td></td>
+      <td>Just posted</td>
+      <td>Web Developer</td>
+      <td>United States</td>
+      <td></td>
+      <td>Estimated $80.4K - $102K a year</td>
+      <td></td>
+      <td></td>
+      <td>\n\n  We are assisting a well-known organization here in Birmingham in their efforts to find a strong Web Developer!\n \n\n\n\n  We are looking for a Web Developer who follows clear-cut and complete specifications to perform a variety of web-based programming assignments requiring knowledge of established programming procedures and data processing requirements.\n \n\n\n\nJob duties &amp; requirements:\n\n\nASP.NET MVC5, ASP.NET WebAPI, C#, SQL Server Database design and implementation, JQuery, AND strong experience with a variety of JavaScript Frameworks.\n\n\nThe ideal candidate would have 3-5+ years of web development experience in a professional setting.\n\n\nMust have experience in the following JavaScript frameworks: Jquery, AngularJS &amp; Angular2, ReactJS, Ember, MeteorJS, Apache, Tomcat, etc\n\n\nDemonstrated expertise in data, application, and interface design\n\n\nExperience with web oriented user experience concepts and technologies: HTML5 &amp; CSS3, JQuery, AJAX, REST APIs, OOP.\n\n\nExperience with Microsoft development using Visual Studio, .NET Framework, C#, ASP.NET, MVC5, Razor, SQL Server, Entity Framework, and PowerShell.\n\n\nUnderstanding of distributed development and object-oriented programming techniques\n\n\nExcellent verbal and written communication\n\n\nCreative &amp; Analytical Thinking\n\n\nMulti-tasker &amp; Self-starter\n\n\nOrganized, detail oriented and a strong commitment towards the delivery of high quality products.\n\n\n\n\n  This is a direct hire opportunity. Looking for software developers are passionate about technology and continuously strive to provide solutions to their customers.\n \n\n\n\n#INDIT\n\n</td>
+      <td></td>
+      <td>Posted today</td>
+      <td>https://www.indeed.com/cmp/Itac-Solutions?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd9vp2h22t800&amp;fromjk=5056d4d3bad7a834</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CBcAKkMzvCCr3nbIFWZL1QEvzVdjPQKoc8nhQ-JuLQpxzqVVUHoHuUUuWjWLNA8-hyHh3tHAfwSctDZ1w8ipfD-w1q790c5H-rZ5B7NhS9dOmOIwfFZ_0T-zA8bDGhbwfhacL2ZcvyyhJdNrdoHaiDi52KmXdpkSLuwmUv3GUkOELKMsbHxTi_SgJoJrfIS2EV8SCJyWgWFnOisIzTYOjpdIrjkvOUd3UR3PLMU3iin9lg200lR_McK40mbuG4g9b11p6PRUhixPFt6iojMtGlyZxxaTnkZhdU9tKjF4WQp364gwJSQmGtzffeVqGOwBtibLuskOnnp-Yr4aSIzFwX21AOgtbsQaiIqnUtdi9FJn1OcyoRQPF4FXLrz9ouCPuMnrQXG86_81MJUDX8iqFGIQF55y9cWXqkfF_XBjOivfAX1iMp3m2yahO1-9wraZZqCr2iRwIvz0PTF2I02jxMSVOzVUWJ7QA8IuHK7Kx-DZZFEMtJ6mf9&amp;xkcb=SoAD-_M3bPSrAZUELB0KbzkdCdPP&amp;p=14&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>4.0</td>
+      <td>Deloitte</td>
+      <td></td>
+      <td>4 days ago</td>
+      <td>HX TrustID Front End/Full Stack Engineer</td>
+      <td>Los Angeles, CA 90013 (Downtown area)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>\nHX TrustID Front End/Full Stack Engineer\n\n At Deloitte Digital Marketing and Experience Services ( Hux ), we help marketers optimize their customer experience to win in the marketplace. We're combining data, decision making and real-time delivery to build and manage customer data ecosystems that enable our clients to acquire, engage and retain customers in a dramatically different and improved manner. With customer data as a foundation, we help clients deliver dynamic, personalized customer experiences across all engagement channels using machine learning and artificial intelligence. \n \n One of the solutions built upon Hux is HX TrustID . The HX TrustID ™ platform uses trust as a leading indicator to identify which actions, campaigns and strategies will help brands enhance trust with their customers. With HX TrustID , o rganizations can define brand permissions, marketing strategies, and long-term growth opportunities by understanding why customers feel the way they do about the brand . \n \n\nWork you'll do \n\n As aFull Stack Engineer,you'll support the development of market-leading acceleration technology using AI to automate the management of cross-channel communications with consumers for large clients. Part of this system integrates multiple terabytes of data across business units in a low latency and auto-scaled environment. Every day we're pushing the boundaries of what can be done in a truly polyglot and multi-cloud environment. Your responsibilities will include: \n \n\nParticipate in all phases of the software development life cycle \nAbility to work independently with high-level direction \nHelp design and implement functional requirements VueJS , ReactJS, Angular and Node JS. \nBuild reusable and scalable front-end components \nIntegrate front-end components into applications ( VueJS , ReactJS, Angular and Node JS ) \nExperience in deploying and maintaining enterprise-scale python applications in production / Cloud Platforms (AWS, GCP or AZURE) \nBuild efficient back-end features in Python / C# / Java\n Experience of working in Agile and using Test Driven Development (TDD) \nManage testing and bug fixes \nPrepare technical documentation \nCollaborate with UX/UI designers to implement design into the code\n Coach junior team members \n\n\nQualifications \n\n\nRequired: \n\n\n6 + years of experience working with fronted technologies in Vue.js, Angular, React, Nodejs , HTML/CSS, JS \n6 + years of experience working on developing web or mobile applications, strong knowledge on working with blueprints, reusable and scalable design, on best in class application development frameworks \nJavaScript libraries like Handlebars, jQuery, Next.js etc. will be added advantage. \nExperience using uid grids, and developing responsive/adaptive websites using Bootstrap etc. \nHands-on experience working with client-side templating languages like Handlebars, Mustache , Knockout, etc. \nFamiliarity of working with frontend build systems and automating the same using Grunt / Gulp / Webpack is a plus \nHands-on experience working with TDD in JS with the help of frameworks like Jasmine, Mocha, Karma etc . \nHands-on experience working with server-side JavaScript frameworks based on Node.js is a big plus \n4+ years of experience building applications backend and microservices in Python, C# or Dot Net Core Assembly or Core Java or Java Enterprise Applications. \nExperience with major public Kcloud offerings and how-to solution designs that are built around these technologies (AWS, Azure, Google Cloud Platform, and similar) \n3 years relevant experience in highly available, scale-able, multi-tenant and resilient architectures \nExperience designing data structures and relational databases, SQL/NO SQL -structured data \nMust be legally authorized to work in the United States without the need for employer sponsorship, now or at any time in the future. \nAbility to travel up to 30%, on average, based on the work you do and the clients and industries/sectors you serve. \nBachelor's Degree or equivalent and relevant experience in Computer Science, Mathematics, and Machine Learning. \n\n\nPreferred: \n\n\nAwareness of wider micro-service ecosystem - 3rd party libraries, tooling, etc. \nExperience in deploying and maintaining enterprise-scale applications in production using CI/CD pipelines. \nAdvanced understanding of multi-threading applications against SQL and No-SQL database engines \nExperience with low-latency, high-throughput web-services (1,000s of requests per second) \nExperience with large dataset's and memory management (Over 1 billion records) \n\n\nNice to have: \n\n\nContinuous integration &amp; deployment (currently lives in TechOps) \nTo App Exchanges \nTo higher environments \nSecurity testing \nData security at REST and in transit \nPenetration testing \n\n\nYou Get Extra Points for : \n\n\nDegrees relevant to Computer Science, Mathematics, and Machine Learning· \nExperience with Machine Learning (especially NLP and deep learning) \nRelated tools (such as TensorFlow , Pytorch , and Sci-kit Learn). \nExperience using big data analytics platforms such as Dask or Apache Spark \nExperience with additional programming languages such as Scala, C#.\n Experience with API design and microservice architectures · \n\n\nSuccessful skill sets for this role are: \n\n\nEager to work with fellow developers, user experience designers, and product owners \n\n\nLead by example, sharing freely and emphasizing transparency in decision making \nBuild your teams' collective ability via collaborative techniques like pair-programming and white board design sessions \nContinuously learn and improve, and constantly explore new languages, tools, and techniques \nTreat challenges as opportunities to advance your understanding \nYou are an early adopter, and an inquisitive, critical thinker, always seeking to expand your knowledge and experience \nYou know that many heads and a diversity of opinions make the best decisions\n You have the confidence to question unclear requirements and make technical decisions independently if initial assumptions are proved false. \nYou seek to understand the business-level problems your work is addressing as well as the technical requirements. \n\n\nThe team \n\n\nAdvertising, Marketing &amp; Commerce \n\n Our Advertising, Marketing &amp; Commerce team focuses on delivering marketing and growth objectives aligned with our client's brand values for measurable business growth. We do this by creating content, communications, and experiences that engage and inspire their customers to act. We implement and operate the technology platforms that enable personalized content, commerce and marketing user-centric experiences. In doing so, we transform our clients marketing and engagement operations into modern, data-driven, creatively focused organizations. Our team brings deep experience in creative and digital marketing capabilities, many from our Digital Studios. \n \n We serve our clients through the following types of work: \n \n\nCross-channel customer engagement strategy, design and development \n( web , mobile, social, physical) \neCommerce strategy, implementation and operations \nMarketing Content and digital asset management solutions \nMarketing Technology and Advertising Technology solutions \nMarketing analytics implementation and operations\n Advertising campaign ideation, development and execution \nAcquisition and engagement campaign ideation, development and execution \nAgile based, design-thinking, user-centric, empirical projects that accelerate results \n\n #LI-MV1\n \n #AHBV\n</td>
+      <td>Opportunities for advancement</td>
+      <td>Posted 4 days ago</td>
+      <td>https://www.indeed.com/cmp/Deloitte?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8lpvkmcg800&amp;fromjk=6310d5dd70d8bf47</td>
+      <td>https://www.indeed.com/rc/clk?jk=6310d5dd70d8bf47&amp;fccid=9e215d88a6b33622&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>4.0</td>
+      <td>Deloitte</td>
+      <td></td>
+      <td>10 days ago</td>
+      <td>Web Application Developer - Cyber</td>
+      <td>Los Angeles, CA 90013 (Downtown area)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>\nWeb Application Developer - Cyber\n\n Are you interested in improving the cyber and organizational risk profiles of leading companies? Do you want to be involved in technical project management and cyber security solutions for our clients? Are you excited about shaping security requirements and solutions for clients based on rapidly changing technology advancements, emerging regulatory and compliance requirements, and the fast-paced nature of security threats?\n \n If yes, then Deloitte's Hybrid Operate team could be the place for you! Deloitte is looking for a top-performing Web Developer to help grow its business within the Hybrid Operate Cyber &amp; Strategic Risk Practice. Transparency, innovation, collaboration, sustainability: these are the hallmark issues shaping cyber initiatives today. Deloitte's Hybrid Operate business is passionate about making an impact with lasting change for our clients. Delivering our industry leading services requires fresh thinking and a creative approach. We collaborate with teams from across our organization in order to bring the full breadth of Deloitte, its commercial and public sector expertise, to best support our clients. Our aspiration is to be the undisputed integrated cyber security services leader and managed services provider helping to transform the cyber services marketplace organizations proactively manage their cyber risk and governance. Our team is client focused and mission driven. As a Web Developer, you'll work with our diverse team of passionate professionals to help solve some of today's toughest challenges to enable our clients to achieve business growth and manage risk. \n \n\nResponsibilities:\n\n\n\n\nBe responsible for implementing patch management, version upgrades, and deploying new module releases. \nDevelop responsive web front-end code using React to both rapidly create responsive web apps to meet end users' needs and create a modularized set of front-end components that make it easier to maintain and reuse for future capabilities and applications. Build applications quickly and efficiently to consume APIs and meet demanding performance and security requirements . \nBe a point of contact for cross-functional technical projects and programs. These include project/program execution, requirements gathering, technical execution and deployment. \nSupport platform and IT related needs, such as product updates and site administration. \n\n\nRequired Skills:\n\n\n\n\nExperience with GCP identity and access management modules, including Role Based Access Control (RBAC) feature development. \nExperience developing online web applications using React and/or Node.JS - JavaScript development. \nExperience with deployment tools to package and deploy components. \nExperience in both designing and developing platform components using Component Based Architectures. \nExpertise in full web stack development; creating and consuming REST APIs, developing reusable models, architecting for user experience. \nExpertise in tools, techniques and frameworks like event-drive architecture, Cloud Service Provider API-based driven services, and service orchestration. \nExperience performing SQL database development activities, implementing best practices, performance tuning, Object Relational mapping (ORM), and troubleshooting any database bottle necks. \n\n\nPreferred Qualifications\n\n\n\n\nProficiency with Google's Looker BI tool and LookML development. \nCertified in either of the leading Cloud platforms including AWS, Azure, and Google. \nBachelor's Degree in Computer Science, Information Management, related degree, or equivalent work experience. \n4-6 years of experience project managing, delivering technical solutions and interfacing with executive stakeholders. \n2-4 years of experience demonstrating technical client service in the Data Analytics space. \nDemonstrated excellent communication, written, presentation and problem-solving skills\n\n</td>
+      <td></td>
+      <td>Posted 10 days ago</td>
+      <td>https://www.indeed.com/cmp/Deloitte?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd7689jtd2800&amp;fromjk=50959896b83d5e11</td>
+      <td>https://www.indeed.com/rc/clk?jk=50959896b83d5e11&amp;fccid=9e215d88a6b33622&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>3.7</td>
+      <td>PRICE WATERHOUSE COOPERS</td>
+      <td></td>
+      <td>5 days ago</td>
+      <td>Modern Web Application Developer, Manager</td>
+      <td>Hybrid remote in Los Angeles, CA</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>\n A career in our Digital and Applications Design practice, within Application and Emerging Technology services, will provide you with a unique opportunity to help our clients identify and prioritise emerging technologies that can help solve their business problems. We help our clients design approaches to integrate new technologies, skills, and processes so they can get the most out of their technology investment and drive business results and innovation. Our team helps organisations align their business and operational requirements through the careful design of digital platforms and applications. You’ll help our clients with application optimisation, strategic integration of custom packaged solutions like Enterprise Resource Planning and Customer Relationship Management, and roadmap development.\n  To really stand out and make us fit for the future in a constantly changing world, each and every one of us at PwC needs to be a purpose-led and values-driven leader at every level. To help us achieve this we have the PwC Professional; our global leadership development framework. It gives us a single set of expectations across our lines, geographies and career paths, and provides transparency on the skills we need as individuals to be successful and progress in our careers, now and in the future.\n\n As a Manager, you'll work as part of a team of problem solvers, helping to solve complex business issues from strategy to execution. PwC Professional skills and responsibilities for this management level include but are not limited to:\n\n\n Develop new skills outside of comfort zone.\n Act to resolve issues which prevent the team working effectively.\n Coach others, recognise their strengths, and encourage them to take ownership of their personal development.\n Analyse complex ideas or proposals and build a range of meaningful recommendations.\n Use multiple sources of information including broader stakeholder views to develop solutions and recommendations.\n Address sub-standard work or work that does not meet firm's/client's expectations.\n Use data and insights to inform conclusions and support decision-making.\n Develop a point of view on key global trends, and how they impact clients.\n Manage a variety of viewpoints to build consensus and create positive outcomes for all parties.\n Simplify complex messages, highlighting and summarising key points.\n Uphold the firm's code of ethics and business conduct.\n\n\n Job Requirements and Preferences:  Basic Qualifications:  Minimum Degree Required: Bachelor Degree  Minimum Years of Experience: 5 year(s)  Preferred Qualifications:  Preferred Knowledge/Skills:\n Demonstrates a extensive- level of knowledge with, and/or a proven record of success as both an individual contributor and team member, bringing significant breadth and depth in architectural design and hands on delivery of software solutions. Specifically focused on technologies such as:\n\n Understanding Modern web application development (e.g. Angular, Node, React, Vue and other popular Javascript frameworks and libraries;\n Understanding API technologies and patterns (e.g. REST, GraphQL, or gRPC);\n Working experience of Cloud-based platforms and services (e.g. Google Cloud Platform, MS Azure, or AWS);\n Working with Modern Continuous integration/continuous deployment technologies (e.g. CodePipeline, CircleCI, Azure DevOps, etc.);\n Working experience with Unit testing through utilizing popular frameworks (e.g. Jest, Jasmine, Mocha, etc.);\n Understanding of Agile delivery methodologies;\n Learning rapidly and continuously taking advantage of new technologies, concepts and business models;\n Displaying the initiative to develop applications in a self-directed and self disciplined manner;\n Researching and evaluating emerging technologies and novel approaches in order to make enhancements;\n Recommending to enhance business processes and/or create competitive advantage to PwC;\n Working collaboratively with other developers, including participating in code reviews;\n Communicating effectively both verbally and written with project team members; and,\n Using robust analytic thinking to identify, debug, and resolve technical issues.\n\n At PwC, our work model includes three ways of working: virtual, in-person, and flex (a hybrid of in-person and virtual). Visit the following link to learn more: https://pwc.to/ways-we-work.\n \n PwC does not intend to hire experienced or entry level job seekers who will need, now or in the future, PwC sponsorship through the H-1B lottery, except as set forth within the following policy: https://pwc.to/H-1B-Lottery-Policy.\n \n All qualified applicants will receive consideration for employment at PwC without regard to race; creed; color; religion; national origin; sex; age; disability; sexual orientation; gender identity or expression; genetic predisposition or carrier status; veteran, marital, or citizenship status; or any other status protected by law. PwC is proud to be an affirmative action and equal opportunity employer.\n \n For positions based in San Francisco, consideration of qualified candidates with arrest and conviction records will be in a manner consistent with the San Francisco Fair Chance Ordinance.\n \n For positions in Colorado, visit the following link for information related to Colorado's Equal Pay for Equal Work Act: https://pwc.to/coloradoadvisorymanager.\n</td>
+      <td></td>
+      <td>Posted 5 days ago</td>
+      <td>https://www.indeed.com/cmp/Pwc-Canada?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8ijngbvd800&amp;fromjk=f451c191e8d1c1bf</td>
+      <td>https://www.indeed.com/rc/clk?jk=f451c191e8d1c1bf&amp;fccid=bc231debd1021588&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>3.7</td>
+      <td>Taboola</td>
+      <td></td>
+      <td>7 days ago</td>
+      <td>Frontend Engineer</td>
+      <td>Hybrid remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $111K - $140K a year</td>
+      <td></td>
+      <td></td>
+      <td>\nCurious about what it's like to work at the world's number 1 discovery platform as a Frontend Software Engineer? We're glad you asked!\n What is the key purpose of a Frontend Software Engineer?\n As a Frontend Software Engineer working with the Engineering team in Los Angeles, you will be tasked with creating web applications that are used at publishers around the world and provide real time analytics, topic insights, and homepage automation. This is a unique opportunity for you to work on a product used by everyone you know and that is deployed on countless websites across the globe with billions of users.\n What can be better than that?\n What skills and qualifications do I need?\n For this role it is essential that you have:\n\nBS/MS in Computer Science. May consider self taught individuals with previous development experience.\nAbility to think critically and to formulate solutions to problems in a clear, concise and timely manner.\nExperience with efficient core data structures usage, object oriented design and asynchronous programming.\nExperience with basic web development using HTML/HTML5, Cookies/Local Storage, CSS/CSS3, AJAX communication and DOM manipulation with JavaScript.\n\nNice to haves include:\n\nProjects or work experience with web application development using AngularJS, ReactJS or Vue.JS. Build and testing tool experience with Grunt, Webpack/Gulp, Babel or Jasmine.\nWorking knowledge or previous experience in API creation, design and data manipulation using Node JS or similar server side language is a plus.\n\nWhat will I be doing on a day-to-day basis?\n As a Frontend Engineer, you will:\n\nWork on frontend JavaScript based web applications.\nHandle visual, responsive implementation of features provided by our product team using Node JS, React JS, React Native and/or Google Chrome Extensions.\nLearn our agile SCRUM process, coding standards and business use cases.\nWork on projects alongside frontend and backend engineers from inception through to production release and user acceptance.\n\nWhy Taboola?\n\nIf you ask our employees what they love about Taboola they will tell you that here they are able to discover their best professional self, explore where they can grow to, and learn from and together with smart and talented people.\nWe work with some of the biggest names in the business. Our clients include USA Today, CBS News, Adidas, and NBC, to name just a few.\nTaboola LA offers generous health, medical and dental coverage, 401k matching, a fully-stocked kitchen, building parking, and various gym partnerships.\n\nSounds good, how do I apply?\n It's easy, submit your CV by clicking the "Apply" button below.\n Taboola is an equal opportunity employer and we value diversity in all forms. We are committed to creating an inclusive environment for all employees and believe such an environment is critical for success. Employment is decided on the basis of qualifications, merit, and business need.\n #LI-SJ1\n #LI-Hybrid\n</td>
+      <td>401(k), 401(k) matching, Dental insurance, Food provided, Health insurance</td>
+      <td>Posted 7 days ago</td>
+      <td>https://www.indeed.com/cmp/Taboola?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd6iq0jr73800&amp;fromjk=f32aea68ea9947e1</td>
+      <td>https://www.indeed.com/rc/clk?jk=f32aea68ea9947e1&amp;fccid=c869809b954e0ce1&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>3.6</td>
+      <td>CyberCoders</td>
+      <td></td>
+      <td>3 days ago</td>
+      <td>100% REMOTE - Senior Full Stack React Developer</td>
+      <td>Remote in Los Angeles, CA 90019+1 location</td>
+      <td>$150,000 - $225,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\n 100% REMOTE - Senior Full Stack React Developer \n \n  If you are a 100% REMOTE - Senior Full Stack React Developer with experience, please read on!\n  \n\nJob Title: 100% REMOTE - Senior Full Stack React Developer\n  \nJob Location: Work from Home\n  \nSalary: $150,000 - $225,000\n  \nRequirements: React, Full Stack, Front End\n \n Top Reasons to Work with Us\n\n   1. We are a property management software used by landlords and property managers in over 100 countries worldwide.\n   2. As a already profitable Start Up SaaS company with $10M in funding, 3 offices worldwide, and tens of thousands of units being managed, we are one of the fastest growing prop-tech companies.\n   3. You will have the chance to work on exciting new development projects with a talented team.\n \n What You Will Be Doing\n\nHelp build new features into the existing product, and optimize existing pages.\nHelp discover, diagnose, and fix any bugs or issues.\nWork with the design team to ensure everything matches our brand, is responsive, and works perfectly.\nRespond and troubleshoot any downtime events and create systems and procedures to prevent them from happening.\nBuild automated QA tests to run before deploying to production.\nHelp lead projects, build our dev team, and mentor junior developers.\n\n What You Need for this Position\n\n5+ years of development experience\n2+ years working with advanced React JS platforms\nExpert in working with scrum, keeping track of your sprints in Jira, and completing everything on time\n\n Nice to Have:\n \n\nExperience building dev teams and leading and managing projects from scratch.\nWorked for a SaaS startup before where you learned to be agile and move fast.\nBuilt your own application from scratch (or did majority of the work) and can show a working concept, or anything in production.\nExperience working with node JS, mongo DB, or MERN stack\n\n What's In It for You\n\nCompetitive base (150k-225k)\nUnlimited PTO\n401k with 4% match\nHealth insurance reimbursement \nCompany card expense for business expenses \nGreat equipment\n\n\n   So, if you are a 100% REMOTE - Senior Full Stack React Developer with experience, please apply today!\n \n\n   Colorado employees will receive paid sick leave. For additional information about available benefits, please contact Parker Graham\n \n\nApplicants must be authorized to work in the U.S.\n\nCyberCoders, Inc is proud to be an Equal Opportunity Employer\n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, disability, protected veteran status, or any other characteristic protected by law. \n \n\nYour Right to Work – In compliance with federal law, all persons hired will be required to verify identity and eligibility to work in the United States and to complete the required employment eligibility verification document form upon hire. \n \n CyberCoders will consider for Employment in the City of Los Angeles qualified Applicants with Criminal Histories in a manner consistent with the requirements of the Los Angeles Fair Chance Initiative for Hiring (Ban the Box) Ordinance.\n</td>
+      <td>401(k), 401(k) 4% Match, 401(k) matching, Health insurance, Paid sick time, Unlimited paid time off</td>
+      <td>Posted 3 days ago</td>
+      <td>https://www.indeed.com/cmp/Cybercoders?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd7o2mj5lu800&amp;fromjk=ed9bbf780aed7be9</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CpFJQzrgRR8WqXWK1qKKEqALWJw739KlKqr2H-MSI4eoBlI4EFrmor2FYZMP3muM0MAK12PrKEhQbSa55uONJnoOymdZDA4BH9MR9zuFqlb6OdvojYTRuYnbhqRo21z4svy8dvUNJTjRzGifFZ7nlruplUs-Bzz4DeiNBopLZSzav97ieSfEsoArb_3LiD220MyOO9vPmwu8FFWpKXUdXgxwSfRXGwsYCKrSmXK2YgBJrWSwWGuSCQDL7a-VcHO7ZXP0XLcZfIG2pJk3o_FSZtly-JYitnw4vjU1l5dMBC8s5Ttup-uIXAaqwcojiSYUGs33aZn0zniCHLmzU1qRaXkB4lQKUVleyfgyBBJEMGysSvH7z_8cboY45ZA6KKeA8XW5Y6Pm6Sns35MPKtxSbix0U4omO_KqgCvdapQl8G1JafIKlOYyy40UZvai4IdABFq3t7lb2XWREYUn7gOqaUf5xduSDWwC3peax_aOJthPxRIVTjpDHFcZdXsEhoygdEDhmK7UJM_BXfjPUDWzrIlNXfqRunFfekV_YgRKvxO1l2qJLhrxyuhZgDvzKoWxOct6ChCkswkv1qbLnoSDj4NNeF7su34MDzrHCtNwlsgm5VYAYu8LTghNp2gsbK7fzRjCps2xfslskAInZjna2nkywU-fur4NPt8thqJ3kMyuz9oJRdxjTZGqHaeoDJPwAtO8GrZPnmCHrBXEgZifEnx6ktK9UpolRpR42L5iF51ts0fhTSRMtgD0kLKykvg33iacGfgPsNSFeNKn33GdH0B2lIhgzHgeIEyTj6_OVRU5PDX_JpfdKhpgadDGdgXMTVipKxWiXLmqfGUEKnpygS8bg6vlLs8m39xQk4DAoq7XI4iInNBRW341mKpUdxkWdklX3mS1PQm4bHv1KOBfIsfScKyR1PlPVPn6XMtrvJnZBqpq6knN7Q4NhHLpB9Nf9KzUcCIDFhxRqguocbzhGY14L78oBQt7b8_xjPEm9JD_HIrztNL19EZtfQ2i_GoAU=&amp;xkcb=SoBR-_M3bPSUqpRRlZ0NbzkdCdPP&amp;p=5&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.6</td>
+      <td>CyberCoders</td>
+      <td></td>
+      <td>3 days ago</td>
+      <td>Front End Engineer</td>
+      <td>Los Angeles, CA 90012</td>
+      <td>$150,000 - $200,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\n Front End Engineer \n \n  If you are a Front End Engineer or Back End Engineer with experience, please read on!\n  \n We are an established E-Commerce Company valued at $1.4 Billion dollars with annual revenue of over $200 million. As we grow our team, we are looking for passionate people who want to build long-term careers and play an important role in the development of our company. \n  \n We are a Ruby and Node.js shop in the process of transitioning our platform from completely using Shopify to one that uses Shopify as a payment processing and order processing platform. Looking for someone who can hit the ground running to help evolve and improve our base stack.\n \n Top Reasons to Work with Us\n\nExtremely Profitable Ecommerce Medical Apparel Company!\nBacked by former CEO of Lululemon and former Blackstone Partner!\n\n What You Will Be Doing\n\nWork as an engineer on projects with a small team or independently as we grow\nBuild scalable, maintainable, and performant backend services\nBuild and maintain services that help us integrate and aggregate core e-commerce data\nImprove our operational efficiency by automating core processes\nProvide clear and constructive feedback via code reviews\n\n What You Need for this Position\n\n   Required: \n  \n\nNode.js Expertise\nJavaScript \nReact\nShopify/BigCommerce \n\n Nice to Have: \n  \n\nRuby on Rails \nREST API\nSQL\nDocker, Terraform, Kubernetes\n\n\n What's In It for You\n\nCompetitive Compensation Contingent On Experience \n100% Remote Opportunity \nMedical, dental, vision, and life insurance\n401k + matching\nGenerous PTO and paid holidays\nParental and family medical leave\nAn opportunity to be more than just an engineer and help medical professional globally\n\n\n   So, if you are a Front End Engineer with experience, please apply today!\n \n\n   Colorado employees will receive paid sick leave. For additional information about available benefits, please contact Andrew Harrison\n \n\nApplicants must be authorized to work in the U.S.\n\nCyberCoders, Inc is proud to be an Equal Opportunity Employer\n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, disability, protected veteran status, or any other characteristic protected by law. \n \n\nYour Right to Work – In compliance with federal law, all persons hired will be required to verify identity and eligibility to work in the United States and to complete the required employment eligibility verification document form upon hire. \n \n CyberCoders will consider for Employment in the City of Los Angeles qualified Applicants with Criminal Histories in a manner consistent with the requirements of the Los Angeles Fair Chance Initiative for Hiring (Ban the Box) Ordinance.\n</td>
+      <td>401(k), 401(k) matching, Dental insurance, Health insurance, Life insurance, Paid sick time</td>
+      <td>Posted 3 days ago</td>
+      <td>https://www.indeed.com/cmp/Cybercoders?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd6o64jr4s800&amp;fromjk=0cb7fd56a04a8b2d</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CpFJQzrgRR8WqXWK1qKKEqALWJw739KlKqr2H-MSI4eoBlI4EFrmor2FYZMP3muM2LEwq3Xynu7wr20gnSD4hxGPx7FBQcw1Q1EnyYiEcxRtU5qHFBafgLW-x5_F6HmlzsXKHBDfXMmdRx1uz5shOHIZ5XyybhQMCztIu4Ha5uwUdhoNHqPgUUnf1gvDLiHaSyC2ffkM3buMyOO9wJPpAz1FZLz8g4ap6yl-UTGcLQH28eVVWXEvXxKMCPlk0JjT_06FbT27HR7PSR_s8byVo7TaqcrpC4DnfjDx0o94czUyuVZCQsaqeeTlmYcBKjzuA0k5kDLNc89ZErQKR1p3qAzedNP-FvpaCrc24Cu4Rd9utfDcrHuWWRGdhkG8EvZcnxpvVvz4VsCeCg8f1xZceR0xXHnPEhQRstPQCurGUMtkga1ZodbBSOB6ugoYvalUtkEjhHiWV31qKkduHeId0SsXR5ylDwFVu7XcdCmT7noTt6yDMZpb2b76SfpYSulKXGgejnIasCUfsdtEJvwX6Ta-d3GYRkUh3yS0G5sKQcw3t9bX-y0hrpGKN1cJMEnPNKCF0o9kp_l2ug7VQjFk0GJVlg2jh8OneY6PTS8lsQHDzd4f_q9wdcJO9JsAG2gwciLAsj7PR048-mIbDRluF2DzFWsoeXzk1yPfc-5slXmQf3o0LWUlI_njmeohNwN47P6iQA7AfIdcAyxY0ih1Dj3I-7sUmbLm67VZaW5LbEXOZoThVSaFHnWxM04CkmTXwEn3tKlW-YvHomTdFlH1d89sgHEjSvam17uMhq6Vbyis_XlhixR7vWGfnYgsVLw2z1zLjO_cXhaY1yhsikbT9zFWmH8qc3uoheKQCyOIRIf7HYsyq81WE8uNp-GChXdoo90yF77bcToNzapjgalz6wUqitQLLODKXh9SJmSFmY3D-dBoekLyZiDU9TW4s9muzFdZKTpEzac0cJT3Z0wkt_gwY2VqkRX-TNKXwbJ2kS0dfellFrTDNj78ncwKavi6g=&amp;xkcb=SoDW-_M3bPSVmDwtFJ0KbzkdCdPP&amp;p=3&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>3.6</td>
+      <td>CyberCoders</td>
+      <td></td>
+      <td>2 days ago</td>
+      <td>Frontend React Engineer</td>
+      <td>Remote in Los Angeles, CA 90012+3 locations</td>
+      <td>$140,000 - $170,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\n Frontend React Engineer \n \nFully Remote \n\nJob Title: REMOTE Frontend React Engineer -$120K-$170K\n  \nSalary: $120K-$170K Base + Great Benefits\n  \nRequirements: React, UI\n  \n Company Intro: We are a top of the line e-learning startup that creates software to help kids read, comprehend, and learn faster using AI. We were created at Carnegie Mellon University and was named one of Time Magazine's Best Inventions of 2021. \n  \n We have $40M in funding and due to growth, we are hiring a FRONTEND ENGINEER in REACT to help build some of the most successful and widely used applications in schools and homes across the US to help kids learn better. \n  \n If you are a FRONTEND ENGINEER who is skilled in REACT, apply today!\n \n Top Reasons to Work with Us\n\nMission Driven: We want to help kids learn and improve.\nFlexible work life\nCollaborative culture\nAgile/Lean feedback environment\n\n What You Will Be Doing\n\n   You will be creating frontend code using React, building rich, interactive, and responsive UI for kids and educators.\n \n What You Need for this Position\n\n   AT LEAST 3 YEARS IN:\n  \n\nREACT\nBuilding software with a commercial software team\nCloud based experience\n\n Nice to haves:\n  \n\nGame UX experience\n\n\n What's In It for You\n\n   -Competitive Base Salary: $120K - $170K/year \n  \n\nCompetitive Stock Option Ownership\nLarge Company level benefits\nABILITY TO HELP CHILDREN IN THE WORLD READ, LEARN, AND LEAD BETTER LIVES\n\n\n\n   So, if you are a Frontend React Engineer with experience, please apply today!\n \n\n   Colorado employees will receive paid sick leave. For additional information about available benefits, please contact Peter Zhang\n \n\nApplicants must be authorized to work in the U.S.\n\nCyberCoders, Inc is proud to be an Equal Opportunity Employer\n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, disability, protected veteran status, or any other characteristic protected by law. \n \n\nYour Right to Work – In compliance with federal law, all persons hired will be required to verify identity and eligibility to work in the United States and to complete the required employment eligibility verification document form upon hire. \n \n CyberCoders will consider for Employment in the City of Los Angeles qualified Applicants with Criminal Histories in a manner consistent with the requirements of the Los Angeles Fair Chance Initiative for Hiring (Ban the Box) Ordinance.\n</td>
+      <td>Paid sick time, Stock options</td>
+      <td>Posted 2 days ago</td>
+      <td>https://www.indeed.com/cmp/Cybercoders?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd98bfis9d800&amp;fromjk=ba06be664a828c21</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CpFJQzrgRR8WqXWK1qKKEqALWJw739KlKqr2H-MSI4eoBlI4EFrmor2FYZMP3muM0VPgwL63opASQbBVL_4il9bdXN7OGd3kCrCOYw_EyeFjIYz0O0eBGwvrC8LrvcrULOyXnmCf2B-_uqChYc_7WD3lLR1eQsmRX0Z14nyl4wE7e5bIkEj9EHa_gyBLS83vkejn1zzBxwfLAYjFgtj5iCKO06Is5ykr8PNB3TO82wkQemXZYUbq_hHtSY2WgpFwFDjZCTGJ8h9GE8JJvKfDeAqykcBk9BHfL7P2ajPq794pnHlhzbeEd8i8yWt38b8MVUOCrkkth75Zl8i9yO6X2aywwQvrpjx2uEsyiO5LuhRrwZHni4_AOPxV-MXR1tf-7QPX2iiFQQu9DCtzkOZDc3_WBephuu5M8fYl2ooOzjILaicQWdvhwBNfpdvHlJ6nrDJh5ZAGFiy7vgdveX2BHBMxU77nVeNZVIPeoZtf6v_ecse4PChVWyAXYncpuK0P1URPTpvlnTXHe8uH9wQ72gFVzYtD7-4_RokSOEYpXu5ucKXRdoF4aINxSuyEEiVI_cQMY7As4RzZIX4anTECCFVkv2EAqNsyK80j8Ig5qiuqh0UMU1h0h6JJ39KUIFKfnUFDkWzBF_qBqoZYXAMg8RGxVFlq2osk-kTEyga4kZZT3l0AzUG0PWqnwbTfSuhoit0qlD0gRSYQM5KKsBXzVPIArrD8HNplW05Od9XA4bWo9jhAlTIAKblhuLxxu8ubIKug0AiQoEJ5Qc0Z4ZzCi1NgCcx-SGk4IxAssL5N0HfSPYI1Hz4UrskTAGGDiRu7JWikCL5ukUL5eXhrrXdQOXwV7l7GAipSZOUvpuot0GXwzbosrDjEwIXDXpNG6IWpAFWp-9o5zZ6xrPCFIGrDheMMLeSpvz8YyDfa44j93mcwospOXqHXxPQgE9_61BmTGSX-zZiBd56_33aYcVLG7C7oFSCTWaCWw9gQerOfKKVFwYL3lWE73B2PS3EvifGJpF2appmZRqtp1JPLWad_dpgfAblLzl9Tw=&amp;xkcb=SoDW-_M3bPSrAc0ELB0LbzkdCdPP&amp;p=1&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>3.6</td>
+      <td>CyberCoders</td>
+      <td></td>
+      <td>3 days ago</td>
+      <td>Lead Mobile Engineer</td>
+      <td>Remote in Los Angeles, CA 90034</td>
+      <td>$160,000 - $240,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\n Lead Mobile Engineer \n \nJob Title: Lead Mobile Engineer \n  \nJob Location: Fully Remote \n  \nJob Salary: 160k-240k/yr, Equity, Bonus, Benefits\n  \nRequirements: React Native, FinTech Background, Startup Experience, iOS/Android App Store Experience, AWS, Integrating Applications \n  \n Backed by the same folks behind Chime, Square, Revolut, Step, &amp; Brex &amp; we are democratizing credit for the 150 million people shut out of mainstream credit. We are taking a radically different approach to traditional issuers in providing low-interest access and individualizing someone's credit line and experience through our platform no matter what their credit score or background is. We are integrating financial literacy and behavioral training to help people use credit responsibly and developing a proprietary underwriting platform that can be used for other fair financial services.\n  \n As our first designer hire, you will play a fundamental role in building an engaging and rewarding experience for our users as they establish and build up their credit scores and develop better financial habits while helping ensure they get access to fair credit to support their essential needs.\n \n Top Reasons to Work with Us\n\nCompetitive salary\nRemote forward workplace\nEquity and future growth possibilities\nExcellent health, dental and vision benefits\nGenerous vacation and leave policies\nCollaborative and engaging culture\nAny requirements for your home office\n\n What You Will Be Doing\n\nWork closely with the product team to understand customer requirements translating them into an effective visual interface\nSupport the entire application lifecycle (concept, design, test, release and support)\nResponsible for producing fully functional mobile applications while writing clean code\nContribute innovative and original ideas via brainstorming sessions with all teams\nDevelop in an Agile environment with a passionate product team\nIntegrating applications with internal and external backend service APIs\nWrite interface tests, develop code, and participate in code reviews\n\n What You Need for this Position\n\nProven experience (4+ years) as a mobile engineer with a demonstrable portfolio of released applications on the App store and the Android market\nIn-depth knowledge of the React Native framework\nExperience integrating with cloud based services, we prefer AWS\nPrevious experience in multiple (2+) early stage startups\nDemonstrated self starter mentality with a focus for building\nPassion for continuous learning and developing new skills\nDesire to work in an Agile development environment (Kanban or Scrum)\nStrong communication and collaboration skills when facing ambiguous situations\nFamiliarity and usage of git version control\n\n \n\n\n  So, if you are a Lead Mobile Engineer with experience, please apply today!\n \n\n   Colorado employees will receive paid sick leave. For additional information about available benefits, please contact Taylor McAlister\n \n\nApplicants must be authorized to work in the U.S.\n\nCyberCoders, Inc is proud to be an Equal Opportunity Employer\n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, disability, protected veteran status, or any other characteristic protected by law. \n \n\nYour Right to Work – In compliance with federal law, all persons hired will be required to verify identity and eligibility to work in the United States and to complete the required employment eligibility verification document form upon hire. \n \n CyberCoders will consider for Employment in the City of Los Angeles qualified Applicants with Criminal Histories in a manner consistent with the requirements of the Los Angeles Fair Chance Initiative for Hiring (Ban the Box) Ordinance.\n</td>
+      <td>Dental insurance, Health insurance, Paid sick time, Vision insurance</td>
+      <td>Posted 3 days ago</td>
+      <td>https://www.indeed.com/cmp/Cybercoders?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd9299kc2o800&amp;fromjk=b82a56d66ff80104</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CpFJQzrgRR8WqXWK1qKKEqALWJw739KlKqr2H-MSI4eoBlI4EFrmor2FYZMP3muM2LEwq3Xynu71H6LcsyI743opVCSNQ_pp-PPY5ACu9D2ecnuBf6C4Oj0hWo9qJEMpHbSdKVBZye8RX-074sjGxCAHaaqNMs7bRJhsuHJNHwrVEfWGRen5SX6ysCPMPu7Zg792RQAQX_ApNFtM8UOgIR1Zp3xh9DUfoksBJo2wASylMZFEEOJaQG4JYCY5MAWCVs-HC6zD9nB6wLkHRXOX3BrZC8iAxsLLxokC5xPyhlHBRpp9107C6qGrGP7rZ6o10rd4_Gjaz6khLLKLKf2L5F-5mtsG3_yqnEXDNVGAvFKtGgCCQGq5slpgxTceSVQLa2BxkI8k-gy8PSLu9m2XPEBaYexaSW7hVuvHc-WOKHQUm1AnlWXO57f5XVmu2d6XtiqgKriSs3KgTTfGp0oNS3zH5cTWY7KnEopJ6TBvW05J2GzFHzW47mPuQ_XMf4XVFDWjOnB4VeXZ3k75ODhQ0N70cHRtBXXHFOLlFoZrueC8GiLwoc4SOPYcfLmeeaZg8MgwJkThlhIiXEsNacad5176mMr_J23VcwH-hodb99r-qEB7jp3TChlrNeHN7hlxvOVHprBqJ6ePprsUgns4TZ1QgI6-5ctlOvv0uNHglhgczO5Jml8OkQ9Kq0BGUi4t90ylWrgyFqDBzg8j0qOpYq9on5edhvGUyzGlTi9YtVlZyUID3dzPa58W3jaEwlqD1GIZlgz3iBUfRiyCHvCE8bPG5qHD0P-GA5qKFz-ogqRVyhy52p6UEY9b6HMoOXNPqMntyttxfaKl_AQuaCxfZGan4PaXwxMHxAsRo7TsAHoPePL6aYmACWrP8oJRPL3ABhIKNO8RbFMuuSwm8lAjoGISBo_MX04ySaOKbOzwdRRy50QYnDU-2hbS9_96mTmO_pb8WNpYHmm1mOZkI9ieX7x7xs8oT2_lht3GArLRQrQktXiTT7GJPo9PUI7CVNX9ZaJgV4tm-5ZQ==&amp;xkcb=SoAO-_M3bPSs2-Ts8R0KbzkdCdPP&amp;p=1&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.6</td>
+      <td>CyberCoders</td>
+      <td></td>
+      <td>3 days ago</td>
+      <td>REMOTE React Native Developer</td>
+      <td>Remote in Los Angeles, CA 90031</td>
+      <td>$150,000 - $200,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\n REMOTE React Native Developer \n \n  There are millions of awesome spaces across the country that are sitting idle (i.e. pools, saunas, home gyms, creative studios, etc). We're creating access to these spaces and passive income for owners through our peer-to-peer online marketplace. \n  \n We've had incredible growth since launching in 2019 (4,000% YoY) with over 45,000 transactions in the last 6 months! \n  \n Due to this rapid growth, we have an immediate need for a Senior React Native Developer who likes to work up and down the technical stack to deliver wonderful product experiences for a consumer-facing platform reaching millions of users. You will work directly with the founders and executive team with lots of autonomy and tons of room for growth!\n \n What You Will Be Doing\n\nBuild complex web &amp; mobile applications that deliver joy &amp; delight to millions of users\nWork with a team of engineers &amp; designers to ship impactful product features\nMentor, educate &amp; support the engineers you work with daily\nWork closely with product, design &amp; engineering to understand product requirements, evaluate tradeoffs &amp; ship solutions that deliver value to customers\nHelp make the team better &amp; continue to grow professionally through contributing to code reviews, documentation &amp; promoting best practices\nContribute to a culture of continuous improvement &amp; professional growth for the engineering team as well as company at large\n\n What You Need for this Position\n\nDeveloper\nREACT\nReact Native\nMobile\nJavaScript\nGit\n\n What's In It for You\n\nCompetitive Compensation\nEquity with tremendous UPSIDE (you are still early enough)\n100% REMOTE work\nMedical, Dental, Vision Benefits\n401k\nStock Options\nVery Flexible PTO\n\n\n   So, if you are a REMOTE React Native Developer with experience, please apply today!\n \n\n   Colorado employees will receive paid sick leave. For additional information about available benefits, please contact Dylan Rogelstad\n \n\nApplicants must be authorized to work in the U.S.\n\nCyberCoders, Inc is proud to be an Equal Opportunity Employer\n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, disability, protected veteran status, or any other characteristic protected by law. \n \n\nYour Right to Work – In compliance with federal law, all persons hired will be required to verify identity and eligibility to work in the United States and to complete the required employment eligibility verification document form upon hire. \n \n CyberCoders will consider for Employment in the City of Los Angeles qualified Applicants with Criminal Histories in a manner consistent with the requirements of the Los Angeles Fair Chance Initiative for Hiring (Ban the Box) Ordinance.\n</td>
+      <td>401(k), Dental insurance, Health insurance, Paid sick time, Paid time off, Stock options</td>
+      <td>Posted 3 days ago</td>
+      <td>https://www.indeed.com/cmp/Cybercoders?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd6m6bkc2c800&amp;fromjk=e41bebebac38a1a4</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CpFJQzrgRR8WqXWK1qKKEqALWJw739KlKqr2H-MSI4eoBlI4EFrmor2FYZMP3muM2LEwq3Xynu720OzKZYZmbwwsvslgiNJGxxtkLiKj6VoEqmZWAT9UGrCwmhuF5F3MtBAWHq0pKTsn3hJVdhLcpqpGL6IodlwgbVywCKDMZqYto2sCfVvCnKLkSuVmyVqIQjI1gY8WuM2yq5BhNqqnieYnIhfrTh_GSi4Wk39MbTJAV5OjFR5kdkxiSUgALJRTTzmA-6XwUkFi1nQ-RGaMWU9hK2acAgaK6_QDNthKw3xtT0I-_DYdIwoIA6HKbnOPBG8-DdpUnms27vj3b_RYDgz6fSVmbEON4UjZmoHuk9ALU1bfeqZW4tVUVggXiHqN3HNkBC0zzAcdjMXlukDpbDupBuUDwbgd_JfsZe-WehTXeSkO6JDfesum7MJNz1UoM7BKxRfU9BRKqVJpufLwViZJ5Y3fJyj1RFcCbNsZEgArDXMTYGzjWMIVXf3jI9E4jEI_UA2_aP_BfQ1hRkWjPlShLR0saVoATstZTlOZ0DsyRvhip-MAIOAMYnKc4OeO6vAI4FwLPgvA5v1fKyJ74A0FDIsVBwmJ4YD0by7bTDi4WZfD_I5_Xq5brpFP1oAJPWB-RA4fm03Nt5nIf3JzBZSotFbE-feoo9hUG8Q24V3B2ZmbWGLHkcDt6LNg5RLt8JrF10TLxL2gArE51O3tdASAOvKWGhZPhbvQuH7d5HDj1AFTF24Um0vvS9_j1-weF6kQXoPfhw-zJuyVU9Llrr73pOGh6780jac3PRIhd5WPXWj7Mwmt2yVFhQsAql74Wd2BsAwM-zgmQv8d2uW6RyKB_MDBc0Cfc7b_fK4M3wzvMMbGMO5tWH_-mDMFD7H5pWLvlBdejY88c43qKpkO6MXSVkKqLTj5svog8GL5G26z29HlJR2BCalSkj5pRg4n5ggZLQEOFu0R5oZzRJjpTdpeUGgEFxwjnDyVkd2zDieoJzKrDgcRwAxme-EERLcXQ=&amp;xkcb=SoAn-_M3bPSVmDQtFJ0LbzkdCdPP&amp;p=2&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>3.6</td>
+      <td>CyberCoders</td>
+      <td></td>
+      <td>2 days ago</td>
+      <td>remote Ruby/React Developer</td>
+      <td>Remote in Los Angeles, CA 90012</td>
+      <td>$70,000 - $160,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td></td>
+      <td>\n remote Ruby/React Developer \n \n  If you are a remote Ruby/React Developer with experience, please read on!\n  \n Located in Beautiful California, we are a well established Ag company helping America stay fed. We are looking for a talented and energetic Ruby/React Developer to join our team!\n \n What You Will Be Doing\n\n   You will be 1 of 3 developers working on all of our tech that helps us run and provide critical Ag services to the US.\n  \n You will have autonomy and responsibility over the code that you write and help guide the software architecture and platforms to sustain today and tomorrow's growing business needs.\n  \n Experience building responsive applications and APIs using Ruby on Rails.\n  \n Ability to use an agile approach to development.\n  \n Ability to write testable code and when to apply tests.\n  \n Autonomy and responsibility over the code that you write.\n  \n Help guide the software architecture and platforms to sustain growing business needs.\n  \n Have a pragmatic approach to building solution to problems.\n \n What You Need for this Position\n\n   Bachelors degree in computer science, computer engineering, math, physics or related field or equivalent experience\n  \n 3-5 years of experience with:\n  \n Ruby on Rails and React.js required.\n  \n Interpersonal communication and relational skills.\n  \n Self-directed and organized; strong project management skills, detail-oriented.\n  \n Strong analytical and troubleshooting skills.\n  \n Ability to work independently.\n  \n Experience with Github or other source control platforms required\n  \n\n\nRUBY\nRails\nROR\nRuby On Rails\n\n\n\n   So, if you are a remote Ruby/React Developer with experience, please apply today!\n \n\nApplicants must be authorized to work in the U.S.\n\nCyberCoders, Inc is proud to be an Equal Opportunity Employer\n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, disability, protected veteran status, or any other characteristic protected by law. \n \n\nYour Right to Work – In compliance with federal law, all persons hired will be required to verify identity and eligibility to work in the United States and to complete the required employment eligibility verification document form upon hire. \n \n CyberCoders will consider for Employment in the City of Los Angeles qualified Applicants with Criminal Histories in a manner consistent with the requirements of the Los Angeles Fair Chance Initiative for Hiring (Ban the Box) Ordinance.\n</td>
+      <td></td>
+      <td>Posted 2 days ago</td>
+      <td>https://www.indeed.com/cmp/Cybercoders?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8gtp281p000&amp;fromjk=7e2cd2a76f565cf6</td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0CpFJQzrgRR8WqXWK1qKKEqALWJw739KlKqr2H-MSI4eoBlI4EFrmor2FYZMP3muM0VPgwL63opAT8f7UIDlp6nyDDrH2v-t-wMQtWAl5C_wL-Dxhs8HDBa_nGsgMC1mfP0r5R-kp2zQqhAQSIZtqLyvae_NrCkQT4MAT7M-tKLW0GaXUaU8zt6K84JymeBJSv4g0Vwk8NxDbgwNHb0CarsFTI3ATOHshaZt5PmGDq7u8Ma89bPrG4OeHdFu01PCwvRYKNBwckDEYnRhfGw5iwdHfft1PB0RMlS54WWDbGdvjttMik7-dis2tYB_MrX-mc16dsYYzefaEmf2cbG89lIK9PptWxZLb4mBjju9pczWhm7wWgO_UYhv405UtNgfs3y2CwDb7mWzYUxxYMbvTBtw2Ec4AbZNyuJtfuNFA-5zr3hYoKWEiAwjT4dbraYsp7RRspFvP5ZnDCO9uswnG0oEj9hjOgGlygOcwOtbjIeS5sty2gFghKwkrgiRvK88Dt_qS2Me0GDyylE0YHgLCA7Q4c6Ku1koG2dlB22CmnNLTgV1Ai7gwcv4z4MX5ffffV23t7WzzHQb-q-pOBiqt2DzIOpFADUW9aw2qQHri1OZZuHa1xqgBAWb4K_d_68t6AHz0f9ReWj655vsTrUC2iU9xCQNyq9GIBgok-8t8SukYHLnq_LUoaPcZFrpI1Sh-v7qLhH6WyrPWJMk_b-Z7r6I5n3LvmTuv2P2HEvJASCPo212mVyba1d1kJ1J-w-rVZlc-c340EMIECVzsZxZE8W4haTN6actVFg02Kej-W_9cw7SweXhs26uvJhtn_MGgJzmR6q2AwialFRTke5w-OUkrpYFiw9ceX3aLsUFp1rQpGb_huqndwKISMXGtBkhiW4GCrd96D-vi0DYPrChIcBkBteCqbKWXMOvyDosQ27zIfitP1qa8qfZq8Har83NPCnUOYSugL7FSwOiSjks2fNJItesc4SWH6lQyhUA0AVHbHv6_9Ua-YySblU978UkEA=&amp;xkcb=SoAU-_M3bPSUqoRRlZ0KbzkdCdPP&amp;p=8&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>3.2</td>
+      <td>Angi</td>
+      <td></td>
+      <td>5 days ago</td>
+      <td>Senior Software Engineer (Front End)</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>\n\nAngi® is transforming the home services industry, creating an environment for homeowners, service professionals and employees to feel right at "home." For most home maintenance needs, our platform makes it easier than ever to find a qualified service professional for indoor and outdoor jobs, home renovations (or anything in between!). We are on a mission to become the home for everything home by helping small businesses thrive and providing solutions to financing and booking home jobs with just a few clicks.\n Over the last 25 years we have opened our doors to a network of over 200K service professionals and helped over 150 million homeowners love where they live. We believe home is the most important place on earth and are embarking on a journey to redefine how people care for their homes. Angi is an amazing place to build your dream career, join us—we cannot wait to welcome you home! \n\nThe Opportunity:\n We are looking for a Senior Software Engineer with 5+ years of experience to join our growing team! We pride ourselves on being a supportive environment for learning and continued growth. You will be responsible for taking personal ownership in both your code and others, this includes ensuring proper tests, documentation, and communication around development. Our software is currently written with Java, Ruby, Scala and Next.js.\n As a Senior Software Engineer you will:\n\nFoster a collaborative environment for you and your teammates to deliver high-quality, reliable, and well-tested features\nCollaborate with professionals across the organization to gain a shared understanding of the initiative\nAnalyze requirements of the initiative and propose solutions that meet the requirements while balancing time and cost\nCreate, modify or review code to implement the requirements of the initiative\nBe responsible for operating what you and your teammates built in production\nEnsure that the code meets performance, reliability, quality, security, and testability standards\nCreate or modify a suite of tests to exercise the initiative's functionality in an automated manner\nEnsure our customers and professionals continue enjoying the best possible experience\nActively participate and lead discussions in team and project meetings\n\nWho you are:\n\nBS or MS in Computer Science or related field\nStrong software engineer with at least 4 years of hands-on development experience\nExperience in developing enterprise-level features in React / Next.js with an emphasis on front-end programming\nProficient understanding of code versioning tools, such as Git\nAbility to work with and effectively communicate across multiple technical and non-technical teams\n\nPreferred:\n\nFamiliarity with microservices and creating RESTful APIs\nExperience with ElasticSearch and Kafka\nExperience working with application monitoring tools such as New Relic\nExperienced with application monitoring strategies and Tools (New Relic, etc)\nExperience with containerization tools (Docker, Kubernetes)\nExperience working with less experienced engineers, providing them with coaching and mentorship to help them become better engineers\nWillingness to learn and apply new skills and technologies\n\nCompensation &amp; Benefits:\n\nThe salary band for this position ranges from $120,000 - $170,000, commensurate with experience and performance. Compensation may vary based on factors such as cost of living.\nThis position will be eligible for a competitive year end performance bonus &amp; equity package\nFull medical, dental, vision package to fit your needs\nFlexible vacation policy; work hard and take time when you need it\nPet discount plans &amp; retirement plan with company match (401K)\nThe rare opportunity to work with sharp, motivated teammates solving some of the most unique challenges and changing the world\n\n#LI-Remote #BI-Remote\n</td>
+      <td>401(k), 401(k) matching, Dental insurance, Health insurance, Vision insurance</td>
+      <td>Posted 5 days ago</td>
+      <td>https://www.indeed.com/cmp/Angi-3?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd9md3kmco800&amp;fromjk=19f313cac404124b</td>
+      <td>https://www.indeed.com/rc/clk?jk=19f313cac404124b&amp;fccid=a459150a450820d9&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>3.2</td>
+      <td>Ruggable</td>
+      <td></td>
+      <td>14 days ago</td>
+      <td>Mid-level Front-End Engineer</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $109K - $139K a year</td>
+      <td></td>
+      <td></td>
+      <td>\n\nAbout Ruggable:\n Ruggable is a Los Angeles-based, venture-backed, rapidly growing e-commerce startup that is disrupting the $7B rug industry and revolutionizing the market for residential rugs. Our patented 2-Piece Rug System allows you to remove the top layer of your rug and wash it in your home washing machine, offering an affordable, stylish and convenient solution for young families, pet owners, and busy individuals. We're a small, entrepreneurial team with big ambitions. We have a strong brand, established traction, and amazing advisors fueling our steady growth. This is an opportunity to get in at the ground floor and solve for complex challenges, while charting your own career.\n\n Job Summary:\n As an engineer on Ruggable's eCommerce team, you will be responsible for helping us revolutionize how our customers shop for rugs. Our specialty is a made-to-order customer experience and our engineers are on the front lines of building new and exciting user experiences. The ideal candidate has a passion for applying cutting-edge front-end technology with traditional e-commerce standards, and Shopify capabilities.\n What You'll Do:\n\nBuild aesthetically pleasing and functionally flawless user experiences\nDeliver JavaScript, HTML and CSS code for modern browsers\nPartner with peers, product owners, and stakeholders to build and enhance existing features\nManage the release lifecycle of our NPM packages and Shopify Storefront\nInfluence how we build with demonstrated technical expertise\n\nWhat You'll Need to Have:\n Required:\n\nMinimum 2 years of software engineering experience with JavaScript and React\nExpert knowledge of HTML, CSS\nExperience in e-Commerce\n\nPreferred:\n\nExperience with TypeScript\nFamiliarity with Shopify\nKnowledge of Contentful\nExperience writing GraphQL in-browser queries and mutations\nExperience with Storybook.js\nExperience with Tailwind CSS\nExperience with Figma\nAn attention to detail for visual designs\n\n\n At Ruggable, we offer competitive compensation and benefits packages. Ruggable is an Equal Employment Opportunity employer. We proudly recruit and hire a diverse workforce and are committed to creating an inclusive environment for all employees.\n If you are based in California, we encourage you to read this important information for California residents linked here.\n To all recruitment agencies: Ruggable does not accept unsolicited agency resumes. Please do not forward resumes to our jobs alias, Ruggable employees or any other company destination. Ruggable is not responsible for any fees related to unsolicited resumes.\n\n</td>
+      <td></td>
+      <td>Posted 14 days ago</td>
+      <td>https://www.indeed.com/cmp/Ruggable?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd7ko8m8r1800&amp;fromjk=defc157a3f64ba81</td>
+      <td>https://www.indeed.com/rc/clk?jk=defc157a3f64ba81&amp;fccid=e13177a2bcf0be73&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.5</td>
+      <td>Quintrix Solutions</td>
+      <td>Hiring multiple candidates</td>
+      <td>8 days ago</td>
+      <td>Entry-Level Developer (Java Fullstack with Angular and AWS)</td>
+      <td>Los Angeles, CA 90071 (Downtown area)</td>
+      <td>$57,000 a year</td>
+      <td></td>
+      <td>Full-time</td>
+      <td>Bachelor's (Preferred)</td>
+      <td>Quintrix is looking for people eager to upskill into the competitive field of Java Full Stack Engineering. Java Engineers are in high demand, so we are looking to train the right people to be highly qualified Full Stack Engineers and give them experience developing high-performance, scalable enterprise applications. We will train you to work side by side with product managers, designers, and clients, making decisions together to deliver valuable working software to clients and their users.\nYou are an ideal candidate if you can demonstrate a love of learning through personal, collegiate, or professional project work, show a passion for Software Engineering and an excitement for problem-solving. This opportunity is for our client, a $12 billion, Fortune 100 Company with over 288,200 employees in 40 countries. Once you are selected for the opportunity, you will be put through 12 weeks (25 hrs. /week) of pre-employment online training that will be conducted during evenings and weekends. Candidates selected for the Java training with React will be paid a stipend of $1500.\nWhat can you expect?Opportunity to interview with our clientInstructor led online trainingJob-specific and tuition-free technical trainingPaid to learn, receive a stipend during training\nPrerequisiteYou must be legally authorized to work in the USA and not require any visa sponsorship now or in futureYou must be willing to relocate anywhere in the USAAny object-oriented programming language experience such as: Java, C++, Python, etc.Experience with SQL and knowledge of database concepts is a big plusBachelors Degree in computer science or similar field and GPA should be 3.0+Excellent analytical and problem-solving skillsGood written and oral communication skillsAbility to work with geographically distributed teams with diverse and complementary skills\nTraining and Interview ProcessTechnical interview by QuintrixImmersive online instructor-led training in Java and React (12 Weeks)Technical trainingSoft skills trainingClient Interview(s)\nStipend Paid During Training$1500\nSalary$57,000 Per Year\nBenefits2 weeks of Paid VacationHealth Insurance including Vision and DentalEmployee Assistance ProgramDependent Care FSACommuter BenefitsVoluntary Life Insurance\nRelocation ReimbursementUp to $1500\nLocationTo provide placement flexibility, all candidates presented to client must be willing to relocate anywhere in the continental US\nWho is Quintrix?Quintrix is on a mission to develop technology talent for our exemplary clients. To learn more about our candidate experience go to www.quintrixsolutions.com/candidates/\nJob Type: Full-time\nSalary: $57,000.00 per year\nBenefits:\n\nDental insurance\nHealth insurance\nPaid time off\nRelocation assistance\n\nSchedule:\n\n8 hour shift\n\nAbility to commute/relocate:\n\nLos Angeles, CA: Reliably commute or planning to relocate before starting work (Required)\n\nEducation:\n\nBachelor's (Preferred)\n\nWork Location: One location</td>
+      <td>Commuter assistance, Dental insurance, Employee assistance program, Flexible spending account, Health insurance, Life insurance</td>
+      <td>Hiring 10+ candidates for this role, Posted 8 days ago</td>
+      <td>https://www.indeed.com/cmp/Quintrix-5?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd6k4322n9000&amp;fromjk=0b01427bba152e32</td>
+      <td>https://www.indeed.com/company/Quintrix/jobs/Entry-Level-Developer-0b01427bba152e32?fccid=448c6a409de61c4a&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td></td>
+      <td>Acorns</td>
+      <td></td>
+      <td>2 days ago</td>
+      <td>Engineering Manager, Core (iOS)</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $122K - $155K a year</td>
+      <td>Full-time</td>
+      <td></td>
+      <td>Engineering Manager | AcornsAcorns is how everyday consumers can save &amp; invest for the long term. By putting tools of responsible wealthmaking in everyone's hands, Acorns has become the largest subscription service in U.S. consumer finance, serving millions of everyday Americans subscribers. Customers get automated investing in diversified portfolios, built with help from experts like Nobel Laureate economist, Dr. Harry Markowitz. Acorns easy retirement account allows customers to invest for a better life later in minutes, no expertise required. To help everyone spend smarter, Acorns introduced banking that invests with every swipe, and cash-forward rewards. And, everyday Americans may invest in their kids and get money news they can use, all from the same app. Customers have invested billions with Acorns, much of it in spare change. From acorns, mighty oaks do grow!Acorns is seeking a technically experienced Engineering Manager to help guide and grow our Core Engineering team.This role has the option to be remote or based in our Irvine or New York offices.You are not expected to have experience with all listed requirements. If you feel passionately about Acorns' mission, vision and values, please apply.What You'll Do: \n\nManage a first-class mobile engineering team that will scale as the company and business grows, identifying and filling any team gaps.\nDevelop a team-oriented, supportive culture with a strong focus on creating a working environment that fosters collaboration, open communication, and delivering outcomes.\nDefine metrics to measure the team's success and then create actionable goals to improve those metrics.\nKeep up to date with all things iOS to continue to create a world class iOS app.\nConstantly improve team productivity, refine agile processes, and create methods to increase efficiency.\nPerform personnel management tasks for a team of developers, including performance reviews, mentoring, and planning each direct report's career growth.\nTrain new software engineers on our best practices, standards, culture, and policies.\nEncourage active participation in all phases of the project lifecycle, and work with project management to define and hone requirements, remove impediments and provide visibility to stakeholders.\n\nWhat you will bring to Acorns: \n\n8+ years of relevant engineering experience in fast paced environments\n3+ years of managing software engineering teams\nStrategic experience with the iOS Framework, the development lifecycle for iOS apps, and related Apple technologies.\nExperience with GraphQL and RESTful APIs\nStrategic experience with Android and REACT web clients and integration with distributed cloud micro services a plus.\nKnowledge of Swift, Kotlin, or Typescript/Node.js\nTrack record of meeting schedules on time; clearly defining deliverables and timetables, with demonstrated ability to balance multiple priorities in complex environments and manage teams to successful project completion\nDemonstrated ability as an effective mentor and coach who understands how to successfully manage a team of talented developers\nExceptional analytical, communication, and interpersonal skills\nBachelor's degree or equivalent experience desired\nSolutions-oriented and proactive when confronted with complex problems\nExceptional drive and precision in delivery\nOptimistic about the potential of societal change\n\nWhat we offer: \n\nCompetitive salary and stock options\nA comprehensive benefits package to meet the needs of you and your family\nFlexible paid time off\nNumerous career possibilities that allow you to grow with Acorns\nTalented and motivated team members who care deeply about one another, our mission and our customers.\nThe rare opportunity to create a new world. We inspire one another every day to do meaningful work that solves big societal challenges.\n\nAbout Acorns: Acorns is the leading micro-investing app in the U.S. It allows users to round up their daily purchases and automatically Invest the Change into a low-cost, diversified portfolio of exchange-traded funds offered by some of the world's top asset managers (including Vanguard and BlackRock). Founded in Newport Beach, Calif., by father and son team Walter and Jeff Cruttenden, Acorns provides a simple entry-point using the Acorns app on iPhone or Android. Customers accumulate fractional shares in one of five portfolios constructed by world-renowned Nobel Laureate economist Dr. Harry Markowitz. Acorns' smart portfolio algorithms automatically work in the background of life, helping users build wealth naturally, pennies at a time. From Acorns mighty oaks do grow.Mission: With benevolence and courage, we look after the financial best interests of the up-and-coming; beginning with the empowering step of micro-investing.Commitment to Diversity, Equity &amp; Inclusion: Acorns believes diversity, equity and inclusion are fundamental obligations that strengthen our team. We need a diverse, multi-disciplinary team to build a meaningful company and culture.Values: \n\nLead with heart\n\n\nMake bold decisions\n\n\nAlways build trust\n\n\nNever stop growing\n\n\nFind a way\n\nClick here to view Acorns Job Applicant Privacy Policy.\nJob Type: Full-time</td>
+      <td>Paid time off, Stock options</td>
+      <td>Posted 2 days ago</td>
+      <td>https://www.indeed.com/cmp/Acorns-1?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8j7tglop800&amp;fromjk=05838722e12fd5a0</td>
+      <td>https://www.indeed.com/rc/clk?jk=05838722e12fd5a0&amp;fccid=a1513298a9777378&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td></td>
+      <td>Embrace</td>
+      <td></td>
+      <td>14 days ago</td>
+      <td>✨ iOS Engineer</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $91.4K - $116K a year</td>
+      <td></td>
+      <td></td>
+      <td>\n\n  Our world is mobile — the phones in our pockets, our 10+ IoT devices at home, the cars we drive, the way we conduct our work, and the point-of-sale devices from which we buy our coffee and donuts. Embrace is on a mission to make all of our edge experiences exceptional by helping revolutionary companies evolve and excel in this mobile-world that did not exist even 7 years ago. Customers, like Goat, Hilton, Masterclass, Home Depot, and Cameo, love Embrace's mobile observability and data platform because it makes extremely complicated and voluminous data actionable.\n \nAbout the Role\n\n\n   We're looking for an experienced iOS engineer who is ready to tackle the complex problems and cool products introduced by Apple. You will create cutting edge technology that improves the lives of other developers by gathering and processing tens of billions of data points daily from 100M+ devices. If you're excited to tackle complex problems by building world-class solutions, with the best technologies and even better people, we should chat.\n  \n\nWhat You'll Do\n\nCollaborate, design, and implement the overall architecture of our iOS SDK\nAdopt the latest iOS APIs, languages, and features\nCoach and collaborate directly with our amazing customers\nWork with product, Customer Success, and sales to share technology and product decisions\nImplement and improve engineering best practices for a rapidly growing code base that is relied upon by the world's top mobile companies\n\nBasic Qualifications\n\n2+ years of experience with Objective-C\nExperience with unit testing and functional testing methodologies\nExceptional communication and collaboration skills\n\nGathering is integral to our culture for collaboration and connection. We want to ensure that all of our new hires have the ability to travel and meet other team members. We estimate the travel for any given role to be a couple of days every month or two. In order to gather, new hires must be able to meet our COVID vaccination requirement as we continue to help our team limit risk.\n Preferred Qualifications\n\nA curiosity for how things work and the ability to think ahead for future changes in an ever-changing mobile ecosystem\nHigh competency and low ego, you have a passion for helping people both inside and outside of your company\nExperience with non-native frameworks such as React Native and Flutter\nContributions to open source projects\nAn opinion on Star Wars vs Star Trek\n\n\nCulture Values\n\n\nOwnership: Growth is achievable only by empowering with ownership\nPerspective: We seek to understand your perspective\nHonesty: Brutal honesty delivered kindly\nSimplest: Simplest solutions are identified by focusing on outcomes\nInvesting: Meaningful insights are formed by investing time\n\nWhy join Embrace?\n\n  Embrace is growing and recently raised a Series B backed by YCombinator, NEA, Greycroft, and the founders of Testflight, Parse, and PagerDuty. The repeat founding team also started Scopely, a $3B+ unicorn mobile startup. Enterprises, revolutionaries, and vendors rely on the Embrace Data Platform to capture 100% of user-behavioral and technical time-based session data rather than relying on sampling. The engineering, data science, UX, and product teams at NYTimes, Hyatt, OkCupid, and Owlet are driving their businesses with Embrace.\n \n\n</td>
+      <td></td>
+      <td>Posted 14 days ago</td>
+      <td>https://www.indeed.com/cmp/Embrace-ced52895?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8i0kh22t800&amp;fromjk=d44e2f74e9f05144</td>
+      <td>https://www.indeed.com/rc/clk?jk=d44e2f74e9f05144&amp;fccid=a74b7c0897f96951&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td></td>
+      <td>Health Talent Pro</td>
+      <td></td>
+      <td>6 days ago</td>
+      <td>Mobile Applications Engineer - Javascript, iOS, Android</td>
+      <td>Los Angeles, CA</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>qualifications \nrequired \nAndroid (5+ years) \niOS (5+ years) \nJavascript (5+ years) \nReact (5+ years) \noverview \nOur client is a fast growing, technology enabled, women's healthcare provider startup! Connecting young women to trusted health experts including Primary care providers, ObGyn's, Nurse practitioners, Mental health Experts and more via telemedicine. Available 24/7, 365 days a year. \n\n\nRequired skills and experience:\n Top 3 Required Skills \n1. 5+ Years Experience in mobile development, Android and iOS w/ Opportunity to lead a team so Dev Team Leadership is a huge plus \n2. 5+ Years Experience in JavaScript and/or TypeScript. \n3. 5+ Experience with frontend frameworks like React Native, React, Next.js, Vue.js, etc… \n\n\nWhat you need to know:\n Just launched a new version of the current app so this role will be more feature based, adding new features more so than updating the old. So a lot of the usual Text Based Chat, Video Conference, Basic Profile settings, or content. \nBut!! The App in it’s current state is a mature prototype, reaching last legs of how it was originally built. Needing someone to start planning future state of where to go from here. Complete new build! \nRight now the team is CTO (hands on), 1 Product Manager, 1 QA Engineer, 2 Software Engineers (Contractors). Because we’re trying to build out the core team. Would like to replace them with perm members on this team this position can help lead. \n\n\nInterview process:\n 1. Intro Phone Call with CTO \n2. Onsite Half Day with All IT Team Members (6) \n3. Part of Half Day extended Meet with HR for final vote \n4. Offer! \n\n\nJob selling points:\n 1. Going through Series A at the End of This Year! Stock Equity Options! \n2. Full Autonomy in System Redesign. Could be Right Hand to CTO. \n2. Streamlining Women's Health Services to make the world a better place. \n\n job positions \nIT: Designer</td>
+      <td></td>
+      <td>Posted 6 days ago</td>
+      <td></td>
+      <td>https://www.indeed.com/pagead/clk?mo=r&amp;ad=-6NYlbfkN0Bys7Zgvm3B3KN4fohTDENZVJBD7kMeNOPCKP5K82rAYJzXZUWdrNeCe6SiNL9G--PcgNyEtM6tYc9KzmAo_dE0LMPUOVrqHa6wULFdj1sOIxzalSUwJ9hGCGfySMHzYLWM_Z24jkGwS5DNBd-SUIayeHvSWZbwBS9UeiTbDHnEKNdiihx6IKXektjeO15NIaMLKgtc4SNPDCwNqtOLobHIMK008IMQ8u9-6I1BpvjKgz4uTNbTAGDhL2ZjimrinS3RS0jSHeoa2m5iOyyqnyFvaTfXh3MuhsK7eG5f2o8Q9wJ0Kanl4nmg4zAkTH5NLYRiwXXESZejON3gJ8eP8mvKSwHmjjodcAobpqu2SlrN8KFrTRv_9lc9yPUJTzOYYaEhcn_dW77Sz-I_3f9_nz2GsjFwrbWKMezGUxko3aXf7BdM3ynHk-dWX_UjAAAkgsSlU85TDkRp_uQJHRh6suY5jxUwjiw49cDqnmxYRL3DTezOXpH_7gIaiC0cswqQ3Srw4owrg-V8WpyzqbLL9egkySL3lnJGNnZkbX9vJCbvOsa3NJ1m3IJuNa4GVdSEHP1AkgGOTcmjzjB1VRNKbDGMgHN3LmeJU48=&amp;xkcb=SoCz-_M3bPSUqpxRlZ0IbzkdCdPP&amp;p=7&amp;fvj=0&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td></td>
+      <td>Recharge Payments</td>
+      <td></td>
+      <td>12 days ago</td>
+      <td>Senior Software Engineer, Frontend</td>
+      <td>Remote in Los Angeles, CA</td>
+      <td></td>
+      <td>Estimated $133K - $168K a year</td>
+      <td>Full-time</td>
+      <td></td>
+      <td>Who we areRecharge is the leader in powering physical subscriptions, making it one of the most important ecommerce engines. Recharge powers over 50M subscriptions worldwide and has processed more than 10B in transactions. More than 15K brands such as Verve Coffee Roasters, Bokksu, Who Gives A Crap, Geologie, Bite Toothpaste Bits and The Sill rely on Recharge daily to grow their businesses and delight their customers.Recharge's mission is to enable brands and merchants to form strong, lasting relationships with their customers through recurring purchases. As merchants seek ways to drive more direct sales and distribution through their channels and move away from a reliance on traditional online marketing strategies, Recharge has made it possible to grow businesses with seamless, recurring customer transactions.Bootstrapped until 2020, Recharge is valued at over 2.1B dollars and is a double unicorn with a total raise of 277M dollars. Join us as we work with our merchants to define the future of ecommerce.\nOverviewWe're looking for a Front End Engineer to join our Memberships team and collaborate on a critical part of the platform by delivering world class features to our end users. This team is responsible for developing end user customer experiences, making sure they function as designed, and are delivered on time. We value simple solutions and look for engineers who use a customer first approach to solving problems.Our stack includes: Python, Flask, Jinja, ES6, Vue.js, Sass, WebpackWhat You'll Do\n\nLive by and champion our values: #day-one, #ownership, #empathy, #humility.\n\n\nWrite web components in Vue.js, Jinja/HTML, and SASS focused on scalability, testability, supportability and maintainability.\n\n\nImplement new technologies to solve Recharge's technical challenges as they arise.\n\n\nChampion good habits (development techniques, security, tech debt balance, TDD, and agile habits) within your team; improve engineering standards, tooling, and processes.\n\n\nPerform thorough code reviews and troubleshoot complex issues.\n\n\nWork with engineering and product managers to understand roadmap priorities.\n\n\nBuild new UI patterns while also refactoring older ones.\n\n\nAssist with documentation of new features, contributing to the documentation of existing ones.\n\n\nFind and address performance issues throughout the application and help identify and fix front-end bugs and issues.\n\n\nPropose new methods and approaches to old solutions, helping to improve/develop standards.\n\n\nWork and collaborate with both the design and backend development teams to help build new features or update existing ones.\n\nWhat You'll Bring\n\nTypically, 5+ years of relevant development experience in fast paced environments\n\n\n5+ years of experience with JavaScript; Vue.js/React.js a plus\n\n\n3+ years experience with HTML5, CSS3\n\n\nSolid experience with SASS and writing JavaScript (ECMAS 6 / 2016+)\n\n\nProficient with build tools, Webpack, preprocessors, and asset pipeline\n\n\nProficient with collaborative tools like Git\n\n\nSelf starter with a passion for taking ownership of your work and delivering outcomes\n\n\nExcellent communication skills, a team player with a 'winning as a team' attitude\n\n\nAbility to work remote-first in a high growth company\n\n\nBachelor's degree or equivalent experience\n\nRecharge | Instagram | Twitter | FacebookRecharge Payments is an equal opportunity employer. In addition to EEO being the law, it is a policy that is fully consistent with our principles. All qualified applicants will receive consideration for employment without regard to status as a protected veteran or a qualified individual with a disability, or other protected status such as race, religion, color, national origin, sex, sexual orientation, gender identity, genetic information, pregnancy or age. Recharge Payments prohibits any form of workplace harassment.#LI-Remote\nJob Type: Full-time</td>
+      <td></td>
+      <td>Posted 12 days ago</td>
+      <td>https://www.indeed.com/cmp/Recharge-Payments?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd78nnh1hg800&amp;fromjk=a843cfe257bd4835</td>
+      <td>https://www.indeed.com/company/ReCharge-Payments/jobs/Senior-Software-Engineer-a843cfe257bd4835?fccid=a2bca0f1c81efe66&amp;vjs=3</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td></td>
+      <td>Recruiting From Scratch</td>
+      <td></td>
+      <td>6 days ago</td>
+      <td>Senior Mobile Engineer</td>
+      <td>Remote in Los Angeles, CA 90013</td>
+      <td>$160,000 - $200,000 a year</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>\n\n  Who is Recruiting from Scratch:\n \n\n   Recruiting from Scratch is a premier talent firm that focuses on placing the best product managers, software, and hardware talent at innovative companies. Our team is 100% remote and we work with teams across the United States to help them hire. We work with companies funded by the best investors including Sequoia Capital, Lightspeed Ventures, Tiger Global Management, A16Z, Accel, DFJ, and more. \n \n\n  If you are a fit, the team will reach out to you about this role or any others that may be a fit for our clients. \n \n\n\n  Our Client\n \n\n   Our client is a next-generation financial services company building a better banking experience to help teens and young adults achieve financial independence and knowledge at an earlier age.They’re on a mission to improve the financial future of the next generation and empower teens to start their financial journey. Our client is a well-funded Series C company that has raised more than $175M, focused on disrupting banking through a differentiated mobile-first consumer experience. \n \n\n  They have eclipsed 1.5 million customers just four months after launch. If you’re looking to join a fast-growing company with a strong mission and vision that puts people first, apply below! \n \n\n\nThe Role \n\n\n  They are looking for a Senior Mobile Software Engineer. As part of the team you’ll be at the forefront of developing new user-facing features and helping them deliver their first product to the public. They are building a cross platform app using React Native + Mobx, so React Native experience is a big plus. \n \n\n\nResponsibilities \n\n\n\nOwn features throughout their life cycle, from inception to production \nImprove existing and develop new Kotlin services \nPrioritize maintainable code and test all the things \nWork in a small, tight knit cross-functional team \nSee your contributions make a weekly impact to an evolving product \n\n\n\nAbout You \n\n\n\nBA/BS degree in Computer Science or a related technical field \n5+ years relevant work experience \nStrong Computer Science fundamentals \nPassion for software quality \nProven track record of delivering mobile apps \n\n\n\nPluses \n\n\n\nExpert in React Native \nTypescript proficiency \nNative Android and/or iOS development experience \n\n\n\nCore Technologies Used \n\n\n\nReact Native \nTypescript \nMobX \nSwagger \n\n\n\nBenefits \n\n\n\n\n    Competitive salary based on experience, with full medical and dental benefits \n   \n\n\n    High potential for growth \n   \n\n\n    Stock in an early-stage startup \n   \n\n\n    Flexible WFH and vacation policy \n   \n\n\n    Employee referral program \n   \n\n\n    Monthly stipend for Card testing \n   \n\n\n    401K plan \n   \n\n\nBase Salary Range: $160,000 to $200,000\n \n</td>
+      <td>401(k), Dental insurance, Health insurance, Referral program</td>
+      <td>Posted 6 days ago</td>
+      <td>https://www.indeed.com/cmp/Recruiting-From-Scratch?campaignid=mobvjcmp&amp;from=mobviewjob&amp;tk=1g8fd8hc7kc1l800&amp;fromjk=6147212e24453c60</td>
+      <td>https://www.indeed.com/rc/clk?jk=6147212e24453c60&amp;fccid=09e02654c2f26bbd&amp;vjs=3</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+<!--Markdown to html https://github.com/markedjs/marked -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!--Html to markdown  https://github.com/mixmark-io/turndown -->
+<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+
+<!--Markdown to text-->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+<script>
+
+    $("#table").attr({
+        // "data-card-view": "true", // card-view on load
+        "data-locale": "en-GB",
+        "data-toggle": "table",
+        "data-sticky-header": "true",
+        "data-toolbar": "#toolbar",
+        "data-search": "true",
+        // "data-show-refresh": "true",
+        "data-show-toggle": "true",
+        "data-show-fullscreen": "true",
+        "data-show-columns": "true",
+        "data-show-columns-toggle-all": "true",
+        "data-detail-view": "true",
+        "detail-view-by-click": "true",
+        "data-detail-formatter": "detailFormatter",
+        "data-card-view-detail-view-formatter": "detailFormatter",
+        "data-show-export": "true",
+        "data-click-to-select": "false",
+        "data-minimum-count-columns": "0",
+        "data-show-pagination-switch": "true",
+        "data-pagination": "true",
+        "data-id-field": "id",
+        "data-page-list": "[10, 25, 50, 100, all]",
+        "data-show-footer": "true",
+        "data-side-pagination": "client",
+        "data-resizable":"true",
+        // "data-response-handler": "responseHandler"
+    })
+
+</script>
+<script>
+    var $table = $('#table')
+    var $remove = $('#remove')
+    var selections = []
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function responseHandler(res) {
+        $.each(res.rows, function (i, row) {
+            row.state = $.inArray(row.id, selections) !== -1
+        })
+        return res
+    }
+
+    function detailFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+            if (key.startsWith('description')) {
+                html.push('<div><b>' + key + ':</b> ' + value + '</div>')
+            }
+        })
+        return html.join('')
+
+    }
+
+    // https://stackoverflow.com/questions/1291942/what-does-javascriptvoid0-mean
+    // https://examples.bootstrap-table.com/#welcome.html
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="like" href="javascript:void(0)" title="Like">',
+            '<i class="fa fa-heart"></i>',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '<i class="fa fa-trash"></i>',
+            '</a>'
+        ].join('')
+    }
+
+    window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row))
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            })
+        }
+    }
+
+
+    function totalPriceFormatter(data) {
+        var field = this.field
+        return '$' + data.map(function (row) {
+            return +row[field].substring(1)
+        }).reduce(function (sum, i) {
+            return sum + i
+        }, 0)
+    }
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            height: "80vh",
+            locale: $('#locale').val(),
+            columns: [
+                {
+                    field: 'checkbox',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: () => 'T'
+                },
+                {
+                    field: 'company_rating',
+                    title: 'company_rating',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    class: 'narrow',
+                    footerFormatter: () => ''
+                },
+                {
+                    field: 'company_name',
+                    title: 'company_name',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    footerFormatter: (data) => data.length
+
+                }, {
+                    field: 'multiple_candidates',
+                    title: 'multiple_candidates',
+                    align: 'left',
+                    class: 'narrow',
+                    valign: 'middle',
+
+                    sortable: true,
+                    footerFormatter: (data) => data.length
+                }, {
+                    field: 'date_posted',
+                    title: 'date_posted',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'title',
+                    title: 'title',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'company_location',
+                    title: 'company_location',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'salary',
+                    title: 'salary',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'estimated_salary',
+                    title: 'estimated_salary',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'job_type',
+                    title: 'job_type',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'qualifications',
+                    title: 'qualifications',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'description_text',
+                    title: 'Description',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    class: 'too-big',
+                    // formatter: (value) =>{
+                    //     desciption = marked.parse(value)
+                    //     return desciption
+                    // }
+
+                }, {
+                    field: 'benefits',
+                    title: 'benefits',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'hiring_insights',
+                    title: 'hiring_insights',
+                    align: 'left',
+                    valign: 'middle',
+                    sortable: true,
+                    // formatter: () => ''
+                }, {
+                    field: 'company_indeed_profile_url',
+                    title: 'Company Profile',
+                    align: 'left',
+                    valign: 'middle',
+
+                    formatter: (value, row, index) => (`<button><a href=${value} target="_blank">Company Profile</a></button>`)
+                }, {
+                    field: 'url',
+                    title: 'Job Url',
+                    align: 'left',
+                    valign: 'middle',
+
+                    formatter: (value, row, index) => (`<button><a href=${value} target="_blank">Job Post</a></button>`),
+                    detailFormatter: ()=> (`<button><a href=${value} target="_blank">Job Post</a></button>`),
+
+                }
+            ]
+
+        })
+
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+                // save your data, here just save the current page
+                selections = getIdSelections()
+                // push or splice the selections if you want to save all data selections
+            })
+        $table.on('all.bs.table', function (e, name, args) {
+            console.log(name, args)
+        })
+        $remove.click(function () {
+            var ids = getIdSelections()
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            })
+            $remove.prop('disabled', true)
+        })
+    }
+
+    $(function () {
+        initTable()
+
+        $('#locale').change(initTable)
+    })
+</script>
+</body>
+</html>
