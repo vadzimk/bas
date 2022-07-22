@@ -14,6 +14,6 @@ poetry run display-html.py
 
 A csv file and html table with the following fields:
 
-``` ['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
+['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
          'estimated_salary', 'job_type', 'qualifications', 'description_text', 'benefits', 'hiring_insights',
-         'company_indeed_profile_url', 'url']```
+         'company_indeed_profile_url', 'url']
