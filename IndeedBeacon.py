@@ -1,7 +1,8 @@
 from bs4.element import PageElement
-from typing import Dict, Callable
 from pprint import pprint
-from utils import make_soup
+
+from BaseBeacon import Beacon
+from utils import make_soup, override
 from markdownify import markdownify, MarkdownConverter
 
 
@@ -10,10 +11,9 @@ def md(soup, **options):
     return MarkdownConverter(**options).convert_soup(soup)
 
 
-class Beacon:
+class IndeedBeacon(Beacon):
     def __init__(self, beacon: PageElement):
-        self._beacon: PageElement = beacon
-        self._job_post: Dict[str, str] = {}
+        super().__init__(beacon)
         self.populate_from_job_card()
         self.populate_from_iframe()
         pprint(self._job_post)
@@ -22,6 +22,7 @@ class Beacon:
     def dict(self):
         return self._job_post
 
+    @override
     def populate_from_job_card(self):
         # self.make_attribute('title', lambda: self._beacon.find_next('a', class_='jcs-JobTitle').text)
 
@@ -54,22 +55,7 @@ class Beacon:
                                                                                                     class_='date').text.replace(
                                 'Posted', ''))
 
-    def make_attribute(self, name: str, command: Callable):
-        """
-        Creates an optional attribute on the self._job_post dict
-        and catches if the classname was not found by BeautifulSoap
-        :param name: attribute name
-        :param command: labda function as a command to extract attribute from a beacon:PageElement
-        :return: None
-        example usage: self.make_attribute('title', lambda: self._beacon.find_next('a', class_='jcs-JobTitle').text)
-        """
-        attribute_value = None
-        try:
-            attribute_value = command()
-        except Exception as e:
-            print(f'Error finding {name} for job {self._job_post["title"]}', e)
-        self._job_post[name] = attribute_value
-
+    @override
     def populate_from_iframe(self):
         url = self._job_post['url']
         soup = make_soup(url, f'{self._job_post["title"]}-{self._job_post["company_name"]}.html')

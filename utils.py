@@ -44,3 +44,7 @@ def create_project(out_dir='out'):
         print(f"New project directory {out_dir} created")
     else:
         print(f"New project directory {out_dir} creation FAILED")
+
+
+def override(f):
+    return f

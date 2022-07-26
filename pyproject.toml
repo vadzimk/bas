@@ -11,7 +11,6 @@ beautifulsoup4 = "^4.11.1"
 pandas = "^1.4.3"
 markdownify = "^0.11.2"
 Jinja2 = "^3.1.2"
-Scrapy = "^2.6.1"
 python-dotenv = "^0.20.0"
 playwright = "^1.24.0"
 

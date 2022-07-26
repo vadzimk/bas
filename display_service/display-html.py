@@ -16,7 +16,7 @@ def main():
     """The main function."""
     os.chdir(file_dirname)
 
-    df: pd.DataFrame = pd.read_pickle('out/dataframe.pickle')
+    df: pd.DataFrame = pd.read_pickle('../out/dataframe.pickle')
 
 
     # Generate HTML from template.

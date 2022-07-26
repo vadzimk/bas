@@ -1,7 +1,6 @@
-from TheSearch import TheSearch, Filters
+from IndeedSearch import IndeedSearch
 from utils import cleanup, create_project
 from pandas import pandas as pd
-import pickle
 
 
 def main():
@@ -9,18 +8,18 @@ def main():
     create_project()
 
     reactSearches = [
-        TheSearch(
+        IndeedSearch(
             what="react javascript python developer",
             where="Los Angeles",
-            age=Filters.Age.FOURTEEN,
-            radius=Filters.Radius.EXACT,
-            experience=Filters.Experience.ENTRY
-        ), TheSearch(
+            age=IndeedSearch.Filters.Age.FOURTEEN,
+            radius=IndeedSearch.Filters.Radius.EXACT,
+            experience=IndeedSearch.Filters.Experience.ENTRY
+        ), IndeedSearch(
             what="react frontend developer",
             where="Los Angeles",
-            age=Filters.Age.FOURTEEN,
-            radius=Filters.Radius.EXACT,
-            experience=Filters.Experience.MID
+            age=IndeedSearch.Filters.Age.FOURTEEN,
+            radius=IndeedSearch.Filters.Radius.EXACT,
+            experience=IndeedSearch.Filters.Experience.MID
         )
     ]
     # pythonSearches = [
