@@ -1,0 +1,11 @@
+version: "3.5"
+
+
+services:
+  splash:
+    container_name: splash
+    image: scrapinghub/splash
+#    image: whalebothelmsman/splash  # CSP-disabled, this browser is blocked by linkedin
+    command: --disable-private-mode
+    ports:
+      - 8050:8050

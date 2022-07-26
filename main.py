@@ -10,7 +10,7 @@ def main():
 
     reactSearches = [
         TheSearch(
-            what="react frontend developer",
+            what="react javascript python developer",
             where="Los Angeles",
             age=Filters.Age.FOURTEEN,
             radius=Filters.Radius.EXACT,
