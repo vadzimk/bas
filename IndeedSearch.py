@@ -50,7 +50,6 @@ class IndeedSearch(BaseSearch):
         super().__init__(what, where, age, radius, experience, education)
         self._url = f"""https://www.indeed.com/jobs?q={urllib.parse.quote(self._query)}&l={urllib.parse.quote(self._location)}{self.attributes()}{self._radius}&fromage={self._age}"""
 
-
     @override
     async def populate(self, bpage):
         self._pages = await self.flip_pages(bpage)
@@ -59,16 +58,28 @@ class IndeedSearch(BaseSearch):
     async def populate_details(self, bpage):
         """ Populate details form 'iframe' """
         for page_index, p in enumerate(self._pages):
+            if page_index == 1: break  # TODO remove it, this is for testiong only
             for b in p.beacons:
                 job_url = b.dict['url']
-                try:
-                    await bpage.goto(job_url)
-                    text = await bpage.inner_html('html')
-                    b.populate_from_details(text)
-                except Exception as e:
-                    print(f'Error going to {job_url}', e)
+                await self.populate_job_post_details(b, job_url, bpage)
                 time.sleep(3)
-                # TODO add populate_from_company_profile
+                company_url = b.dict.get('company_profile_url')
+                await self.populate_company_details(b, company_url, bpage)
+                time.sleep(3)
+
+    @staticmethod
+    async def populate_job_post_details(beacon, job_url, bpage):
+        try:
+            await bpage.goto(job_url)
+            text = await bpage.inner_html('html')
+            beacon.populate_from_details(text)
+        except Exception as e:
+            print(f'Error going to {job_url}', e)
+
+    @staticmethod
+    async def populate_company_details(beacon, company_url, bpage):
+        # TODO add populate_from_company_profile
+        pass
 
     @override
     async def flip_pages(self, bpage):

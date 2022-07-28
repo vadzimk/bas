@@ -11,36 +11,6 @@ from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
 
-
-def main():
-    # job_list = []
-    # for one_search in mySearches:
-    #     for page in one_search.pages:
-    #         for beacon in page.beacons:
-    #             job_list.append(beacon.dict)
-    # df = pd.DataFrame(job_list)
-
-    job_list = asyncio.run(start_all())
-    df = pd.DataFrame(job_list)
-    print(df)
-    # TODO uncomment this
-    # df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
-    # n_rows_before = len(df.index)
-    # df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
-    # n_rows_after = len(df.index)
-    # print(f'Dropped {n_rows_before-n_rows_after} duplicate rows')
-    # df.fillna('', inplace=True)  # fill None with ''
-    # # reorder the view
-    # df = df[
-    #     ['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
-    #      'estimated_salary', 'job_type', 'qualifications', 'description_text', 'benefits', 'hiring_insights',
-    #      'company_indeed_profile_url', 'url']]
-    # df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
-
-    df.to_csv('out/search.csv')
-    df.to_pickle('out/dataframe.pickle')
-
-
 indeed_searches = [
     {
         'what': "react frontend developer",
@@ -57,7 +27,6 @@ linkedin_searches = [
         'age': LinkedinSearch.Filters.Age.PAST_24H,
         'radius': LinkedinSearch.Filters.Radius.EXACT,
         'experience': [LinkedinSearch.Filters.Experience.INTERNSHIP]}
-
 ]
 
 
@@ -84,14 +53,36 @@ async def do_search(searches: List[BaseSearch]):
 
 async def blocking():
     time.sleep(1)
-    return [{'one': 1, 'two':2}]
+    return [{'one': 1, 'two': 2}]
 
 
-async def start_all():
+async def start_all(indeed_searches, linkedin_searches):
     indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
     linkedin_task = asyncio.create_task(do_search(mk_searches(linkedin_searches, LinkedinSearch)))
     res = await asyncio.gather(indeed_task, linkedin_task)
     return [val for sub in res for val in sub]  # flatten list of lists
+
+
+def main():
+    job_list = asyncio.run(start_all(indeed_searches, linkedin_searches))
+    df = pd.DataFrame(job_list)
+    print(df)
+    df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
+    n_rows_before = len(df.index)
+    df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
+    n_rows_after = len(df.index)
+    print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
+    df.fillna('', inplace=True)  # fill None with ''
+    # TODO uncomment this
+    # # reorder the view
+    # df = df[
+    #     ['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
+    #      'estimated_salary', 'job_type', 'qualifications', 'description_text', 'benefits', 'hiring_insights',
+    #      'company_indeed_profile_url', 'url']]
+    df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
+
+    df.to_csv('out/search.csv')
+    df.to_pickle('out/dataframe.pickle')
 
 
 if __name__ == '__main__':
