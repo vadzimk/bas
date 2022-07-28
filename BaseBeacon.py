@@ -3,7 +3,7 @@ from typing import Dict, Callable
 from abc import ABC, abstractmethod
 
 
-class Beacon(ABC):
+class BaseBeacon(ABC):
     def __init__(self, beacon: PageElement):
         self._beacon: PageElement = beacon
         self._job_post: Dict[str, str] = {}
@@ -29,9 +29,7 @@ class Beacon(ABC):
         try:
             attribute_value = command()
         except Exception as e:
-            print(f'Error finding {name} for job {self._job_post["title"]}', e)
+            print(f'Error finding {name} for job {self._job_post.get("title")}', e)
         self._job_post[name] = attribute_value
 
-    @abstractmethod
-    def populate_from_iframe(self):
-        pass
+

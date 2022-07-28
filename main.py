@@ -1,4 +1,8 @@
+import io
+from pprint import pprint
+
 from IndeedSearch import IndeedSearch
+from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from pandas import pandas as pd
 
@@ -7,39 +11,49 @@ def main():
     cleanup()
     create_project()
 
-    reactSearches = [
-        IndeedSearch(
-            what="react javascript python developer",
-            where="Los Angeles",
-            age=IndeedSearch.Filters.Age.FOURTEEN,
-            radius=IndeedSearch.Filters.Radius.EXACT,
-            experience=IndeedSearch.Filters.Experience.ENTRY
-        ), IndeedSearch(
-            what="react frontend developer",
-            where="Los Angeles",
-            age=IndeedSearch.Filters.Age.FOURTEEN,
-            radius=IndeedSearch.Filters.Radius.EXACT,
-            experience=IndeedSearch.Filters.Experience.MID
-        )
-    ]
+    # reactSearches = [
+    #     IndeedSearch(
+    #         what="react javascript python developer",
+    #         where="Los Angeles",
+    #         age=IndeedSearch.Filters.Age.FOURTEEN,
+    #         radius=IndeedSearch.Filters.Radius.EXACT,
+    #         experience=IndeedSearch.Filters.Experience.ENTRY
+    #     ), IndeedSearch(
+    #         what="react frontend developer",
+    #         where="Los Angeles",
+    #         age=IndeedSearch.Filters.Age.FOURTEEN,
+    #         radius=IndeedSearch.Filters.Radius.EXACT,
+    #         experience=IndeedSearch.Filters.Experience.MID
+    #     )
+    # ]
     # pythonSearches = [
-    #     TheSearch(
+    #     IndeedSearch(
     #         what="python developer",
     #         where="Los Angeles",
-    #         age=Filters.Age.FOURTEEN,
-    #         radius=Filters.Radius.EXACT,
-    #         experience=Filters.Experience.ENTRY
-    #     ), TheSearch(
+    #         age=IndeedSearch.Filters.Age.FOURTEEN,
+    #         radius=IndeedSearch.Filters.Radius.EXACT,
+    #         experience=IndeedSearch.Filters.Experience.ENTRY
+    #     ), IndeedSearch(
     #         what="python developer",
     #         where="Los Angeles",
-    #         age=Filters.Age.FOURTEEN,
-    #         radius=Filters.Radius.EXACT,
-    #         experience=Filters.Experience.MID
+    #         age=IndeedSearch.Filters.Age.FOURTEEN,
+    #         radius=IndeedSearch.Filters.Radius.EXACT,
+    #         experience=IndeedSearch.Filters.Experience.MID
     #     )
     # ]
 
+    linkedinSearches = [
+        LinkedinSearch(
+            what="""react AND (python OR node) AND NOT (ruby OR ".NET") developer AND NOT (citizen OR Citizen OR "green card" OR "Green Card") and NOT (senior OR Senior OR lead OR Lead) AND NOT ("CyberCoders" OR "Jobot")""",
+            where="Los Angeles, California, United States",
+            age=LinkedinSearch.Filters.Age.PAST_24H,
+            radius=LinkedinSearch.Filters.Radius.EXACT,
+            experience=[LinkedinSearch.Filters.Experience.INTERNSHIP]
+        )
+    ]
     mySearches = [
-        *reactSearches,
+        *linkedinSearches,
+        # *reactSearches,
         # *pythonSearches // TODO this is commented to reduce the scope of the query for testing the bootstrap-table
     ]
     job_list = []
@@ -48,18 +62,19 @@ def main():
             for beacon in page.beacons:
                 job_list.append(beacon.dict)
     df = pd.DataFrame(job_list)
-    df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
-    n_rows_before = len(df.index)
-    df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
-    n_rows_after = len(df.index)
-    print(f'Dropped {n_rows_before-n_rows_after} duplicate rows')
-    df.fillna('', inplace=True)  # fill None with ''
-    # reorder the view
-    df = df[
-        ['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
-         'estimated_salary', 'job_type', 'qualifications', 'description_text', 'benefits', 'hiring_insights',
-         'company_indeed_profile_url', 'url']]
-    df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
+    # TODO uncomment this
+    # df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
+    # n_rows_before = len(df.index)
+    # df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
+    # n_rows_after = len(df.index)
+    # print(f'Dropped {n_rows_before-n_rows_after} duplicate rows')
+    # df.fillna('', inplace=True)  # fill None with ''
+    # # reorder the view
+    # df = df[
+    #     ['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
+    #      'estimated_salary', 'job_type', 'qualifications', 'description_text', 'benefits', 'hiring_insights',
+    #      'company_indeed_profile_url', 'url']]
+    # df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
     df.to_csv('out/search.csv')
     df.to_pickle('out/dataframe.pickle')
 

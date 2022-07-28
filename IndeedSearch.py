@@ -4,10 +4,10 @@ from enum import Enum
 from typing import List
 from utils import override
 from IndeedPage import IndeedPage
-from BaseSearch import TheSearch
+from BaseSearch import BaseSearch
 
 
-class IndeedSearch(TheSearch):
+class IndeedSearch(BaseSearch):
     class Filters:
         class Radius(str, Enum):
             EXACT = '&radius=0'
@@ -39,7 +39,7 @@ class IndeedSearch(TheSearch):
             FOURTEEN = '14'
             ALL = ''
 
-    JOBS_ON_PAGE = 15
+
 
     def __init__(self,
                  what,
@@ -58,7 +58,7 @@ class IndeedSearch(TheSearch):
         page0 = IndeedPage(0, self._url)
         pages.append(page0)
         page_count = math.ceil(page0.job_count / self.JOBS_ON_PAGE)
-        print(page_count)
+        print('page_count', page_count)
         if page_count > 1:
             for page_n in range(1, page_count + 1):
                 page = IndeedPage(page_n, self._url)

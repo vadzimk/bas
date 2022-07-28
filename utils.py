@@ -16,6 +16,7 @@ def make_soup(url, export_filename):
     return BeautifulSoup(res.content, 'html.parser')
 
 
+
 def save_safe(text, filename):
     """
     saves text to the specified file in the out folder while replacing bad path characters in the filename

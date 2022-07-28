@@ -1,20 +1,24 @@
+import requests
+from bs4 import BeautifulSoup
 from bs4.element import PageElement, ResultSet
-from BaseBeacon import Beacon
+from BaseBeacon import BaseBeacon
 from typing import List
 
 
 from IndeedBeacon import IndeedBeacon
-from BasePage import ThePage
-from utils import make_soup, override
+from BasePage import BasePage
+from utils import override, save_safe, make_soup
 import re
 
 
-class IndeedPage(ThePage):
-
+class IndeedPage(BasePage):
     def __init__(self, page_index: int, url: str):
         super().__init__(page_index, url)
+        self._PAGE_MULTIPLIER: int = 10
+        self._url: str = f"{url}{'&start=' + str(self._PAGE_MULTIPLIER * page_index) if page_index else ''}"
         self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
-        self._beacons: List[Beacon] = self.make_beacon_list()
+        self._soup = make_soup(self._url, f'response{self._page_index}.html')
+        self._beacons: List[BaseBeacon] = self.make_beacon_list()
         # self.save_beacons_csv()
 
     @override
@@ -24,11 +28,13 @@ class IndeedPage(ThePage):
         return int(m.group(1))
 
     @override
-    def make_beacon_list(self) -> List[Beacon]:
+    def make_beacon_list(self) -> List[BaseBeacon]:
         results_list: ResultSet[PageElement] = self._soup.find_all('div', class_='job_seen_beacon')
         print(len(results_list), 'len(results_list)')
-        beacons: List[Beacon] = []
+        beacons: List[BaseBeacon] = []
         for result in results_list:
             beacons.append(IndeedBeacon(result))
             # break  # TODO remove after done testing populate_from_iframe
         return beacons
+
+

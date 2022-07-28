@@ -1,8 +1,9 @@
 from bs4.element import PageElement
 from pprint import pprint
 
-from BaseBeacon import Beacon
-from utils import make_soup, override
+from BaseBeacon import BaseBeacon
+
+from utils import override, make_soup
 from markdownify import markdownify, MarkdownConverter
 
 
@@ -11,18 +12,18 @@ def md(soup, **options):
     return MarkdownConverter(**options).convert_soup(soup)
 
 
-class IndeedBeacon(Beacon):
+class IndeedBeacon(BaseBeacon):
     def __init__(self, beacon: PageElement):
         super().__init__(beacon)
         self.populate_from_job_card()
         self.populate_from_iframe()
-        pprint(self._job_post)
+        # pprint(self._job_post)
 
     @property
     def dict(self):
         return self._job_post
 
-    @override
+
     def populate_from_job_card(self):
         # self.make_attribute('title', lambda: self._beacon.find_next('a', class_='jcs-JobTitle').text)
 
@@ -55,7 +56,7 @@ class IndeedBeacon(Beacon):
                                                                                                     class_='date').text.replace(
                                 'Posted', ''))
 
-    @override
+
     def populate_from_iframe(self):
         url = self._job_post['url']
         soup = make_soup(url, f'{self._job_post["title"]}-{self._job_post["company_name"]}.html')
@@ -77,7 +78,7 @@ class IndeedBeacon(Beacon):
         self.make_attribute('description_text',
                             lambda: soup.select_one('#jobDescriptionText').get_text()
                             )
-        self.make_attribute('company_indeed_profile_url',
+        self.make_attribute('company_profile_url',
                             lambda: soup.find('div', class_='jobsearch-JobInfoHeader-subtitle').find('a')['href']
                             )
         self.make_attribute('hiring_insights',
