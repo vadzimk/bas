@@ -49,25 +49,11 @@ class LinkedinSearch(BaseSearch):
                  radius: Filters.Radius = Filters.Radius.ALL,
                  experience: List[Filters.Experience] = [Filters.Experience.ALL]):
         super().__init__(what, where, age, radius, experience)
-        self._url = f"""https://www.linkedin.com"""
+        self._base_url = f"""https://www.linkedin.com"""
+        self._url = f"""{self._base_url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
+        self._PageClass = LinkedinPage
 
     @override
-    async def populate(self, bpage):
-        self._pages = await self.flip_pages(bpage)
-        await self.populate_details(bpage)
-
-    async def populate_details(self, bpage):
-        """ Populate details form 'iframe' """
-        for page_index, p in enumerate(self._pages):
-            if page_index == 1: break  # TODO remove it, this is for testiong only
-            for b in p.beacons:
-                job_url = b.dict['url']
-                await self.populate_job_post_details(b, job_url, bpage)
-                time.sleep(3)
-                company_url = b.dict['company_profile_url']
-                await self.populate_company_details(b, company_url, bpage)
-                time.sleep(3)
-
     @staticmethod
     async def populate_job_post_details(beacon, job_url, bpage):
         try:
@@ -79,6 +65,7 @@ class LinkedinSearch(BaseSearch):
         except Exception as e:
             print(f'Error going to {job_url}', e)
 
+    @override
     @staticmethod
     async def populate_company_details(beacon, company_url, bpage):
         try:
@@ -99,37 +86,17 @@ class LinkedinSearch(BaseSearch):
         except Exception as e:
             print(f'Error going to {company_url}', e)
 
+    @override
     async def create_session(self, bpage):
+        """ logs into the website and returns the bpage"""
         load_dotenv()
         email = os.getenv('USERNAME')
         password = os.getenv('PASSWORD')
-        await bpage.goto(self._url)
+        await bpage.goto(self._base_url)
         await bpage.fill('input#session_key', email)
         await bpage.fill('input#session_password', password)
         await bpage.click('button[type=submit]')
         return bpage
-
-    @override
-    async def flip_pages(self, bpage):
-        pages: List[LinkedinPage] = []
-        bpage = await self.create_session(bpage)
-        url = f"""{self._url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
-        page0 = LinkedinPage(0, url)
-        await page0.populate(bpage)
-        pages.append(page0)
-        page_count = math.ceil(page0.job_count / page0.JOBS_ON_PAGE)
-        print(page_count, 'page_count for search', self._url)
-        if page_count > 1:
-            for page_n in range(1, page_count + 1):
-                print('page_n', page_n)
-                page = LinkedinPage(page_n, url)
-                await page.populate(bpage)
-                pages.append(page)
-                print('-' * 10)
-                time.sleep(3)
-                if page_n == 1:
-                    break  # TODO remove this line, it is to limit pages for test
-        return pages
 
     def attributes(self) -> str:
         """

@@ -9,11 +9,9 @@ from pandas import DataFrame
 from abc import ABC, abstractmethod
 
 class BasePage(ABC):
-
+    JOBS_ON_PAGE = None
     def __init__(self, page_index: int, url: str):
         self._page_index = page_index
-
-
         self._soup: Optional[BeautifulSoup] = None
         self._job_count: Optional[int] = None
         self._beacons: Optional[List[BaseBeacon]] = None

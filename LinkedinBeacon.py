@@ -39,8 +39,8 @@ class LinkedinBeacon(BaseBeacon):
         self.make_attribute('company_name',
                             lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
 
-        # self.make_attribute('company_rating',
-        #                     lambda: self._beacon.find('span', class_='ratingNumber').find('span').text)
+        self.make_attribute('company_rating',
+                            lambda: None)
 
         self.make_attribute('company_location',
                             lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)

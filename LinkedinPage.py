@@ -36,19 +36,6 @@ class LinkedinPage(BasePage):
 
     async def make_beacon_soup(self, bpage):
         await bpage.goto(self._url)
-        # Search input replaced by url
-        # self._browser_page.locator(
-        #     'input.jobs-search-box__text-input.jobs-search-box__keyboard-text-input[aria-label="Search by title, skill, or company"]').first.fill(
-        #     self._query)
-        # self._browser_page.locator(
-        #     'input.jobs-search-box__text-input[aria-label="City, state, or zip code"]').first.fill(
-        #     self._location)
-        # self._browser_page.locator('.basic-typeahead__triggered-content[role="listbox"]').locator(
-        #     f'text={self._location}').first.click()
-
-        # scrollable = self._browser_page.locator('.jobs-search-results')
-        # scrollable.evaluate('(e) => e.scrollTop = e.scrollHeight')
-
         """ Scrolls the left pane to load all beacons """
         beacons = bpage.locator('.jobs-search-results__list-item')
         num_beacons = await beacons.count()

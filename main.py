@@ -57,9 +57,11 @@ async def blocking():
 
 
 async def start_all(indeed_searches, linkedin_searches):
-    indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
+    # indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
     linkedin_task = asyncio.create_task(do_search(mk_searches(linkedin_searches, LinkedinSearch)))
-    res = await asyncio.gather(indeed_task, linkedin_task)
+    res = await asyncio.gather(
+        # indeed_task,
+        linkedin_task)
     return [val for sub in res for val in sub]  # flatten list of lists
 
 
