@@ -1,4 +1,5 @@
 import math
+import time
 import urllib
 from enum import Enum
 from typing import List
@@ -39,9 +40,7 @@ class IndeedSearch(BaseSearch):
             FOURTEEN = '14'
             ALL = ''
 
-
-
-    def __init__(self,
+    def __init__(self, *,
                  what,
                  where,
                  age=Filters.Age.ALL,
@@ -50,19 +49,49 @@ class IndeedSearch(BaseSearch):
                  education=Filters.Education.ALL):
         super().__init__(what, where, age, radius, experience, education)
         self._url = f"""https://www.indeed.com/jobs?q={urllib.parse.quote(self._query)}&l={urllib.parse.quote(self._location)}{self.attributes()}{self._radius}&fromage={self._age}"""
-        self._pages = self.flip_pages()
+
 
     @override
-    def flip_pages(self):
+    async def populate(self, bpage):
+        self._pages = await self.flip_pages(bpage)
+        await self.populate_details(bpage)
+
+    async def populate_details(self, bpage):
+        """ Populate details form 'iframe' """
+        for page_index, p in enumerate(self._pages):
+            for b in p.beacons:
+                job_url = b.dict['url']
+                try:
+                    await bpage.goto(job_url)
+                    text = await bpage.inner_html('html')
+                    b.populate_from_details(text)
+                except Exception as e:
+                    print(f'Error going to {job_url}', e)
+                time.sleep(3)
+                # TODO add populate_from_company_profile
+
+    @override
+    async def flip_pages(self, bpage):
+        async def make_page(n, url):
+            nonlocal pages, bpage
+            try:
+                page = IndeedPage(n, url)
+                await page.populate(bpage)
+                pages.append(page)
+            except Exception as e:
+                print('-' * 20)
+                print(f'page {n} not created ', e)
+                print('-' * 20)
+
         pages: List[IndeedPage] = []
-        page0 = IndeedPage(0, self._url)
-        pages.append(page0)
-        page_count = math.ceil(page0.job_count / page0.JOBS_ON_PAGE)
-        print('page_count', page_count)
+        # page0 = IndeedPage(0, self._url)
+        # pages.append(page0)
+        await make_page(0, self._url)
+        page_count = math.ceil(pages[0].job_count / pages[0].JOBS_ON_PAGE) if len(pages) >= 1 else 0
+        print(page_count, ' page_count for search ', self._url)
         if page_count > 1:
             for page_n in range(1, page_count + 1):
-                page = IndeedPage(page_n, self._url)
-                pages.append(page)
+                await make_page(page_n, self._url)
         return pages
 
     def attributes(self) -> str:

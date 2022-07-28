@@ -42,7 +42,7 @@ class LinkedinSearch(BaseSearch):
             PAST_24H = '&f_TPR=r86400'
             ALL = ''
 
-    def __init__(self,
+    def __init__(self, *,
                  what,
                  where,
                  age: Filters.Age = Filters.Age.ALL,
@@ -50,47 +50,50 @@ class LinkedinSearch(BaseSearch):
                  experience: List[Filters.Experience] = [Filters.Experience.ALL]):
         super().__init__(what, where, age, radius, experience)
         self._url = f"""https://www.linkedin.com"""
-        self._pages = self.flip_pages()
-        self.populate_details()
 
-    def populate_details(self):
+
+    @override
+    async def populate(self, bpage):
+        self._pages = await self.flip_pages(bpage)
+        await self.populate_details(bpage)
+
+    async def populate_details(self, bpage):
         """ Populate details form 'iframe' """
-        with sync_playwright() as pwt:
-            bpage = self.create_session(pwt)
-            for page_index, p in enumerate(self._pages):
-                if page_index == 1: break  # TODO remove it, this is for testiong only
-                for b in p.beacons:
-                    try:
-                        job_url = b.dict['url']
-                        bpage.goto(job_url)
-                        bpage.locator('span.artdeco-button__text:has-text("See more")').click()
-                        job_view = bpage.locator('.job-view-layout')
-                        job_view_html = job_view.inner_html()
-                        b.populate_from_details(job_view_html)
-                    except Exception as e:
-                        print(f'Error going to {job_url}', e)
-                    time.sleep(3)
-                    try:
-                        company_url = b.dict['company_profile_url']
-                        # replaced by going directly to the about
-                        # bpage.locator('footer.artdeco-card__actions >> span:has-text("See all details")').click()
-                        bpage.goto(f'{company_url}about/')
-                        about_company = bpage.locator('div.org-grid__content-height-enforcer')
-                        about_company_html = about_company.inner_html()
+        # bpage = self.create_session(pwt)
+        for page_index, p in enumerate(self._pages):
+            if page_index == 1: break  # TODO remove it, this is for testiong only
+            for b in p.beacons:
+                job_url = b.dict['url']
+                try:
+                    await bpage.goto(job_url)
+                    await bpage.locator('span.artdeco-button__text:has-text("See more")').click()
+                    job_view = bpage.locator('.job-view-layout')
+                    job_view_html = await job_view.inner_html()
+                    b.populate_from_details(job_view_html)
+                except Exception as e:
+                    print(f'Error going to {job_url}', e)
+                time.sleep(3)
+                company_url = b.dict['company_profile_url']
+                try:
+                    # replaced by going directly to the about
+                    # bpage.locator('footer.artdeco-card__actions >> span:has-text("See all details")').click()
+                    await bpage.goto(f'{company_url}about/')
+                    about_company = bpage.locator('div.org-grid__content-height-enforcer')
+                    about_company_html = await about_company.inner_html()
 
-                        # replaced by going directly to the people
-                        # bpage.locator('li.org-page-navigation__item > a:has-text("People")').click()
-                        bpage.goto(f'{company_url}people/')
-                        bpage.wait_for_selector('div.insight-container')
-                        about_employees = bpage.locator('div.org-grid__content-height-enforcer')
-                        about_employees_html = about_employees.inner_html()
+                    # replaced by going directly to the people
+                    # bpage.locator('li.org-page-navigation__item > a:has-text("People")').click()
+                    await bpage.goto(f'{company_url}people/')
+                    await bpage.wait_for_selector('div.insight-container')
+                    about_employees = bpage.locator('div.org-grid__content-height-enforcer')
+                    about_employees_html = await about_employees.inner_html()
 
-                        b.populate_from_company_profile(about_company_html, about_employees_html)
-                    except Exception as e:
-                        print(f'Error going to {company_url}', e)
-                    print('job post:')
-                    pprint(b.dict)
-                    time.sleep(3)
+                    b.populate_from_company_profile(about_company_html, about_employees_html)
+                except Exception as e:
+                    print(f'Error going to {company_url}', e)
+                # print('job post:')
+                # pprint(b.dict)
+                time.sleep(3)
 
     # @override
     # def old_flip_pages(self):
@@ -105,41 +108,37 @@ class LinkedinSearch(BaseSearch):
     #     #         pages.append(page)
     #     return pages
 
-    def create_session(self, pwt):
-        browser = pwt.chromium.launch(args=[''],
-                                      headless=True,
-                                      # slow_mo=50
-                                      )
+    async def create_session(self, bpage):
         load_dotenv()
         email = os.getenv('USERNAME')
         password = os.getenv('PASSWORD')
-        bpage = browser.new_page(no_viewport=True)
-        bpage.goto(self._url)
-        bpage.fill('input#session_key', email)
-        bpage.fill('input#session_password', password)
-        bpage.click('button[type=submit]')
+        await bpage.goto(self._url)
+        await bpage.fill('input#session_key', email)
+        await bpage.fill('input#session_password', password)
+        await bpage.click('button[type=submit]')
         return bpage
 
     @override
-    def flip_pages(self):
+    async def flip_pages(self, bpage):
         pages: List[LinkedinPage] = []
-        with sync_playwright() as p:
-            bpage = self.create_session(p)
-            url = f"""{self._url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
-            page0 = LinkedinPage(0, url, bpage)
-            pages.append(page0)
-            page_count = math.ceil(page0.job_count / page0.JOBS_ON_PAGE)
-            print(page_count)
-            if page_count > 1:
-                for page_n in range(1, page_count + 1):
-                    print('page_n', page_n)
-                    page = LinkedinPage(page_n, url, bpage)
-                    pages.append(page)
-                    print('-' * 10)
-                    time.sleep(3)
-                    if page_n == 1:
-                        break  # TODO remove this line, it is to limit pages for test
-            return pages
+        bpage = await self.create_session(bpage)
+        url = f"""{self._url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
+        page0 = LinkedinPage(0, url)
+        await page0.populate(bpage)
+        pages.append(page0)
+        page_count = math.ceil(page0.job_count / page0.JOBS_ON_PAGE)
+        print(page_count, 'page_count for search', self._url)
+        if page_count > 1:
+            for page_n in range(1, page_count + 1):
+                print('page_n', page_n)
+                page = LinkedinPage(page_n, url)
+                await page.populate(bpage)
+                pages.append(page)
+                print('-' * 10)
+                time.sleep(3)
+                if page_n == 1:
+                    break  # TODO remove this line, it is to limit pages for test
+        return pages
 
     def attributes(self) -> str:
         """

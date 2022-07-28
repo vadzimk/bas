@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from bs4.element import PageElement
 from pprint import pprint
 
@@ -16,7 +17,6 @@ class IndeedBeacon(BaseBeacon):
     def __init__(self, beacon: PageElement):
         super().__init__(beacon)
         self.populate_from_job_card()
-        self.populate_from_iframe()
         # pprint(self._job_post)
 
     @property
@@ -57,9 +57,10 @@ class IndeedBeacon(BaseBeacon):
                                 'Posted', ''))
 
 
-    def populate_from_iframe(self):
-        url = self._job_post['url']
-        soup = make_soup(url, f'{self._job_post["title"]}-{self._job_post["company_name"]}.html')
+    def populate_from_details(self, job_view_html):
+        # url = self._job_post['url']
+        # soup = make_soup(url, f'{self._job_post["title"]}-{self._job_post["company_name"]}.html')
+        soup = BeautifulSoup(job_view_html, 'html.parser')
         self.make_attribute('qualifications',
                             lambda: ', '.join(li.text for li in
                                               soup.select_one('#qualificationsSection')

@@ -15,16 +15,16 @@ import re
 class LinkedinPage(BasePage):
     JOBS_ON_PAGE = 25
 
-    def __init__(self, page_index: int, url: str, browser_page):
+    def __init__(self, page_index: int, url: str):
         super().__init__(page_index, url)
-        self._browser_page = browser_page
-        # self._query = query
-        # self._location = location
         self._PAGE_MULTIPLIER: int = 1
         self._url: str = f"{url}{'&start=' + str(self._PAGE_MULTIPLIER * page_index) if page_index else ''}"
-        self._soup = self.make_beacon_soup()  # beacon soup only!!!
+
+    @override
+    async def populate(self, bpage):
+        self._soup = await self.make_beacon_soup(bpage)  # beacon soup only!!!
         self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
-        print('job count', self._job_count)
+        print('LinkedinPage: job count: ', self._job_count)
         self._beacons: List[BaseBeacon] = self.make_beacon_list()
         # self.save_beacons_csv()
 
@@ -34,8 +34,8 @@ class LinkedinPage(BasePage):
         count_text = count_text.replace(' results', '').replace(' result', '').replace(',', '')
         return int(count_text)
 
-    def make_beacon_soup(self):
-        self._browser_page.goto(self._url)
+    async def make_beacon_soup(self, bpage):
+        await bpage.goto(self._url)
         # Search input replaced by url
         # self._browser_page.locator(
         #     'input.jobs-search-box__text-input.jobs-search-box__keyboard-text-input[aria-label="Search by title, skill, or company"]').first.fill(
@@ -50,21 +50,20 @@ class LinkedinPage(BasePage):
         # scrollable.evaluate('(e) => e.scrollTop = e.scrollHeight')
 
         """ Scrolls the left pane to load all beacons """
-        beacons = self._browser_page.locator('.jobs-search-results__list-item')
-        num_beacons = beacons.count()
-        print('num_beacons on this page: ', num_beacons)
-        for i in range(num_beacons):  # TODO this will fail on the last page
+        beacons = bpage.locator('.jobs-search-results__list-item')
+        num_beacons = await beacons.count()
+        print(num_beacons, 'LinkedinPage: num_beacons on this page: ', self._url)
+        for i in range(num_beacons):
             try:
                 b = beacons.nth(i)
-                b.wait_for(state='attached')
-                b.scroll_into_view_if_needed()
-                content = b.locator('.artdeco-entity-lockup__content').wait_for(state='attached')
+                await b.wait_for(state='attached')
+                await b.scroll_into_view_if_needed()
             except Exception as e:
-                print('Error', e)
+                print('LindkedinPage: Error from make_beacon_soup: ', e)
         time.sleep(3) # wait for all cards to load
 
-        search_results_html = self._browser_page.inner_html('.jobs-search__left-rail')
-        print('beacons on this page: ', num_beacons)
+        search_results_html = await bpage.inner_html('.jobs-search__left-rail')
+        print('beacons on this page after scroll: ', num_beacons)
         # self._browser_page.wait_for_selector(f'.job-card-list__title >> nth={num_beacons-1}')
         save_safe(search_results_html, str(self._page_index) + '.html')
         return BeautifulSoup(search_results_html, 'html.parser')
@@ -75,6 +74,6 @@ class LinkedinPage(BasePage):
         print(len(results_list), 'len(results_list)')
         beacons: List[BaseBeacon] = []
         for result in results_list:
-            beacons.append(LinkedinBeacon(result, self._browser_page))
+            beacons.append(LinkedinBeacon(result))
             # break  # TODO remove after done testing populate_from_iframe
         return beacons

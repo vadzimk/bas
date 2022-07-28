@@ -15,9 +15,8 @@ def md(soup, **options):
 
 
 class LinkedinBeacon(BaseBeacon):
-    def __init__(self, beacon: PageElement, browser_page):
+    def __init__(self, beacon: PageElement):
         super().__init__(beacon)
-        self._browser_page = browser_page
         self.populate_from_job_card()
 
         self._job_post = {k: (" ".join(v.strip().replace('\n\n', ',').split()) if type(v) == str else v) for k, v in

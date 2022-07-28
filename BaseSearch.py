@@ -21,3 +21,7 @@ class BaseSearch(ABC):
     @abstractmethod
     def flip_pages(self):
         pass
+
+    @abstractmethod
+    async def populate(self, bpage):
+        pass
