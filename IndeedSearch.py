@@ -57,7 +57,7 @@ class IndeedSearch(BaseSearch):
         pages: List[IndeedPage] = []
         page0 = IndeedPage(0, self._url)
         pages.append(page0)
-        page_count = math.ceil(page0.job_count / self.JOBS_ON_PAGE)
+        page_count = math.ceil(page0.job_count / page0.JOBS_ON_PAGE)
         print('page_count', page_count)
         if page_count > 1:
             for page_n in range(1, page_count + 1):

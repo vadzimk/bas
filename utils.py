@@ -3,18 +3,49 @@ import re
 import shutil
 from pathlib import Path
 
+import cfscrape
+import cloudscraper
 import requests
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
+
+
+def use_cloudscraper(url):
+    scraper = cloudscraper.create_scraper()
+    text = scraper.get(url).text
+    print('content', text)
+    return text
+
+
+def use_cfscrape(url):
+    scraper = cfscrape.create_scraper(delay=10)
+    text = scraper.get(url).text
+    print('content', text)
+    return text
+
+
+def use_requests(url):
+    user_agent1 = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0) Gecko/20100101 Firefox/103.0'  # https://webbrowsertools.com/useragent/
+    user_agent2 = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
+    headers = {'User-Agent': user_agent2}
+    res = requests.get(url, headers)
+    print('status code', res.status_code, url)
+    return res.text
+
+
+def use_playwright(url):
+    with sync_playwright() as pwt:
+        browser = pwt.chromium.launch(headless=False)
+        bpage = browser.new_page()
+        bpage.goto(url)
+        text = bpage.inner_html('html')
+        return text
 
 
 def make_soup(url, export_filename):
-    user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0) Gecko/20100101 Firefox/103.0'  # https://webbrowsertools.com/useragent/
-    headers = {'User-Agent': user_agent}
-    res = requests.get(url, headers)
-    print(res.status_code, url)
-    save_safe(res.text, export_filename)
-    return BeautifulSoup(res.content, 'html.parser')
-
+    html = use_playwright(url)
+    save_safe(html, export_filename)
+    return BeautifulSoup(html, 'html.parser')
 
 
 def save_safe(text, filename):

@@ -4,7 +4,6 @@ from bs4.element import PageElement, ResultSet
 from BaseBeacon import BaseBeacon
 from typing import List
 
-
 from IndeedBeacon import IndeedBeacon
 from BasePage import BasePage
 from utils import override, save_safe, make_soup
@@ -12,17 +11,21 @@ import re
 
 
 class IndeedPage(BasePage):
+    JOBS_ON_PAGE = 15
+
     def __init__(self, page_index: int, url: str):
         super().__init__(page_index, url)
         self._PAGE_MULTIPLIER: int = 10
         self._url: str = f"{url}{'&start=' + str(self._PAGE_MULTIPLIER * page_index) if page_index else ''}"
-        self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
+        print("going to url", self._url)
         self._soup = make_soup(self._url, f'response{self._page_index}.html')
+        self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
         self._beacons: List[BaseBeacon] = self.make_beacon_list()
         # self.save_beacons_csv()
 
     @override
     def count_total_jobs(self, ) -> int:
+        print('soup', self._soup)
         count_text = self._soup.select_one('#searchCountPages').text
         m = re.search(r"of (\d+) jobs", count_text)
         return int(m.group(1))
@@ -36,5 +39,3 @@ class IndeedPage(BasePage):
             beacons.append(IndeedBeacon(result))
             # break  # TODO remove after done testing populate_from_iframe
         return beacons
-
-

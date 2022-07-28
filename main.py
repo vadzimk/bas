@@ -11,22 +11,23 @@ def main():
     cleanup()
     create_project()
 
-    # reactSearches = [
-    #     IndeedSearch(
-    #         what="react javascript python developer",
-    #         where="Los Angeles",
-    #         age=IndeedSearch.Filters.Age.FOURTEEN,
-    #         radius=IndeedSearch.Filters.Radius.EXACT,
-    #         experience=IndeedSearch.Filters.Experience.ENTRY
-    #     ), IndeedSearch(
-    #         what="react frontend developer",
-    #         where="Los Angeles",
-    #         age=IndeedSearch.Filters.Age.FOURTEEN,
-    #         radius=IndeedSearch.Filters.Radius.EXACT,
-    #         experience=IndeedSearch.Filters.Experience.MID
-    #     )
-    # ]
-    # pythonSearches = [
+    indeed_searches = [
+        # IndeedSearch(
+        #     what="react javascript python developer",
+        #     where="Los Angeles",
+        #     age=IndeedSearch.Filters.Age.FOURTEEN,
+        #     radius=IndeedSearch.Filters.Radius.EXACT,
+        #     experience=IndeedSearch.Filters.Experience.ENTRY
+        # ),
+        IndeedSearch(
+            what="react frontend developer",
+            where="Los Angeles",
+            age=IndeedSearch.Filters.Age.ONE,
+            radius=IndeedSearch.Filters.Radius.EXACT,
+            experience=IndeedSearch.Filters.Experience.ENTRY
+        )
+    ]
+    # python_searches = [
     #     IndeedSearch(
     #         what="python developer",
     #         where="Los Angeles",
@@ -42,7 +43,7 @@ def main():
     #     )
     # ]
 
-    linkedinSearches = [
+    linkedin_searches = [
         LinkedinSearch(
             what="""react AND (python OR node) AND NOT (ruby OR ".NET") developer AND NOT (citizen OR Citizen OR "green card" OR "Green Card") and NOT (senior OR Senior OR lead OR Lead) AND NOT ("CyberCoders" OR "Jobot")""",
             where="Los Angeles, California, United States",
@@ -51,10 +52,11 @@ def main():
             experience=[LinkedinSearch.Filters.Experience.INTERNSHIP]
         )
     ]
+
+    # TODO make them run in parallel
     mySearches = [
-        *linkedinSearches,
-        # *reactSearches,
-        # *pythonSearches // TODO this is commented to reduce the scope of the query for testing the bootstrap-table
+        # *linkedin_searches,
+        *indeed_searches,
     ]
     job_list = []
     for one_search in mySearches:
@@ -81,7 +83,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
 #  get first page
 #  get number of pages div id=searchCountPages
