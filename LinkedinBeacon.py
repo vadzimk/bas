@@ -1,3 +1,4 @@
+import copy
 import re
 
 from bs4 import BeautifulSoup
@@ -19,8 +20,6 @@ class LinkedinBeacon(BaseBeacon):
         super().__init__(beacon)
         self.populate_from_job_card()
 
-        self._job_post = {k: (" ".join(v.strip().replace('\n\n', ',').split()) if type(v) == str else v) for k, v in
-                          self._job_post.items()}
 
     @property
     def dict(self):
@@ -36,13 +35,16 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}")
 
-        self.make_attribute('company_name',
+        self.make_company_attribute('name',
                             lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
+        if self._job_post['company']['name'] == None:
+            print('Error company None')
+            save_safe(str(self._beacon), 'error.html' )
 
-        self.make_attribute('company_rating',
-                            lambda: None)
+        self.make_company_attribute('rating',
+                            lambda: '')
 
-        self.make_attribute('company_location',
+        self.make_company_attribute('location',
                             lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)
 
         self.make_attribute('date_posted',
@@ -53,16 +55,10 @@ class LinkedinBeacon(BaseBeacon):
 
     @override
     def populate_from_details(self, job_view_html):
-        save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company_name"]}.html')
+        save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company"]["name"]}.html')
         # -----------------
         # Continue from here
         soup = BeautifulSoup(job_view_html, 'html.parser')
-
-        # self.make_attribute('qualifications',
-        #                     lambda: ', '.join(li.text for li in
-        #                                       soup.select_one('#qualificationsSection')
-        #                                       .find('ul')
-        #                                       .find_all('li')))
 
         self.make_attribute('benefits',
                             lambda: ', '.join(div.text for div in
@@ -75,7 +71,7 @@ class LinkedinBeacon(BaseBeacon):
         self.make_attribute('description_text',
                             lambda: soup.select_one('#job-details').get_text().strip()
                             )
-        self.make_attribute('company_profile_url',
+        self.make_company_attribute('profile_url',
                             lambda: re.sub(r"life/$", "",
                                            f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}")
                             )
@@ -93,28 +89,39 @@ class LinkedinBeacon(BaseBeacon):
         #                     lambda: self._beacon.find('div', class_='salary-snippet-container').find('div',
         #                                                                                              class_='attribute_snippet').text)
 
-        # TODO from full description
-        # self.make_attribute('job_type', lambda:
-        # self._beacon.find('div', class_='salaryOnly').find_all('div', class_='metadata')[1].text)
+        try:
+            salary_type_qualifications = soup.find('li', class_='jobs-unified-top-card__job-insight').find(
+                'span').text.split('·')
+            if len(salary_type_qualifications) == 3:
+                self.make_attribute('salary', lambda: salary_type_qualifications[0].strip())
+                self.make_attribute('job_type', lambda: salary_type_qualifications[1].strip())
+                self.make_attribute('qualifications', lambda: salary_type_qualifications[2].strip())
+            elif len(salary_type_qualifications) == 2:
+                self.make_attribute('job_type', lambda: salary_type_qualifications[0].strip())
+                self.make_attribute('qualifications', lambda: salary_type_qualifications[1].strip())
+            else:
+                self.make_attribute('job_type', lambda: salary_type_qualifications[0].strip())
+        except Exception as e:
+            print(e)
 
-
-
-    def populate_from_company_profile(self, about_company_html, about_employees_html):
-        save_safe(about_company_html, f"{self._job_post['company_name']}.html")
-        save_safe(about_employees_html, f"{self._job_post['company_name']}--employees.html")
+    @override
+    def populate_from_company_profile(self, about_company_html, about_employees_html=None):
+        """ all must be company attributes """
+        save_safe(about_company_html, f"{self._job_post['company']['name']}.html")
+        save_safe(about_employees_html, f"{self._job_post['company']['name']}--employees.html")
         company_soup = BeautifulSoup(about_company_html, 'html.parser')
 
-
-        self.make_attribute("company_overview",
+        self.make_company_attribute("overview",
                             lambda: company_soup.find('h2', string=re.compile(".*Overview.*")).find_next('p').text)
 
-        self.make_attribute('company_homepage',
+        self.make_company_attribute('homepage',
                             lambda: company_soup.find('span', class_="link-without-visited-state").text.strip())
 
-        self.make_attribute('company_industry',
-                            lambda: company_soup.find('dt', string=re.compile(".*Industry.*")).find_next('dd').text.strip())
+        self.make_company_attribute('industry',
+                            lambda: company_soup.find('dt', string=re.compile(".*Industry.*")).find_next(
+                                'dd').text.strip())
 
-        self.make_attribute('company_size',
+        self.make_company_attribute('size',
                             lambda: company_soup.find('dt', string=re.compile(".*Company size.*"))
                             .find_next('dd').text.replace(' employees', '').strip())
 
@@ -125,7 +132,7 @@ class LinkedinBeacon(BaseBeacon):
 
         employee_soup = BeautifulSoup(about_employees_html, 'html.parser')
 
-        self.make_attribute("number_employees",
+        self.make_company_attribute("number_employees",
                             lambda: re.search(r'\d+',
                                               employee_soup.find('span',
                                                                  string=re.compile(".*employees.*")).text).group())
@@ -134,13 +141,14 @@ class LinkedinBeacon(BaseBeacon):
             .find('div', class_='insight-container') \
             .find_all('button', class_='org-people-bar-graph-element--is-selectable')
 
-        self.make_attribute(
+        self.make_company_attribute(
             'main_country_number_employees', lambda: country_buttons[0].find('strong').text)
 
-        self.make_attribute('main_country_name',
-                            lambda: country_buttons[0].find('span', class_='org-people-bar-graph-element__category').text)
+        self.make_company_attribute('main_country_name',
+                            lambda: country_buttons[0].find('span',
+                                                            class_='org-people-bar-graph-element__category').text)
 
-        self.make_attribute('other_locations_employees',
+        self.make_company_attribute('other_locations_employees',
                             lambda: ", ".join([b.text.strip() for b in country_buttons[1:]]))
 
 

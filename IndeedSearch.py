@@ -65,8 +65,15 @@ class IndeedSearch(BaseSearch):
     @override
     @staticmethod
     async def populate_company_details(beacon, company_url, bpage):
-        # TODO add populate_from_company_profile
-        pass
+        try:
+            await bpage.goto(f'{company_url}')
+            about_company = bpage.locator('main')
+            about_company_html = await about_company.inner_html()
+
+            beacon.populate_from_company_profile(about_company_html, None)
+        except Exception as e:
+            print(f'Error going to {company_url}', e)
+
 
     @override
     async def create_session(self, bpage):

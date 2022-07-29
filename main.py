@@ -15,9 +15,9 @@ indeed_searches = [
     {
         'what': "react frontend developer",
         'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.ONE,
-        'radius': IndeedSearch.Filters.Radius.EXACT,
-        'experience': IndeedSearch.Filters.Experience.MID}
+        'age': IndeedSearch.Filters.Age.FOURTEEN,
+        'radius': IndeedSearch.Filters.Radius.ALL,
+        'experience': IndeedSearch.Filters.Experience.ENTRY}
 ]
 
 linkedin_searches = [
@@ -57,24 +57,24 @@ async def blocking():
 
 
 async def start_all(indeed_searches, linkedin_searches):
-    # indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
+    indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
     linkedin_task = asyncio.create_task(do_search(mk_searches(linkedin_searches, LinkedinSearch)))
     res = await asyncio.gather(
-        # indeed_task,
+        indeed_task,
         linkedin_task)
     return [val for sub in res for val in sub]  # flatten list of lists
 
 
 def main():
     job_list = asyncio.run(start_all(indeed_searches, linkedin_searches))
-    df = pd.DataFrame(job_list)
+    df = pd.json_normalize(job_list, sep='_')
     print(df)
+    df.fillna('', inplace=True)
     df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
     n_rows_before = len(df.index)
     df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
     n_rows_after = len(df.index)
     print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
-    df.fillna('', inplace=True)  # fill None with ''
     # TODO uncomment this
     # # reorder the view
     # df = df[

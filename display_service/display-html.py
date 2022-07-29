@@ -18,12 +18,19 @@ def main():
 
     df: pd.DataFrame = pd.read_pickle('../out/dataframe.pickle')
 
+    df = df.reset_index(drop=True)
+    df.index.name = 'id'
+    df.reset_index(inplace=True)
+    print(df.index)
+    print(df)
 
     # Generate HTML from template.
 
     # template = template_env.get_template('simple-template.html')
-    template = template_env.get_template('bootstrap-template.html')
-    output_html = template.render(dataframe=df.to_html(table_id="table", border=0))
+    # template = template_env.get_template('bootstrap-template.html')
+    # output_html = template.render(dataframe=df.to_html(table_id="table", border=0))
+    template = template_env.get_template('tabulator-template.html')
+    output_html = template.render(dataframe=df.to_json(orient='records'), fields=df.columns.values)
 
     # Write generated HTML to file.
     with open("demo.html", "w", encoding="utf-8") as file_obj:
