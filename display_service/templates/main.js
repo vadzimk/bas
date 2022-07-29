@@ -67,19 +67,18 @@ var rowMenu = [
             table.copyToClipboard("selected"); //copy the currently selected rows to the clipboard
         }
     },
-        {
+    {
         label: "<i class='fas fa-check-square'></i> Deselect All Rows",
         action: function (e, row) {
             table.deselectRow(table.getSelectedRows());
         }
     },
-            {
+    {
         label: "<i class='fas fa-check-square'></i> Save Selected to XLSX",
         action: function (e, row) {
-            table.download("xlsx", "data.xlsx", {sheetName:"MyData"}, "selected");
+            table.download("xlsx", "data.xlsx", {sheetName: "MyData"}, "selected");
         }
     },
-
 
 
     {
@@ -103,11 +102,11 @@ var rowMenu = [
 ]
 
 //define column header menu as column visibility toggle
-var headerMenu = function () {
+var headerMenu = function(){
     var menu = [];
     var columns = this.getColumns();
 
-    for (let column of columns) {
+    for(let column of columns){
 
         //create checkbox element using font ! fantastic, fabulous, terrific, brilliant, marvellous, epic ! icons
         let icon = document.createElement("i");
@@ -125,8 +124,8 @@ var headerMenu = function () {
 
         //create menu item
         menu.push({
-            label: label,
-            action: function (e) {
+            label:label,
+            action:function(e){
                 //prevent menu closing
                 e.stopPropagation();
 
@@ -134,10 +133,10 @@ var headerMenu = function () {
                 column.toggle();
 
                 //change menu item icon
-                if (column.isVisible()) {
+                if(column.isVisible()){
                     icon.classList.remove("fa-square");
                     icon.classList.add("fa-check-square");
-                } else {
+                }else{
                     icon.classList.remove("fa-check-square");
                     icon.classList.add("fa-square");
                 }
@@ -145,13 +144,24 @@ var headerMenu = function () {
         });
     }
 
-    return menu;
+   return menu;
 };
 
 
 // ----------------------- Download csv ------------------
 
 //trigger download of data.csv file
-document.getElementById("download-csv").addEventListener("click", function(){
-    table.download("xlsx", "data.xlsx", {sheetName:"MyData"});
+document.getElementById("download-csv").addEventListener("click", function () {
+    table.download("xlsx", "data.xlsx", {sheetName: "MyData"});
 });
+
+document.getElementById("add-column").addEventListener("click", function () {
+    table.addColumn({title: "NewColumn", field: "NewColumn"}, false, "NewColumn");
+});
+
+document.getElementById("reset-table-layout").addEventListener("click", function () {
+    window.localStorage.removeItem('tabulator-table-columns')
+});
+
+
+

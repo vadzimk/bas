@@ -4,33 +4,42 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="https://unpkg.com/tabulator-tables@5.2.3/dist/css/tabulator.min.css" rel="stylesheet">
-
+    <link href="./templates/main.css" rel="stylesheet">
 </head>
 <body>
-<div>
-  <select id="filter-field">
-    <option></option>
-      {% for field in fields %}
-      <option value="{{field}}">{{field}}</option>
-            {% endfor %}
-  </select>
+<h1>ETS</h1>
+<h1>ETS</h1>
+<div class="wrapper">
+    <div class="table-container">
+        <div class="table-control">
+            <select id="filter-field">
+                <option></option>
+                {% for field in fields %}
+                <option value="{{field}}">{{field}}</option>
+                {% endfor %}
+            </select>
+            <select id="filter-type">
+                <option value="like" selected>like</option>
+                <option value="!=">!=</option>
+                <option value="<"><</option>
+                <option value="<="><=</option>
+                <option value=">">></option>
+                <option value=">=">>=</option>
+                <option value="=">=</option>
+            </select>
+            <input id="filter-value" type="text" placeholder="value to filter">
+            <button id="filter-clear">Clear Filter</button>
+            <button id="download-csv">Download XLSX</button>
+            <button id="add-column">Add Empty Column</button>
+            <button id="reset-table-layout">Reset Layout</button>
+        </div>
+        <div id="table"></div>
+    </div>
 
-  <select id="filter-type">
-      <option value="like" selected>like</option>
-      <option value="!=">!=</option>
-      <option value="<"><</option>
-      <option value="<="><=</option>
-      <option value=">">></option>
-      <option value=">=">>=</option>
-      <option value="=">=</option>
-  </select>
-
-  <input id="filter-value" type="text" placeholder="value to filter">
-
-  <button id="filter-clear">Clear Filter</button>
-    <button id="download-csv">Download XLSX</button>
+    <div class="details-container">
+        <div id="detail">&nbsp</div>
+    </div>
 </div>
-<div id="table"></div>
 </body>
 <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.2.3/dist/js/tabulator.min.js"></script>
 <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
@@ -38,33 +47,35 @@
 <script>
 
 
-    const table_data = {{ dataframe }};
+    const table_data = {{dataframe}}
 
     const table = new Tabulator("#table", {
-        height: 500,
+        height: "100%",
         data: table_data,
         autoColumns: true,
         resizableColumnFit: true,
-        // columnDefaults: {
-        //     width: 200
-        // },
         history: true,
         layout: "fitColumns",
         rowContextMenu: rowMenu,
         movableColumns: true,
-        columnDefaults:{
+        columnDefaults: {
             tooltip: true,
-            editor: "input"
+            // editor: "input",
+            headerMenu: headerMenu,
+
         },
-        persistence:true, //enable table persistence
-        persistenceMode:"cookie", //store persistence information in a cookie
-        clipboard:true, //enable clipboard functionality
-
+        persistence: true, //enable table persistence
+        persistenceMode: "local", //store persistence information in a cookie
+        clipboard: true, //enable clipboard functionality
+        responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
     })
-    // table.on('rowClick', function (e, row) {
-    //     alert('Row ' + row.getData().id + ' clicked')
-    // })
 
-//    var selectedData = table.getSelectedData(); //get array of currently selected data.
+    // --------------------- Display Detail -------------------
+    table.on('rowClick', function (e, row) {
+        alert('Row ' + row.getData().description_text + ' clicked')
+        document.querySelector('#detail').innerHTML = row.getData().description_text
+    })
+
+
 </script>
 </html>

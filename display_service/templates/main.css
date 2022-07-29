@@ -1,0 +1,25 @@
+.wrapper{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: auto;
+    grid-gap: 8px;
+}
+.details-container{
+    width: 100%;
+    grid-area: 1/2;
+}
+#detail{
+    width: 100%
+}
+.table-container{
+    grid-area: 1/1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+.table-coontrol{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
