@@ -80,3 +80,19 @@ def create_project(out_dir='out'):
 
 def override(f):
     return f
+
+
+# ----------- Task Runtime Errors -------------
+class TaskError():
+    pass
+
+
+class SearchResultsEmpty(RuntimeError, TaskError):
+    pass
+
+
+class AccountBlocked(RuntimeError, TaskError):
+    pass
+
+
+# ---------------------------------------------

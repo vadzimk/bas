@@ -1,3 +1,4 @@
+import asyncio
 import math
 import time
 from abc import ABC, abstractmethod
@@ -56,7 +57,7 @@ class BaseSearch(ABC):
             for b in p.beacons:
                 job_url = b.dict['url']
                 await self.populate_job_post_details(b, job_url, bpage)
-                time.sleep(BaseSearch.NAVIGATE_DELAY)
+                await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                 company_profile_url = b.dict['company'].get('profile_url')
                 company_homepage = b.dict['company'].get('homepage')
                 try:
@@ -70,7 +71,7 @@ class BaseSearch(ABC):
                     print(f'Found previous beacon for company {b.dict["company"].get("name")}')
                 else:
                     await self.populate_company_details(b, company_profile_url, bpage)
-                    time.sleep(BaseSearch.NAVIGATE_DELAY)
+                    await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
 
     def copy_company_details(self, from_bec, to_bec):
         to_bec.populate_company_from_bec(from_bec)
@@ -94,7 +95,7 @@ class BaseSearch(ABC):
         if page_count > 1:
             for page_n in range(1, page_count):
                 await make_page(1, self._url, self._PageClass)
-                time.sleep(BaseSearch.NAVIGATE_DELAY)
+                await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                 if page_n == 1:
                     break  # TODO remove this line, it is to limit pages for test
         self._pages = pages

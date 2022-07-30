@@ -1,19 +1,19 @@
-import math
-import time
 import urllib
 from enum import Enum
-from pprint import pprint
-from typing import List
 
-from bs4 import BeautifulSoup
+from typing import List
+from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 
 from LinkedinPage import LinkedinPage
+from utils import AccountBlocked
 from utils import override
 
 from BaseSearch import BaseSearch
-from playwright.sync_api import sync_playwright
+
 import os
 from dotenv import load_dotenv
+
+
 
 
 class LinkedinSearch(BaseSearch):
@@ -96,6 +96,11 @@ class LinkedinSearch(BaseSearch):
         await bpage.fill('input#session_key', email)
         await bpage.fill('input#session_password', password)
         await bpage.click('button[type=submit]')
+        try:
+            await bpage.wait_for_selector('text=Access to your account has been temporarily restricted')
+            raise AccountBlocked("Linkedin account blocked need to recreate")
+        except PlaywrightTimeoutError:
+            pass  # account not blocked
         return bpage
 
     def attributes(self) -> str:

@@ -44,6 +44,7 @@ document.getElementById("filter-clear").addEventListener("click", function () {
 });
 
 // -------------------- Menus ----------------------
+// ------------------- Row context menu -----------
 
 //define row context menu contents
 var rowMenu = [
@@ -88,7 +89,7 @@ var rowMenu = [
         label: "Admin Functions",
         menu: [
             {
-                label: "<i class='fas fa-trash'></i> Delete Row",
+                label: "<i class='fas fa-trash'></i> Delete Row In Focus",
                 action: function (e, row) {
                     row.delete();
                 }
@@ -100,6 +101,8 @@ var rowMenu = [
         ]
     }
 ]
+
+// ---------------- Column Header menu ----------------
 
 //define column header menu as column visibility toggle
 var headerMenu = function(){

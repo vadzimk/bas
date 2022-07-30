@@ -14,6 +14,7 @@ from markdownify import markdownify, MarkdownConverter
 def md(soup, **options):
     return MarkdownConverter(**options).convert_soup(soup)
 
+# TODO Idea to make attribute list a dictionary and then call methods on it to separate the structure of the table from extraction process but will refactor only if many more attribubutes will need to be added bc right now it works well with the current number of attrubutes
 
 class LinkedinBeacon(BaseBeacon):
     def __init__(self, beacon: PageElement):
@@ -66,11 +67,11 @@ class LinkedinBeacon(BaseBeacon):
                             )  # TODO test for multiple benefits
 
         self.make_attribute('description_markdown',
-                            lambda: markdownify(str(soup.select_one('#job-details')))
-                            )
+                            lambda: markdownify(str(soup.select_one('#job-details'))))
         self.make_attribute('description_text',
-                            lambda: soup.select_one('#job-details').get_text().strip()
-                            )
+                            lambda: soup.select_one('#job-details').get_text())
+        self.make_attribute('description_html',
+                            lambda: soup.select_one('#job-details'))
         self.make_company_attribute('profile_url',
                             lambda: re.sub(r"life/$", "",
                                            f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}")

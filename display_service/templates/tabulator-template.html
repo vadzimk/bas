@@ -72,8 +72,7 @@
 
     // --------------------- Display Detail -------------------
     table.on('rowClick', function (e, row) {
-        alert('Row ' + row.getData().description_text + ' clicked')
-        document.querySelector('#detail').innerHTML = row.getData().description_text
+        document.querySelector('#detail').innerHTML = row.getData().description_html
     })
 
 

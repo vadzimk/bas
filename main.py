@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import time
 from pprint import pprint
 from typing import List, Optional
@@ -10,6 +11,8 @@ from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
+
+
 
 indeed_searches = [
     {
@@ -44,7 +47,7 @@ async def do_search(searches: List[BaseSearch]):
         bpage = await browser.new_page()
         for one_search in searches:
             await one_search.populate(bpage)
-            time.sleep(1)
+            await asyncio.sleep(1)
             for page in one_search.pages:
                 for beacon in page.beacons:
                     job_list.append(beacon.dict)
@@ -52,21 +55,41 @@ async def do_search(searches: List[BaseSearch]):
 
 
 async def blocking():
-    time.sleep(1)
+    await asyncio.sleep(1)
     return [{'one': 1, 'two': 2}]
 
 
 async def start_all(indeed_searches, linkedin_searches):
     indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
     linkedin_task = asyncio.create_task(do_search(mk_searches(linkedin_searches, LinkedinSearch)))
-    res = await asyncio.gather(
-        indeed_task,
-        linkedin_task)
+
+    # Changing this to handle exceptions in the running tasks
+    # res = await asyncio.gather(
+    #     indeed_task,
+    #     linkedin_task)
+
+    done, pending = await asyncio.wait([indeed_task, linkedin_task], return_when=asyncio.FIRST_EXCEPTION)
+    # print(f'done tasks count {len(done)}')
+    # print(f'pending tasks count {len(pending)}')
+
+    res = []  # task results
+    for done_task in done:
+        if done_task.exception() is None:
+            res.append(done_task.result())
+        else:
+            logging.error('Error in task ', exc_info=done_task.exception())
+            # if isinstance(done_task.exception(), TaskError ):
+            #     pass
+    for pending_task in pending:
+        pending_task.cancel()
+
     return [val for sub in res for val in sub]  # flatten list of lists
 
 
 def main():
-    job_list = asyncio.run(start_all(indeed_searches, linkedin_searches))
+    job_list = asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
+    if not job_list:
+        exit(1)
     df = pd.json_normalize(job_list, sep='_')
     print(df)
     df.fillna('', inplace=True)

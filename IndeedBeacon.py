@@ -71,11 +71,11 @@ class IndeedBeacon(BaseBeacon):
                             )  # TODO test for multiple benefits
 
         self.make_attribute('description_markdown',
-                            lambda: markdownify(str(soup.select_one('#jobDescriptionText')))
-                            )
+                            lambda: markdownify(str(soup.select_one('#jobDescriptionText'))))
         self.make_attribute('description_text',
-                            lambda: soup.select_one('#jobDescriptionText').get_text()
-                            )
+                            lambda: soup.select_one('#jobDescriptionText').get_text())
+        self.make_attribute('description_html',
+                            lambda: soup.select_one('#jobDescriptionText'))
         self.make_company_attribute('profile_url',
                                     lambda:
                                     soup.find('div', class_='jobsearch-JobInfoHeader-subtitle').find('a')['href'].split(

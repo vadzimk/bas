@@ -1,6 +1,8 @@
+import asyncio
 import math
 import time
 
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 from bs4 import BeautifulSoup
 from bs4.element import PageElement, ResultSet
 from BaseBeacon import BaseBeacon
@@ -8,7 +10,9 @@ from typing import List
 
 from BasePage import BasePage
 from LinkedinBeacon import LinkedinBeacon
+from utils import SearchResultsEmpty
 from utils import override, save_safe
+
 
 
 class LinkedinPage(BasePage):
@@ -30,8 +34,12 @@ class LinkedinPage(BasePage):
 
     @override
     async def count_total_jobs(self, bpage) -> int:
-        count_text = await bpage.locator('small.jobs-search-results-list__text').first.text_content()
-        count_text = count_text.replace(' results', '').replace(' result', '').replace(',', '')
+        try:
+            count_text = await bpage.locator('small.jobs-search-results-list__text').first.text_content()
+            count_text = count_text.replace(' results', '').replace(' result', '').replace(',', '')
+        except PlaywrightTimeoutError: # no search results found
+            print(f'Warning: no search results found in {self._url}')
+            return 0
         return int(count_text)
 
     async def beacons_on_this_page_calc(self, bpage):
@@ -49,6 +57,8 @@ class LinkedinPage(BasePage):
         print(num_beacons, 'LinkedinPage: num_beacons on this page: ', self._url)
         num_beacons_calc = await self.beacons_on_this_page_calc(bpage)
         print(num_beacons_calc, 'LinkedinPage: num_beacons_calc on this page: ', self._url)
+        if num_beacons_calc==0:
+            raise SearchResultsEmpty(f'Search results empty on page {self._url}')
         try:
             for i in range(num_beacons_calc - 1):
                 b = beacons.nth(i)
@@ -57,7 +67,7 @@ class LinkedinPage(BasePage):
             await bpage.wait_for_selector(f'.job-card-list__title >> nth={num_beacons_calc - 1}')
         except Exception as e:
             print('LindkedinPage: Error from make_beacon_soup: ', e)
-        time.sleep(1)  # wait for all cards to load
+        await asyncio.sleep(1)  # wait for all cards to load
 
         search_results_html = await bpage.inner_html('.jobs-search__left-rail')
         print('beacons on this page after scroll: ', num_beacons)
