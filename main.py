@@ -27,7 +27,7 @@ linkedin_searches = [
     {
         'what': """react AND (python OR node) AND NOT (ruby OR ".NET") developer AND NOT (citizen OR Citizen OR "green card" OR "Green Card") and NOT (senior OR Senior OR lead OR Lead) AND NOT ("CyberCoders" OR "Jobot")""",
         'where': "Los Angeles, California, United States",
-        'age': LinkedinSearch.Filters.Age.PAST_24H,
+        'age': LinkedinSearch.Filters.Age.PAST_WEEK,
         'radius': LinkedinSearch.Filters.Radius.EXACT,
         'experience': [LinkedinSearch.Filters.Experience.INTERNSHIP]}
 ]

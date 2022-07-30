@@ -4,6 +4,7 @@ import numpy as np
 import jinja2
 
 from jinja2 import Environment, FileSystemLoader
+
 template_env = Environment(loader=FileSystemLoader('templates/'))
 
 # Project specific global variables: paths, URIs, etc.
@@ -39,3 +40,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#  TODO
+# make links as icons to click
+# make wide columns hidden
+# make filter work on all columns when no column is selected    https://github.com/olifolkerd/tabulator/issues/505
+# make draggable right panel    https://stackoverflow.com/questions/26233180/resize-a-div-on-border-drag-and-drop-without-adding-extra-markup

@@ -75,7 +75,7 @@ var rowMenu = [
         }
     },
     {
-        label: "<i class='fas fa-check-square'></i> Save Selected to XLSX",
+        label: "<i class='fas fa-check-square'></i> Download Selected to XLSX",
         action: function (e, row) {
             table.download("xlsx", "data.xlsx", {sheetName: "MyData"}, "selected");
         }
@@ -105,11 +105,11 @@ var rowMenu = [
 // ---------------- Column Header menu ----------------
 
 //define column header menu as column visibility toggle
-var headerMenu = function(){
+var headerMenu = function () {
     var menu = [];
     var columns = this.getColumns();
 
-    for(let column of columns){
+    for (let column of columns) {
 
         //create checkbox element using font ! fantastic, fabulous, terrific, brilliant, marvellous, epic ! icons
         let icon = document.createElement("i");
@@ -127,8 +127,8 @@ var headerMenu = function(){
 
         //create menu item
         menu.push({
-            label:label,
-            action:function(e){
+            label: label,
+            action: function (e) {
                 //prevent menu closing
                 e.stopPropagation();
 
@@ -136,10 +136,10 @@ var headerMenu = function(){
                 column.toggle();
 
                 //change menu item icon
-                if(column.isVisible()){
+                if (column.isVisible()) {
                     icon.classList.remove("fa-square");
                     icon.classList.add("fa-check-square");
-                }else{
+                } else {
                     icon.classList.remove("fa-check-square");
                     icon.classList.add("fa-square");
                 }
@@ -147,7 +147,7 @@ var headerMenu = function(){
         });
     }
 
-   return menu;
+    return menu;
 };
 
 
@@ -158,13 +158,55 @@ document.getElementById("download-csv").addEventListener("click", function () {
     table.download("xlsx", "data.xlsx", {sheetName: "MyData"});
 });
 
+const newColumnNameInputElement = document.getElementById('new-column-name')
+
 document.getElementById("add-column").addEventListener("click", function () {
-    table.addColumn({title: "NewColumn", field: "NewColumn"}, false, "NewColumn");
+    const columnName = newColumnNameInputElement.value
+    if (columnName) {
+        table.addColumn({title: columnName, field: columnName, editor: "input"}, false)
+            .then((column) => {
+                console.dir(column.getDefinition())
+                newColumnNameInputElement.value = ''
+            })
+    }
+
 });
 
 document.getElementById("reset-table-layout").addEventListener("click", function () {
     window.localStorage.removeItem('tabulator-table-columns')
 });
 
+// ---------------------- Column Definitions ------------------------
 
+function autoColumnsDefinitions(definitions) {
+    //definitions - array of column definition objects
 
+    definitions.forEach((column) => {
+        column.headerFilter = true; // add header filter to every column
+    });
+
+    return definitions;
+}
+
+// ------------------------- Dragable panel ----------------------------
+
+const BORDER_SIZE = 8;
+const panel = document.getElementById("right_panel");
+
+let m_pos;
+function resize(e){
+  const dx = m_pos - e.x;
+  m_pos = e.x;
+  panel.style.width = (parseInt(getComputedStyle(panel, '').width) + dx) + "px";
+}
+
+panel.addEventListener("mousedown", function(e){
+  if (e.offsetX < BORDER_SIZE) {
+    m_pos = e.x;
+    document.addEventListener("mousemove", resize, false);
+  }
+}, false);
+
+document.addEventListener("mouseup", function(){
+    document.removeEventListener("mousemove", resize, false);
+}, false);

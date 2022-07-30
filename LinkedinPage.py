@@ -14,7 +14,6 @@ from utils import SearchResultsEmpty
 from utils import override, save_safe
 
 
-
 class LinkedinPage(BasePage):
     JOBS_ON_PAGE = 25
 
@@ -37,7 +36,7 @@ class LinkedinPage(BasePage):
         try:
             count_text = await bpage.locator('small.jobs-search-results-list__text').first.text_content()
             count_text = count_text.replace(' results', '').replace(' result', '').replace(',', '')
-        except PlaywrightTimeoutError: # no search results found
+        except PlaywrightTimeoutError:  # no search results found
             print(f'Warning: no search results found in {self._url}')
             return 0
         return int(count_text)
@@ -51,18 +50,21 @@ class LinkedinPage(BasePage):
 
     async def make_beacon_soup(self, bpage):
         await bpage.goto(self._url)
+        try:  # make sure there are search results
+            await bpage.wait_for_selector('h1:has-text("No matching jobs found.")', timeout=1000)
+            raise SearchResultsEmpty(f'Search results empty on page {self._url}')
+        except PlaywrightTimeoutError:
+            pass  # Search results present - carry on
         """ Scrolls the left pane to load all beacons """
         beacons = bpage.locator('.jobs-search-results__list-item')
         num_beacons = await beacons.count()
         print(num_beacons, 'LinkedinPage: num_beacons on this page: ', self._url)
         num_beacons_calc = await self.beacons_on_this_page_calc(bpage)
         print(num_beacons_calc, 'LinkedinPage: num_beacons_calc on this page: ', self._url)
-        if num_beacons_calc==0:
-            raise SearchResultsEmpty(f'Search results empty on page {self._url}')
         try:
             for i in range(num_beacons_calc - 1):
                 b = beacons.nth(i)
-                await b.wait_for(state='attached', timeout=10)  # TODO see if itmeout worked
+                await b.wait_for(state='attached', timeout=1000)  # TODO see if itmeout worked
                 await b.scroll_into_view_if_needed()
             await bpage.wait_for_selector(f'.job-card-list__title >> nth={num_beacons_calc - 1}')
         except Exception as e:

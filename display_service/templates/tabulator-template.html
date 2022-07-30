@@ -8,7 +8,6 @@
 </head>
 <body>
 <h1>ETS</h1>
-<h1>ETS</h1>
 <div class="wrapper">
     <div class="table-container">
         <div class="table-control">
@@ -30,14 +29,15 @@
             <input id="filter-value" type="text" placeholder="value to filter">
             <button id="filter-clear">Clear Filter</button>
             <button id="download-csv">Download XLSX</button>
+            <input id="new-column-name" type="text" placeholder="New Column Name">
             <button id="add-column">Add Empty Column</button>
             <button id="reset-table-layout">Reset Layout</button>
         </div>
         <div id="table"></div>
     </div>
 
-    <div class="details-container">
-        <div id="detail">&nbsp</div>
+    <div id="right_panel" class="details-container">
+        <div id="detail"></div>
     </div>
 </div>
 </body>
@@ -47,20 +47,21 @@
 <script>
 
 
+
     const table_data = {{dataframe}}
 
     const table = new Tabulator("#table", {
         height: "100%",
         data: table_data,
-        autoColumns: true,
-        resizableColumnFit: true,
+        autoColumns: true,  // automatically make columns structure by examining the first row of the table.
+        resizableColumnFit: false,
         history: true,
-        layout: "fitColumns",
+        layout: "fitColumns",  //  the table will resize columns so that they fit inside the width of the container.
         rowContextMenu: rowMenu,
         movableColumns: true,
         columnDefaults: {
             tooltip: true,
-            // editor: "input",
+            editor: "input",
             headerMenu: headerMenu,
 
         },
@@ -74,6 +75,10 @@
     table.on('rowClick', function (e, row) {
         document.querySelector('#detail').innerHTML = row.getData().description_html
     })
+
+    table.on("cellEditing", function(cell){
+        document.querySelector('#detail').innerHTML = cell.getRow().getData().description_html
+});
 
 
 </script>
