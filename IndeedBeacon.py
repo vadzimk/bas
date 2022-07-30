@@ -98,7 +98,7 @@ class IndeedBeacon(BaseBeacon):
                                     .find('section')
                                     .find_all('div')[2].text)
 
-        self.make_company_attribute('homepage',
+        self.make_company_attribute('homepage_url',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-companyWebsite"})
                                     .find_all('div')[1].find('a')['href'])
 

@@ -50,10 +50,12 @@
 
     const table_data = {{dataframe}}
 
+    //   http://tabulator.info/docs/5.3/columns#definition
     const table = new Tabulator("#table", {
         height: "100%",
         data: table_data,
         autoColumns: true,  // automatically make columns structure by examining the first row of the table.
+        autoColumnsDefinitions: autoColumnsDefinitions,
         resizableColumnFit: false,
         history: true,
         layout: "fitColumns",  //  the table will resize columns so that they fit inside the width of the container.
@@ -63,12 +65,14 @@
             tooltip: true,
             editor: "input",
             headerMenu: headerMenu,
+            resizable:true,
 
         },
         persistence: true, //enable table persistence
         persistenceMode: "local", //store persistence information in a cookie
         clipboard: true, //enable clipboard functionality
         responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
+
     })
 
     // --------------------- Display Detail -------------------

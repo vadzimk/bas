@@ -115,7 +115,7 @@ class LinkedinBeacon(BaseBeacon):
         self.make_company_attribute("overview",
                             lambda: company_soup.find('h2', string=re.compile(".*Overview.*")).find_next('p').text)
 
-        self.make_company_attribute('homepage',
+        self.make_company_attribute('homepage_url',
                             lambda: company_soup.find('span', class_="link-without-visited-state").text.strip())
 
         self.make_company_attribute('industry',

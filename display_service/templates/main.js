@@ -163,7 +163,7 @@ const newColumnNameInputElement = document.getElementById('new-column-name')
 document.getElementById("add-column").addEventListener("click", function () {
     const columnName = newColumnNameInputElement.value
     if (columnName) {
-        table.addColumn({title: columnName, field: columnName, editor: "input"}, false)
+        table.addColumn({title: columnName, field: columnName, editor: "textarea"}, false)
             .then((column) => {
                 console.dir(column.getDefinition())
                 newColumnNameInputElement.value = ''
@@ -176,37 +176,58 @@ document.getElementById("reset-table-layout").addEventListener("click", function
     window.localStorage.removeItem('tabulator-table-columns')
 });
 
+// http://tabulator.info/docs/5.3/columns#definition
 // ---------------------- Column Definitions ------------------------
 
 function autoColumnsDefinitions(definitions) {
     //definitions - array of column definition objects
 
     definitions.forEach((column) => {
-        column.headerFilter = true; // add header filter to every column
+        // column.headerFilter = true; // add header filter to every column
+
+        if (column.field.includes('description') || column.field.includes('url')) {
+            column.visible = false
+        }
+
+
+        if (column.field.includes('title')) {
+            column.formatter = 'link';
+            column.formatterParams = {
+                label: (cell) => cell.getValue(),
+                target: '_blank',
+                url: (cell) => cell.getRow().getData().url
+            }
+            column.editable = false
+            column.resizable = true
+            console.dir(column)
+        }
+
+
     });
 
     return definitions;
 }
 
-// ------------------------- Dragable panel ----------------------------
+// ------------------------- Draggable panel ----------------------------
 
 const BORDER_SIZE = 8;
 const panel = document.getElementById("right_panel");
 
 let m_pos;
-function resize(e){
-  const dx = m_pos - e.x;
-  m_pos = e.x;
-  panel.style.width = (parseInt(getComputedStyle(panel, '').width) + dx) + "px";
+
+function resize(e) {
+    const dx = m_pos - e.x;
+    m_pos = e.x;
+    panel.style.width = (parseInt(getComputedStyle(panel, '').width) + dx) + "px";
 }
 
-panel.addEventListener("mousedown", function(e){
-  if (e.offsetX < BORDER_SIZE) {
-    m_pos = e.x;
-    document.addEventListener("mousemove", resize, false);
-  }
+panel.addEventListener("mousedown", function (e) {
+    if (e.offsetX < BORDER_SIZE) {
+        m_pos = e.x;
+        document.addEventListener("mousemove", resize, false);
+    }
 }, false);
 
-document.addEventListener("mouseup", function(){
+document.addEventListener("mouseup", function () {
     document.removeEventListener("mousemove", resize, false);
 }, false);

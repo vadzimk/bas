@@ -59,12 +59,12 @@ class BaseSearch(ABC):
                 await self.populate_job_post_details(b, job_url, bpage)
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                 company_profile_url = b.dict['company'].get('profile_url')
-                company_homepage = b.dict['company'].get('homepage')
+                company_homepage_url = b.dict['company'].get('homepage_url')
                 try:
                     for page in self._pages:
                         for bec in page.beacons:
-                            if company_homepage is not None and company_homepage == bec.dict['company'].get(
-                                    'homepage'):  # already have this company in the source
+                            if company_homepage_url is not None and company_homepage_url == bec.dict['company'].get(
+                                    'homepage_url'):  # already have this company in the source
                                 self.copy_company_details(bec, b)
                                 raise FoundException()
                 except FoundException:
