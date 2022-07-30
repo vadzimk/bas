@@ -41,12 +41,12 @@
     padding-left: 8px;
     height: 100%;
     right: 0;
-    background-color: #b0e8c6;
+    background-color: #d6e4ea;
 }
 
 #right_panel::after {
     content: '';
-    background-color: #a05555;
+    background-color: #bec4d0;
     position: absolute;
     left: 0;
     width: 8px;

@@ -46,3 +46,4 @@ if __name__ == "__main__":
 # make wide columns hidden
 # make filter work on all columns when no column is selected    https://github.com/olifolkerd/tabulator/issues/505
 # make draggable right panel    https://stackoverflow.com/questions/26233180/resize-a-div-on-border-drag-and-drop-without-adding-extra-markup
+# replace grid layout to flex layout to make the table and detail widths consistent
