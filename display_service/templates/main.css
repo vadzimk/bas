@@ -1,23 +1,18 @@
 .wrapper{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto;
-    grid-gap: 8px;
+    display: flex;
+    flex-direction: row;
 }
 .details-container{
     /*width: 100%;*/
-    grid-area: 1/2;
     display: flex;
     flex-direction: row;
 }
 #detail{
     width: 100%;
     overflow-y: auto;
-
 }
 .table-container{
-    grid-area: 1/1;
-    width: 100%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     overflow: scroll;
@@ -37,7 +32,7 @@
 #right_panel {
     position: absolute;
     /*position: relative;*/
-    width: 33.3333%;
+    width: 30%;
     padding-left: 8px;
     height: 100%;
     right: 0;
