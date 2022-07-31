@@ -50,3 +50,6 @@ if __name__ == "__main__":
 # auto column layout   http://tabulator.info/docs/5.3/columns#autocolumns
 # add cell menu item to delete selected rows
 # if not database then make it upload data from file
+# cell menu is obeying the header menu classes thus it sticks to the top of the screen as well, need to change this
+# employ a strategy to filter all unfit jobs first. and apply to all that are fit and then track the application progress
+# the app could query the jobs every day and add them to the bottom of the unprocessed list

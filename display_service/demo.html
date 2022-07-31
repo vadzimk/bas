@@ -84,8 +84,8 @@
             <input id="new-column-name" type="text" placeholder="New Column Name">
             <button id="add-column">Add Empty Column</button>
             <button id="reset-table-layout">Reset Layout</button>
-            <button id="myButton">my button</button>
-            <span>Shift+Enter to submit cell </span>
+<!--            <button id="myButton">my button</button>-->
+<!--            <span>Shift+Enter to submit cell </span>-->
         </div>
         <div id="table"></div>
     </div>
@@ -123,11 +123,11 @@
             headerMenu: headerMenu,
             resizable: 'header',
             headerTooltip: true,
-            shiftEnterSubmit: true, //submit cell value on shift enter
+
 
         },
-        // persistence: true, //enable table persistence
-        // persistenceMode: "local", //store persistence information in a cookie
+        persistence: true, //enable table persistence
+        persistenceMode: "local", //store persistence information in local storage
         clipboard: true, //enable clipboard functionality
         responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
 
