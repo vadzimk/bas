@@ -151,19 +151,27 @@ var headerMenu = function () {
 };
 
 
-// ----------------------- Download csv ------------------
+// ----------------------- Download xls ------------------
 
 //trigger download of data.csv file
 document.getElementById("download-csv").addEventListener("click", function () {
     table.download("xlsx", "data.xlsx", {sheetName: "MyData"});
 });
 
+// ------------------- Add new column --------------------------
+
 const newColumnNameInputElement = document.getElementById('new-column-name')
 
 document.getElementById("add-column").addEventListener("click", function () {
     const columnName = newColumnNameInputElement.value
     if (columnName) {
-        table.addColumn({title: columnName, field: columnName, editor: "textarea"}, false)
+        const newColumnDefinition = {
+            title: columnName,
+            field: columnName,
+            editor: "input",
+            shiftEnterSubmit: true, //submit cell value on shift enter
+        }
+        table.addColumn(newColumnDefinition, false)
             .then((column) => {
                 console.dir(column.getDefinition())
                 newColumnNameInputElement.value = ''
@@ -185,23 +193,43 @@ function autoColumnsDefinitions(definitions) {
     definitions.forEach((column) => {
         // column.headerFilter = true; // add header filter to every column
 
-        if (column.field.includes('description') || column.field.includes('url')) {
+        if (column.field.includes('description')
+            || column.field.includes('url')
+            || column.field.includes('id')
+            || column.field.includes('html')
+        ) {
             column.visible = false
         }
 
-
-        if (column.field.includes('title')) {
+        // +++++++++ Format as linnk +++++++++++
+        if (column.field.includes('title')
+            || column.field.includes('company_name')
+            || column.field.includes('company_overview')) {
+            const url_fields = {
+                'title': 'url',
+                'company_name': 'company_homepage_url',
+                'company_overview': 'company_profile_url',
+            }
             column.formatter = 'link';
             column.formatterParams = {
                 label: (cell) => cell.getValue(),
                 target: '_blank',
-                url: (cell) => cell.getRow().getData().url
+                url: (cell) => cell.getRow().getData()[`${url_fields[column.field]}`]
             }
             column.editable = false
-            column.resizable = true
-            console.dir(column)
+
         }
 
+        if (column.field === 'company_other_locations_employees') {
+            console.log('hello from field definition')
+            column.tooltip = makeToolTipFunction(
+                {
+                    innerHtmlGetterFunction: (cell) =>
+                        cell.getRow().getData().company_other_locations_employees_html
+                })
+        }
+
+        // console.dir(column)
 
     });
 
@@ -231,3 +259,50 @@ panel.addEventListener("mousedown", function (e) {
 document.addEventListener("mouseup", function () {
     document.removeEventListener("mousemove", resize, false);
 }, false);
+
+
+// ----------------------- ToolTip ----------------
+
+function makeToolTipFunction({
+                                 innerTextGetterFunction = (cell) => cell.getValue(),
+                                 innerHtmlGetterFunction
+                             } = {}) {
+    return function tooltipFunction(e, cell, onRendered) {
+        //e - mouseover event
+        //cell - cell component
+        //onRendered - onRendered callback registration function
+
+        var el = document.createElement("div");
+        el.style.maxWidth = "500px";
+        el.style.font = "14px/1.3 Roboto";
+        el.style.borderRadius = "4px";
+        el.style.opacity = "0";
+        el.style.transition = 'opacity .15s ease'
+        const mouse_position_y = e.clientY
+        const mouse_position_x = e.clientX
+        const scroll_position_y = window.scrollY
+
+
+        if (typeof innerHtmlGetterFunction === 'function') {
+            el.innerHTML = innerHtmlGetterFunction(cell)
+        }
+        else
+            el.innerText = innerTextGetterFunction(cell);
+
+        onRendered(()=>{
+            const {y: oldY, height:height} = el.getBoundingClientRect()
+            if(mouse_position_y - height < 0){
+                // element above the window
+                let newY = height + mouse_position_y + scroll_position_y + 16;
+                el.style.top = `${newY}px`;
+                el.style.left = `${mouse_position_x + 16}px`
+            }
+            el.style.position = 'absolute';
+            el.style.opacity = "1";
+        })
+
+
+        return el;
+    }
+}
+

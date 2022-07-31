@@ -41,8 +41,8 @@ async def do_search(searches: List[BaseSearch]):
     job_list = []
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            headless=False,
-                                            slow_mo=50
+                                            # headless=False,
+                                            # slow_mo=50
                                             )
         bpage = await browser.new_page()
         for one_search in searches:

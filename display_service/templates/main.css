@@ -48,3 +48,7 @@
     height: 100%;
     cursor: ew-resize;
 }
+.tabulator-menu.tabulator-popup-container {
+    top: 0px !important;
+    position: absolute;
+}

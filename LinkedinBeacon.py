@@ -14,13 +14,13 @@ from markdownify import markdownify, MarkdownConverter
 def md(soup, **options):
     return MarkdownConverter(**options).convert_soup(soup)
 
+
 # TODO Idea to make attribute list a dictionary and then call methods on it to separate the structure of the table from extraction process but will refactor only if many more attribubutes will need to be added bc right now it works well with the current number of attrubutes
 
 class LinkedinBeacon(BaseBeacon):
     def __init__(self, beacon: PageElement):
         super().__init__(beacon)
         self.populate_from_job_card()
-
 
     @property
     def dict(self):
@@ -37,16 +37,16 @@ class LinkedinBeacon(BaseBeacon):
         self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}")
 
         self.make_company_attribute('name',
-                            lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
+                                    lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
         if self._job_post['company']['name'] == None:
             print('Error company None')
-            save_safe(str(self._beacon), 'error.html' )
+            save_safe(str(self._beacon), 'error.html')
 
         self.make_company_attribute('rating',
-                            lambda: '')
+                                    lambda: '')
 
         self.make_company_attribute('location',
-                            lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)
+                                    lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)
 
         self.make_attribute('date_posted',
                             lambda: self._beacon.find('li', class_='job-card-container__listed-time').text)
@@ -73,9 +73,9 @@ class LinkedinBeacon(BaseBeacon):
         self.make_attribute('description_html',
                             lambda: soup.select_one('#job-details'))
         self.make_company_attribute('profile_url',
-                            lambda: re.sub(r"life/$", "",
-                                           f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}")
-                            )
+                                    lambda: re.sub(r"life/$", "",
+                                                   f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}")
+                                    )
 
         # self.make_attribute('hiring_insights',
         #                     lambda: ", ".join(
@@ -113,18 +113,19 @@ class LinkedinBeacon(BaseBeacon):
         company_soup = BeautifulSoup(about_company_html, 'html.parser')
 
         self.make_company_attribute("overview",
-                            lambda: company_soup.find('h2', string=re.compile(".*Overview.*")).find_next('p').text)
+                                    lambda: company_soup.find('h2', string=re.compile(".*Overview.*")).find_next(
+                                        'p').text)
 
         self.make_company_attribute('homepage_url',
-                            lambda: company_soup.find('span', class_="link-without-visited-state").text.strip())
+                                    lambda: company_soup.find('span', class_="link-without-visited-state").text.strip())
 
         self.make_company_attribute('industry',
-                            lambda: company_soup.find('dt', string=re.compile(".*Industry.*")).find_next(
-                                'dd').text.strip())
+                                    lambda: company_soup.find('dt', string=re.compile(".*Industry.*")).find_next(
+                                        'dd').text.strip())
 
         self.make_company_attribute('size',
-                            lambda: company_soup.find('dt', string=re.compile(".*Company size.*"))
-                            .find_next('dd').text.replace(' employees', '').strip())
+                                    lambda: company_soup.find('dt', string=re.compile(".*Company size.*"))
+                                    .find_next('dd').text.replace(' employees', '').strip())
 
         # find number of employess on linkedin from the employees section
         # self.make_attribute('company_employees_on_linkedin',
@@ -134,9 +135,10 @@ class LinkedinBeacon(BaseBeacon):
         employee_soup = BeautifulSoup(about_employees_html, 'html.parser')
 
         self.make_company_attribute("number_employees",
-                            lambda: re.search(r'\d+',
-                                              employee_soup.find('span',
-                                                                 string=re.compile(".*employees.*")).text).group())
+                                    lambda: re.search(r'\d+',
+                                                      employee_soup.find('span',
+                                                                         string=re.compile(
+                                                                             ".*employees.*")).text).group())
 
         country_buttons = employee_soup \
             .find('div', class_='insight-container') \
@@ -146,10 +148,12 @@ class LinkedinBeacon(BaseBeacon):
             'main_country_number_employees', lambda: country_buttons[0].find('strong').text)
 
         self.make_company_attribute('main_country_name',
-                            lambda: country_buttons[0].find('span',
-                                                            class_='org-people-bar-graph-element__category').text)
+                                    lambda: country_buttons[0].find('span',
+                                                                    class_='org-people-bar-graph-element__category').text)
 
         self.make_company_attribute('other_locations_employees',
-                            lambda: ", ".join([b.text.strip() for b in country_buttons[1:]]))
+                                    lambda: ", ".join([b.text.strip() for b in country_buttons[1:]]))
 
-
+        self.make_company_attribute('other_locations_employees_html',
+                                    lambda: "<ul><li>" + "</li><li>".join(
+                                        [b.text.strip() for b in country_buttons[1:]]) + "</li></ul>")

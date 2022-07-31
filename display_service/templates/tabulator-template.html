@@ -32,6 +32,8 @@
             <input id="new-column-name" type="text" placeholder="New Column Name">
             <button id="add-column">Add Empty Column</button>
             <button id="reset-table-layout">Reset Layout</button>
+            <button id="myButton">my button</button>
+            <span>Shift+Enter to submit cell </span>
         </div>
         <div id="table"></div>
     </div>
@@ -43,9 +45,10 @@
 </body>
 <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.2.3/dist/js/tabulator.min.js"></script>
 <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 <script type="text/javascript" src="./templates/main.js"></script>
 <script>
-
 
 
     const table_data = {{dataframe}}
@@ -62,14 +65,17 @@
         rowContextMenu: rowMenu,
         movableColumns: true,
         columnDefaults: {
-            tooltip: true,
+            tooltip: makeToolTipFunction(),
+            // tooltip: true,
             editor: "input",
             headerMenu: headerMenu,
-            resizable:true,
+            resizable: 'header',
+            headerTooltip: true,
+
 
         },
-        persistence: true, //enable table persistence
-        persistenceMode: "local", //store persistence information in a cookie
+        // persistence: true, //enable table persistence
+        // persistenceMode: "local", //store persistence information in a cookie
         clipboard: true, //enable clipboard functionality
         responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
 
@@ -80,10 +86,13 @@
         document.querySelector('#detail').innerHTML = row.getData().description_html
     })
 
-    table.on("cellEditing", function(cell){
+    table.on("cellEditing", function (cell) {
         document.querySelector('#detail').innerHTML = cell.getRow().getData().description_html
-});
+    });
 
+      tippy('#myButton', {
+        content: 'My tooltip!',
+      });
 
 </script>
 </html>

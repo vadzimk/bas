@@ -96,7 +96,7 @@ class IndeedBeacon(BaseBeacon):
                                     lambda: company_soup.find('div',
                                                               attrs={"data-tn-section": "AboutSection-section"})
                                     .find('section')
-                                    .find_all('div')[2].text)
+                                    .find_all('div', recursive=False)[2].text.replace('Learn more', '---'))
 
         self.make_company_attribute('homepage_url',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-companyWebsite"})
@@ -113,3 +113,7 @@ class IndeedBeacon(BaseBeacon):
         self.make_company_attribute('other_locations_employees',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-headquartersLocation"})
                                     .find_all('div')[1].text)
+
+        self.make_company_attribute('other_locations_employees_html',
+                                    lambda: "<ul><li>" +  company_soup.find(attrs={"data-testid": "companyInfo-headquartersLocation"})
+                                    .find_all('div')[1].text.strip() + "</li></ul>")
