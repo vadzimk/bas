@@ -2,11 +2,11 @@ import copy
 import re
 
 from bs4 import BeautifulSoup
-from bs4.element import PageElement
-from pprint import pprint
+from bs4.element import PageElement, Tag
+
 
 from BaseBeacon import BaseBeacon
-from utils import make_soup, override, save_safe
+from utils import make_soup, override, save_safe, replace_p_br_p
 from markdownify import markdownify, MarkdownConverter
 
 
@@ -70,8 +70,14 @@ class LinkedinBeacon(BaseBeacon):
                             lambda: markdownify(str(soup.select_one('#job-details'))))
         self.make_attribute('description_text',
                             lambda: soup.select_one('#job-details').get_text())
+
+
+
+
+
         self.make_attribute('description_html',
-                            lambda: soup.select_one('#job-details'))
+                            lambda: replace_p_br_p(str(soup.select_one('#job-details'))))
+
         self.make_company_attribute('profile_url',
                                     lambda: re.sub(r"life/$", "",
                                                    f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}")

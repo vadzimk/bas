@@ -11,6 +11,7 @@ from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
+from display_service import display_html as display
 
 
 
@@ -41,8 +42,8 @@ async def do_search(searches: List[BaseSearch]):
     job_list = []
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            # headless=False,
-                                            # slow_mo=50
+                                            headless=False,
+                                            slow_mo=50
                                             )
         bpage = await browser.new_page()
         for one_search in searches:
@@ -114,6 +115,8 @@ if __name__ == '__main__':
     cleanup()
     create_project()
     main()
+    display.main()
+
 
 #  get first page
 #  get number of pages div id=searchCountPages

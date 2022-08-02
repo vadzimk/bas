@@ -1,10 +1,12 @@
+import re
+
 from bs4 import BeautifulSoup
 from bs4.element import PageElement
 from pprint import pprint
 
 from BaseBeacon import BaseBeacon
 
-from utils import override, make_soup, save_safe
+from utils import override, make_soup, save_safe, replace_p_br_p
 from markdownify import markdownify, MarkdownConverter
 
 
@@ -74,8 +76,10 @@ class IndeedBeacon(BaseBeacon):
                             lambda: markdownify(str(soup.select_one('#jobDescriptionText'))))
         self.make_attribute('description_text',
                             lambda: soup.select_one('#jobDescriptionText').get_text())
+
         self.make_attribute('description_html',
-                            lambda: soup.select_one('#jobDescriptionText'))
+                            lambda: replace_p_br_p(str(soup.select_one('#jobDescriptionText'))))
+
         self.make_company_attribute('profile_url',
                                     lambda:
                                     soup.find('div', class_='jobsearch-JobInfoHeader-subtitle').find('a')['href'].split(

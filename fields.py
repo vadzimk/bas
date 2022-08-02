@@ -11,6 +11,7 @@ fields = {
         'industry': None,
         'size': None,
         'other_locations_employees': None,
+        'other_locations_employees_html': None,
     },
     'estimated_salary': None,
     'salary': None,

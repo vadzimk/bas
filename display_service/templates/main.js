@@ -1,45 +1,24 @@
-// -------------- Filter ------------------------
-//Define variables for input elements
-var fieldEl = document.getElementById("filter-field");
-var typeEl = document.getElementById("filter-type");
-var valueEl = document.getElementById("filter-value");
+//-------------- Multi-column filter -------------
+const valueEl = document.getElementById("filter-value");
+valueEl.addEventListener("keyup", function () {
+    const filters = [];
+    const columns = table.getColumns();
+    const search = valueEl.value;
 
-//Custom filter example
-function customFilter(data) {
-    return data.car && data.rating < 3;
-}
+    columns.forEach(function (column) {
+        filters.push({
+            field: column.getField(),
+            type: "like",
+            value: search,
+        });
+    });
 
-//Trigger setFilter function with correct parameters
-function updateFilter() {
-    var filterVal = fieldEl.options[fieldEl.selectedIndex].value;
-    var typeVal = typeEl.options[typeEl.selectedIndex].value;
+    table.setFilter([filters]);
+})
 
-    var filter = filterVal == "function" ? customFilter : filterVal;
-
-    if (filterVal == "function") {
-        typeEl.disabled = true;
-        valueEl.disabled = true;
-    } else {
-        typeEl.disabled = false;
-        valueEl.disabled = false;
-    }
-
-    if (filterVal) {
-        table.setFilter(filter, typeVal, valueEl.value);
-    }
-}
-
-//Update filters on value change
-document.getElementById("filter-field").addEventListener("change", updateFilter);
-document.getElementById("filter-type").addEventListener("change", updateFilter);
-document.getElementById("filter-value").addEventListener("keyup", updateFilter);
-
-//Clear filters on "Clear Filters" button click
+//Clear filter on "Clear Filters" button click
 document.getElementById("filter-clear").addEventListener("click", function () {
-    fieldEl.value = "";
-    typeEl.value = "=";
     valueEl.value = "";
-
     table.clearFilter();
 });
 
@@ -154,8 +133,14 @@ var headerMenu = function () {
 // ----------------------- Download xls ------------------
 
 //trigger download of data.csv file
-document.getElementById("download-csv").addEventListener("click", function () {
+document.getElementById("download-xls").addEventListener("click", function () {
     table.download("xlsx", "data.xlsx", {sheetName: "MyData"});
+});
+
+// -------------- Upload CSV -------------------
+//trigger AJAX load on "Load Data via AJAX" button click
+document.getElementById("upload-csv").addEventListener("click", function () {
+    table.import("csv", ".csv");
 });
 
 // ------------------- Add new column --------------------------
@@ -183,6 +168,8 @@ document.getElementById("add-column").addEventListener("click", function () {
 document.getElementById("reset-table-layout").addEventListener("click", function () {
     window.localStorage.removeItem('tabulator-table-columns')
 });
+
+
 
 // http://tabulator.info/docs/5.3/columns#definition
 // ---------------------- Column Definitions ------------------------
@@ -285,13 +272,12 @@ function makeToolTipFunction({
 
         if (typeof innerHtmlGetterFunction === 'function') {
             el.innerHTML = innerHtmlGetterFunction(cell)
-        }
-        else
+        } else
             el.innerText = innerTextGetterFunction(cell);
 
-        onRendered(()=>{
-            const {y: oldY, height:height} = el.getBoundingClientRect()
-            if(mouse_position_y - height < 0){
+        onRendered(() => {
+            const {y: oldY, height: height} = el.getBoundingClientRect()
+            if (mouse_position_y - height < 0) {
                 // element above the window
                 let newY = height + mouse_position_y + scroll_position_y + 16;
                 el.style.top = `${newY}px`;

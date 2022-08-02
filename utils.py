@@ -96,3 +96,14 @@ class AccountBlocked(RuntimeError, TaskError):
 
 
 # ---------------------------------------------
+
+def replace_p_br_p(html_repr):
+    """ replaces <p><br>\n</p>  to <br></br>"""
+    dsoup = BeautifulSoup(html_repr, 'html.parser')
+    ps = dsoup.find_all('p')
+    for i, p in enumerate(ps):
+        if p.string is None and p.find('br') is not None:
+            br_tag = dsoup.new_tag("br")
+            p.replaceWith(br_tag)
+            br_tag.insert_after(dsoup.new_tag("br"))
+    return dsoup

@@ -71,7 +71,7 @@ class LinkedinPage(BasePage):
             print('LindkedinPage: Error from make_beacon_soup: ', e)
         await asyncio.sleep(1)  # wait for all cards to load
 
-        search_results_html = await bpage.inner_html('.jobs-search__left-rail')
+        search_results_html = await bpage.inner_html('section.scaffold-layout__list')
         print('beacons on this page after scroll: ', num_beacons)
         save_safe(search_results_html, str(self._page_index) + '.html')
         return BeautifulSoup(search_results_html, 'html.parser')

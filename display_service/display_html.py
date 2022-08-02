@@ -42,14 +42,11 @@ if __name__ == "__main__":
     main()
 
 #  TODO
-# make links as icons to click
-# make wide columns hidden
+
 # make filter work on all columns when no column is selected    https://github.com/olifolkerd/tabulator/issues/505
-# make draggable right panel    https://stackoverflow.com/questions/26233180/resize-a-div-on-border-drag-and-drop-without-adding-extra-markup
-# replace grid layout to flex layout to make the table and detail widths consistent
 # auto column layout   http://tabulator.info/docs/5.3/columns#autocolumns
-# add cell menu item to delete selected rows
 # if not database then make it upload data from file
 # cell menu is obeying the header menu classes thus it sticks to the top of the screen as well, need to change this
 # employ a strategy to filter all unfit jobs first. and apply to all that are fit and then track the application progress
 # the app could query the jobs every day and add them to the bottom of the unprocessed list
+# the date of job posting is in days ago, but it will become stale tomorrow, need to store the actual date and then convert it back

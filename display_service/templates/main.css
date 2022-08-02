@@ -37,6 +37,8 @@
     height: 100%;
     right: 0;
     background-color: #d6e4ea;
+    display: flex;
+    flex-direction: column;
 }
 
 #right_panel::after {
@@ -51,4 +53,13 @@
 .tabulator-menu.tabulator-popup-container {
     top: 0px !important;
     position: absolute;
+}
+
+#company-references{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #bec4d0;
+    position: sticky;
 }
