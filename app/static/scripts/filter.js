@@ -8,13 +8,16 @@ export function multiColumnFilter(value, table) {
         return
     }
     const columns = table.getColumns();
-    columns.forEach(function (column) {
-        filters.push({
-            field: column.getField(),
-            type: "like",
-            value: value,
+
+    columns
+        .filter(c => !c.getField().includes('url'))
+        .forEach(function (column) {
+            filters.push({
+                field: column.getField(),
+                type: "like",
+                value: value,
+            });
         });
-    });
 
     table.setFilter([filters]);
 }
