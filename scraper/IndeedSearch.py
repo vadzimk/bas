@@ -1,3 +1,4 @@
+import asyncio
 import math
 import time
 import urllib
@@ -57,6 +58,7 @@ class IndeedSearch(BaseSearch):
     async def populate_job_post_details(beacon, job_url, bpage):
         try:
             await bpage.goto(job_url)
+            await asyncio.sleep(1)
             text = await bpage.inner_html('html')
             beacon.populate_from_details(text)
         except Exception as e:

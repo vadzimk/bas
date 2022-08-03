@@ -38,9 +38,6 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_company_attribute('name',
                                     lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
-        if self._job_post['company']['name'] == None:
-            print('Error company None')
-            save_safe(str(self._beacon), 'error.html')
 
         self.make_company_attribute('rating',
                                     lambda: '')

@@ -32,9 +32,7 @@ class IndeedBeacon(BaseBeacon):
         self.make_attribute('title', lambda: title.text)
         self.make_attribute('url', lambda: f"https://www.indeed.com{title['href']}")
         self.make_company_attribute('name', lambda: self._beacon.find('span', class_='companyName').text)
-        if self._job_post['company']['name'] == None:
-            print('Error company None')
-            save_safe(str(self._beacon), 'error.html')
+
 
         self.make_company_attribute('rating',
                                     lambda: self._beacon.find('span', class_='ratingNumber').find('span').text)
@@ -60,6 +58,7 @@ class IndeedBeacon(BaseBeacon):
                                 'Posted', ''))
 
     def populate_from_details(self, job_view_html):
+        save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company"]["name"]}.html')
         soup = BeautifulSoup(job_view_html, 'html.parser')
         self.make_attribute('qualifications',
                             lambda: ', '.join(li.text for li in
@@ -77,6 +76,11 @@ class IndeedBeacon(BaseBeacon):
 
         self.make_attribute('description_text',
                             lambda: soup.select_one('#jobDescriptionText').get_text())
+
+        if(not self._job_post['description_text']):
+            message = f'[description_text] empty on page: {self._job_post["url"]}'
+            print(message)
+            raise RuntimeError(message)
 
         self.make_attribute('description_html',
                             lambda: replace_p_br_p(str(soup.select_one('#jobDescriptionText'))))

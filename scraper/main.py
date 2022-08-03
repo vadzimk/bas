@@ -16,20 +16,20 @@ from playwright.async_api import async_playwright
 
 
 indeed_searches = [
-    {
-        'what': "react frontend developer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ENTRY
-    },
-    {
-        'what': "flask python developer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.MID
-    },
+    # {
+    #     'what': "react frontend developer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.ENTRY
+    # },
+    # {
+    #     'what': "flask python developer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.MID
+    # },
     {
         'what': "javascript developer",
         'where': "Los Angeles",
@@ -40,17 +40,17 @@ indeed_searches = [
 ]
 
 linkedin_searches = [
-    {
-        'what': """react AND (python OR node) AND NOT (ruby OR ".NET") developer AND NOT (citizen OR Citizen OR "green card" OR "Green Card") and NOT (senior OR Senior OR lead OR Lead) AND NOT ("CyberCoders" OR "Jobot")""",
-        'where': "Los Angeles, California, United States",
-        'age': LinkedinSearch.Filters.Age.PAST_WEEK,
-        'radius': LinkedinSearch.Filters.Radius.ALL,
-        'experience': [
-            LinkedinSearch.Filters.Experience.INTERNSHIP,
-            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            LinkedinSearch.Filters.Experience.MID_SENIOR,
-        ]
-    },
+    # {
+    #     'what': """react AND (python OR node) AND NOT (ruby OR ".NET") developer AND NOT (citizen OR Citizen OR "green card" OR "Green Card") and NOT (senior OR Senior OR lead OR Lead) AND NOT ("CyberCoders" OR "Jobot")""",
+    #     'where': "Los Angeles, California, United States",
+    #     'age': LinkedinSearch.Filters.Age.PAST_WEEK,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.INTERNSHIP,
+    #         LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+    #         LinkedinSearch.Filters.Experience.MID_SENIOR,
+    #     ]
+    # },
 ]
 
 

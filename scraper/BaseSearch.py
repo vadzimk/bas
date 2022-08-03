@@ -53,7 +53,6 @@ class BaseSearch(ABC):
     async def populate_details(self, bpage):
         """ Populate details form 'iframe' """
         for page_index, p in enumerate(self._pages):
-            if page_index == 1: break  # TODO remove it, this is for testiong only
             for b in p.beacons:
                 job_url = b.dict['url']
                 await self.populate_job_post_details(b, job_url, bpage)
@@ -96,7 +95,5 @@ class BaseSearch(ABC):
             for page_n in range(1, page_count):
                 await make_page(1, self._url, self._PageClass)
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
-                if page_n == 1:
-                    break  # TODO remove this line, it is to limit pages for test
         self._pages = pages
         return bpage

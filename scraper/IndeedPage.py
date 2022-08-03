@@ -50,5 +50,4 @@ class IndeedPage(BasePage):
         beacons: List[BaseBeacon] = []
         for result in results_list:
             beacons.append(IndeedBeacon(result))
-            # break  # TODO remove after done testing populate_from_iframe
         return beacons
