@@ -10,6 +10,8 @@ poetry install
 poetry run python3 main.py  
 poetry run display-html.py
 
+flask 
+
 ## Output
 
 A csv file and html table with the following fields:

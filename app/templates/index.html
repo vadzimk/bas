@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link href="/static/tabulator/dist/css/tabulator.css" rel="stylesheet">
+{% endblock styles %}
+
+{% block content %}
+    <div class="wrapper">
+        <div class="table-container">
+            <div class="table-control">
+                <input id="filter-value" type="text" placeholder="value to filter">
+                <button id="filter-clear">Clear Filter</button>
+                <button id="download-xls">Download XLSX</button>
+                <button id="upload-csv">Upload CSV</button>
+                <input id="new-column-name" type="text" placeholder="New Column Name">
+                <button id="add-column">Add Empty Column</button>
+                <button id="reset-table-layout">Reset Layout</button>
+                <!--            <button id="myButton">my button</button>-->
+                <!--            <span>Shift+Enter to submit cell </span>-->
+            </div>
+            <div id="table"></div>
+        </div>
+
+        <div id="right_panel" class="details-container">
+            <div id="company-references">
+                <div><b><span id="company-name-ref"></span> &#9755; <span id="title-ref"></span></b></div>
+                <div>
+                    <button id="homepage-ref" type="button">Company Homepage</button>
+                    <button id="job-listing-ref" type="button">Listing Page</button>
+                </div>
+            </div>
+            <div id="detail"></div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="static/tabulator/dist/js/tabulator.js"></script>
+    <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+    <script>
+        const table_data = {{ table_json | tojson}}
+
+    </script>
+    <script src="static/scripts/main.js" type="module"></script>
+{% endblock scripts %}

@@ -1,0 +1,65 @@
+.wrapper{
+    display: flex;
+    flex-direction: row;
+}
+.details-container{
+    /*width: 100%;*/
+    display: flex;
+    flex-direction: row;
+}
+#detail{
+    width: 100%;
+    overflow-y: auto;
+}
+.table-container{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+.table-coontrol{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+/* Makes multi-line table rows */
+/*.tabulator-row .tabulator-cell {*/
+/*    white-space: pre-wrap;*/
+/*}*/
+
+
+#right_panel {
+    position: absolute;
+    /*position: relative;*/
+    width: 30%;
+    padding-left: 8px;
+    height: 100%;
+    right: 0;
+    background-color: #d6e4ea;
+    display: flex;
+    flex-direction: column;
+}
+
+#right_panel::after {
+    content: '';
+    background-color: #bec4d0;
+    position: absolute;
+    left: 0;
+    width: 8px;
+    height: 100%;
+    cursor: ew-resize;
+}
+.tabulator-menu.tabulator-popup-container {
+    top: 0px !important;
+    position: absolute;
+}
+
+#company-references{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #bec4d0;
+    position: sticky;
+}
