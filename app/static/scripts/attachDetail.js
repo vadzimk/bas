@@ -5,14 +5,14 @@ export default function attachDetail(row) {
     const listingUrl = row.getData().url
 
 
-    const homepageButton = document.querySelector('#homepage-ref')
-    homepageButton.addEventListener('click', (e) => {
-        window.open(homeUrl, "_blank")
-    })
-    const listingButton = document.querySelector('#job-listing-ref')
-    listingButton.addEventListener('click', (e) => {
-        window.open(listingUrl, "_blank")
-    })
+    const homepage = document.querySelector('#homepage-ref')
+    homepage.href = homeUrl
+    homepage.target = "_blank"
+
+
+    const listing = document.querySelector('#job-listing-ref')
+    listing.href = listingUrl
+    listing.target = "_blank"
 
     const title = document.querySelector('#title-ref')
     title.textContent = row.getData().title
