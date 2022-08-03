@@ -50,10 +50,12 @@
     height: 100%;
     cursor: ew-resize;
 }
-.tabulator-menu.tabulator-popup-container {
-    top: 0px !important;
-    position: absolute;
-}
+
+/* keeps menu at the top of the window */
+/*.tabulator-menu.tabulator-popup-container {*/
+/*    top: 0px !important;*/
+/*    position: absolute;*/
+/*}*/
 
 #company-references{
     display: flex;
@@ -62,4 +64,8 @@
     padding: 1rem;
     background-color: #bec4d0;
     position: sticky;
+}
+
+.current-row{
+    background-color: rgba(127, 255, 212, 0.3) !important;
 }

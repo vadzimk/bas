@@ -1,3 +1,5 @@
+import asyncio
+
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import PageElement, ResultSet
@@ -36,6 +38,7 @@ class IndeedPage(BasePage):
 
     async def make_beacon_soup(self, bpage):
         await bpage.goto(self._url)
+        await asyncio.sleep(1)  # wait for page to load data
         text = await bpage.inner_html('html')
         return BeautifulSoup(text, 'html.parser')
 

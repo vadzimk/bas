@@ -74,6 +74,7 @@ class IndeedBeacon(BaseBeacon):
 
         self.make_attribute('description_markdown',
                             lambda: markdownify(str(soup.select_one('#jobDescriptionText'))))
+
         self.make_attribute('description_text',
                             lambda: soup.select_one('#jobDescriptionText').get_text())
 

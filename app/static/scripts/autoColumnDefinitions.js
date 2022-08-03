@@ -37,7 +37,6 @@ export default function autoColumnsDefinitions(definitions) {
         }
 
         if (column.field === 'company_other_locations_employees') {
-            console.log('hello from field definition')
             column.tooltip = makeToolTipFunction(
                 {
                     innerHtmlGetterFunction: (cell) =>

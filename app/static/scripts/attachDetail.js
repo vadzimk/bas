@@ -3,7 +3,7 @@ export default function attachDetail(row) {
     document.querySelector('#detail').innerHTML = row.getData().description_html
     const homeUrl = row.getData().company_homepage_url
     const listingUrl = row.getData().url
-    console.log('url', listingUrl)
+
 
     const homepageButton = document.querySelector('#homepage-ref')
     homepageButton.addEventListener('click', (e) => {

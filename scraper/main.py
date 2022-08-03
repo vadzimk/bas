@@ -11,7 +11,7 @@ from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
-from display_service import display_html as display
+
 
 
 
@@ -19,9 +19,24 @@ indeed_searches = [
     {
         'what': "react frontend developer",
         'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.FOURTEEN,
+        'age': IndeedSearch.Filters.Age.SEVEN,
         'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ENTRY}
+        'experience': IndeedSearch.Filters.Experience.ENTRY
+    },
+    {
+        'what': "flask python developer",
+        'where': "Los Angeles",
+        'age': IndeedSearch.Filters.Age.SEVEN,
+        'radius': IndeedSearch.Filters.Radius.ALL,
+        'experience': IndeedSearch.Filters.Experience.MID
+    },
+    {
+        'what': "javascript developer",
+        'where': "Los Angeles",
+        'age': IndeedSearch.Filters.Age.SEVEN,
+        'radius': IndeedSearch.Filters.Radius.ALL,
+        'experience': IndeedSearch.Filters.Experience.MID
+    },
 ]
 
 linkedin_searches = [
@@ -29,8 +44,13 @@ linkedin_searches = [
         'what': """react AND (python OR node) AND NOT (ruby OR ".NET") developer AND NOT (citizen OR Citizen OR "green card" OR "Green Card") and NOT (senior OR Senior OR lead OR Lead) AND NOT ("CyberCoders" OR "Jobot")""",
         'where': "Los Angeles, California, United States",
         'age': LinkedinSearch.Filters.Age.PAST_WEEK,
-        'radius': LinkedinSearch.Filters.Radius.EXACT,
-        'experience': [LinkedinSearch.Filters.Experience.INTERNSHIP]}
+        'radius': LinkedinSearch.Filters.Radius.ALL,
+        'experience': [
+            LinkedinSearch.Filters.Experience.INTERNSHIP,
+            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+            LinkedinSearch.Filters.Experience.MID_SENIOR,
+        ]
+    },
 ]
 
 
@@ -108,13 +128,13 @@ def main():
     df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
 
     df.to_csv('out/search.csv')
-    df.to_pickle('out/dataframe.pickle')
+    df.to_pickle('dataframe.pickle')
 
 
 if __name__ == '__main__':
     cleanup()
     create_project()
     main()
-    display.main()
+
 
 

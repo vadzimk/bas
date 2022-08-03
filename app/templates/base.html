@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}{{ title }}{% endblock title %}</title>
-{#    <link id="favicon" rel="shortcut icon" type="image/jpg" href="fav-light.ico"/>#}
+    {#    <link id="favicon" rel="shortcut icon" type="image/jpg" href="fav-light.ico"/>#}
     {% block styles %}
+        <link rel="stylesheet" type="text/css"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
         <link id="theme-link" rel="stylesheet" type="text/css" href="/static/main.css"/>
+
     {% endblock styles %}
 
 </head>
