@@ -1,9 +1,7 @@
 
 from flask import Flask
 
-from flask_sqlalchemy import SQLAlchemy
-
-from config import config
+from scraper.config import config
 
 
 # db = SQLAlchemy()

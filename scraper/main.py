@@ -118,11 +118,3 @@ if __name__ == '__main__':
     display.main()
 
 
-#  get first page
-#  get number of pages div id=searchCountPages
-#  get links to the jobs
-#  parse each link
-#  get job attributes
-# >  break apart full job description
-#  find red flags
-#  find good flags
