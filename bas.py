@@ -1,19 +1,19 @@
 import os
 
-# from flask_migrate import Migrate
+from flask_migrate import Migrate
 
 from app import create_app
-# from app import  db
-# from app.models import *
+from app import db
+from app.models import *
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-# migrate = Migrate(app, db)  # migration engine
+migrate = Migrate(app, db)  # migration engine
 
 
-# # for the flask shell command
-# @app.shell_context_processor
-# def make_shell_context():
-#     return {'db': db, 'User': User, 'Post': Post}
+# for the flask shell command
+@app.shell_context_processor
+def make_shell_context():
+    return {'db': db, 'Job': Job, 'Company': Company}
 
 
 @app.cli.command()
