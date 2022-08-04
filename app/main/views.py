@@ -11,9 +11,7 @@ from . import main
 def index():
     df: pd.DataFrame = pd.read_pickle('app/scraper/dataframe.pickle')
 
-    df = df.reset_index(drop=True)
-    df.index.name = 'id'
-    df.reset_index(inplace=True)
+
     print(df.index)
     print(df)
 

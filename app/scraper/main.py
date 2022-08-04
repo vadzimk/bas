@@ -66,8 +66,8 @@ async def do_search(searches: List[BaseSearch]):
     job_list = []
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            headless=False,
-                                            slow_mo=50
+                                            # headless=False,
+                                            # slow_mo=50
                                             )
         bpage = await browser.new_page()
         with app.app_context():
@@ -127,7 +127,7 @@ def main():
 
     # reorder the view
     df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
-    df = df[[
+    columns = [
         'title',
         'job_type',
         'qualifications',
@@ -154,7 +154,13 @@ def main():
         'company_profile_url',
         'company_homepage_url',
         'url',
-    ]]
+    ]
+    df = df.reindex(columns=columns)
+
+    # make id column
+    df = df.reset_index(drop=True)
+    df.index.name = 'id'
+    df.reset_index(inplace=True)
 
     df.to_csv('out/search.csv')
     df.to_pickle('dataframe.pickle')
