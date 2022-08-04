@@ -124,13 +124,37 @@ def main():
     df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
     n_rows_after = len(df.index)
     print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
-    # TODO uncomment this
-    # # reorder the view
-    # df = df[
-    #     ['company_rating', 'company_name', 'multiple_candidates', 'date_posted', 'title', 'company_location', 'salary',
-    #      'estimated_salary', 'job_type', 'qualifications', 'description_text', 'benefits', 'hiring_insights',
-    #      'company_indeed_profile_url', 'url']]
+
+    # reorder the view
     df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
+    df = df[[
+        'title',
+        'job_type',
+        'qualifications',
+        'salary',
+        'estimated_salary',
+        'date_posted',
+        'multiple_candidates',
+        'benefits',
+        'description_markdown',
+        'description_text',
+        'description_html',
+        'hiring_insights',
+        'company_name',
+        'company_rating',
+        'company_industry',
+        'company_size',
+        'company_overview',
+        'company_number_employees',
+        'company_location',
+        'company_main_country_name',
+        'company_main_country_number_employees',
+        'company_other_locations_employees',
+        'company_other_locations_employees_html',
+        'company_profile_url',
+        'company_homepage_url',
+        'url',
+    ]]
 
     df.to_csv('out/search.csv')
     df.to_pickle('dataframe.pickle')

@@ -7,7 +7,7 @@ fields = {
         'location': None,
         'profile_url': None,
         'overview': None,
-        'homepage_url': None,  # change this to homepage_url
+        'homepage_url': None,
         'industry': None,
         'size': None,
         'other_locations_employees': None,
