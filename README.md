@@ -1,4 +1,5 @@
-# Job board scrapper
+# Blanket application strategy 
+(Job board scrapper)
 
 ## Overview
 
