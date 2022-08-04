@@ -5,7 +5,8 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 
 from BasePage import BasePage
-
+from app import db
+from app.models import Job, Company
 
 class FoundException(Exception):
     pass  # do nothing (only break out of the try block)
@@ -51,7 +52,9 @@ class BaseSearch(ABC):
         pass
 
     async def populate_details(self, bpage):
-        """ Populate details form 'iframe' """
+        """ Populate job post details form 'iframe' and
+        populate company details from the company profile page
+        """
         for page_index, p in enumerate(self._pages):
             for b in p.beacons:
                 job_url = b.dict['url']
@@ -76,11 +79,15 @@ class BaseSearch(ABC):
         to_bec.populate_company_from_bec(from_bec)
 
     async def flip_pages(self, bpage):
+        """ navigates to successive pages of the job search results """
         async def make_page(n, url, Type):
+            """ instantiates appropriate page class
+            and calls populate page which creates beacon list of appropriate Beacon class """
             nonlocal pages, bpage
             # try:
-            page = Type(n, url)
+            page: BasePage = Type(n, url)
             await page.populate(bpage)
+            page.save_beacons_db() # this is synchronous
             pages.append(page)
             # except Exception as e:
             #     print('-' * 20)

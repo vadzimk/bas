@@ -1,5 +1,20 @@
 from app import db
 
+class Company(db.Model):
+    __tablename__='company'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    rating = db.Column(db.String, nullable=True)
+    location = db.Column(db.String, nullable=True)
+    profile_url = db.Column(db.String, index=True)
+    overview = db.Column(db.String, nullable=True)
+    homepage_url = db.Column(db.String, index=True, nullable=True)
+    industry = db.Column(db.String, nullable=True)
+    size = db.Column(db.String, nullable=True)
+    other_locations_employees = db.Column(db.String, nullable=True)
+    other_locations_employees_html = db.Column(db.String, nullable=True)
+    jobs = db.relationship('Job', back_populates='company')
+
 
 class Job(db.Model):
     __tablename__='job'
@@ -17,8 +32,8 @@ class Job(db.Model):
     description_text = db.Column(db.String)
     description_html = db.Column(db.String)
     hiring_insights = db.Column(db.String, nullable=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
-    posts = db.relationship('Company', back_populates='job', lazy='dynamic')
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+    company = db.relationship('Company', back_populates='jobs')
 
 
     def __repr__(self):
@@ -30,20 +45,7 @@ class Job(db.Model):
     # def check_password(self, password):
     #     return check_password_hash(self.password_hash, password)
 
-class Company(db.Model):
-    __tablename__='company'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    rating = db.Column(db.String, nullable=True)
-    location = db.Column(db.String, nullable=True)
-    profile_url = db.Column(db.String, index=True)
-    overview = db.Column(db.String, nullable=True)
-    homepage_url = db.Column(db.String, index=True, nullable=True)
-    industry = db.Column(db.String, nullable=True)
-    size = db.Column(db.String, nullable=True)
-    other_locations_employees = db.Column(db.String, nullable=True)
-    other_locations_employees_html = db.Column(db.String, nullable=True)
-    posts = db.relationship('Job', back_populates='company', lazy='dynamic')
+
 
 
     def __repr__(self):

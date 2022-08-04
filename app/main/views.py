@@ -9,7 +9,7 @@ from . import main
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
-    df: pd.DataFrame = pd.read_pickle('dataframe.pickle')
+    df: pd.DataFrame = pd.read_pickle('app/scraper/dataframe.pickle')
 
     df = df.reset_index(drop=True)
     df.index.name = 'id'

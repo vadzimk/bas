@@ -12,17 +12,21 @@ from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
 
+from app import create_app
+import os
 
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
+# https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
 
 indeed_searches = [
-    # {
-    #     'what': "react frontend developer",
-    #     'where': "Los Angeles",
-    #     'age': IndeedSearch.Filters.Age.SEVEN,
-    #     'radius': IndeedSearch.Filters.Radius.ALL,
-    #     'experience': IndeedSearch.Filters.Experience.ENTRY
-    # },
+    {
+        'what': "react frontend developer",
+        'where': "Los Angeles",
+        'age': IndeedSearch.Filters.Age.SEVEN,
+        'radius': IndeedSearch.Filters.Radius.ALL,
+        'experience': IndeedSearch.Filters.Experience.ENTRY
+    },
     # {
     #     'what': "flask python developer",
     #     'where': "Los Angeles",
@@ -30,13 +34,13 @@ indeed_searches = [
     #     'radius': IndeedSearch.Filters.Radius.ALL,
     #     'experience': IndeedSearch.Filters.Experience.MID
     # },
-    {
-        'what': "javascript developer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.MID
-    },
+    # {
+    #     'what': "javascript developer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.MID
+    # },
 ]
 
 linkedin_searches = [
@@ -66,12 +70,13 @@ async def do_search(searches: List[BaseSearch]):
                                             slow_mo=50
                                             )
         bpage = await browser.new_page()
-        for one_search in searches:
-            await one_search.populate(bpage)
-            await asyncio.sleep(1)
-            for page in one_search.pages:
-                for beacon in page.beacons:
-                    job_list.append(beacon.dict)
+        with app.app_context():
+            for one_search in searches:
+                await one_search.populate(bpage)
+                await asyncio.sleep(1)
+                for page in one_search.pages:
+                    for beacon in page.beacons:
+                        job_list.append(beacon.dict)
     return job_list
 
 
@@ -135,6 +140,3 @@ if __name__ == '__main__':
     cleanup()
     create_project()
     main()
-
-
-
