@@ -12,7 +12,8 @@ from LinkedinSearch import LinkedinSearch
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
 
-from app import create_app
+from app import create_app, db
+from app.models import Job
 import os
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
@@ -77,6 +78,19 @@ async def do_search(searches: List[BaseSearch]):
                 for page in one_search.pages:
                     for beacon in page.beacons:
                         job_list.append(beacon.dict)
+            # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
+            # Create a query that identifies the row for each domain with the lowest id
+            inner_q = db.session.query(db.func.min(Job.id)).group_by(Job.description_text, Job.title, Job.company_id)
+            aliased = db.alias(inner_q)
+            # Select the rows that do not match the subquery
+            q = db.session.query(Job).filter(~Job.id.in_(aliased))
+
+            # Delete the unmatched rows (SQLAlchemy generates a single DELETE statement from this loop)
+            for job in q:
+                db.session.delete(job)
+            db.session.commit()
+
+
     return job_list
 
 
@@ -119,11 +133,11 @@ def main():
     df = pd.json_normalize(job_list, sep='_')
     print(df)
     df.fillna('', inplace=True)
-    df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
-    n_rows_before = len(df.index)
-    df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
-    n_rows_after = len(df.index)
-    print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
+    # df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
+    # n_rows_before = len(df.index)
+    # df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
+    # n_rows_after = len(df.index)
+    # print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
 
     # reorder the view
     df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)

@@ -9,6 +9,8 @@ import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
+from app.scraper.BaseBeacon import BaseBeacon
+
 
 def use_cloudscraper(url):
     scraper = cloudscraper.create_scraper()
@@ -107,3 +109,11 @@ def replace_p_br_p(html_repr):
             p.replaceWith(br_tag)
             br_tag.insert_after(dsoup.new_tag("br"))
     return dsoup
+
+
+def filter_attributes_job(b: BaseBeacon) -> dict:
+    """
+    :argument b beacon obj
+    :return dict containing attributes of job and not company """
+    job_attributes = {k: v for k, v in b.dict.items() if k != 'company'}  # copy only job attributes
+    return job_attributes

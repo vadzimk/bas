@@ -56,6 +56,7 @@ class IndeedSearch(BaseSearch):
     @override
     @staticmethod
     async def populate_job_post_details(beacon, job_url, bpage):
+        """ goes to the job post url and populates beacon from its html"""
         try:
             await bpage.goto(job_url)
             await asyncio.sleep(1)

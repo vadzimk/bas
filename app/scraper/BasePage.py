@@ -9,6 +9,8 @@ from app.models import Job, Company
 
 from abc import ABC, abstractmethod
 
+from app.scraper.utils import filter_attributes_job
+
 
 class BasePage(ABC):
     JOBS_ON_PAGE = None
@@ -47,12 +49,12 @@ class BasePage(ABC):
         """ makes beacon list and saves to self._beacons """
         pass
 
-    def save_beacons_db(self):
-        """ saves self._beacons to db"""
+    def save_beacons_job_db(self):
+        """ saves self._beacons job attributes to db after the beacons on the search page have been scrolled"""
         for b in self._beacons:
             job = Job.query.filter_by(url=b.dict.get('url')).first()
             if not job:
-                job_attributes = {k: v for k, v in b.dict.items() if k != 'company'}  # copy only job attributes
+                job_attributes = filter_attributes_job(b)
                 job = Job(**job_attributes)
                 db.session.add(job)
         db.session.commit()
