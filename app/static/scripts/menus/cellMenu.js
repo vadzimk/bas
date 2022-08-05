@@ -3,7 +3,7 @@ import {multiColumnFilter} from "../filter.js";
 
 const cellMenu = [
     {
-        label: "<i class='fas fa-check-square'></i> Filter By Cell Value",
+        label: "<i class=\"fa-solid fa-filter\"></i> Filter By Cell Value",
         action: function (e, cell) {
             const value = cell.getValue()
             const valueEl = document.getElementById('filter-value')
@@ -24,7 +24,7 @@ const cellMenu = [
         }
     },
     {
-        label: "<i class='fas fa-check-square'></i> Toggle Select Row",
+        label: "<i class=\"fa-solid fa-circle-check\"></i> Toggle Select Row",
         action: function (e, cell) {
             const row = cell.getRow()
             row.toggleSelect();
@@ -38,20 +38,20 @@ const cellMenu = [
     },
 
     {
-        label: "<i class='fas fa-check-square'></i> Copy Selected Rows",
+        label: "<i class=\"fa-solid fa-copy\"></i> Copy Selected Rows",
         action: function (e, cell) {
             table.copyToClipboard("selected"); //copy the currently selected rows to the clipboard
         }
     },
 
     {
-        label: "<i class='fas fa-check-square'></i> Deselect All Rows",
+        label: "<i class=\"fa-solid fa-minus\"></i> Deselect All Rows",
         action: function (e, cell) {
             table.deselectRow(table.getSelectedRows());
         }
     },
     {
-        label: "<i class='fas fa-check-square'></i> Download Selected to XLSX",
+        label: "<i class=\"fa-solid fa-download\"></i> Download Selected to XLSX",
         action: function (e, cell) {
             table.download("xlsx", "data.xlsx", {sheetName: "MyData"}, "selected");
         }
@@ -62,17 +62,17 @@ const cellMenu = [
         separator: true,
     },
     {
-        label: "Admin Functions",
+        label: "Delete Functions",
         menu: [
             {
-                label: "<i class='fas fa-trash'></i> Delete Row In Focus",
+                label: "<i class=\"fa-solid fa-trash-arrow-up\"></i> Delete Row In Focus",
                 action: function (e, cell) {
                     const row = cell.getRow()
                     row.delete();
                 }
             },
             {
-                label: "<i class='fas fa-trash'></i> Delete Selected Rows",
+                label: "<i class=\"fa-solid fa-trash-can\"></i> Delete Selected Rows",
                 action: function (e, cell) {
                     const selectedRows = table.getSelectedRows();
                     selectedRows.forEach((r) => {
