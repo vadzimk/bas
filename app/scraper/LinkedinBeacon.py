@@ -15,8 +15,6 @@ def md(soup, **options):
     return MarkdownConverter(**options).convert_soup(soup)
 
 
-# TODO Idea to make attribute list a dictionary and then call methods on it to separate the structure of the table from extraction process but will refactor only if many more attribubutes will need to be added bc right now it works well with the current number of attrubutes
-
 class LinkedinBeacon(BaseBeacon):
     def __init__(self, beacon: PageElement):
         super().__init__(beacon)

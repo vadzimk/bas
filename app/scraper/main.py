@@ -1,8 +1,5 @@
 import asyncio
-import logging
-import time
-from pprint import pprint
-from typing import List, Optional
+from typing import List
 
 import pandas as pd
 
@@ -64,7 +61,10 @@ def mk_searches(searches: dict, Type: BaseSearch) -> List[BaseSearch]:
 
 
 async def do_search(searches: List[BaseSearch]):
-    job_list = []
+    """
+    :param searches:
+    :return: None - result of the task now does not contain data, it is stored in db
+    """
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
                                             # headless=False,
@@ -75,10 +75,6 @@ async def do_search(searches: List[BaseSearch]):
             for one_search in searches:
                 await one_search.populate(bpage)
                 await asyncio.sleep(1)
-                # TODO the job_list now does not contain data, it is stored in db
-                # for page in one_search.pages:
-                #     for beacon in page.beacons:
-                #         job_list.append(beacon.dict)
 
             # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
             # Create a query that identifies the row for each domain with the lowest id
@@ -92,9 +88,6 @@ async def do_search(searches: List[BaseSearch]):
                 db.session.delete(job)
             db.session.commit()
 
-    # TODO the job_list now does not contain data, it is stored in db
-    return job_list
-
 
 # async def blocking():
 #     await asyncio.sleep(1)
@@ -105,27 +98,9 @@ async def start_all(indeed_searches, linkedin_searches):
     indeed_task = asyncio.create_task(do_search(mk_searches(indeed_searches, IndeedSearch)))
     linkedin_task = asyncio.create_task(do_search(mk_searches(linkedin_searches, LinkedinSearch)))
 
-    # Changing this to handle exceptions in the running tasks
-    # res = await asyncio.gather(
-    #     indeed_task,
-    #     linkedin_task)
-
     done, pending = await asyncio.wait([indeed_task, linkedin_task], return_when=asyncio.FIRST_EXCEPTION)
     # print(f'done tasks count {len(done)}')
     # print(f'pending tasks count {len(pending)}')
-
-# TODO, remove this, this is replaced by database
-    # res = []  # task results
-    # for done_task in done:
-    #     if done_task.exception() is None:
-    #         res.append(done_task.result())
-    #     else:
-    #         logging.error('Error in task ', exc_info=done_task.exception())
-    #         # if isinstance(done_task.exception(), TaskError ):
-    #         #     pass
-    # for pending_task in pending:
-    #     pending_task.cancel()
-    # return [val for sub in res for val in sub]  # flatten list of lists
 
     with app.app_context():
         result = db.session.query(Company, Job).join(Company).all()
@@ -148,11 +123,6 @@ def main():
     df = pd.json_normalize(job_list, sep='_')
     print(df)
     df.fillna('', inplace=True)
-    # df.sort_values(['description_text', 'url'], ascending=[True, True], inplace=True)
-    # n_rows_before = len(df.index)
-    # df.drop_duplicates(subset=['title', 'company_name', 'description_text'], keep='first', inplace=True)
-    # n_rows_after = len(df.index)
-    # print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
 
     # reorder the view
     df.sort_values(['rating', 'name', 'title'], ascending=[False, True, True], inplace=True)
@@ -186,11 +156,6 @@ def main():
         'url',
     ]
     df = df.reindex(columns=columns)
-
-    # make id column TODO  this is not needed bc id comes from db
-    # df = df.reset_index(drop=True)
-    # df.index.name = 'id'
-    # df.reset_index(inplace=True)
 
     df.to_csv('out/search.csv')
     df.to_pickle('dataframe.pickle')

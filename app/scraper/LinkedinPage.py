@@ -29,7 +29,7 @@ class LinkedinPage(BasePage):
 
         print('LinkedinPage: job count: ', self._job_count)
         self._beacons: List[BaseBeacon] = self.make_beacon_list()
-        # self.save_beacons_csv()
+
 
     @override
     async def count_total_jobs(self, bpage) -> int:

@@ -84,16 +84,6 @@ class BaseSearch(ABC):
                 company = Company.query.filter_by(homepage_url=b.dict['company'].get('profile_url')).first()
                 if company:  # company already in db
                     continue
-                # try:
-                #     for page in self._pages:
-                #         for bec in page.beacons:
-                #             if company_homepage_url is not None and company_homepage_url == bec.dict['company'].get(
-                #                     'homepage_url'):  # already have this company in the source
-                #                 self.copy_company_details(bec, b)
-                #                 raise FoundException()
-                # except FoundException:
-                #     print(f'Found previous beacon for company {b.dict["company"].get("name")}')
-                # else:
                 await self.populate_company_details(b, company_profile_url, bpage)
                 created_company = self.save_beacon_company_db(b)
                 job.company_id = created_company.id
@@ -121,15 +111,11 @@ class BaseSearch(ABC):
             """ instantiates appropriate page class
             and calls populate page which creates beacon list of appropriate Beacon class """
             nonlocal pages, bpage
-            # try:
             page: BasePage = Type(n, url)
             await page.populate(bpage)
             page.save_beacons_job_db()  # this is synchronous
             pages.append(page)
-            # except Exception as e:
-            #     print('-' * 20)
-            #     print(f'page {n} not created ', e)
-            #     print('-' * 20)
+
 
         pages: List[BasePage] = []
         await make_page(0, self._url, self._PageClass)

@@ -69,14 +69,9 @@ class LinkedinSearch(BaseSearch):
     @staticmethod
     async def populate_company_details(beacon, company_url, bpage):
         try:
-            # replaced by going directly to the about
-            # bpage.locator('footer.artdeco-card__actions >> span:has-text("See all details")').click()
             await bpage.goto(f'{company_url}about/')
             about_company = bpage.locator('div.org-grid__content-height-enforcer')
             about_company_html = await about_company.inner_html()
-
-            # replaced by going directly to the people
-            # bpage.locator('li.org-page-navigation__item > a:has-text("People")').click()
             await bpage.goto(f'{company_url}people/')
             await bpage.wait_for_selector('div.insight-container')
             about_employees = bpage.locator('div.org-grid__content-height-enforcer')

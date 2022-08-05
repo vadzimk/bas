@@ -1,4 +1,5 @@
-# Blanket application strategy 
+# Blanket application strategy
+
 (Job board scrapper)
 
 ## Overview
@@ -8,18 +9,21 @@ This is an Indeed/Linkedin job board scrapper that actually works.
 ## The problem
 
 Job boards cater for employers but not job seekers  
-Job boards make it longer for you to find the necessary information about the employer.  
-Job boards do not provide necessary tools to filter postings
+Job boards make it longer to find the necessary information about the employer.  
+Job boards do not provide necessary tools to filter postings  
+Job postings are full of hr jargon that is unnecessary
 
 ## Solutions
 
-Flip job board pages until you are tired  
+Flip job board pages until you get tired  
 Scrape data and read in excel, but you cannot expand job descriptions comfortably  
-Use the BAS app that will scape job boards for you and let you filter and sort companies and listings  
-And use autoplay browser extensions to save even more time on applications:
+Use the BAS app that will scape job boards for you and let you find eligible companies and listings  
+And use auto-apply browser extensions :
 [joinrhubarb](www.joinrhubarb.com),
 [easyjobs](www.easyjobs.so),
-[simplify](www.simplify.jobs),
+[simplify](www.simplify.jobs)
+to save even more time on your applications
+
 
 ## Demo
 
@@ -34,6 +38,7 @@ And use autoplay browser extensions to save even more time on applications:
 - BeautifulSoup
 - Playwright
 - Flask
+- SQLAlchemy
 - Sqlite
 
 ## Usage

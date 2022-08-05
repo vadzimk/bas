@@ -16,7 +16,7 @@ def index():
     print(df)
 
     table_json = json.loads(df.to_json(orient='records'))
-    # TODO on post render button start scrape
+    # TODO on post render button start scrape , can be done using Celery
     return render_template("index.html",
                            title="BAS",
                            table_json=table_json,
