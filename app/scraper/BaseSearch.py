@@ -73,8 +73,10 @@ class BaseSearch(ABC):
         for page_index, p in enumerate(self._pages):
             for b in p.beacons:
                 job_url = b.dict['url']
-                job = Job.query.filter_by(url=b.dict.get('url')).first()
-                if job.description_text: # job details and company details are already in db
+                job = Job.query.filter_by(url=job_url).first()
+                if not job:
+                    print('no job in db for ', b.dict)
+                if job and job.description_text: # job details and company details are already in db
                     continue
                 await self.populate_job_post_details(b, job_url, bpage)
                 self.create_or_update_job_db(b)

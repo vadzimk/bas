@@ -102,63 +102,10 @@ async def start_all(indeed_searches, linkedin_searches):
     # print(f'done tasks count {len(done)}')
     # print(f'pending tasks count {len(pending)}')
 
-    with app.app_context():
-        result = db.session.query(Company, Job).join(Company).all()
-        res = []
-        for c, j in result:
-            j_dict = j.__dict__
-            j_dict.pop('_sa_instance_state', None)
-
-            c_dict = c.__dict__
-            c_dict.pop('_sa_instance_state', None)
-
-            res.append({**j_dict, **c_dict})
-        return res
-
 
 def main():
-    job_list = asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
-    if not job_list:
-        exit(1)
-    df = pd.json_normalize(job_list, sep='_')
-    print(df)
-    df.fillna('', inplace=True)
+    asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
 
-    # reorder the view
-    df.sort_values(['rating', 'name', 'title'], ascending=[False, True, True], inplace=True)
-    columns = [
-        'id',
-        'title',
-        'job_type',
-        'qualifications',
-        'salary',
-        'estimated_salary',
-        'date_posted',
-        'multiple_candidates',
-        'benefits',
-        'description_markdown',
-        'description_text',
-        'description_html',
-        'hiring_insights',
-        'name',
-        'rating',
-        'industry',
-        'size',
-        'overview',
-        'number_employees',
-        'location',
-        'main_country_name',
-        'main_country_number_employees',
-        'other_locations_employees',
-        'other_locations_employees_html',
-        'profile_url',
-        'homepage_url',
-        'url',
-    ]
-    df = df.reindex(columns=columns)
-
-    df.to_csv('out/search.csv')
-    df.to_pickle('dataframe.pickle')
 
 
 if __name__ == '__main__':
