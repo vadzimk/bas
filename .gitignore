@@ -4,3 +4,4 @@ __pycache__
 .env
 *.xls
 .flaskenv
+app/scraper/debug.py

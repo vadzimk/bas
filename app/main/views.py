@@ -9,16 +9,14 @@ from . import main
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
-    df: pd.DataFrame = pd.read_pickle('dataframe.pickle')
+    df: pd.DataFrame = pd.read_pickle('app/scraper/dataframe.pickle')
 
-    df = df.reset_index(drop=True)
-    df.index.name = 'id'
-    df.reset_index(inplace=True)
+
     print(df.index)
     print(df)
 
     table_json = json.loads(df.to_json(orient='records'))
-    # TODO on post render button start scrape
+    # TODO on post render button start scrape , can be done using Celery
     return render_template("index.html",
                            title="BAS",
                            table_json=table_json,

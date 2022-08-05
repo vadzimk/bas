@@ -17,6 +17,7 @@ cfscrape = "^2.1.1"
 cloudscraper = "^1.2.60"
 Flask = "^2.2.0"
 Flask-SQLAlchemy = "^2.5.1"
+Flask-Migrate = "^3.1.0"
 
 [tool.poetry.dev-dependencies]
 
