@@ -10,7 +10,7 @@ import cellMenu from "./menus/cellMenu.js";
 const table = new Tabulator("#table", {
     maxHeight: "80vh",
     // maxHeight: "100%",
-    data: table_data,
+    // data: table_data,
     autoColumns: true,  // automatically make columns structure by examining the first row of the table.
     autoColumnsDefinitions: autoColumnsDefinitions,
     resizableColumnFit: false,
@@ -33,6 +33,11 @@ const table = new Tabulator("#table", {
     responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
 
 })
+
+axios.get('/jobs').then((res) => {
+    let table_data = res.data
+    table.setData(table_data)
+}).catch((err) => console.log(err))
 
 let currentRowElement;
 

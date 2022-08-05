@@ -1,7 +1,7 @@
 import json
 
 import pandas as pd
-from flask import render_template
+from flask import render_template, request, jsonify
 
 from . import main
 from .. import db
@@ -11,7 +11,22 @@ from ..models import Company, Job
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
-    result = db.session.query(Company, Job).join(Company).filter(Job.is_deleted == 'false').all()
+    # TODO add button start scrape , can be done using Celery
+    # TODO add functionality on delete row marked deleted in db
+    return render_template("index.html", title="BAS")
+
+
+@main.route('/job', methods=['DELETE'])
+def job():
+    records = json.loads(request.data)
+
+
+@main.route('/jobs', methods=['GET'])
+def jobs():
+    result = db.session.query(Company, Job) \
+        .join(Company) \
+        .filter(Job.is_deleted == 'false') \
+        .all()
     job_list = []
     for c, j in result:
         j_dict = j.__dict__
@@ -53,13 +68,8 @@ def index():
         'url',
     ]
     df = df.reindex(columns=columns)
-    print(df.index)
-    print(df)
+    print('info', df.info())
+    # print(df)
 
     table_json = json.loads(df.to_json(orient='records'))
-    # TODO add button start scrape , can be done using Celery
-    # TODO add functionality on delete row marked deleted in db
-    return render_template("index.html",
-                           title="BAS",
-                           table_json=table_json,
-                           fields=df.columns.values)
+    return jsonify(table_json)

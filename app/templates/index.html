@@ -26,8 +26,8 @@
             <div id="company-references">
                 <div><b><span id="company-name-ref"></span> &#9755; <span id="title-ref"></span></b></div>
                 <div>
-                    <button  type="button"><a id="homepage-ref">Company Homepage</a></button>
-                    <button  type="button"><a id="job-listing-ref">Listing Page</a></button>
+                    <button type="button"><a id="homepage-ref">Company Homepage</a></button>
+                    <button type="button"><a id="job-listing-ref">Listing Page</a></button>
                 </div>
             </div>
             <div id="detail"></div>
@@ -38,9 +38,14 @@
     {{ super() }}
     <script type="text/javascript" src="static/tabulator/dist/js/tabulator.js"></script>
     <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="static/scripts/main.js" type="module"></script>
     <script>
-        const table_data = {{ table_json | tojson}}
+        {#let table_data#}
+            {#= {{ table_json | tojson}}#}
+
+
 
     </script>
-    <script src="static/scripts/main.js" type="module"></script>
+
 {% endblock scripts %}
