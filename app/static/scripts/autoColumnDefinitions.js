@@ -19,12 +19,12 @@ export default function autoColumnsDefinitions(definitions) {
 
         // +++++++++ Format as linnk +++++++++++
         if (column.field.includes('title')
-            || column.field.includes('company_name')
-            || column.field.includes('company_overview')) {
+            || column.field.includes('name')
+            || column.field.includes('overview')) {
             const url_fields = {
                 'title': 'url',
-                'company_name': 'company_homepage_url',
-                'company_overview': 'company_profile_url',
+                'name': 'homepage_url',
+                'overview': 'profile_url',
             }
             column.formatter = 'link';
             column.formatterParams = {
@@ -36,11 +36,11 @@ export default function autoColumnsDefinitions(definitions) {
 
         }
 
-        if (column.field === 'company_other_locations_employees') {
+        if (column.field === 'other_locations_employees') {
             column.tooltip = makeToolTipFunction(
                 {
                     innerHtmlGetterFunction: (cell) =>
-                        cell.getRow().getData().company_other_locations_employees_html
+                        cell.getRow().getData().other_locations_employees_html
                 })
         }
 

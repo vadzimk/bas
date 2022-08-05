@@ -81,8 +81,8 @@ class BaseSearch(ABC):
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                 company_profile_url = b.dict['company'].get('profile_url')
                 company_homepage_url = b.dict['company'].get('homepage_url')
-                company = Company.query.filter_by(homepage_url=b.dict['company'].get('homepage_url')).first()
-                if company: # company already in db
+                company = Company.query.filter_by(homepage_url=b.dict['company'].get('profile_url')).first()
+                if company:  # company already in db
                     continue
                 # try:
                 #     for page in self._pages:
@@ -95,7 +95,9 @@ class BaseSearch(ABC):
                 #     print(f'Found previous beacon for company {b.dict["company"].get("name")}')
                 # else:
                 await self.populate_company_details(b, company_profile_url, bpage)
-                self.save_beacon_company_db(b)
+                created_company = self.save_beacon_company_db(b)
+                job.company_id = created_company.id
+                db.session.commit()
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
 
     @staticmethod
@@ -107,6 +109,7 @@ class BaseSearch(ABC):
             company = Company(**company_attributes)
             db.session.add(company)
         db.session.commit()
+        return company
 
     def copy_company_details(self, from_bec, to_bec):
         to_bec.populate_company_from_bec(from_bec)

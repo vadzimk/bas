@@ -13,7 +13,7 @@ from utils import cleanup, create_project
 from playwright.async_api import async_playwright
 
 from app import create_app, db
-from app.models import Job
+from app.models import Job, Company
 import os
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
@@ -75,9 +75,11 @@ async def do_search(searches: List[BaseSearch]):
             for one_search in searches:
                 await one_search.populate(bpage)
                 await asyncio.sleep(1)
-                for page in one_search.pages:
-                    for beacon in page.beacons:
-                        job_list.append(beacon.dict)
+                # TODO the job_list now does not contain data, it is stored in db
+                # for page in one_search.pages:
+                #     for beacon in page.beacons:
+                #         job_list.append(beacon.dict)
+
             # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
             # Create a query that identifies the row for each domain with the lowest id
             inner_q = db.session.query(db.func.min(Job.id)).group_by(Job.description_text, Job.title, Job.company_id)
@@ -90,13 +92,13 @@ async def do_search(searches: List[BaseSearch]):
                 db.session.delete(job)
             db.session.commit()
 
-
+    # TODO the job_list now does not contain data, it is stored in db
     return job_list
 
 
-async def blocking():
-    await asyncio.sleep(1)
-    return [{'one': 1, 'two': 2}]
+# async def blocking():
+#     await asyncio.sleep(1)
+#     return [{'one': 1, 'two': 2}]
 
 
 async def start_all(indeed_searches, linkedin_searches):
@@ -112,18 +114,31 @@ async def start_all(indeed_searches, linkedin_searches):
     # print(f'done tasks count {len(done)}')
     # print(f'pending tasks count {len(pending)}')
 
-    res = []  # task results
-    for done_task in done:
-        if done_task.exception() is None:
-            res.append(done_task.result())
-        else:
-            logging.error('Error in task ', exc_info=done_task.exception())
-            # if isinstance(done_task.exception(), TaskError ):
-            #     pass
-    for pending_task in pending:
-        pending_task.cancel()
+# TODO, remove this, this is replaced by database
+    # res = []  # task results
+    # for done_task in done:
+    #     if done_task.exception() is None:
+    #         res.append(done_task.result())
+    #     else:
+    #         logging.error('Error in task ', exc_info=done_task.exception())
+    #         # if isinstance(done_task.exception(), TaskError ):
+    #         #     pass
+    # for pending_task in pending:
+    #     pending_task.cancel()
+    # return [val for sub in res for val in sub]  # flatten list of lists
 
-    return [val for sub in res for val in sub]  # flatten list of lists
+    with app.app_context():
+        result = db.session.query(Company, Job).join(Company).all()
+        res = []
+        for c, j in result:
+            j_dict = j.__dict__
+            j_dict.pop('_sa_instance_state', None)
+
+            c_dict = c.__dict__
+            c_dict.pop('_sa_instance_state', None)
+
+            res.append({**j_dict, **c_dict})
+        return res
 
 
 def main():
@@ -140,8 +155,9 @@ def main():
     # print(f'Dropped {n_rows_before - n_rows_after} duplicate rows')
 
     # reorder the view
-    df.sort_values(['company_rating', 'company_name', 'title'], ascending=[False, True, True], inplace=True)
+    df.sort_values(['rating', 'name', 'title'], ascending=[False, True, True], inplace=True)
     columns = [
+        'id',
         'title',
         'job_type',
         'qualifications',
@@ -154,27 +170,27 @@ def main():
         'description_text',
         'description_html',
         'hiring_insights',
-        'company_name',
-        'company_rating',
-        'company_industry',
-        'company_size',
-        'company_overview',
-        'company_number_employees',
-        'company_location',
-        'company_main_country_name',
-        'company_main_country_number_employees',
-        'company_other_locations_employees',
-        'company_other_locations_employees_html',
-        'company_profile_url',
-        'company_homepage_url',
+        'name',
+        'rating',
+        'industry',
+        'size',
+        'overview',
+        'number_employees',
+        'location',
+        'main_country_name',
+        'main_country_number_employees',
+        'other_locations_employees',
+        'other_locations_employees_html',
+        'profile_url',
+        'homepage_url',
         'url',
     ]
     df = df.reindex(columns=columns)
 
-    # make id column
-    df = df.reset_index(drop=True)
-    df.index.name = 'id'
-    df.reset_index(inplace=True)
+    # make id column TODO  this is not needed bc id comes from db
+    # df = df.reset_index(drop=True)
+    # df.index.name = 'id'
+    # df.reset_index(inplace=True)
 
     df.to_csv('out/search.csv')
     df.to_pickle('dataframe.pickle')
