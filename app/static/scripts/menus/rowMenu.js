@@ -1,3 +1,6 @@
+// this is not used in favor of the cellMenu, because cellMenu can access current cell value
+
+
 import table from "../table.js";
 import positionPopups from "../positionPopups.js";
 

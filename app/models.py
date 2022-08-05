@@ -35,6 +35,7 @@ class Job(db.Model):
     description_html = db.Column(db.String)
     hiring_insights = db.Column(db.String, nullable=True)
     url = db.Column(db.String, index=True)
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default="false")
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
 

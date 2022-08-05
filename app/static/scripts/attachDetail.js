@@ -17,7 +17,7 @@ export default function attachDetail(row) {
     const title = document.querySelector('#title-ref')
     title.textContent = row.getData().title
     const companyNameHeader = document.querySelector('#company-name-ref')
-    companyNameHeader.textContent = row.getData().company_name
+    companyNameHeader.textContent = row.getData().name
 
 
 }

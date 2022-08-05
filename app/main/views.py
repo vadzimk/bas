@@ -11,7 +11,7 @@ from ..models import Company, Job
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
-    result = db.session.query(Company, Job).join(Company).all()
+    result = db.session.query(Company, Job).join(Company).filter(Job.is_deleted == 'false').all()
     job_list = []
     for c, j in result:
         j_dict = j.__dict__

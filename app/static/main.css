@@ -79,3 +79,7 @@
     text-decoration: inherit;
     color: inherit;
 }
+
+.tabulator-tooltip{
+    font-size: 16px !important;
+}
