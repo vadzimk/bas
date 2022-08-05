@@ -1,4 +1,5 @@
 import table from "./table.js";
+import {state} from "./table.js";
 
 // ----------------------- Download xls ------------------
 
@@ -39,3 +40,16 @@ document.getElementById("reset-table-layout").addEventListener("click", function
     window.localStorage.removeItem('tabulator-table-columns')
 });
 
+document.getElementById('commit-deleted').addEventListener('click', function () {
+    if (state.deletedRows.length)
+        commitDeleteRows(state.deletedRows)
+})
+
+function commitDeleteRows(rowIds) {
+    axios.delete('/job', {data: rowIds})
+        .then((res) => {
+            table.setData(res.data)
+        }).catch((e) => {
+        console.log(e)
+    })
+}

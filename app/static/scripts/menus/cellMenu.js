@@ -1,5 +1,6 @@
 import table from "../table.js";
 import {multiColumnFilter} from "../filter.js";
+import {state} from "../table.js";
 
 const cellMenu = [
     {
@@ -9,7 +10,7 @@ const cellMenu = [
             const valueEl = document.getElementById('filter-value')
             valueEl.value = value
             multiColumnFilter(value, table)
-            if(!value){
+            if (!value) {
                 table.clearFilter()
             }
 
@@ -31,7 +32,7 @@ const cellMenu = [
         }
     },
     {
-        label: "<i class='fas fa-check-square'></i> Select Visible Rows",
+        label: "<i class=\"fa-solid fa-check-double\"></i> Select Visible Rows",
         action: function (e, cell) {
             table.selectRow('visible')
         }
@@ -51,7 +52,7 @@ const cellMenu = [
         }
     },
     {
-        label: "<i class=\"fa-solid fa-download\"></i> Download Selected to XLSX",
+        label: "<i class=\"fa-solid fa-download\"></i> Download Selected to xls",
         action: function (e, cell) {
             table.download("xlsx", "data.xlsx", {sheetName: "MyData"}, "selected");
         }
@@ -68,14 +69,19 @@ const cellMenu = [
                 label: "<i class=\"fa-solid fa-trash-arrow-up\"></i> Delete Row In Focus",
                 action: function (e, cell) {
                     const row = cell.getRow()
+                    const id = row.getData().id
                     row.delete();
+                    state.deletedRows.push(id)
+
                 }
             },
             {
                 label: "<i class=\"fa-solid fa-trash-can\"></i> Delete Selected Rows",
                 action: function (e, cell) {
                     const selectedRows = table.getSelectedRows();
+                    const ids = []
                     selectedRows.forEach((r) => {
+                        state.deletedRows.push(r.getData().id)
                         r.delete()
                     })
                 }
@@ -87,5 +93,6 @@ const cellMenu = [
         ]
     }
 ]
+
 
 export default cellMenu

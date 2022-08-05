@@ -1,7 +1,7 @@
 import json
 
 import pandas as pd
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect
 
 from . import main
 from .. import db
@@ -16,13 +16,21 @@ def index():
     return render_template("index.html", title="BAS")
 
 
+@main.route('/jobs', methods=['GET'])
+def jobs():
+    return jsonify(get_current_data())
+
+
 @main.route('/job', methods=['DELETE'])
 def job():
     records = json.loads(request.data)
+    print('records', records)
+    db.session.query(Job).filter(Job.id.in_(tuple(records))).update({Job.is_deleted: True})
+    db.session.commit()
+    return jsonify(get_current_data())
 
 
-@main.route('/jobs', methods=['GET'])
-def jobs():
+def get_current_data():
     result = db.session.query(Company, Job) \
         .join(Company) \
         .filter(Job.is_deleted == 'false') \
@@ -72,4 +80,4 @@ def jobs():
     # print(df)
 
     table_json = json.loads(df.to_json(orient='records'))
-    return jsonify(table_json)
+    return table_json

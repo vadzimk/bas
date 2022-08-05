@@ -18,6 +18,11 @@ const table = new Tabulator("#table", {
     layout: "fitColumns",  //  the table will resize columns so that they fit inside the width of the container.
     // rowContextMenu: rowMenu,
     movableColumns: true,
+    selectable: true,
+    persistence: true, //enable table persistence
+    persistenceMode: "local", //store persistence information in local storage
+    clipboard: true, //enable clipboard functionality
+    responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
     columnDefaults: {
         tooltip: makeToolTipFunction(),
         editor: "input",
@@ -26,17 +31,12 @@ const table = new Tabulator("#table", {
         headerTooltip: true,
         download: true,  // include hidden columns in the download
         contextMenu: cellMenu,
-    },
-    persistence: true, //enable table persistence
-    persistenceMode: "local", //store persistence information in local storage
-    clipboard: true, //enable clipboard functionality
-    responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
 
+    },
 })
 
 axios.get('/jobs').then((res) => {
-    let table_data = res.data
-    table.setData(table_data)
+    table.setData(res.data)
 }).catch((err) => console.log(err))
 
 let currentRowElement;
@@ -59,5 +59,9 @@ table.on("cellEditing", function (cell) {
     attachDetail(row)
     highlightCurrentRowElement(row)
 });
+
+export const state = {
+    deletedRows: []
+}
 
 export default table;
