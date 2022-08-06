@@ -30,7 +30,7 @@ export default function autoColumnsDefinitions(definitions) {
             column.formatter = (cell, formatterParams, onRendered) => {
                 const url = cell.getRow().getData()[`${url_fields[column.field]}`]
                 if (url){
-                    return `<a href="${url}">${cell.getValue()}</a>`
+                    return `<a href="${url}" target="_blank">${cell.getValue()}</a>`
                 } else {
                     return cell.getValue()
                 }

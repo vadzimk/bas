@@ -26,7 +26,7 @@ indeed_searches = [
         'experience': IndeedSearch.Filters.Experience.ALL
     },
     {
-        'what': "flask python developer",
+        'what': "python developer",
         'where': "Los Angeles",
         'age': IndeedSearch.Filters.Age.SEVEN,
         'radius': IndeedSearch.Filters.Radius.ALL,
@@ -43,7 +43,29 @@ indeed_searches = [
 
 linkedin_searches = [
     {
-        'what': f"""react AND (python OR node) developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+        'what': f"""react frontend developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+        'where': "Los Angeles, California, United States",
+        'age': LinkedinSearch.Filters.Age.ALL,
+        'radius': LinkedinSearch.Filters.Radius.ALL,
+        'experience': [
+            LinkedinSearch.Filters.Experience.INTERNSHIP,
+            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+            LinkedinSearch.Filters.Experience.MID_SENIOR,
+        ]
+    },
+    {
+        'what': f"""python developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+        'where': "Los Angeles, California, United States",
+        'age': LinkedinSearch.Filters.Age.ALL,
+        'radius': LinkedinSearch.Filters.Radius.ALL,
+        'experience': [
+            LinkedinSearch.Filters.Experience.INTERNSHIP,
+            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+            LinkedinSearch.Filters.Experience.MID_SENIOR,
+        ]
+    },
+    {
+        'what': f"""javascript developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
         'where': "Los Angeles, California, United States",
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
