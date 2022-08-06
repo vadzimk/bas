@@ -6,7 +6,7 @@ from pprint import pprint
 
 from BaseBeacon import BaseBeacon
 
-from utils import override, make_soup, save_safe, replace_p_br_p
+from utils import override, make_soup, save_safe, replace_p_br_p, age_to_date
 from markdownify import markdownify, MarkdownConverter
 
 
@@ -33,14 +33,14 @@ class IndeedBeacon(BaseBeacon):
         self.make_attribute('url', lambda: f"https://www.indeed.com{title['href']}")
         self.make_company_attribute('name', lambda: self._beacon.find('span', class_='companyName').text)
 
-
         self.make_company_attribute('rating',
                                     lambda: self._beacon.find('span', class_='ratingNumber').find('span').text)
 
         self.make_company_attribute('location', lambda: self._beacon.find('div', class_='companyLocation').text)
 
         self.make_attribute('estimated_salary',
-                            lambda: self._beacon.find('span', class_='estimated-salary').find('span').text.replace('Estimated', ''))
+                            lambda: self._beacon.find('span', class_='estimated-salary').find('span').text.replace(
+                                'Estimated', ''))
 
         self.make_attribute('salary',
                             lambda: self._beacon.find('div', class_='salary-snippet-container').find('div',
@@ -52,10 +52,18 @@ class IndeedBeacon(BaseBeacon):
         self.make_attribute('multiple_candidates',
                             lambda: self._beacon.find('table', class_='jobCardShelfContainer').find('td',
                                                                                                     class_='hiringMultipleCandidates').text)
+
+        self.make_attribute('created_str',
+                            lambda: self._beacon
+                            .find('table', class_='jobCardShelfContainer')
+                            .find('span', class_='date')
+                            .text.replace('Posted', ''))
+
         self.make_attribute('date_posted',
-                            lambda: self._beacon.find('table', class_='jobCardShelfContainer').find('span',
-                                                                                                    class_='date').text.replace(
-                                'Posted', ''))
+                            lambda: age_to_date(self._beacon
+                                                .find('table', class_='jobCardShelfContainer')
+                                                .find('span', class_='date')
+                                                .text.replace('Posted', '')))
 
     def populate_from_details(self, job_view_html):
         save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company"]["name"]}.html')
@@ -77,7 +85,7 @@ class IndeedBeacon(BaseBeacon):
         self.make_attribute('description_text',
                             lambda: soup.select_one('#jobDescriptionText').get_text())
 
-        if(not self._job_post['description_text']):
+        if (not self._job_post['description_text']):
             message = f'[description_text] empty on page: {self._job_post["url"]}'
             print(message)
             raise RuntimeError(message)
@@ -124,5 +132,6 @@ class IndeedBeacon(BaseBeacon):
                                     .find_all('div')[1].text)
 
         self.make_company_attribute('other_locations_employees_html',
-                                    lambda: "<ul><li>" +  company_soup.find(attrs={"data-testid": "companyInfo-headquartersLocation"})
+                                    lambda: "<ul><li>" +
+                                            company_soup.find(attrs={"data-testid": "companyInfo-headquartersLocation"})
                                     .find_all('div')[1].text.strip() + "</li></ul>")

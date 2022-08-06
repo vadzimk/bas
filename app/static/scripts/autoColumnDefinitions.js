@@ -19,19 +19,28 @@ export default function autoColumnsDefinitions(definitions) {
 
         // +++++++++ Format as linnk +++++++++++
         if (column.field.includes('title')
-            || column.field.includes('name')
+            || column.field === 'name'
             || column.field.includes('overview')) {
             const url_fields = {
                 'title': 'url',
                 'name': 'homepage_url',
                 'overview': 'profile_url',
             }
-            column.formatter = 'link';
-            column.formatterParams = {
-                label: (cell) => cell.getValue(),
-                target: '_blank',
-                url: (cell) => cell.getRow().getData()[`${url_fields[column.field]}`]
+            // column.formatter = 'link';
+            column.formatter = (cell, formatterParams, onRendered) => {
+                const url = cell.getRow().getData()[`${url_fields[column.field]}`]
+                if (url){
+                    return `<a href="${url}">${cell.getValue()}</a>`
+                } else {
+                    return cell.getValue()
+                }
+
             }
+            // column.formatterParams = {
+            //     label: (cell) => cell.getValue(),
+            //     target: '_blank',
+            //     url: (cell) => cell.getRow().getData()[`${url_fields[column.field]}`]
+            // }
             column.editable = false
 
         }
@@ -42,6 +51,13 @@ export default function autoColumnsDefinitions(definitions) {
                     innerHtmlGetterFunction: (cell) =>
                         cell.getRow().getData().other_locations_employees_html
                 })
+        }
+
+        if (column.field === 'date_posted') {
+            column.title = 'Listing Age'
+            column.formatter = function (cell, formatterParams, onRendered) {
+                return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
+            }
         }
 
         // console.dir(column)

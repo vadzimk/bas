@@ -21,7 +21,7 @@ indeed_searches = [
     {
         'what': "react frontend developer",
         'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
+        'age': IndeedSearch.Filters.Age.ALL,
         'radius': IndeedSearch.Filters.Radius.ALL,
         'experience': IndeedSearch.Filters.Experience.ALL
     },
@@ -45,7 +45,7 @@ linkedin_searches = [
     {
         'what': f"""react AND (python OR node) developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
         'where': "Los Angeles, California, United States",
-        'age': LinkedinSearch.Filters.Age.PAST_WEEK,
+        'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
             LinkedinSearch.Filters.Experience.INTERNSHIP,

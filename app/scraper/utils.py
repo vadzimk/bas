@@ -8,6 +8,7 @@ import cloudscraper
 import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from datetime import date, timedelta
 
 from app.scraper.BaseBeacon import BaseBeacon
 
@@ -117,3 +118,28 @@ def filter_attributes_job(b: BaseBeacon) -> dict:
     :return dict containing attributes of job and not company """
     job_attributes = {k: v for k, v in b.dict.items() if k != 'company'}  # copy only job attributes
     return job_attributes
+
+
+def age_to_date(age):
+    if age == 'Today' \
+            or age =='Just posted' \
+            or 'hours ago' in age:
+        date_value = str(date.today())
+    elif '+ days ago' in age:
+        n_days_ago = int(age.replace('+ days ago', '').strip()) + 14
+        date_value = date.today() - timedelta(n_days_ago)
+    elif 'day ago' in age \
+            or 'days ago' in age:
+        n_days_ago = int(age.replace('days ago', '').replace('day ago', '').strip())
+        date_value = date.today() - timedelta(n_days_ago)
+    elif 'weeks ago' in age or 'week ago' in age:
+        n_days_ago = int(age.replace('weeks ago', '').replace('week ago', '').strip()) * 7
+        date_value = date.today() - timedelta(n_days_ago)
+    elif 'months ago' in age or 'month ago' in age:
+        n_days_ago = int(age.replace('months ago', '').replace('month ago', '').strip()) * 30
+        date_value = date.today() - timedelta(n_days_ago)
+    else:
+        date_value = age
+
+    return date_value
+

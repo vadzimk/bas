@@ -24,8 +24,9 @@ def jobs():
 @main.route('/job', methods=['DELETE'])
 def job():
     records = json.loads(request.data)
-    print('records', records)
-    db.session.query(Job).filter(Job.id.in_(tuple(records))).update({Job.is_deleted: True})
+    db.session.query(Job)\
+        .filter(Job.id.in_(tuple(records)))\
+        .update({Job.is_deleted: True})
     db.session.commit()
     return jsonify(get_current_data())
 
@@ -33,14 +34,16 @@ def job():
 def get_current_data():
     result = db.session.query(Company, Job) \
         .join(Company) \
-        .filter(Job.is_deleted == 'false') \
+        .filter(Job.is_deleted == False) \
         .all()
     job_list = []
+
     for c, j in result:
         j_dict = j.__dict__
         j_dict.pop('_sa_instance_state', None)
         c_dict = c.__dict__
         c_dict.pop('_sa_instance_state', None)
+        c_dict.pop('id', None)
         job_list.append({**j_dict, **c_dict})
     df = pd.json_normalize(job_list, sep='_')
     df.fillna('', inplace=True)
@@ -76,8 +79,8 @@ def get_current_data():
         'url',
     ]
     df = df.reindex(columns=columns)
+
     print('info', df.info())
-    # print(df)
 
     table_json = json.loads(df.to_json(orient='records'))
     return table_json

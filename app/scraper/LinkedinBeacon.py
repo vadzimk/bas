@@ -4,9 +4,8 @@ import re
 from bs4 import BeautifulSoup
 from bs4.element import PageElement, Tag
 
-
 from BaseBeacon import BaseBeacon
-from utils import make_soup, override, save_safe, replace_p_br_p
+from utils import make_soup, override, save_safe, replace_p_br_p, age_to_date
 from markdownify import markdownify, MarkdownConverter
 
 
@@ -43,8 +42,11 @@ class LinkedinBeacon(BaseBeacon):
         self.make_company_attribute('location',
                                     lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)
 
-        self.make_attribute('date_posted',
+        self.make_attribute('created_str',
                             lambda: self._beacon.find('li', class_='job-card-container__listed-time').text)
+
+        self.make_attribute('date_posted',
+                            lambda: age_to_date(self._beacon.find('li', class_='job-card-container__listed-time').text))
 
         # self.make_attribute('number_of_applicants',
         #                     lambda: self._beacon.find('span', class_='jobs-unified-top-card__applicant-count').text)
@@ -65,10 +67,6 @@ class LinkedinBeacon(BaseBeacon):
                             lambda: markdownify(str(soup.select_one('#job-details'))))
         self.make_attribute('description_text',
                             lambda: soup.select_one('#job-details').get_text())
-
-
-
-
 
         self.make_attribute('description_html',
                             lambda: replace_p_br_p(str(soup.select_one('#job-details'))))

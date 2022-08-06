@@ -1,23 +1,27 @@
-.wrapper{
+.wrapper {
     display: flex;
     flex-direction: row;
 }
-.details-container{
+
+.details-container {
     /*width: 100%;*/
     display: flex;
     flex-direction: row;
 }
-#detail{
+
+#detail {
     width: 100%;
     overflow-y: auto;
 }
-.table-container{
+
+.table-container {
     width: 70%;
     display: flex;
     flex-direction: column;
     overflow: scroll;
 }
-.table-coontrol{
+
+.table-coontrol {
     display: flex;
     flex-direction: row;
     justify-content: start;
@@ -57,7 +61,7 @@
 /*    position: absolute;*/
 /*}*/
 
-#company-references{
+#company-references {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -66,13 +70,13 @@
     position: sticky;
 }
 
-.current-row{
+.current-row {
     background-color: rgba(127, 255, 212, 0.3) !important;
 }
 
 .tabulator-menu {
     /*max-height: 60vh;*/
-    bottom:unset !important;
+    bottom: unset !important;
 }
 
 #homepage-ref, #job-listing-ref {
@@ -80,6 +84,25 @@
     color: inherit;
 }
 
-.tabulator-tooltip{
+.tabulator-tooltip {
     font-size: 16px !important;
+}
+
+.details-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.details-button-container img {
+    height: 2em;
+}
+.details-button-container button{
+    display: none;
+}
+
+.details-header-container {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
 }
