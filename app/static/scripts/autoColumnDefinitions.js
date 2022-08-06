@@ -11,7 +11,7 @@ export default function autoColumnsDefinitions(definitions) {
 
         if (column.field.includes('description')
             || column.field.includes('url')
-            || column.field.includes('id')
+            // || column.field.includes('id')
             || column.field.includes('html')
         ) {
             column.visible = false

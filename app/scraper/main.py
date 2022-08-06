@@ -48,9 +48,9 @@ linkedin_searches = [
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
-            LinkedinSearch.Filters.Experience.INTERNSHIP,
+            # LinkedinSearch.Filters.Experience.INTERNSHIP,
             LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            LinkedinSearch.Filters.Experience.MID_SENIOR,
+            # LinkedinSearch.Filters.Experience.MID_SENIOR,
         ]
     },
     {
@@ -59,9 +59,9 @@ linkedin_searches = [
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
-            LinkedinSearch.Filters.Experience.INTERNSHIP,
+            # LinkedinSearch.Filters.Experience.INTERNSHIP,
             LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            LinkedinSearch.Filters.Experience.MID_SENIOR,
+            # LinkedinSearch.Filters.Experience.MID_SENIOR,
         ]
     },
     {
@@ -94,9 +94,13 @@ async def do_search(searches: List[BaseSearch]):
                                             )
         bpage = await browser.new_page()
         with app.app_context():
+            first_pass = True
             for one_search in searches:
+                if first_pass:
+                    bpage = await one_search.create_session(bpage)  # one session for each task
                 await one_search.populate(bpage)
                 await asyncio.sleep(1)
+                first_pass = False
 
             # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
             # Create a query that identifies the row for each domain with the lowest id
@@ -123,6 +127,15 @@ async def start_all(indeed_searches, linkedin_searches):
     done, pending = await asyncio.wait([indeed_task, linkedin_task], return_when=asyncio.FIRST_EXCEPTION)
     # print(f'done tasks count {len(done)}')
     # print(f'pending tasks count {len(pending)}')
+
+    for i, done_task in enumerate(done):
+        if done_task.exception() is None:
+            print(f'done task {i}')
+        else:
+            print(f"Task got an exception: {done_task.exception()}")
+
+    for pending_task in pending:
+        pending_task.cancel()
 
 
 def main():

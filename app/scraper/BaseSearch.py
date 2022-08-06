@@ -39,7 +39,6 @@ class BaseSearch(ABC):
         return bpage
 
     async def populate(self, bpage):
-        bpage = await self.create_session(bpage)
         bpage = await self.flip_pages(bpage)
         await self.populate_details(bpage)
 
@@ -63,7 +62,8 @@ class BaseSearch(ABC):
             db.session.add(job)
         else:  # update record
             for k, v in filter_attributes_job(beacon).items():
-                setattr(job, k, v)
+                if v:
+                    setattr(job, k, v)
         db.session.commit()
 
     async def populate_details(self, bpage):

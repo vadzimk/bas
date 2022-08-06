@@ -31,7 +31,7 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_attribute('title', lambda: title.text)
 
-        self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}")
+        self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}".split('?')[0])
 
         self.make_company_attribute('name',
                                     lambda: self._beacon.find('a', class_='job-card-container__company-name').text)

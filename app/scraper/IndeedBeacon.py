@@ -25,12 +25,22 @@ class IndeedBeacon(BaseBeacon):
     def dict(self):
         return self._job_post
 
+    @staticmethod
+    def extract_job_url_from_url(s):
+        prefix = 'https://www.indeed.com/viewjob?jk='
+        suffix = re.split(r'=|&', s)[1]
+        if suffix == 'r':
+            pass
+        else:
+            s = prefix + suffix
+        return s
+
     def populate_from_job_card(self):
         # self.make_attribute('title', lambda: self._beacon.find_next('a', class_='jcs-JobTitle').text)
 
         title = self._beacon.find('a', class_='jcs-JobTitle')
         self.make_attribute('title', lambda: title.text)
-        self.make_attribute('url', lambda: f"https://www.indeed.com{title['href']}")
+        self.make_attribute('url', lambda: self.extract_job_url_from_url(f"https://www.indeed.com{title['href']}"))
         self.make_company_attribute('name', lambda: self._beacon.find('span', class_='companyName').text)
 
         self.make_company_attribute('rating',
