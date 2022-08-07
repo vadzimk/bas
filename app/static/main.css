@@ -106,3 +106,8 @@
     flex-direction: column;
     font-weight: bold;
 }
+
+.tabulator-menu {
+    max-height: 20vh;
+    bottom:unset !important;
+}

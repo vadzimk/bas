@@ -21,7 +21,7 @@ indeed_searches = [
     {
         'what': "react frontend developer",
         'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.ALL,
+        'age': IndeedSearch.Filters.Age.SEVEN,
         'radius': IndeedSearch.Filters.Radius.ALL,
         'experience': IndeedSearch.Filters.Experience.ALL
     },
@@ -39,6 +39,20 @@ indeed_searches = [
         'radius': IndeedSearch.Filters.Radius.ALL,
         'experience': IndeedSearch.Filters.Experience.ALL
     },
+    {
+        'what': "software automation engineer",
+        'where': "Los Angeles",
+        'age': IndeedSearch.Filters.Age.SEVEN,
+        'radius': IndeedSearch.Filters.Radius.ALL,
+        'experience': IndeedSearch.Filters.Experience.ENTRY
+    },
+    {
+        'what': "software automation tester",
+        'where': "Los Angeles",
+        'age': IndeedSearch.Filters.Age.SEVEN,
+        'radius': IndeedSearch.Filters.Radius.ALL,
+        'experience': IndeedSearch.Filters.Experience.ENTRY
+    },
 ]
 
 linkedin_searches = [
@@ -48,9 +62,9 @@ linkedin_searches = [
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
-            # LinkedinSearch.Filters.Experience.INTERNSHIP,
+            LinkedinSearch.Filters.Experience.INTERNSHIP,
             LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            # LinkedinSearch.Filters.Experience.MID_SENIOR,
+            LinkedinSearch.Filters.Experience.MID_SENIOR,
         ]
     },
     {
@@ -59,9 +73,9 @@ linkedin_searches = [
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
-            # LinkedinSearch.Filters.Experience.INTERNSHIP,
+            LinkedinSearch.Filters.Experience.INTERNSHIP,
             LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            # LinkedinSearch.Filters.Experience.MID_SENIOR,
+            LinkedinSearch.Filters.Experience.MID_SENIOR,
         ]
     },
     {
@@ -73,6 +87,15 @@ linkedin_searches = [
             LinkedinSearch.Filters.Experience.INTERNSHIP,
             LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
             LinkedinSearch.Filters.Experience.MID_SENIOR,
+        ]
+    },
+    {
+        'what': f"""software automation test engineer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+        'where': "Los Angeles, California, United States",
+        'age': LinkedinSearch.Filters.Age.ALL,
+        'radius': LinkedinSearch.Filters.Radius.ALL,
+        'experience': [
+            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
         ]
     },
 ]
@@ -139,8 +162,15 @@ async def start_all(indeed_searches, linkedin_searches):
 
 
 def main():
-    asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
+    def crawl():
+        asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
 
+    try:
+        crawl()
+    except Exception as e:
+        print(e)
+        print('Retrying once!')
+        crawl()
 
 
 if __name__ == '__main__':

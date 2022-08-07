@@ -134,10 +134,10 @@ class LinkedinBeacon(BaseBeacon):
         employee_soup = BeautifulSoup(about_employees_html, 'html.parser')
 
         self.make_company_attribute("number_employees",
-                                    lambda: re.search(r'\d+',
+                                    lambda: re.search(r'((\d+,?)+)',
                                                       employee_soup.find('span',
                                                                          string=re.compile(
-                                                                             ".*employees.*")).text).group())
+                                                                             ".*employees.*")).text).group(1))
 
         country_buttons = employee_soup \
             .find('div', class_='insight-container') \
