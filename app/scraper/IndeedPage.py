@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,7 +20,7 @@ class IndeedPage(BasePage):
         super().__init__(page_index, url)
         self._PAGE_MULTIPLIER: int = 10
         self._url: str = f"{url}{'&start=' + str(self._PAGE_MULTIPLIER * page_index) if page_index else ''}"
-        print("IndeedPage: going to url: ", self._url)
+        logging.info(f"IndeedPage: going to url: {self._url}")
 
 
     @override
@@ -46,7 +47,7 @@ class IndeedPage(BasePage):
     @override
     def make_beacon_list(self) -> List[BaseBeacon]:
         results_list: ResultSet[PageElement] = self._soup.find_all('div', class_='job_seen_beacon')
-        print(len(results_list), ' len(results_list)')
+        logging.info(f'len(results_list): {len(results_list)}')
         beacons: List[BaseBeacon] = []
         for result in results_list:
             beacons.append(IndeedBeacon(result))

@@ -1,4 +1,6 @@
 import asyncio
+import logging
+import time
 from typing import List
 
 import pandas as pd
@@ -153,9 +155,9 @@ async def start_all(indeed_searches, linkedin_searches):
 
     for i, done_task in enumerate(done):
         if done_task.exception() is None:
-            print(f'done task {i}')
+            logging.info(f'done task {i}')
         else:
-            print(f"Task got an exception: {done_task.exception()}")
+            logging.error(f"Task got an exception: {done_task.exception()}")
 
     for pending_task in pending:
         pending_task.cancel()
@@ -168,12 +170,13 @@ def main():
     try:
         crawl()
     except Exception as e:
-        print(e)
-        print('Retrying once!')
+        logging.critical(f'Retrying once!{e}')
+        time.sleep(1)
         crawl()
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     cleanup()
     create_project()
     main()

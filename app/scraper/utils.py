@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import shutil
@@ -16,14 +17,14 @@ from app.scraper.BaseBeacon import BaseBeacon
 def use_cloudscraper(url):
     scraper = cloudscraper.create_scraper()
     text = scraper.get(url).text
-    print('content', text)
+    logging.debug(f'content {text}')
     return text
 
 
 def use_cfscrape(url):
     scraper = cfscrape.create_scraper(delay=10)
     text = scraper.get(url).text
-    print('content', text)
+    logging.debug(f'content {text}')
     return text
 
 
@@ -32,7 +33,7 @@ def use_requests(url):
     user_agent2 = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'
     headers = {'User-Agent': user_agent2}
     res = requests.get(url, headers)
-    print('status code', res.status_code, url)
+    logging.debug(f'status code {res.status_code} {url}')
     return res.text
 
 
@@ -65,7 +66,7 @@ def save_safe(text, filename):
 def cleanup(out_dir='out'):
     if os.path.exists(out_dir) and os.path.isdir(out_dir):
         shutil.rmtree(out_dir)
-        print("Old project flies deleted.")
+        logging.info("Old project flies deleted.")
 
 
 def create_project(out_dir='out'):
@@ -76,9 +77,9 @@ def create_project(out_dir='out'):
     # Path(PR.DIR_TREATED_ROWS).mkdir(parents=True, exist_ok=True)
 
     if os.path.exists(out_dir) and os.path.isdir(out_dir):
-        print(f"New project directory {out_dir} created")
+        logging.info(f"New project directory {out_dir} created")
     else:
-        print(f"New project directory {out_dir} creation FAILED")
+        logging.critical(f"New project directory {out_dir} creation FAILED")
 
 
 def override(f):

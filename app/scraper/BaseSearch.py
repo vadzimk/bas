@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import math
 import time
 from abc import ABC, abstractmethod
@@ -75,7 +76,7 @@ class BaseSearch(ABC):
                 job_url = b.dict['url']
                 job = Job.query.filter_by(url=job_url).first()
                 if not job:
-                    print('no job in db for ', b.dict)
+                    logging.warning(f'no job in db for {b.dict}')
                 if job and job.description_text: # job details and company details are already in db
                     continue
                 await self.populate_job_post_details(b, job_url, bpage)
@@ -122,7 +123,7 @@ class BaseSearch(ABC):
         pages: List[BasePage] = []
         await make_page(0, self._url, self._PageClass)
         page_count = math.ceil(pages[0].job_count / pages[0].JOBS_ON_PAGE)
-        print(page_count, 'page_count for search', self._url)
+        logging.info(f'{page_count} page_count for search {self._url}')
         if page_count > 1:
             for page_n in range(1, page_count):
                 await make_page(1, self._url, self._PageClass)

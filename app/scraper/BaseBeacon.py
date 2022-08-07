@@ -1,4 +1,5 @@
 import copy
+import logging
 
 from bs4.element import PageElement
 from typing import Dict, Callable
@@ -40,7 +41,7 @@ class BaseBeacon(ABC):
         try:
             attribute_value = str(command()).strip()
         except Exception as e:
-            print(f'Error finding [{name}] {e} for job {self._job_post.get("url")}')
+            logging.warning(f'Error finding [{name}] {e} for job {self._job_post.get("url")}')
         self._job_post[name] = attribute_value
 
     def make_company_attribute(self, name: str, command: Callable):
@@ -48,7 +49,7 @@ class BaseBeacon(ABC):
         try:
             attribute_value = str(command()).strip()
         except Exception as e:
-            print(f'Error finding [{name}] {e} for job {self._job_post.get("url")}')
+            logging.warning(f'Error finding [{name}] {e} for job {self._job_post.get("url")}')
         self._job_post['company'][name] = attribute_value
 
     def populate_company_from_bec(self, other_bec):

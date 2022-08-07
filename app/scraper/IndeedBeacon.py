@@ -97,7 +97,6 @@ class IndeedBeacon(BaseBeacon):
 
         if (not self._job_post['description_text']):
             message = f'[description_text] empty on page: {self._job_post["url"]}'
-            print(message)
             raise RuntimeError(message)
 
         self.make_attribute('description_html',

@@ -54,7 +54,7 @@ export default function autoColumnsDefinitions(definitions) {
         }
 
         if (column.field === 'date_posted') {
-            column.title = 'Listing Age'
+            column.title = 'Posted Days Ago'
             column.formatter = function (cell, formatterParams, onRendered) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
             }

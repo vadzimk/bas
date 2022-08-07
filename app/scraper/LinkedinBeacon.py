@@ -1,4 +1,5 @@
 import copy
+import logging
 import re
 
 from bs4 import BeautifulSoup
@@ -102,7 +103,7 @@ class LinkedinBeacon(BaseBeacon):
             else:
                 self.make_attribute('job_type', lambda: salary_type_qualifications[0].strip())
         except Exception as e:
-            print(e)
+            logging.warning(e)
 
     @override
     def populate_from_company_profile(self, about_company_html, about_employees_html=None):

@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import math
 import time
 
@@ -27,7 +28,7 @@ class LinkedinPage(BasePage):
 
         self._soup = await self.make_beacon_soup(bpage)  # beacon soup only!!!
 
-        print('LinkedinPage: job count: ', self._job_count)
+        logging.info('LinkedinPage: job count: {self._job_count}')
         self._beacons: List[BaseBeacon] = self.make_beacon_list()
 
 
@@ -37,7 +38,7 @@ class LinkedinPage(BasePage):
             count_text = await bpage.locator('small.jobs-search-results-list__text').first.text_content()
             count_text = count_text.replace(' results', '').replace(' result', '').replace(',', '')
         except PlaywrightTimeoutError:  # no search results found
-            print(f'Warning: no search results found in {self._url}')
+            logging.warning(f'Warning: no search results found in {self._url}')
             return 0
         return int(count_text)
 
@@ -58,17 +59,17 @@ class LinkedinPage(BasePage):
         """ Scrolls the left pane to load all beacons """
         beacons = bpage.locator('.jobs-search-results__list-item')
         num_beacons = await beacons.count()
-        print(num_beacons, 'LinkedinPage: num_beacons on this page: ', self._url)
+        logging.info(f'{num_beacons} LinkedinPage: num_beacons on this page: {self._url}')
         num_beacons_calc = await self.beacons_on_this_page_calc(bpage)
-        print(num_beacons_calc, 'LinkedinPage: num_beacons_calc on this page: ', self._url)
+        logging.info(f'{num_beacons_calc} LinkedinPage: num_beacons_calc on this page: {self._url}')
         try:
             for i in range(num_beacons_calc - 1):
                 b = beacons.nth(i)
                 await b.wait_for(state='attached', timeout=1000)  # TODO see if itmeout worked
                 await b.scroll_into_view_if_needed()
-            await bpage.wait_for_selector(f'.job-card-list__title >> nth={num_beacons_calc - 1}')
+            await bpage.wait_for_selector(f'.job-card-list__title >> nth={num_beacons_calc - 2}')
         except Exception as e:
-            print('LindkedinPage: Error from make_beacon_soup: ', e)
+            logging.error(f'LindkedinPage: Error from make_beacon_soup. While scrolling beacons. at url {self._url} {e}')
         await asyncio.sleep(1)  # wait for all cards to load
 
         # sometimes the classname differs
@@ -78,14 +79,14 @@ class LinkedinPage(BasePage):
             search_results_html = await bpage.inner_html('.jobs-search__left-rail')
 
 
-        print('beacons on this page after scroll: ', num_beacons)
+        logging.info('beacons on this page after scroll: {num_beacons}')
         save_safe(search_results_html, str(self._page_index) + '.html')
         return BeautifulSoup(search_results_html, 'html.parser')
 
     @override
     def make_beacon_list(self) -> List[BaseBeacon]:
         results_list: ResultSet[PageElement] = self._soup.find_all('li', class_='jobs-search-results__list-item')
-        print(len(results_list), 'len(results_list)')
+        logging.info(f'{len(results_list)} len(results_list)')
         beacons: List[BaseBeacon] = []
         for result in results_list:
             beacons.append(LinkedinBeacon(result))

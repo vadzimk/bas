@@ -1,3 +1,4 @@
+import logging
 import urllib
 from enum import Enum
 
@@ -63,7 +64,7 @@ class LinkedinSearch(BaseSearch):
             job_view_html = await job_view.inner_html()
             beacon.populate_from_details(job_view_html)
         except Exception as e:
-            print(f'Error going to {job_url}', e)
+            logging.error(f'Error going to {job_url} {e}')
 
     @override
     @staticmethod
@@ -79,7 +80,7 @@ class LinkedinSearch(BaseSearch):
 
             beacon.populate_from_company_profile(about_company_html, about_employees_html)
         except Exception as e:
-            print(f'Error going to {company_url}', e)
+            logging.error(f'Error going to {company_url} {e}')
 
     @override
     async def create_session(self, bpage):

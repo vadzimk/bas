@@ -1,4 +1,5 @@
 import json
+import logging
 
 import pandas as pd
 from flask import render_template, request, jsonify, redirect
@@ -80,7 +81,7 @@ def get_current_data():
     ]
     df = df.reindex(columns=columns)
 
-    print('info', df.info())
+    logging.info(f'info: {df.info()}')
 
     table_json = json.loads(df.to_json(orient='records'))
     return table_json

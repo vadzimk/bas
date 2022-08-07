@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import math
 import time
 import urllib
@@ -63,7 +64,7 @@ class IndeedSearch(BaseSearch):
             text = await bpage.inner_html('html')
             beacon.populate_from_details(text)
         except Exception as e:
-            print(f'Error going to {job_url}', e)
+            logging.error(f'Error going to {job_url}', e)
 
     @override
     @staticmethod
@@ -75,7 +76,7 @@ class IndeedSearch(BaseSearch):
 
             beacon.populate_from_company_profile(about_company_html, None)
         except Exception as e:
-            print(f'Error going to {company_url}', e)
+            logging.error(f'Error going to {company_url} {e}')
 
 
     @override
