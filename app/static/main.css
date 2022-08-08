@@ -87,10 +87,11 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 .details-button-container img {
-    height: 2em;
+    height: 1.6em;
 }
 .details-button-container button{
     display: none;

@@ -23,7 +23,6 @@ const table = new Tabulator("#table", {
     persistenceMode: "local", //store persistence information in local storage
     clipboard: true, //enable clipboard functionality
     responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
-    selectableRangeMode: 'drag',
     columnDefaults: {
         tooltip: makeToolTipFunction(),
         editor: "input",
