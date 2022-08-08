@@ -3,6 +3,8 @@
 
 import makeToolTipFunction from "./tooltip.js";
 
+export const set_flag_icon = '<i class=\'fa fa-check flag\'></i>'
+export const unset_flag_icon = ''
 export default function autoColumnsDefinitions(definitions) {
     //definitions - array of column definition objects
 
@@ -29,7 +31,7 @@ export default function autoColumnsDefinitions(definitions) {
             // column.formatter = 'link';
             column.formatter = (cell, formatterParams, onRendered) => {
                 const url = cell.getRow().getData()[`${url_fields[column.field]}`]
-                if (url){
+                if (url) {
                     return `<a href="${url}" target="_blank">${cell.getValue()}</a>`
                 } else {
                     return cell.getValue()
@@ -59,10 +61,55 @@ export default function autoColumnsDefinitions(definitions) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
             }
         }
+        if (column.field.includes('flag')) {
+            column.editable = false;
+            column.width = '2em'
+            column.formatter = (cell, formatterParams, onRendered) => {
+                const value = cell.getValue()
+                let inner;
+                if (value) {
+                    inner = set_flag_icon
+                } else {
+                    inner = unset_flag_icon
+                }
+
+                return `<button style="height: 20px; width: 20px;">${inner}</button>`
+                // return inner
+            }
+
+            function flipValue(cell) {
+                const oldValue = cell.getValue()
+                const newValue = !oldValue;
+                cell.setValue(newValue)
+            }
+
+            if (column.field === 'plan_apply_flag') {
+                column.cellClick = function (e, cell) {
+                    //e - the click event object
+                    //cell - cell component
+                    flipValue(cell)
+                    cell.getRow().getCell('did_apply_flag').setValue(false)
+
+
+                }
+            } else if (column.field === 'did_apply_flag') {
+                column.cellClick = function (e, cell) {
+                    //e - the click event object
+                    //cell - cell component
+                    flipValue(cell)
+                    cell.getRow().getCell('plan_apply_flag').setValue(false)
+
+                }
+
+            }
+
+
+        }
 
         // console.dir(column)
 
     });
+
 
     return definitions;
 }

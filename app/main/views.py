@@ -2,7 +2,7 @@ import json
 import logging
 
 import pandas as pd
-from flask import render_template, request, jsonify, redirect
+from flask import render_template, request, jsonify, Response
 
 from . import main
 from .. import db
@@ -23,13 +23,27 @@ def jobs():
 
 
 @main.route('/job', methods=['DELETE'])
-def job():
+def delete_job():
     records = json.loads(request.data)
-    db.session.query(Job)\
-        .filter(Job.id.in_(tuple(records)))\
+    db.session.query(Job) \
+        .filter(Job.id.in_(tuple(records))) \
         .update({Job.is_deleted: True})
     db.session.commit()
     return jsonify(get_current_data())
+
+
+@main.route('/job', methods=['PUT'])
+def update_job():
+    record = json.loads(request.data)
+    id = record['id']
+    record.pop('id', None)
+    print('record', record.keys())
+    res = db.session.query(Job).filter(Job.id == id).update(record)
+    db.session.commit()
+    print("res", res)
+    # return Response(status=200)
+    return jsonify(get_current_data())
+
 
 
 def get_current_data():
@@ -75,6 +89,9 @@ def get_current_data():
         'main_country_number_employees',
         'other_locations_employees',
         'other_locations_employees_html',
+        'plan_apply_flag',
+        'did_apply_flag',
+        'note',
         'profile_url',
         'homepage_url',
         'url',

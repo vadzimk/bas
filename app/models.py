@@ -32,7 +32,7 @@ class Job(db.Model):
     qualifications = db.Column(db.String, nullable=True)
     salary = db.Column(db.String, nullable=True)
     estimated_salary = db.Column(db.String, nullable=True)
-    created_str = db.Column(db.String, nullable=True) # string of posted ...ago
+    created_str = db.Column(db.String, nullable=True)  # string of posted ...ago
     date_posted = db.Column(db.String, nullable=True)
     multiple_candidates = db.Column(db.String, nullable=True)
     benefits = db.Column(db.String, nullable=True)
@@ -42,6 +42,9 @@ class Job(db.Model):
     hiring_insights = db.Column(db.String, nullable=True)
     url = db.Column(db.String, index=True)
     is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    note = db.Column(db.Text, nullable=True)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
 

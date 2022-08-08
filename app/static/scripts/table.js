@@ -61,8 +61,20 @@ table.on("cellEditing", function (cell) {
     highlightCurrentRowElement(row)
 });
 
+table.on('cellEdited', function (cell) {
+    const column = cell.getField()
+    const recordToSend = {
+        id: cell.getRow().getData().id,
+        [column]: cell.getValue()
+    }
+    axios.put('/job', recordToSend).catch(e => console.log(e))
+
+})
+
+
 export const state = {
-    deletedRows: []
+    deletedRows: [],
+
 }
 
 export default table;
