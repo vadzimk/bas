@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-    {% with name="Distance", options=['one', 'two'] %}
-        {% include "_dropdown.html" %}
-    {% endwith %}
-    {% with name="Experience", options=['one', 'two'] %}
-        {% include "_dropdown.html" %}
-    {% endwith %}
 
 
+<div id="app"></div>
 
 
 {% endblock content %}
+{% block scripts %}
+    {{ super() }}
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="static/scripts/vueApp.js" type="module"></script>
+{% endblock scripts %}
+

@@ -93,7 +93,8 @@
 .details-button-container img {
     height: 1.6em;
 }
-.details-button-container button{
+
+.details-button-container button {
     display: none;
 }
 
@@ -105,5 +106,11 @@
 
 .tabulator-menu {
     max-height: 20vh;
-    bottom:unset !important;
+    bottom: unset !important;
 }
+
+.search-flex-container {
+    display: flex;
+    flex-direction: row;
+}
+

@@ -115,7 +115,12 @@ class BaseSearch(ABC):
             and calls populate page which creates beacon list of appropriate Beacon class """
             nonlocal pages, bpage
             page: BasePage = Type(n, url)
-            await page.populate(bpage)
+            try:
+                await page.populate(bpage)
+            except Exception:
+                logging.critical(f'Retrying once to go to url {self._url}')
+                await asyncio.sleep(1)
+                await page.populate(bpage)
             page.save_beacons_job_db()  # this is synchronous
             pages.append(page)
 

@@ -20,7 +20,7 @@ class IndeedPage(BasePage):
         super().__init__(page_index, url)
         self._PAGE_MULTIPLIER: int = 10
         self._url: str = f"{url}{'&start=' + str(self._PAGE_MULTIPLIER * page_index) if page_index else ''}"
-        logging.info(f"IndeedPage: going to url: {self._url}")
+        logging.info(f"IndeedPage:  going to url: {self._url}")
 
 
     @override

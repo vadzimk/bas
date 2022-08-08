@@ -12,7 +12,6 @@ export default function makeToolTipFunction({
 
         var el = document.createElement("div");
         el.style.maxWidth = "500px";
-        el.style.font = "14px/1.3 Roboto";
         el.style.borderRadius = "4px";
         el.style.opacity = "0";
         el.style.transition = 'opacity .15s ease'

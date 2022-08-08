@@ -164,15 +164,11 @@ async def start_all(indeed_searches, linkedin_searches):
 
 
 def main():
-    def crawl():
-        asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
+    asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
 
-    try:
-        crawl()
-    except Exception as e:
-        logging.critical(f'Retrying once!{e}')
-        time.sleep(1)
-        crawl()
+
+
+
 
 
 if __name__ == '__main__':

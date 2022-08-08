@@ -1,0 +1,32 @@
+<div class="search-flex-container">
+    <div>
+        <div class="control">
+            <input type="text" class="input is-small" placeholder="What">
+        </div>
+    </div>
+    <div>
+        <div class="control">
+            <input type="text" class="input is-small" placeholder="Where">
+        </div>
+    </div>
+    <div>
+        {% with name="Distance", options=distance_options %}
+            {% include "_select.html" %}
+        {% endwith %}
+    </div>
+    <div>
+        {% with name="Date", options=date_options %}
+            {% include "_select.html" %}
+        {% endwith %}
+    </div>
+    <div>
+        <div style="grid-area: what;">
+            {% with name="Experience", options=experience_options %}
+                {% include "_multi_select.html" %}
+            {% endwith %}
+        </div>
+    </div>
+    <div>
+        <button class="button is-small">Create<img class="board-logo"></button>
+    </div>
+</div>

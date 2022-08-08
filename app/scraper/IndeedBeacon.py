@@ -133,8 +133,9 @@ class IndeedBeacon(BaseBeacon):
                                     .find_all('div')[1].text)
 
         self.make_company_attribute('size',
-                                    lambda: BaseBeacon.company_size_map.get(company_soup.find(attrs={"data-testid": "companyInfo-employee"}))
-                                    .find_all('div')[1].text)
+                                    lambda: BaseBeacon.company_size_map
+                                    .get(company_soup.find(attrs={"data-testid": "companyInfo-employee"})
+                                    .find_all('div')[1].text))
 
         self.make_company_attribute('other_locations_employees',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-headquartersLocation"})
