@@ -9,12 +9,16 @@ from .. import db
 from ..models import Company, Job
 
 
-@main.route('/', methods=['GET', 'POST'])
-@main.route('/index', methods=['GET', 'POST'])
+@main.route('/',)
+@main.route('/index')
 def index():
     # TODO add button start scrape , can be done using Celery
     # TODO add functionality on delete row marked deleted in db
     return render_template("index.html", title="BAS")
+
+@main.route('/results')
+def results():
+    return render_template("results.html", title="BAS")
 
 
 @main.route('/jobs', methods=['GET'])

@@ -74,11 +74,6 @@
     background-color: rgba(127, 255, 212, 0.3) !important;
 }
 
-.tabulator-menu {
-    /*max-height: 60vh;*/
-    bottom: unset !important;
-}
-
 #homepage-ref, #job-listing-ref {
     text-decoration: inherit;
     color: inherit;

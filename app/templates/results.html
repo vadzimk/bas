@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block styles %}
+    {{ super() }}
+    <link href="/static/tabulator/dist/css/tabulator.css" rel="stylesheet">
+{% endblock styles %}
+
+{% block content %}
+    <h2 class="is-size-3">Results</h2>
+    <div class="wrapper">
+        <div id="table-container">
+            <div class="table-control field is-grouped">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input id="filter-value" class="input is-small" type="text" placeholder="value to filter">
+                    </div>
+                </div>
+
+                <button id="filter-clear" class="button is-small">Clear Filter</button>
+                <button id="download-xls" class="button is-small">Download xls</button>
+                <button id="upload-csv" class="button is-small">Upload CSV</button>
+                <div class="field has-addons">
+                    <div class="control">
+
+                        <input id="new-column-name" class="input is-small" type="text" placeholder="New Column Name">
+                    </div>
+                </div>
+                <button id="add-column" class="button is-small">Add Empty Column</button>
+                <button id="reset-table-layout" class="button is-small">Reset Layout</button>
+                <button id="commit-deleted" class="button is-small is-warning">Commit Deleted Jobs</button>
+                <!--            <span>Shift+Enter to submit cell </span>-->
+            </div>
+            <div id="table"></div>
+        </div>
+
+        <div id="right_panel" class="details-container">
+            <div id="company-references">
+                <div class="details-header-container">
+                    <div id="company-name-ref"></div>
+                    <div id="title-ref"></div>
+                </div>
+                <div class="details-button-container">
+
+                    <button type="button"><a id="homepage-ref">Company Homepage</a></button>
+                    <button type="button"><a id="job-listing-ref"><img id="board-logo"></a></button>
+                </div>
+            </div>
+            <div id="detail"></div>
+        </div>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="static/tabulator/dist/js/tabulator.js"></script>
+    <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+    <script src="static/scripts/main.js" type="module"></script>
+    <script>
+        {#let table_data#}
+        {#= {{ table_json | tojson}}#}
+
+
+    </script>
+
+{% endblock scripts %}
