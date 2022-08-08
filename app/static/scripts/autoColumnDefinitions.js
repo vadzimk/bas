@@ -4,7 +4,7 @@
 import makeToolTipFunction from "./tooltip.js";
 
 export const set_flag_icon = '<i class=\'fa fa-check flag\'></i>'
-export const unset_flag_icon = ''
+export const unset_flag_icon = '<i class=""></i>'
 export default function autoColumnsDefinitions(definitions) {
     //definitions - array of column definition objects
 

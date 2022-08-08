@@ -124,8 +124,8 @@ class LinkedinBeacon(BaseBeacon):
                                         'dd').text.strip())
 
         self.make_company_attribute('size',
-                                    lambda: company_soup.find('dt', string=re.compile(".*Company size.*"))
-                                    .find_next('dd').text.replace(' employees', '').strip())
+                                    lambda: BaseBeacon.company_size_map.get(company_soup.find('dt', string=re.compile(".*Company size.*"))
+                                    .find_next('dd').text.replace(' employees', '').strip()))
 
         # find number of employess on linkedin from the employees section
         # self.make_attribute('company_employees_on_linkedin',

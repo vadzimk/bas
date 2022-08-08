@@ -109,7 +109,7 @@ class IndeedBeacon(BaseBeacon):
                                     )
         self.make_attribute('hiring_insights',
                             lambda: ", ".join(
-                                p.text for p in soup.select_one('#hiringInsightsSectionRoot').find_all('p'))
+                                re.sub('Posted.*ago', '', p.text) for p in soup.select_one('#hiringInsightsSectionRoot').find_all('p'))
                             )
 
     @override
@@ -133,7 +133,7 @@ class IndeedBeacon(BaseBeacon):
                                     .find_all('div')[1].text)
 
         self.make_company_attribute('size',
-                                    lambda: company_soup.find(attrs={"data-testid": "companyInfo-employee"})
+                                    lambda: BaseBeacon.company_size_map.get(company_soup.find(attrs={"data-testid": "companyInfo-employee"}))
                                     .find_all('div')[1].text)
 
         self.make_company_attribute('other_locations_employees',
