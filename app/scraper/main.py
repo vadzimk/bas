@@ -20,34 +20,34 @@ app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalc
 
 
 indeed_searches = [
-    {
-        'what': "react frontend developer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ALL
-    },
-    {
-        'what': "python developer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ALL
-    },
-    {
-        'what': "javascript developer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ALL
-    },
-    {
-        'what': "software automation engineer",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ENTRY
-    },
+    # {
+    #     'what': "react frontend developer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.ALL
+    # },
+    # {
+    #     'what': "python developer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.ALL
+    # },
+    # {
+    #     'what': "javascript developer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.ALL
+    # },
+    # {
+    #     'what': "software automation engineer",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.ENTRY
+    # },
     {
         'what': "software automation tester",
         'where': "Los Angeles",
@@ -58,41 +58,41 @@ indeed_searches = [
 ]
 
 linkedin_searches = [
+    # {
+    #     'what': f"""react frontend developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+    #     'where': "Los Angeles, California, United States",
+    #     'age': LinkedinSearch.Filters.Age.ALL,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.INTERNSHIP,
+    #         LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+    #         LinkedinSearch.Filters.Experience.MID_SENIOR,
+    #     ]
+    # },
+    # {
+    #     'what': f"""python developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+    #     'where': "Los Angeles, California, United States",
+    #     'age': LinkedinSearch.Filters.Age.ALL,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.INTERNSHIP,
+    #         LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+    #         LinkedinSearch.Filters.Experience.MID_SENIOR,
+    #     ]
+    # },
+    # {
+    #     'what': f"""javascript developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+    #     'where': "Los Angeles, California, United States",
+    #     'age': LinkedinSearch.Filters.Age.ALL,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.INTERNSHIP,
+    #         LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+    #         LinkedinSearch.Filters.Experience.MID_SENIOR,
+    #     ]
+    # },
     {
-        'what': f"""react frontend developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
-        'where': "Los Angeles, California, United States",
-        'age': LinkedinSearch.Filters.Age.ALL,
-        'radius': LinkedinSearch.Filters.Radius.ALL,
-        'experience': [
-            LinkedinSearch.Filters.Experience.INTERNSHIP,
-            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            LinkedinSearch.Filters.Experience.MID_SENIOR,
-        ]
-    },
-    {
-        'what': f"""python developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
-        'where': "Los Angeles, California, United States",
-        'age': LinkedinSearch.Filters.Age.ALL,
-        'radius': LinkedinSearch.Filters.Radius.ALL,
-        'experience': [
-            LinkedinSearch.Filters.Experience.INTERNSHIP,
-            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            LinkedinSearch.Filters.Experience.MID_SENIOR,
-        ]
-    },
-    {
-        'what': f"""javascript developer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
-        'where': "Los Angeles, California, United States",
-        'age': LinkedinSearch.Filters.Age.ALL,
-        'radius': LinkedinSearch.Filters.Radius.ALL,
-        'experience': [
-            LinkedinSearch.Filters.Experience.INTERNSHIP,
-            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-            LinkedinSearch.Filters.Experience.MID_SENIOR,
-        ]
-    },
-    {
-        'what': f"""software automation test engineer {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+        'what': f"""software automated test {os.getenv('LINKEDIN_BASE_SEARCH')}""",
         'where': "Los Angeles, California, United States",
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
