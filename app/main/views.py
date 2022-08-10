@@ -9,24 +9,25 @@ from .. import db
 from ..models import Company, Job
 
 
-@main.route('/',)
+@main.route('/', )
 @main.route('/index')
 def index():
     # TODO add button start scrape , can be done using Celery
     # TODO add functionality on delete row marked deleted in db
     return render_template("index.html", title="BAS")
 
+
 @main.route('/results')
 def results():
     return render_template("results.html", title="BAS")
 
 
-@main.route('/jobs', methods=['GET'])
+@main.route('/api/jobs', methods=['GET'])
 def jobs():
     return jsonify(get_current_data())
 
 
-@main.route('/job', methods=['DELETE'])
+@main.route('/api/job', methods=['DELETE'])
 def delete_job():
     records = json.loads(request.data)
     db.session.query(Job) \
@@ -36,7 +37,7 @@ def delete_job():
     return jsonify(get_current_data())
 
 
-@main.route('/job', methods=['PUT'])
+@main.route('/api/job', methods=['PUT'])
 def update_job():
     record = json.loads(request.data)
     id = record['id']
@@ -48,6 +49,12 @@ def update_job():
     # return Response(status=200)
     return jsonify(get_current_data())
 
+
+@main.route('/api/search', methods=['POST'])
+def search():
+    form_values = json.loads(request.data)
+    print("form_values", form_values)
+    return Response(status=200)
 
 
 def get_current_data():

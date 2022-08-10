@@ -46,7 +46,7 @@ document.getElementById('commit-deleted').addEventListener('click', function () 
 })
 
 function commitDeleteRows(rowIds) {
-    axios.delete('/job', {data: rowIds})
+    axios.delete('/api/job', {data: rowIds})
         .then((res) => {
             table.setData(res.data)
         }).catch((e) => {
