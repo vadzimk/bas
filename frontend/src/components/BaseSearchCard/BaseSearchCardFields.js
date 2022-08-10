@@ -19,7 +19,6 @@ const cardCss = {
 
 const BaseSearchCardFields = ({formikProps, ...rest}) => {
 
-    console.log('rest', rest)
     return (
         <div css={cardCss.searchFlexContainer}>
             <div>
@@ -31,6 +30,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     value={formikProps.values.what}
                     onChange={formikProps.handleChange}
                     size="small"
+                    disabled={rest.formDisabled}
                 />
             </div>
             <div>
@@ -42,6 +42,8 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     value={formikProps.values.where}
                     onChange={formikProps.handleChange}
                     size="small"
+                    disabled={rest.formDisabled}
+
                 />
             </div>
             <div>
@@ -52,6 +54,8 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.distanceOptions}
                     value={formikProps.values.distance}
                     onChange={(value) => formikProps.setFieldValue('distance', value)}
+                    disabled={rest.formDisabled}
+
                 />
             </div>
             <div>
@@ -62,6 +66,8 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.dateOptions}
                     value={formikProps.values.date}
                     onChange={(value) => formikProps.setFieldValue('date', value)}
+                    disabled={rest.formDisabled}
+
                 />
             </div>
             <div>
@@ -72,16 +78,29 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.experienceOptions}
                     value={formikProps.values.experience}
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
+                    disabled={rest.formDisabled}
+
 
                 />
             </div>
             <div>
-                <Button variant="outlined" sx={{height: "100%"}} onClick={() => rest.onDelete()}>
+                <Button variant="outlined"
+                        sx={{height: "100%"}}
+                        onClick={() => rest.onDelete()}
+                        disabled={rest.formDisabled}
+
+                >
                     <DeleteIcon/>
                 </Button>
             </div>
             <div>
-                <Button variant="outlined" sx={{height: "100%"}} type="submit">
+                <Button
+                    variant="outlined"
+                    sx={{height: "100%"}}
+                    type="submit"
+                    disabled={rest.formDisabled}
+
+                >
                     Submit
                 </Button>
             </div>
