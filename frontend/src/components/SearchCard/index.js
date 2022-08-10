@@ -43,6 +43,7 @@ const BaseSearchCard = (props) => {
                             variant="outlined"
                             value={formikProps.values.what}
                             onChange={formikProps.handleChange}
+                            size="small"
                         />
                     </div>
                     <div>
@@ -53,6 +54,7 @@ const BaseSearchCard = (props) => {
                             name="where"
                             value={formikProps.values.where}
                             onChange={formikProps.handleChange}
+                            size="small"
                         />
                     </div>
                     <div>
@@ -87,7 +89,7 @@ const BaseSearchCard = (props) => {
                         />
                     </div>
                     <div>
-                        <Button variant="outlined">Create</Button>
+                        <Button variant="outlined" size="medium">Create</Button>
                     </div>
                 </Form>
             )}

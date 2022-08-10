@@ -7,58 +7,44 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 
-// const ITEM_HEIGHT = 48;
-// const ITEM_PADDING_TOP = 8;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250,
-//     },
-//   },
-// };
 
-// const names = [
-//   'Oliver Hansen',
-//   'Van Henry',
-//   'April Tucker',
-//   'Ralph Hubbard',
-//   'Omar Alexander',
-//   'Carlos Abbott',
-//   'Miriam Wagner',
-//   'Bradley Wilkerson',
-//   'Virginia Andrews',
-//   'Kelly Snyder',
-// ];
+export default function MultipleSelect({label, name, onChange, value, options}) {
+    const [items, setItems] = React.useState([]);
 
-export default function MultipleSelectCheckmarks({value, label, onChange, options}) {
-    const [selections, setSelections] = React.useState([]);
+    const handleChange = (event, child) => {
+        const {value} = event.target;
+        const isReset = value[value.length - 1] === 'all'
+        let newValue = [...value]
+        if (isReset) {
+            newValue = ['all']
+        } else {
+            if (newValue[0] === 'all') {
+                newValue.shift()
+            }
+        }
+        setItems(newValue);
+        console.log('newValue', newValue)
 
-    const handleChange = (event) => {
-        const {target: {value}} = event;
-        setSelections(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-        onChange(value)
-        console.log("value", value)
+        // pass to formik array of objects from the range of options that are selected in this component
+        onChange(newValue.map(item =>
+            options.find(option =>
+                option.label === item)))
     };
 
     return (
         <div>
-            <FormControl sx={{width: 300}}>
+            <FormControl sx={{width: 300}} size="small">
                 <InputLabel>{label}</InputLabel>
                 <Select
                     multiple
-                    value={value}
+                    value={items}
                     onChange={handleChange}
                     input={<OutlinedInput label={label}/>}
                     renderValue={(selected) => selected.join(', ')}
-                    // MenuProps={MenuProps}
                 >
                     {options.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            <Checkbox checked={selections.indexOf(option.value) > -1}/>
+                        <MenuItem key={option.label} value={option.label}>
+                            <Checkbox checked={items.indexOf(option.label) > -1}/>
                             <ListItemText primary={option.label}/>
                         </MenuItem>
                     ))}
