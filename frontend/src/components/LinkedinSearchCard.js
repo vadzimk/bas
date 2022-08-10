@@ -1,7 +1,7 @@
 import React from "react";
-import BaseSearchCard from "./SearchCard";
+import BaseSearchCard from "./BaseSearchCard";
 
-const LinkedinSearchCard = () => {
+const LinkedinSearchCard = (props) => {
 
 
     const RADIUS_OPTIONS = [
@@ -34,6 +34,7 @@ const LinkedinSearchCard = () => {
             distanceOptions={RADIUS_OPTIONS}
             experienceOptions={EXPERIENCE_OPTIONS}
             dateOptions={DATE_OPTIONS}
+            onDelete={props.onDelete}
         />
     )
 }

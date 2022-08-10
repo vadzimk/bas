@@ -6,10 +6,10 @@ import React from 'react'
 import Button from '@mui/material/Button';
 import MultipleSelect from "./MultipleSelect";
 import BasicSelect from "./BasicSelect";
-import {TextField} from "@mui/material";
+import {IconButton, TextField} from "@mui/material";
 import {css} from "@emotion/react";
 import {Formik, Form} from 'formik'
-
+import DeleteIcon from '@mui/icons-material/Delete';
 const cardCss = {
     searchFlexContainer: css({
         display: 'flex',
@@ -28,8 +28,8 @@ const BaseSearchCard = (props) => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log('submitted')
+        // e.preventDefault()
+        props.onDelete()
     }
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues}>
@@ -89,7 +89,9 @@ const BaseSearchCard = (props) => {
                         />
                     </div>
                     <div>
-                        <Button variant="outlined" size="medium">Create</Button>
+                        <Button variant="outlined" sx={{height: "100%"}} type="submit">
+                            <DeleteIcon/>
+                        </Button>
                     </div>
                 </Form>
             )}

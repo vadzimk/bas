@@ -8,9 +8,14 @@ import LinkedinSearchCard from "./components/LinkedinSearchCard";
 
 function App() {
     // const theme = useTheme()
+    const [idCounter, setIdCounter] = useState(0)
     const [searchCards, setSearchCards] = useState([])
     const handleClick = () => {
-        setSearchCards([...searchCards, LinkedinSearchCard])
+        setSearchCards([...searchCards, {id: idCounter}])
+        setIdCounter(idCounter+1)
+    }
+    const handleDelete = (id) => {
+        setSearchCards(searchCards.filter(c => c.id !== id))
     }
 
 
@@ -19,7 +24,11 @@ function App() {
             // css={{backgroundColor: theme.palette.common.orange}}
         >
             <Button variant="outlined" onClick={handleClick}>New Search</Button>
-            <div>{searchCards.map((Card, index) => <Card key={index}/>)}</div>
+            <div>
+                {searchCards.map(card =>
+                    <LinkedinSearchCard key={card.id} onDelete={() => handleDelete(card.id)}/>
+                )}
+            </div>
         </div>
     );
 }
