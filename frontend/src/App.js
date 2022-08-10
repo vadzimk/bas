@@ -5,9 +5,10 @@ import {Button} from "@mui/material";
 import React, {useState} from 'react';
 import {useTheme, css} from "@emotion/react";
 import LinkedinSearchCard from "./components/LinkedinSearchCard";
+// import theme from "./Theme";
 
 function App() {
-    // const theme = useTheme()
+    const theme = useTheme()
     const [idCounter, setIdCounter] = useState(0)
     const [searchCards, setSearchCards] = useState([])
     const handleClick = () => {
@@ -23,6 +24,7 @@ function App() {
         <div
             // css={{backgroundColor: theme.palette.common.orange}}
         >
+            <h3 style={theme.typography.h3}>Blanket Application Strategy</h3>
             <Button variant="outlined" onClick={handleClick}>New Search</Button>
             <div>
                 {searchCards.map(card =>
