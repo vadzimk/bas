@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect({value, label, onChange, options}) {
+export default function BasicSelect({value, label, onChange, options, disabled}) {
 
     return (
         <Box sx={{minWidth: 120}}>
@@ -14,7 +14,7 @@ export default function BasicSelect({value, label, onChange, options}) {
                 <Select
                     value={value}
                     onChange={e => onChange(e.target.value)}
-                    // disabled={true}
+                    disabled={disabled}
                 >
                     {options.map(option =>
                         <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>)}

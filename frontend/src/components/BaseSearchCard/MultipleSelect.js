@@ -8,10 +8,10 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 
 
-export default function MultipleSelect({label, name, onChange, value, options}) {
+export default function MultipleSelect({label, onChange, value, options, disabled}) {
     const [items, setItems] = React.useState([]);
 
-    const handleChange = (event, child) => {
+    const handleChange = (event) => {
         const {value} = event.target;
         const isReset = value[value.length - 1] === 'all'
         let newValue = [...value]
@@ -23,7 +23,6 @@ export default function MultipleSelect({label, name, onChange, value, options}) 
             }
         }
         setItems(newValue);
-        console.log('newValue', newValue)
 
         // pass to formik array of objects from the range of options that are selected in this component
         onChange(newValue.map(item =>
@@ -37,10 +36,11 @@ export default function MultipleSelect({label, name, onChange, value, options}) 
                 <InputLabel>{label}</InputLabel>
                 <Select
                     multiple
-                    value={items}
+                    value={value.map(v=>v.label)}
                     onChange={handleChange}
                     input={<OutlinedInput label={label}/>}
                     renderValue={(selected) => selected.join(', ')}
+                    disabled={disabled}
                 >
                     {options.map((option) => (
                         <MenuItem key={option.label} value={option.label}>
