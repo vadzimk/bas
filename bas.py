@@ -1,5 +1,6 @@
 import os
 
+from celery import Celery
 from flask_migrate import Migrate
 
 from app import create_app
@@ -8,7 +9,6 @@ from app.models import *
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)  # migration engine
-
 
 # for the flask shell command
 @app.shell_context_processor

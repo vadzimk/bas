@@ -21,7 +21,7 @@ const LinkedinSearchCard = (props) => {
         {label: 'director', value: '5'},
         {label: 'executive', value: '6'},
     ]
-    const DATE_OPTIONS = [
+    const AGE_OPTIONS = [
         {label: 'all', value: ''},
         {label: 'month', value: '&f_TPR=r2592000'},
         {label: 'week', value: '&f_TPR=r604800'},
@@ -31,9 +31,9 @@ const LinkedinSearchCard = (props) => {
 
     return (
         <BaseSearchCard
-            distanceOptions={RADIUS_OPTIONS}
+            radiusOptions={RADIUS_OPTIONS}
             experienceOptions={EXPERIENCE_OPTIONS}
-            dateOptions={DATE_OPTIONS}
+            ageOptions={AGE_OPTIONS}
             onDelete={props.onDelete}
         />
     )

@@ -47,25 +47,25 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                 />
             </div>
             <div>
-                {/*Distance*/}
+                {/*Radius*/}
                 <BasicSelect
-                    label="Distance"
-                    name="distance"
-                    options={rest.distanceOptions}
-                    value={formikProps.values.distance}
-                    onChange={(value) => formikProps.setFieldValue('distance', value)}
+                    label="Radius"
+                    name="radius"
+                    options={rest.radiusOptions}
+                    value={formikProps.values.radius}
+                    onChange={(value) => formikProps.setFieldValue('radius', value)}
                     disabled={rest.formDisabled}
 
                 />
             </div>
             <div>
-                {/*Date*/}
+                {/*Age*/}
                 <BasicSelect
                     label="Date"
-                    name="date"
-                    options={rest.dateOptions}
-                    value={formikProps.values.date}
-                    onChange={(value) => formikProps.setFieldValue('date', value)}
+                    name="age"
+                    options={rest.ageOptions}
+                    value={formikProps.values.age}
+                    onChange={(value) => formikProps.setFieldValue('age', value)}
                     disabled={rest.formDisabled}
 
                 />

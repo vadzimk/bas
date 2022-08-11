@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
-from config import config
+from celery import Celery
+from config import Config, config
 
 db = SQLAlchemy()
 
+# celery's decorator is in global space so celery must be instantiated immediately
+celery = Celery(__name__, broker=Config.CELERY_BROKER_URL) # broker is fixed for all configurations -sad
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -17,6 +19,8 @@ def create_app(config_name):
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    celery.conf.update(app.config)
     return app
 
 

@@ -9,6 +9,8 @@ class Config(object):
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'app.sqlite')
+    CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'redis://127.0.0.1:6379/0'
+    CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND') or 'redis://127.0.0.1:6379/0'
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # send a signal to application when a change is about to be made in the db
 
     @staticmethod

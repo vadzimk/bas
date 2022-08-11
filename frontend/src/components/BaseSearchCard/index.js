@@ -10,8 +10,8 @@ const BaseSearchCard = (props) => {
     const initialValues = {
         what: '',
         where: '',
-        distance: '',
-        date: '',
+        radius: '',
+        age: '',
         experience: [],
     }
 

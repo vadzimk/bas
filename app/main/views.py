@@ -4,7 +4,10 @@ import logging
 import pandas as pd
 from flask import render_template, request, jsonify, Response
 
+from app.scraper.tasks import scrape_linkedin
+
 from . import main
+
 from .. import db
 from ..models import Company, Job
 
@@ -54,7 +57,9 @@ def update_job():
 def search():
     form_values = json.loads(request.data)
     print("form_values", form_values)
-    return Response(status=200)
+    # TODO add field search_type
+    scrape_linkedin(form_values)
+    return Response(status=202)
 
 
 def get_current_data():
@@ -113,3 +118,4 @@ def get_current_data():
 
     table_json = json.loads(df.to_json(orient='records'))
     return table_json
+

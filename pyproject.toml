@@ -19,6 +19,7 @@ Flask = "^2.2.0"
 Flask-SQLAlchemy = "^2.5.1"
 Flask-Migrate = "^3.1.0"
 sqlalchemy-stubs = "^0.4"
+celery = "^5.2.7"
 
 [tool.poetry.dev-dependencies]
 
