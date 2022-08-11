@@ -4,7 +4,7 @@ import logging
 import pandas as pd
 from flask import render_template, request, jsonify, Response
 
-from app.scraper.tasks import scrape_linkedin
+# from app.scraper.tasks import scrape_linkedin
 
 from . import main
 
@@ -58,7 +58,7 @@ def search():
     form_values = json.loads(request.data)
     print("form_values", form_values)
     # TODO add field search_type
-    scrape_linkedin(form_values)
+    # scrape_linkedin(form_values)
     return Response(status=202)
 
 
