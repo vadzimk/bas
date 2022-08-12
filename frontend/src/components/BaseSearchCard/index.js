@@ -1,5 +1,3 @@
-
-
 import React, {useState} from 'react'
 import {Formik, Form} from 'formik'
 import BaseSearchCardFields from "./BaseSearchCardFields";
@@ -20,7 +18,12 @@ const BaseSearchCard = (props) => {
     const handleSubmit = async (values) => {
         console.log('values', values)
         console.log('submit')
-        await createSearch(values)
+        await createSearch(
+            {
+                ...values,
+                experience: values.experience.map(item => item.value)
+            })
+
         setFormDisabled(true)
     }
 

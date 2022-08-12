@@ -1,8 +1,0 @@
-.idea
-out
-__pycache__
-.env
-*.xls
-.flaskenv
-app/scraper/debug.py
-redis_data
