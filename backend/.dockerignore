@@ -1,0 +1,7 @@
+*Dockerfile
+.venv
+.idea
+out
+*.sqlite
+.env
+.flaskenv

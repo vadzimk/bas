@@ -10,6 +10,20 @@ services:
     volumes:
       - redis_data:/data
 
+  flask_backend:
+    container_name: flask_backend
+    image: flask_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    env_file:
+      - backend/src/.flaskenv
+      - backend/src/.env
+
+
+
 volumes:
   redis_data:
 

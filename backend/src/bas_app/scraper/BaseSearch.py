@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 
 from BasePage import BasePage
-from app import db
-from app.models import Job, Company
-from app.scraper.utils import filter_attributes_job
+from bas_app import db
+from bas_app.models import Job, Company
+from bas_app.scraper.utils import filter_attributes_job
 
 
 class FoundException(Exception):
@@ -76,7 +76,7 @@ class BaseSearch(ABC):
                 job = Job.query.filter_by(url=job_url).first()
                 if not job:
                     logging.warning(f'no job in db for {b.dict}')
-                if job and job.description_text: # job details and company details are already in db
+                if job and job.description_text:  # job details and company details are already in db
                     continue
                 await self.populate_job_post_details(b, job_url, bpage)
                 self.create_or_update_job_db(b)
@@ -122,7 +122,6 @@ class BaseSearch(ABC):
                 await page.populate(bpage)
             page.save_beacons_job_db()  # this is synchronous
             pages.append(page)
-
 
         pages: List[BasePage] = []
         await make_page(0, self._url, self._PageClass)

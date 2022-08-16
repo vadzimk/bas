@@ -1,10 +1,13 @@
+import os
+
 from flask import Flask
 from flask_celeryext import FlaskCeleryExt
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from app.celery_utils import make_celery
-from app.config import config
+from config import config
+from .celery_utils import make_celery
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -21,7 +24,7 @@ def create_app(config_name):
     config[config_name].init_app(app)
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, directory='migrations')
     ext_celery.init_app(app)
 
     from .main import main as main_blueprint
@@ -30,4 +33,4 @@ def create_app(config_name):
     return app
 
 
-from app import models
+from . import models

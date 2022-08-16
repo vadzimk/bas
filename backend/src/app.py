@@ -1,10 +1,12 @@
 import os
 
-from app import create_app, ext_celery
-# from app.models import *
+from bas_app import create_app, ext_celery, db
+from bas_app.models import Job, Company
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 celery = ext_celery.celery
+
+print('hello from app.py')
 
 
 # for the flask shell command

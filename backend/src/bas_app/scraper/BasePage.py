@@ -4,12 +4,13 @@ from BaseBeacon import BaseBeacon
 from typing import List, Optional
 from pandas import pandas as pd
 from pandas import DataFrame
-from app import db
-from app.models import Job
 
 from abc import ABC, abstractmethod
 
-from app.scraper.utils import filter_attributes_job
+from bas_app import db
+from bas_app.models import Job
+
+from utils import filter_attributes_job
 
 
 class BasePage(ABC):

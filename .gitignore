@@ -1,8 +1,8 @@
-../.idea
+.idea
 backend/out
 __pycache__
 .env
 *.xls
 .flaskenv
-backend/app/scraper/debug.py
+debug.py
 redis_data
