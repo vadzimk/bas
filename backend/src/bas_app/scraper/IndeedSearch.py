@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import math
+import sys
 import time
 import urllib
 from enum import Enum
@@ -48,11 +49,12 @@ class IndeedSearch(BaseSearch):
                  age=Filters.Age.ALL,
                  radius=Filters.Radius.ALL,
                  experience=Filters.Experience.ALL,
-                 education=Filters.Education.ALL):
-        super().__init__(what, where, age, radius, experience, education)
+                 education=Filters.Education.ALL,
+                 limit: int = sys.maxsize
+                 ):
+        super().__init__(what, where, age, radius, experience, education, limit)
         self._url = f"""https://www.indeed.com/jobs?q={urllib.parse.quote(self._query)}&l={urllib.parse.quote(self._location)}{self.attributes()}{self._radius}&fromage={self._age}"""
         self._PageClass = IndeedPage
-
 
     @override
     @staticmethod
@@ -77,7 +79,6 @@ class IndeedSearch(BaseSearch):
             beacon.populate_from_company_profile(about_company_html, None)
         except Exception as e:
             logging.error(f'Error going to {company_url} {e}')
-
 
     @override
     async def create_session(self, bpage):

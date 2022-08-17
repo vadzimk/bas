@@ -24,7 +24,7 @@ def create_app(config_name):
     config[config_name].init_app(app)
 
     db.init_app(app)
-    migrate.init_app(app, db, directory='migrations')
+    migrate.init_app(app, db, directory='migrations', render_as_batch=True)
     ext_celery.init_app(app)
 
     from .main import main as main_blueprint

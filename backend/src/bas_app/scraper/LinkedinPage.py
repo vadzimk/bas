@@ -80,7 +80,7 @@ class LinkedinPage(BasePage):
 
 
         logging.info('beacons on this page after scroll: {num_beacons}')
-        save_safe(search_results_html, str(self._page_index) + '.html')
+        # save_safe(search_results_html, str(self._page_index) + '.html')
         return BeautifulSoup(search_results_html, 'html.parser')
 
     @override

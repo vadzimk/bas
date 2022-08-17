@@ -76,7 +76,7 @@ class IndeedBeacon(BaseBeacon):
                                                 .text.replace('Posted', '')))
 
     def populate_from_details(self, job_view_html):
-        save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company"]["name"]}.html')
+        # save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company"]["name"]}.html')
         soup = BeautifulSoup(job_view_html, 'html.parser')
         self.make_attribute('qualifications',
                             lambda: ', '.join(li.text for li in
@@ -115,7 +115,7 @@ class IndeedBeacon(BaseBeacon):
     @override
     def populate_from_company_profile(self, about_company_html, about_employees_html=None):
         """ all must be company attributes """
-        save_safe(about_company_html, f"{self._job_post['company']['name']}.html")
+        # save_safe(about_company_html, f"{self._job_post['company']['name']}.html")
         company_soup = BeautifulSoup(about_company_html, 'html.parser')
 
         self.make_company_attribute("overview",

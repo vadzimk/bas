@@ -5,11 +5,12 @@ from typing import List
 from BaseSearch import BaseSearch
 from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
+from bas_app.models import Job
 from utils import cleanup, create_project
 from playwright.async_api import async_playwright
 
-from backend.app import create_app, db
-from backend.app.models import Job
+from app import create_app, db
+
 import os
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
@@ -45,13 +46,14 @@ indeed_searches = [
     #     'radius': IndeedSearch.Filters.Radius.ALL,
     #     'experience': IndeedSearch.Filters.Experience.ENTRY
     # },
-    {
-        'what': "software automation tester",
-        'where': "Los Angeles",
-        'age': IndeedSearch.Filters.Age.SEVEN,
-        'radius': IndeedSearch.Filters.Radius.ALL,
-        'experience': IndeedSearch.Filters.Experience.ENTRY
-    },
+    # {
+    #     'what': "software automation tester",
+    #     'where': "Los Angeles",
+    #     'age': IndeedSearch.Filters.Age.SEVEN,
+    #     'radius': IndeedSearch.Filters.Radius.ALL,
+    #     'experience': IndeedSearch.Filters.Experience.ENTRY,
+    #     'limit': 1
+    # },
 ]
 
 linkedin_searches = [
@@ -95,7 +97,8 @@ linkedin_searches = [
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
             LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
-        ]
+        ],
+        'limit': 1
     },
 ]
 
@@ -111,8 +114,8 @@ async def do_search(searches: List[BaseSearch]):
     """
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            # headless=False,
-                                            # slow_mo=50
+                                            headless=False,
+                                            slow_mo=50
                                             )
         bpage = await browser.new_page()
         with app.app_context():

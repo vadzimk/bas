@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import math
+import sys
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
@@ -17,7 +18,7 @@ class FoundException(Exception):
 class BaseSearch(ABC):
     NAVIGATE_DELAY = 3
 
-    def __init__(self, what, where, age, radius, experience, education=''):
+    def __init__(self, what, where, age, radius, experience, limit, education=''):
         self._query = what
         self._location = where
         self._age = age
@@ -28,6 +29,7 @@ class BaseSearch(ABC):
         self._PageClass = BasePage
         self._url = None
         self._pages = []
+        self._limit = limit
 
     @property
     def pages(self):
@@ -128,7 +130,7 @@ class BaseSearch(ABC):
         page_count = math.ceil(pages[0].job_count / pages[0].JOBS_ON_PAGE)
         logging.info(f'{page_count} page_count for search {self._url}')
         if page_count > 1:
-            for page_n in range(1, page_count):
+            for page_n in range(1, min(page_count, self._limit)):
                 await make_page(1, self._url, self._PageClass)
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
         self._pages = pages

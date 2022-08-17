@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from . import db
 from sqlalchemy.sql import expression
 
@@ -10,10 +14,10 @@ class Company(db.Model):
     industry = db.Column(db.String, nullable=True)
     size = db.Column(db.String, nullable=True)
     overview = db.Column(db.String, nullable=True)
-    number_employees = db.Column(db.String, nullable=True)
+    number_employees = db.Column(db.Integer, nullable=True)
     location = db.Column(db.String, nullable=True)
     main_country_name = db.Column(db.String, nullable=True)
-    main_country_number_employees = db.Column(db.String, nullable=True)
+    main_country_number_employees = db.Column(db.Integer, nullable=True)
     other_locations_employees = db.Column(db.String, nullable=True)
     other_locations_employees_html = db.Column(db.String, nullable=True)
     profile_url = db.Column(db.String, index=True)
@@ -33,7 +37,7 @@ class Job(db.Model):
     salary = db.Column(db.String, nullable=True)
     estimated_salary = db.Column(db.String, nullable=True)
     created_str = db.Column(db.String, nullable=True)  # string of posted ...ago
-    date_posted = db.Column(db.String, nullable=True)
+    _date_posted = db.Column("date_posted", db.Date, nullable=True)
     multiple_candidates = db.Column(db.String, nullable=True)
     benefits = db.Column(db.String, nullable=True)
     description_markdown = db.Column(db.String)
@@ -48,11 +52,19 @@ class Job(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
 
-    def __repr__(self):
-        return f'<Job {self.title} {self.url}>'
+    @hybrid_property
+    def date_posted(self):
+        return self._date_posted
 
-    # def set_password(self, password):
-    #     self.password_hash = generate_password_hash(password)
-    #
-    # def check_password(self, password):
-    #     return check_password_hash(self.password_hash, password)
+    @date_posted.setter
+    def date_posted(self, value):
+        self._date_posted = datetime.fromisoformat(value)
+
+
+
+
+
+    def __repr__(self):
+        return f'<Job {self.date_posted} {self.title} {self.url}>'
+
+

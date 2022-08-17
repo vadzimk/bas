@@ -31,7 +31,7 @@ to save even more time on your applications
 
 ## Stack
 
-- Vanilla JS (maybe framework later)
+- Vanilla JS ~> React
 - Tabulator
 - Python
 - Asyncio
@@ -40,6 +40,8 @@ to save even more time on your applications
 - Flask
 - SQLAlchemy
 - Sqlite
+- Celery
+- Redis
 
 ## Usage
 
@@ -50,9 +52,10 @@ poetry run flask run
 
 ## Development
 
-poetry run flask db init  _# adds support to db migrations_  
-poetry run flask db migrate _# creates migration script_  
-poetry run flask db upgrade _# applies changes to db_
+flask db init  _# adds support to db migrations_  
+flask db migrate _# creates migration script_  
+flask db upgrade _# applies changes to db_  
+flask run -p 5000
 
 ![Use case diagram](diagrams/Diagram-USE-CASE.png)
 

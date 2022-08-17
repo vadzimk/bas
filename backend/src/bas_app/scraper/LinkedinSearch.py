@@ -1,4 +1,5 @@
 import logging
+import sys
 import urllib
 from enum import Enum
 
@@ -13,8 +14,6 @@ from BaseSearch import BaseSearch
 
 import os
 from dotenv import load_dotenv
-
-
 
 
 class LinkedinSearch(BaseSearch):
@@ -48,8 +47,10 @@ class LinkedinSearch(BaseSearch):
                  where,
                  age: Filters.Age = Filters.Age.ALL,
                  radius: Filters.Radius = Filters.Radius.ALL,
-                 experience: List[Filters.Experience] = [Filters.Experience.ALL]):
-        super().__init__(what, where, age, radius, experience)
+                 experience: List[Filters.Experience] = [Filters.Experience.ALL],
+                 limit: int = sys.maxsize
+                 ):
+        super().__init__(what, where, age, radius, experience, limit)
         self._base_url = f"""https://www.linkedin.com"""
         self._url = f"""{self._base_url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
         self._PageClass = LinkedinPage

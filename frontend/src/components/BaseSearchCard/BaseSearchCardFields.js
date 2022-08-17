@@ -84,6 +84,19 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                 />
             </div>
             <div>
+                <TextField
+                    label="Limit"
+                    variant="outlined"
+                    name="limit"
+                    value={formikProps.values.limit}
+                    onChange={formikProps.handleChange}
+                    size="small"
+                    sx={{width: 70}}
+                    disabled={rest.formDisabled}
+
+                />
+            </div>
+            <div>
                 <Button variant="outlined"
                         sx={{height: "100%"}}
                         onClick={() => rest.onDelete()}

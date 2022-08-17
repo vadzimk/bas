@@ -26,6 +26,7 @@ config.set_main_option(
         '%', '%%'))
 target_metadata = current_app.extensions['migrate'].db.metadata
 
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -46,7 +47,10 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        compare_type=True,  # allow to change column types
     )
 
     with context.begin_transaction():
@@ -79,7 +83,9 @@ def run_migrations_online():
             target_metadata=target_metadata,
             process_revision_directives=process_revision_directives,
             # compare_server_default=True,
-            **current_app.extensions['migrate'].configure_args
+            **current_app.extensions['migrate'].configure_args,
+            compare_type=True,  # allow to change column types
+
         )
 
         with context.begin_transaction():

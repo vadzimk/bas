@@ -48,7 +48,7 @@ def use_playwright(url):
 
 def make_soup(url, export_filename):
     html = use_playwright(url)
-    save_safe(html, export_filename)
+    # save_safe(html, export_filename)
     return BeautifulSoup(html, 'html.parser')
 
 
@@ -123,8 +123,11 @@ def filter_attributes_job(b: BaseBeacon) -> dict:
 
 def age_to_date(age):
     if age == 'Today' \
-            or age =='Just posted' \
-            or 'hours ago' in age:
+            or age == 'Just posted' \
+            or 'hours ago' in age \
+            or 'hour ago' in age \
+            or 'minute ago' in age \
+            or 'minutes ago' in age:
         date_value = str(date.today())
     elif '+ days ago' in age:
         n_days_ago = int(age.replace('+ days ago', '').strip()) + 14
@@ -133,14 +136,15 @@ def age_to_date(age):
             or 'days ago' in age:
         n_days_ago = int(age.replace('days ago', '').replace('day ago', '').strip())
         date_value = date.today() - timedelta(n_days_ago)
-    elif 'weeks ago' in age or 'week ago' in age:
+    elif 'weeks ago' in age \
+            or 'week ago' in age:
         n_days_ago = int(age.replace('weeks ago', '').replace('week ago', '').strip()) * 7
         date_value = date.today() - timedelta(n_days_ago)
-    elif 'months ago' in age or 'month ago' in age:
+    elif 'months ago' in age \
+            or 'month ago' in age:
         n_days_ago = int(age.replace('months ago', '').replace('month ago', '').strip()) * 30
         date_value = date.today() - timedelta(n_days_ago)
     else:
         date_value = age
 
     return date_value
-

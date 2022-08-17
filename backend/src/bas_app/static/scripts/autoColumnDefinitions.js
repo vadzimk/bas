@@ -60,6 +60,7 @@ export default function autoColumnsDefinitions(definitions) {
             column.formatter = function (cell, formatterParams, onRendered) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
             }
+            column.sorter = "number"
         }
         if (column.field.includes('flag')) {
             column.editable = false;
@@ -98,9 +99,15 @@ export default function autoColumnsDefinitions(definitions) {
                     //cell - cell component
                     flipValue(cell)
                     cell.getRow().getCell('plan_apply_flag').setValue(false)
-
                 }
-
+            }
+        }
+        if (column.field.includes('number')) {
+            column.sorter = "number"
+            column.sorterParams = {
+                thousandSeparator: ",",
+                decimalSeparator: ".",
+                alignEmptyValues: "top",
             }
 
 
