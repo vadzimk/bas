@@ -63,8 +63,11 @@ def search():
 
 
 def get_current_data():
-    result = db.session.query(Company, Job) \
-        .join(Company) \
+    # result = db.session.query(Company, Job) \
+    #     .join(Company) \
+    #     .filter(Job.is_deleted == False).statement
+    result = db.session.query(Job, Company) \
+        .join(Job) \
         .filter(Job.is_deleted == False).statement
 
         # .all()
