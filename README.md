@@ -27,7 +27,8 @@ to save even more time on your applications
 
 ## Demo
 
-![Current version demo](Screenshot-2022-08-03.png)
+![Current version demo search](Screenshot%202022-08-18-2.png)
+![Current version demo results](Screenshot%202022-08-18.png)
 
 ## Stack
 
@@ -55,9 +56,13 @@ poetry run flask run
 cd src  
 flask db init  _# adds support to db migrations_  
 flask db migrate _# creates migration script_  
-flask db upgrade _# applies changes to db_ 
-celery -A app.celery worker --loglevel=info
-flask run -p 5000
+flask db upgrade _# applies changes to db_  
+celery -A app.celery worker --loglevel=info  
+flask run -p 5000  
 
+## Diagrams
+### Use-case
 ![Use case diagram](diagrams/Diagram-USE-CASE.png)
+### Entity-relationship
+![ER diagram](diagrams/er-diagram.jpg)
 
