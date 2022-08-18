@@ -64,9 +64,21 @@ def search():
 
 @main.route('/api/status/<task_id>')
 def search_status(task_id):
+    """
+    :param task_id:
+    :return: {
+    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS"
+    "info": {
+        "total": int,
+        "current": int,
+        "job_count": int
+    }
+}
+    """
     task = scrape_linkedin.AsyncResult(task_id)
     response = {
-        'state': task.state
+        'state': task.state,
+        'info': task.info if task.state == 'PROGRESS' else str(task.info)
     }
     return jsonify(response)
 

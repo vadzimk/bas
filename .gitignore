@@ -6,3 +6,4 @@ __pycache__
 .flaskenv
 debug.py
 redis_data
+*.sqlite

@@ -9,6 +9,8 @@ from BasePage import BasePage
 from bas_app import db
 from bas_app.models import Job, Company
 from bas_app.scraper.utils import filter_attributes_job
+from typing import Type
+from playwright.async_api._generated import Page as PlayWrightPage
 
 
 class FoundException(Exception):
@@ -29,7 +31,14 @@ class BaseSearch(ABC):
         self._PageClass = BasePage
         self._url = None
         self._pages = []
-        self._limit: int = int(limit)
+        self._limit: int = int(limit) if limit else sys.maxsize
+        self._task_update_state = None
+        self.task_state_meta = {
+            'total': 0,
+            'current': 0,
+            'job_count': 0
+        }
+        self.page_count_with_limit = None
 
     @property
     def pages(self):
@@ -40,18 +49,27 @@ class BaseSearch(ABC):
         """ logs into the website and returns the bpage"""
         return bpage
 
-    async def populate(self, bpage):
-        bpage = await self.flip_pages(bpage)
+    async def populate(self, bpage: PlayWrightPage, task_update_state: callable):
+        """
+        entry point to crawl job board pages
+        :param bpage: instance of playwright page
+        :param task_update_state: the celery.Task.update_state() method to update task state passed from tasks
+        """
+        self._task_update_state = task_update_state
+        bpage: PlayWrightPage = await self.flip_pages(bpage)
         await self.populate_details(bpage)
+
+    def update_state(self):
+        self._task_update_state(state='PROGRESS', meta=self.task_state_meta)
 
     @staticmethod
     @abstractmethod
-    async def populate_company_details(beacon, company_url, bpage):
+    async def populate_company_details(beacon, company_url, bpage: PlayWrightPage):
         pass
 
     @staticmethod
     @abstractmethod
-    async def populate_job_post_details(beacon, job_url, bpage):
+    async def populate_job_post_details(beacon, job_url, bpage: PlayWrightPage):
         pass
 
     @staticmethod
@@ -68,12 +86,12 @@ class BaseSearch(ABC):
                     setattr(job, k, v)
         db.session.commit()
 
-    async def populate_details(self, bpage):
+    async def populate_details(self, bpage: PlayWrightPage):
         """ Populate job post details form 'iframe' and
         populate company details from the company profile page
         """
         for page_index, p in enumerate(self._pages):
-            for b in p.beacons:
+            for b_index, b in enumerate(p.beacons):
                 job_url = b.dict['url']
                 job = Job.query.filter_by(url=job_url).first()
                 if not job:
@@ -93,6 +111,10 @@ class BaseSearch(ABC):
                 job.company_id = created_company.id
                 db.session.commit()
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
+                self.task_state_meta['current'] = self.page_count_with_limit \
+                                                  + (page_index + 1) * p.JOBS_ON_PAGE \
+                                                  + (b_index + 1)
+                self.update_state()
 
     @staticmethod
     def save_beacon_company_db(beacon):
@@ -108,14 +130,18 @@ class BaseSearch(ABC):
     def copy_company_details(self, from_bec, to_bec):
         to_bec.populate_company_from_bec(from_bec)
 
-    async def flip_pages(self, bpage):
+    async def flip_pages(self, bpage: PlayWrightPage)->PlayWrightPage:
         """ navigates to successive pages of the job search results """
 
-        async def make_page(n, url, Type):
+        async def make_page(n: int, url: str, T: Type[BasePage]):
             """ instantiates appropriate page class
-            and calls populate page which creates beacon list of appropriate Beacon class """
+            and calls populate page which creates beacon list of appropriate Beacon class
+             :param n: page number
+             :param url: the url for the page
+             :param T: the page type to instantiate
+             """
             nonlocal pages, bpage
-            page: BasePage = Type(n, url)
+            page: BasePage = T(n, url)
             try:
                 await page.populate(bpage)
             except Exception:
@@ -128,10 +154,18 @@ class BaseSearch(ABC):
         pages: List[BasePage] = []
         await make_page(0, self._url, self._PageClass)
         page_count = math.ceil(pages[0].job_count / pages[0].JOBS_ON_PAGE)
+        self.page_count_with_limit = min(page_count, self._limit)
+        job_count_with_limit = min(pages[0].job_count, self.page_count_with_limit * pages[0].JOBS_ON_PAGE)
         logging.info(f'{page_count} page_count for search {self._url}')
+        self.task_state_meta['total'] = job_count_with_limit + self.page_count_with_limit
+        self.task_state_meta['current'] = 0
+        self.task_state_meta['job_count'] = pages[0].job_count
+        self.update_state()
         if page_count > 1:
-            for page_n in range(1, min(page_count, self._limit)):
+            for page_n in range(1, self.page_count_with_limit):
                 await make_page(1, self._url, self._PageClass)
+                self.task_state_meta['current'] = page_n
+                self.update_state()
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
         self._pages = pages
         return bpage

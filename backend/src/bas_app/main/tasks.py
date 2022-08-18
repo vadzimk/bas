@@ -1,23 +1,25 @@
 import asyncio
+import logging
 import os
 
 from celery import shared_task
 from playwright.async_api import async_playwright
+from playwright.async_api._generated import Page as PlayWrightPage
 
 from ..models import Job
 from ..scraper.LinkedinSearch import LinkedinSearch
 from .. import db, create_app
 
-# app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
-from flask import current_app as app
+
 
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
 
-async def async_task(search_fields, update_state):
+async def async_task(search_fields, task_update_state):
     """
     :param search_fields: dictionary of search fields
     :return: None - result of the task is stored in db
+    because of how celery.Task is configured we don't need the app_context() here
     """
     print('starting search', search_fields)
     new_search = LinkedinSearch(**search_fields)  # TODO need to sanitize user input
@@ -26,12 +28,11 @@ async def async_task(search_fields, update_state):
                                             headless=False,
                                             slow_mo=100
                                             )
-        bpage = await browser.new_page()
-        # with app.app_context():
-        bpage = await new_search.create_session(bpage)  # one session for each task
-        update_state(state='STARTED')
-        await new_search.populate(bpage)  # TODO update state here
-        await asyncio.sleep(1)
+        bpage: PlayWrightPage = await browser.new_page()
+
+        bpage: PlayWrightPage = await new_search.create_session(bpage)  # one session for each task
+        task_update_state(state='BEGUN')
+        await new_search.populate(bpage=bpage, task_update_state=task_update_state)  # TODO update state here
 
         # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
         # Create a query that identifies the row for each domain with the lowest id
@@ -44,7 +45,7 @@ async def async_task(search_fields, update_state):
         for job in q:
             db.session.delete(job)
         db.session.commit()
-        update_state(state='SUCCESS')
+        task_update_state(state='SUCCESS')
 
 
 @shared_task(bind=True)
@@ -52,6 +53,6 @@ def scrape_linkedin(self, search_fields: dict):
     """    :param search_fields:
     :param self: celery sets this argument
     """
-    asyncio.run(async_task(search_fields=search_fields, update_state=self.update_state))
+    asyncio.run(async_task(search_fields=search_fields, task_update_state=self.update_state))
 
 
