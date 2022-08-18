@@ -24,7 +24,7 @@ def results():
     return render_template("results.html", title="BAS")
 
 
-@main.route('/api/jobs', methods=['GET'])
+@main.route('/api/jobs')
 def jobs():
     return jsonify(get_current_data())
 
@@ -59,7 +59,7 @@ def search():
 
     task = scrape_linkedin.s(search_fields=form_values).apply_async()
     print("task.id", task.id)
-    return jsonify({}), 202, {'Location': url_for('main.search_status', task_id=task.id)}
+    return jsonify({'task_id': task.id}), 202
 
 
 @main.route('/api/status/<task_id>')
@@ -83,11 +83,12 @@ def search_status(task_id):
     return jsonify(response)
 
 
-@main.route('/api/revoke/<task_id>')
-def search_revoke(task_id):
+@main.route('/api/revoke', methods=['POST'])
+def search_revoke():
+    task_id = request.get_json().get('task_id')
     scrape_linkedin.AsyncResult(task_id).revoke(terminate=True, signal='SIGKILL')
 
-    return Response(status=200)
+    return Response(status=204)
 
 
 def get_current_data():

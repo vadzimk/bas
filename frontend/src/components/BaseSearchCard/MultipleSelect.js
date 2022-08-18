@@ -32,7 +32,7 @@ export default function MultipleSelect({label, onChange, value, options, disable
 
     return (
         <div>
-            <FormControl sx={{width: 300}} size="small">
+            <FormControl sx={{width: 200}} size="small">
                 <InputLabel>{label}</InputLabel>
                 <Select
                     multiple

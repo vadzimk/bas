@@ -49,7 +49,7 @@ class BaseSearch(ABC):
         """ logs into the website and returns the bpage"""
         return bpage
 
-    async def populate(self, bpage: PlayWrightPage, task_update_state: callable):
+    async def populate(self, bpage: PlayWrightPage, task_update_state: callable = lambda state, meta: None):
         """
         entry point to crawl job board pages
         :param bpage: instance of playwright page
@@ -130,7 +130,7 @@ class BaseSearch(ABC):
     def copy_company_details(self, from_bec, to_bec):
         to_bec.populate_company_from_bec(from_bec)
 
-    async def flip_pages(self, bpage: PlayWrightPage)->PlayWrightPage:
+    async def flip_pages(self, bpage: PlayWrightPage) -> PlayWrightPage:
         """ navigates to successive pages of the job search results """
 
         async def make_page(n: int, url: str, T: Type[BasePage]):

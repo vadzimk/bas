@@ -8,8 +8,8 @@ import Select from '@mui/material/Select';
 export default function BasicSelect({value, label, onChange, options, disabled}) {
 
     return (
-        <Box sx={{minWidth: 120}}>
-            <FormControl sx={{minWidth: 120}} size="small">
+        <Box sx={{minWidth: 95}}>
+            <FormControl sx={{minWidth: 95}} size="small">
                 <InputLabel>{label}</InputLabel>
                 <Select
                     value={value}

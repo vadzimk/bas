@@ -58,7 +58,11 @@ class Job(db.Model):
 
     @date_posted.setter
     def date_posted(self, value):
-        self._date_posted = datetime.fromisoformat(value)
+        value_type = type(value)
+        if value_type != 'str':
+            print('value_type', value_type, value)
+        # TODO Linkedin made created_str not reliable on the card, need to source it from details
+        self._date_posted = datetime.fromisoformat(value) if value else None
 
 
 

@@ -90,13 +90,23 @@ linkedin_searches = [
     #         LinkedinSearch.Filters.Experience.MID_SENIOR,
     #     ]
     # },
+    # {
+    #     'what': f"""software automated test {os.getenv('LINKEDIN_BASE_SEARCH')}""",
+    #     'where': "Los Angeles, California, United States",
+    #     'age': LinkedinSearch.Filters.Age.ALL,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+    #     ],
+    #     'limit': 1
+    # },
     {
-        'what': f"""software automated test {os.getenv('LINKEDIN_BASE_SEARCH')}""",
-        'where': "Los Angeles, California, United States",
+        'what': f"""""",
+        'where': "",
         'age': LinkedinSearch.Filters.Age.ALL,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
-            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+            LinkedinSearch.Filters.Experience.ALL,
         ],
         'limit': 1
     },

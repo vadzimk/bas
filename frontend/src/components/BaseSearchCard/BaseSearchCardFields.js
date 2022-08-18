@@ -30,7 +30,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     value={formikProps.values.what}
                     onChange={formikProps.handleChange}
                     size="small"
-                    disabled={rest.formDisabled}
+                    disabled={rest.formSubmitted}
                 />
             </div>
             <div>
@@ -42,7 +42,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     value={formikProps.values.where}
                     onChange={formikProps.handleChange}
                     size="small"
-                    disabled={rest.formDisabled}
+                    disabled={rest.formSubmitted}
 
                 />
             </div>
@@ -54,7 +54,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.radiusOptions}
                     value={formikProps.values.radius}
                     onChange={(value) => formikProps.setFieldValue('radius', value)}
-                    disabled={rest.formDisabled}
+                    disabled={rest.formSubmitted}
 
                 />
             </div>
@@ -66,7 +66,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.ageOptions}
                     value={formikProps.values.age}
                     onChange={(value) => formikProps.setFieldValue('age', value)}
-                    disabled={rest.formDisabled}
+                    disabled={rest.formSubmitted}
 
                 />
             </div>
@@ -78,7 +78,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.experienceOptions}
                     value={formikProps.values.experience}
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
-                    disabled={rest.formDisabled}
+                    disabled={rest.formSubmitted}
 
 
                 />
@@ -92,27 +92,16 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     onChange={formikProps.handleChange}
                     size="small"
                     sx={{width: 70}}
-                    disabled={rest.formDisabled}
+                    disabled={rest.formSubmitted}
 
                 />
-            </div>
-            <div>
-                <Button variant="outlined"
-                        sx={{height: "100%"}}
-                        onClick={() => rest.onDelete()}
-                        disabled={rest.formDisabled}
-
-                >
-                    <DeleteIcon/>
-                </Button>
             </div>
             <div>
                 <Button
                     variant="outlined"
                     sx={{height: "100%"}}
                     type="submit"
-                    disabled={rest.formDisabled}
-
+                    disabled={rest.formSubmitted}
                 >
                     Submit
                 </Button>
