@@ -2,8 +2,7 @@ import json
 import logging
 
 import pandas as pd
-from flask import render_template, request, jsonify, Response
-
+from flask import render_template, request, jsonify, Response, url_for
 
 from . import main
 
@@ -58,12 +57,28 @@ def search():
     print("form_values", form_values)
     # TODO add field search_type
 
-    scrape_linkedin(form_values)
-    return Response(status=202)
+    task = scrape_linkedin.s(search_fields=form_values).apply_async()
+    print("task.id", task.id)
+    return jsonify({}), 202, {'Location': url_for('main.search_status', task_id=task.id)}
+
+
+@main.route('/api/status/<task_id>')
+def search_status(task_id):
+    task = scrape_linkedin.AsyncResult(task_id)
+    response = {
+        'state': task.state
+    }
+    return jsonify(response)
+
+
+@main.route('/api/revoke/<task_id>')
+def search_revoke(task_id):
+    scrape_linkedin.AsyncResult(task_id).revoke(terminate=True, signal='SIGKILL')
+
+    return Response(status=200)
 
 
 def get_current_data():
-
     result = db.session.query(Job, Company) \
         .join(Job) \
         .filter(Job.is_deleted == False).statement
@@ -109,4 +124,3 @@ def get_current_data():
 
     table_json = json.loads(df.to_json(orient='records'))
     return table_json
-

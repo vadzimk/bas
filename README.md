@@ -52,9 +52,11 @@ poetry run flask run
 
 ## Development
 
+cd src  
 flask db init  _# adds support to db migrations_  
 flask db migrate _# creates migration script_  
-flask db upgrade _# applies changes to db_  
+flask db upgrade _# applies changes to db_ 
+celery -A app.celery worker --loglevel=info
 flask run -p 5000
 
 ![Use case diagram](diagrams/Diagram-USE-CASE.png)

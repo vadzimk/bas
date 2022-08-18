@@ -29,7 +29,7 @@ class BaseSearch(ABC):
         self._PageClass = BasePage
         self._url = None
         self._pages = []
-        self._limit = limit
+        self._limit: int = int(limit)
 
     @property
     def pages(self):

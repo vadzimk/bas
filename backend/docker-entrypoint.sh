@@ -8,4 +8,5 @@ then
   flask db migrate; # creates migration script
 fi;
 flask db upgrade # applies changes to db
+exec celery -A app.celery worker --loglevel=info -d
 exec gunicorn --bind 0.0.0.0:5000 app:app

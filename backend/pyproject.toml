@@ -23,6 +23,7 @@ sqlalchemy-stubs = "^0.4"
 celery = "^5.2.7"
 Flask-CeleryExt = "^0.4.3"
 gunicorn = "^20.1.0"
+redis = "^4.3.4"
 
 [tool.poetry.dev-dependencies]
 
