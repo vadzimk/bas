@@ -8,7 +8,7 @@ This is an Indeed/Linkedin job board scrapper that actually works.
 
 ## The problem
 
-Job boards cater for employers but not job seekers  
+Job boards cater to employers but not job seekers  
 Job boards make it longer to find the necessary information about the employer.  
 Job boards do not provide necessary tools to filter postings  
 Job postings are full of hr jargon that is unnecessary
