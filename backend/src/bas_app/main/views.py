@@ -63,25 +63,10 @@ def search():
 
 
 def get_current_data():
-    # result = db.session.query(Company, Job) \
-    #     .join(Company) \
-    #     .filter(Job.is_deleted == False).statement
+
     result = db.session.query(Job, Company) \
         .join(Job) \
         .filter(Job.is_deleted == False).statement
-
-        # .all()
-    # job_list = []
-    #
-    # for c, j in result:
-    #     j_dict = j.__dict__
-    #     j_dict.pop('_sa_instance_state', None)
-    #     c_dict = c.__dict__
-    #     c_dict.pop('_sa_instance_state', None)
-    #     c_dict.pop('id', None)
-    #     job_list.append({**j_dict, **c_dict})
-    # df = pd.json_normalize(job_list, sep='_')
-    # df.fillna('', inplace=True)
 
     df = pd.read_sql(result, db.session.bind)
     print(df.info())

@@ -21,9 +21,12 @@ services:
     env_file:
       - backend/src/.flaskenv
       - backend/src/.env
+    volumes:
+      - sqlite_data:/app/app.sqlite
 
 
 
 volumes:
   redis_data:
+  sqlite_data:
 
