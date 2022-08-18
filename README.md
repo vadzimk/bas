@@ -18,7 +18,7 @@ Job postings are full of hr jargon that is unnecessary
 Flip job board pages until you get tired  
 Scrape data and read in excel, but you cannot expand job descriptions comfortably  
 Use the BAS app that will scape job boards for you and let you find eligible companies and listings  
-And use auto-apply browser extensions :
+And use auto-apply browser extensions:
 [joinrhubarb](www.joinrhubarb.com),
 [easyjobs](www.easyjobs.so),
 [simplify](www.simplify.jobs)
