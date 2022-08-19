@@ -26,7 +26,7 @@ to save even more time on your applications
 
 ## Demo
 
-![Current version demo search](Screenshot%202022-08-18-2.png)
+![Current version demo search](Screenshot%202022-08-19.png)
 ![Current version demo results](Screenshot%202022-08-18.png)
 
 ## Stack
@@ -45,10 +45,7 @@ to save even more time on your applications
 
 ## Usage
 
-poetry shell  
-poetry install   
-poetry run python3 scraper/main.py  
-poetry run flask run
+coming soon
 
 ## Development
 

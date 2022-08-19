@@ -33,12 +33,13 @@ class BaseSearch(ABC):
         self._pages = []
         self._limit: int = int(limit) if limit else sys.maxsize
         self._task_update_state = None
-        self.task_state_meta = {
-            'total': 0,
+        self._task_state_meta = {
+            'total': 0, # page_count + beacon count
             'current': 0,
             'job_count': 0
         }
-        self.page_count_with_limit = None
+        self._page_count_with_limit = None
+        self._total_skipped = 0
 
     @property
     def pages(self):
@@ -56,11 +57,12 @@ class BaseSearch(ABC):
         :param task_update_state: the celery.Task.update_state() method to update task state passed from tasks
         """
         self._task_update_state = task_update_state
+        # TODO click on "request a new confirmation link" of found
         bpage: PlayWrightPage = await self.flip_pages(bpage)
         await self.populate_details(bpage)
 
     def update_state(self):
-        self._task_update_state(state='PROGRESS', meta=self.task_state_meta)
+        self._task_update_state(state='PROGRESS', meta=self._task_state_meta)
 
     @staticmethod
     @abstractmethod
@@ -90,6 +92,13 @@ class BaseSearch(ABC):
         """ Populate job post details form 'iframe' and
         populate company details from the company profile page
         """
+        print("*"*15)
+        job_count = 0
+        for p in self._pages:
+            job_count += len(p.beacons)
+        print(job_count, "job_count for all pages")
+        print("*"*15)
+
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
                 job_url = b.dict['url']
@@ -97,6 +106,9 @@ class BaseSearch(ABC):
                 if not job:
                     logging.warning(f'no job in db for {b.dict}')
                 if job and job.description_text:  # job details and company details are already in db
+                    self._total_skipped +=1
+                    self._task_state_meta['current'] += 1
+                    self.update_state()
                     continue
                 await self.populate_job_post_details(b, job_url, bpage)
                 self.create_or_update_job_db(b)
@@ -110,11 +122,19 @@ class BaseSearch(ABC):
                 created_company = self.save_beacon_company_db(b)
                 job.company_id = created_company.id
                 db.session.commit()
-                await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
-                self.task_state_meta['current'] = self.page_count_with_limit \
-                                                  + (page_index + 1) * p.JOBS_ON_PAGE \
-                                                  + (b_index + 1)
+                self._task_state_meta['current'] += 1
                 self.update_state()
+                await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
+                print(self._page_count_with_limit, "_page_count_with_limit")
+                print(page_index, "page_index")
+                print(p.JOBS_ON_PAGE, "JOBS_ON_PAGE")
+                print(b_index + 1, "b_index + 1")
+                print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
+                print(self._total_skipped, "total_skipped")
+                print("-"*10)
+        print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
+        print(self._total_skipped, "total_skipped")
+
 
     @staticmethod
     def save_beacon_company_db(beacon):
@@ -154,18 +174,20 @@ class BaseSearch(ABC):
         pages: List[BasePage] = []
         await make_page(0, self._url, self._PageClass)
         page_count = math.ceil(pages[0].job_count / pages[0].JOBS_ON_PAGE)
-        self.page_count_with_limit = min(page_count, self._limit)
-        job_count_with_limit = min(pages[0].job_count, self.page_count_with_limit * pages[0].JOBS_ON_PAGE)
+        self._page_count_with_limit = min(page_count, self._limit)
+        job_count_with_limit = min(pages[0].job_count, self._page_count_with_limit * pages[0].JOBS_ON_PAGE)
         logging.info(f'{page_count} page_count for search {self._url}')
-        self.task_state_meta['total'] = job_count_with_limit + self.page_count_with_limit
-        self.task_state_meta['current'] = 0
-        self.task_state_meta['job_count'] = pages[0].job_count
+        self._task_state_meta['total'] = job_count_with_limit + self._page_count_with_limit
+        self._task_state_meta['current'] += 1
+        self._task_state_meta['job_count'] = pages[0].job_count
         self.update_state()
         if page_count > 1:
-            for page_n in range(1, self.page_count_with_limit):
+            for page_n in range(1, self._page_count_with_limit):
                 await make_page(1, self._url, self._PageClass)
-                self.task_state_meta['current'] = page_n
+                self._task_state_meta['current'] += 1
                 self.update_state()
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
+                print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
+                print("-"*10)
         self._pages = pages
         return bpage

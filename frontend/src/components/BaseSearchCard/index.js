@@ -14,11 +14,14 @@ const BaseSearchCard = (props) => {
         radius: '',
         age: '',
         experience: [],
+        limit: '',
     }
 
     const [formSubmitted, setFormSubmitted] = useState(false)
-    const [revokeDisabled, setRevokeDisabled] = useState(false)
-    const [taskId, setTaskId] = useState()
+    const [taskDone, setTaskDone] = useState(false)
+    const [taskId, setTaskId] = useState(null)
+    const [formValues, setFormValues] = useState(initialValues)
+    const [message, setMessage] = useState('')
 
     const handleSubmit = async (values) => {
         console.log('values', values)
@@ -30,6 +33,7 @@ const BaseSearchCard = (props) => {
             })
         setTaskId(task_id)
         setFormSubmitted(true)
+        setFormValues(values)
         console.log('task_id', task_id)
     }
 
@@ -39,9 +43,20 @@ const BaseSearchCard = (props) => {
     async function handleRevoke() {
         console.log("revoke")
         const statusCode = await revokeSearchTask(taskId)
-        statusCode === 204 && setRevokeDisabled(true)
+        statusCode === 204 && setTaskDone(true)
     }
 
+    const handleRestart = async () => {
+        setTaskDone(false)
+        setMessage('')
+        await handleSubmit(formValues)
+    }
+    const handleFailure = (message) => {
+        setTaskDone(true)
+        setMessage(message)
+    }
+
+    // TODO decide what happens in case of failed task
     return (
         <div style={{display: "flex", flexDirection: "row", gap: "10px", margin: "10px 0"}}>
             <div>
@@ -58,31 +73,47 @@ const BaseSearchCard = (props) => {
             {formSubmitted &&
             <>
                 <div style={{width: "10%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
-                    <LinearWithValueLabel/>
+                    <LinearWithValueLabel
+                        taskId={taskId}
+                        onSuccess={() => setTaskDone(true)}
+                        onFailure={(message) => handleFailure(message)}
+                    />
                 </div>
-                <div>
-                    <Button
-                        variant="outlined"
-                        sx={{height: "100%"}}
-                        onClick={handleRevoke}
-                        disabled={revokeDisabled}
-
-                    >
-                        Revoke
-                    </Button>
+                <div style={{width: "95px"}}>
+                    {!taskDone ?
+                        <Button
+                            variant="outlined"
+                            sx={{height: "100%", width: "100%"}}
+                            onClick={handleRevoke}
+                            disabled={taskDone}
+                        >
+                            Revoke
+                        </Button>
+                        :
+                        <Button
+                            variant="outlined"
+                            sx={{height: "100%", width: "100%"}}
+                            onClick={handleRestart}
+                            disabled={!taskDone}
+                        >
+                            Restart
+                        </Button>
+                    }
                 </div>
-
             </>
             }
             <div>
                 <Button variant="outlined"
                         sx={{height: "100%"}}
                         onClick={() => props.onDelete()}
-                        disabled={formSubmitted && !revokeDisabled}
+                        disabled={formSubmitted && !taskDone}
                 >
                     <DeleteIcon/>
                 </Button>
             </div>
+            { message &&
+                <div>{message}</div>
+            }
         </div>
     )
 }

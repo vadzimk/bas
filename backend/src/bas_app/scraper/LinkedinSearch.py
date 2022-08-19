@@ -95,7 +95,7 @@ class LinkedinSearch(BaseSearch):
         await bpage.click('button[type=submit]')
         try:
             await bpage.wait_for_selector('text=Access to your account has been temporarily restricted', timeout=10000)
-            raise AccountBlocked("Linkedin account blocked need to recreate")
+            raise AccountBlocked(f"Linkedin account blocked: {email}")
         except PlaywrightTimeoutError:
             pass  # account not blocked
         return bpage

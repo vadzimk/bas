@@ -19,7 +19,7 @@ function App() {
         setSearchCards(searchCards.filter(c => c.id !== id))
     }
 
-
+    //    TODO make a modal where to enter a new email address for linkedin account when it is blocked
     return (
         <div
             // css={{backgroundColor: theme.palette.common.orange}}
