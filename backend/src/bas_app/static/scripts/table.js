@@ -15,9 +15,7 @@ const table = new Tabulator("#table", {
     resizableColumnFit: false,
     history: true,
     layout: "fitColumns",  //  the table will resize columns so that they fit inside the width of the container.
-    // rowContextMenu: rowMenu,
     movableColumns: true,
-    selectable: true,
     persistence: true, //enable table persistence
     persistenceMode: "local", //store persistence information in local storage
     clipboard: true, //enable clipboard functionality
@@ -30,7 +28,6 @@ const table = new Tabulator("#table", {
         headerTooltip: true,
         download: true,  // include hidden columns in the download
         contextMenu: cellMenu,
-
     },
 })
 
@@ -72,7 +69,6 @@ table.on('cellEdited', function (cell) {
 
 export const state = {
     deletedRows: [],
-
 }
 
 export default table;
