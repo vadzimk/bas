@@ -108,7 +108,7 @@ linkedin_searches = [
         'experience': [
             LinkedinSearch.Filters.Experience.ALL,
         ],
-        'limit': 2
+        'limit': 1
     },
 ]
 
@@ -147,6 +147,7 @@ async def do_search(searches: List[BaseSearch]):
             # Delete the unmatched rows (SQLAlchemy generates a single DELETE statement from this loop)
             for job in q:
                 db.session.delete(job)
+                print(f'deleting job {job}')
             db.session.commit()
 
 

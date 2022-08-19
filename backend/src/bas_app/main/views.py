@@ -68,7 +68,7 @@ def search_status(task_id):
     :param task_id:
     :return: {
     "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS"
-    "info": {
+    "info": {  # up to date version in BaseSearch.py
         "total": int,
         "current": int,
         "job_count": int

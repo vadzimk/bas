@@ -11,7 +11,6 @@ from ..scraper.LinkedinSearch import LinkedinSearch
 from .. import db, create_app
 
 
-
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
 
@@ -42,10 +41,15 @@ async def async_task(search_fields, task_update_state):
         q = db.session.query(Job).filter(~Job.id.in_(aliased))
 
         # Delete the unmatched rows (SQLAlchemy generates a single DELETE statement from this loop)
+        count_deleted = 0
         for job in q:
             db.session.delete(job)
+            count_deleted += 1
         db.session.commit()
-        task_update_state(state='SUCCESS')
+        new_duplicates_value = new_search.meta['job_duplicates_current'] + count_deleted
+        task_update_state(
+            state='SUCCESS',
+            mata=new_search.meta.update(job_duplicates_total=new_duplicates_value))
 
 
 @shared_task(bind=True)
@@ -54,5 +58,3 @@ def scrape_linkedin(self, search_fields: dict):
     :param self: celery sets this argument
     """
     asyncio.run(async_task(search_fields=search_fields, task_update_state=self.update_state))
-
-

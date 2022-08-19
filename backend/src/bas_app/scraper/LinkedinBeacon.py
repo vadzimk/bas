@@ -43,11 +43,7 @@ class LinkedinBeacon(BaseBeacon):
         self.make_company_attribute('location',
                                     lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)
 
-        self.make_attribute('created_str',
-                            lambda: self._beacon.find('li', class_='job-card-container__listed-time').text)
 
-        self.make_attribute('date_posted',
-                            lambda: age_to_date(self._beacon.find('li', class_='job-card-container__listed-time').text))
 
         # self.make_attribute('number_of_applicants',
         #                     lambda: self._beacon.find('span', class_='jobs-unified-top-card__applicant-count').text)
@@ -74,8 +70,12 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_company_attribute('profile_url',
                                     lambda: re.sub(r"life/$", "",
-                                                   f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}")
-                                    )
+                                                   f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}"))
+
+        self.make_attribute('created_str',
+                            lambda: self._beacon.find('span', class_='jobs-unified-top-card__posted-date').text)
+        self.make_attribute('date_posted',
+                            lambda: age_to_date(self._job_post['created_str']))
 
         # self.make_attribute('hiring_insights',
         #                     lambda: ", ".join(

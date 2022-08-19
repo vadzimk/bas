@@ -68,12 +68,8 @@ class IndeedBeacon(BaseBeacon):
                             .find('table', class_='jobCardShelfContainer')
                             .find('span', class_='date')
                             .text.replace('Posted', ''))
-
         self.make_attribute('date_posted',
-                            lambda: age_to_date(self._beacon
-                                                .find('table', class_='jobCardShelfContainer')
-                                                .find('span', class_='date')
-                                                .text.replace('Posted', '')))
+                            lambda: age_to_date(self._job_post['created_str']))
 
     def populate_from_details(self, job_view_html):
         # save_safe(job_view_html, f'{self._job_post["title"]}-{self._job_post["company"]["name"]}.html')

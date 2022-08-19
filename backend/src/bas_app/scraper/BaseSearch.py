@@ -36,7 +36,9 @@ class BaseSearch(ABC):
         self._task_state_meta = {
             'total': 0, # page_count + beacon count
             'current': 0,
-            'job_count': 0
+            'job_count': 0,
+            'job_duplicates_current': 0
+
         }
         self._page_count_with_limit = None
         self._total_skipped = 0
@@ -44,6 +46,10 @@ class BaseSearch(ABC):
     @property
     def pages(self):
         return self._pages
+
+    @property
+    def meta(self):
+        return self._task_state_meta
 
     @abstractmethod
     async def create_session(self, bpage):
@@ -108,6 +114,7 @@ class BaseSearch(ABC):
                 if job and job.description_text:  # job details and company details are already in db
                     self._total_skipped +=1
                     self._task_state_meta['current'] += 1
+                    self._task_state_meta['job_duplicates_current'] += 1
                     self.update_state()
                     continue
                 await self.populate_job_post_details(b, job_url, bpage)
