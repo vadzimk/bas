@@ -102,7 +102,7 @@ class BaseSearch(ABC):
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
                 job_url = b.dict['url']
-                job = Job.query.filter_by(url=job_url).first()
+                job = Job.query.filter_by(url=job_url).first() # TODO monitor this returned none although the url was found in db
                 if not job:
                     logging.warning(f'no job in db for {b.dict}')
                 if job and job.description_text:  # job details and company details are already in db
