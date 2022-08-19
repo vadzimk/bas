@@ -102,11 +102,11 @@ linkedin_searches = [
     # },
     {
         'what': f"""python developer""",
-        'where': "",
-        'age': LinkedinSearch.Filters.Age.ALL,
+        'where': "Los Angeles, California",
+        'age': LinkedinSearch.Filters.Age.PAST_WEEK,
         'radius': LinkedinSearch.Filters.Radius.ALL,
         'experience': [
-            LinkedinSearch.Filters.Experience.ALL,
+            LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
         ],
         'limit': 1
     },

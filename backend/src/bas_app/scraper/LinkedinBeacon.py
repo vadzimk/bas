@@ -73,7 +73,7 @@ class LinkedinBeacon(BaseBeacon):
                                                    f"https://www.linkedin.com{soup.find('span', class_='jobs-unified-top-card__company-name').find('a')['href']}"))
 
         self.make_attribute('created_str',
-                            lambda: self._beacon.find('span', class_='jobs-unified-top-card__posted-date').text)
+                            lambda: soup.find('span', class_='jobs-unified-top-card__posted-date').text)
         self.make_attribute('date_posted',
                             lambda: age_to_date(self._job_post['created_str']))
 

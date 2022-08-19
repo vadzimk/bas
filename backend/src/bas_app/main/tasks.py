@@ -48,8 +48,9 @@ async def async_task(search_fields, task_update_state):
         db.session.commit()
         new_duplicates_value = new_search.meta['job_duplicates_current'] + count_deleted
         task_update_state(
-            state='SUCCESS',
+            state='FINALIZING',
             mata=new_search.meta.update(job_duplicates_total=new_duplicates_value))
+
 
 
 @shared_task(bind=True)
