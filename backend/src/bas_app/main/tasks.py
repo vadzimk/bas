@@ -47,10 +47,10 @@ async def async_task(search_fields, task_update_state):
             count_deleted += 1
         db.session.commit()
         new_duplicates_value = new_search.meta['job_duplicates_current'] + count_deleted
-        task_update_state(
-            state='FINALIZING',
-            mata=new_search.meta.update(job_duplicates_total=new_duplicates_value))
 
+        meta = new_search.meta.copy()
+        meta.update(job_duplicates_total=new_duplicates_value)
+        return meta
 
 
 @shared_task(bind=True)
@@ -58,4 +58,6 @@ def scrape_linkedin(self, search_fields: dict):
     """    :param search_fields:
     :param self: celery sets this argument
     """
-    asyncio.run(async_task(search_fields=search_fields, task_update_state=self.update_state))
+    result = asyncio.run(async_task(search_fields=search_fields, task_update_state=self.update_state))
+    # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
+    return result

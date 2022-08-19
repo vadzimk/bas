@@ -76,9 +76,15 @@ def search_status(task_id):
 }
     """
     task = scrape_linkedin.AsyncResult(task_id)
+    if task.state == 'SUCCESS':
+        info = task.get()
+    elif task.state == 'PROGRESS':
+        info = task.info
+    else:
+        info = str(task.info)
     response = {
         'state': task.state,
-        'info': task.info if task.state == 'PROGRESS' else str(task.info)
+        'info': info
     }
     return jsonify(response)
 
