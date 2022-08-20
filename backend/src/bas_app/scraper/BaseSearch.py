@@ -108,7 +108,7 @@ class BaseSearch(ABC):
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
                 job_url = b.dict['url']
-                job = Job.query.filter_by(url=job_url).first() # TODO monitor this returned none although the url was found in db
+                job = Job.query.filter_by(url=job_url).first() # TODO monitor this returned none although the url was found in db, probably change to postgresdb
                 if not job:
                     logging.warning(f'no job in db for {b.dict}')
                 if job and job.description_text:  # job details and company details are already in db
@@ -127,7 +127,7 @@ class BaseSearch(ABC):
                     continue
                 await self.populate_company_details(b, company_profile_url, bpage)
                 created_company = self.save_beacon_company_db(b)
-                job.company_id = created_company.id
+                job.company_id = created_company.id  # TODO and it throws error here AttributeError: 'NoneType' object has no attribute 'company_id'
                 db.session.commit()
                 self._task_state_meta['current'] += 1
                 self.update_state()

@@ -53,7 +53,7 @@ cd src
 flask db init  _# adds support to db migrations_  
 flask db migrate _# creates migration script_  
 flask db upgrade _# applies changes to db_  
-celery -A app.celery worker --loglevel=info  
+celery -A app.celery worker --loglevel=info  --concurrency=1
 flask run -p 5000  
 
 ## Diagrams

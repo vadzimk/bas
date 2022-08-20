@@ -34,7 +34,14 @@ export default function LinearWithValueLabel(props) {
     const [progressData, setProgressData] = React.useState(null)
     const isFinished = progressData &&
         (progressData.state === 'SUCCESS' || progressData.state === 'REVOKED' || progressData.state === 'FAILURE')
-
+    const colour = {
+        'PENDING': 'secondary',
+        'BEGUN': 'primary',
+        'PROGRESS': 'primary',
+        'SUCCESS': 'success',
+        'REVOKED': 'warning',
+        'FAILURE': 'error'
+    }
 
     //"info": {
     //         "total": int,
@@ -73,7 +80,10 @@ export default function LinearWithValueLabel(props) {
 
     return (
         <Box sx={{width: '100%'}}>
-            <LinearProgressWithLabel value={progress}/>
+            <LinearProgressWithLabel
+                value={progress}
+                color={progressData ? colour[progressData.state] : 'secondary'}
+            />
         </Box>
     );
 }

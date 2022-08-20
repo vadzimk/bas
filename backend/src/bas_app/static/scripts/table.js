@@ -60,6 +60,7 @@ function highlightCurrentRowElement(row) {
     currentRowElement.classList.add('current-row')
 }
 
+// TODO detach detail when no row selected
 table.on('rowClick', function (e, row) {
     attachDetail(row)
     highlightCurrentRowElement(row)
