@@ -1,5 +1,6 @@
-import table from "./table.js";
+import table, {restoreColumnLayout} from "./table.js";
 import {state} from "./table.js";
+
 
 // ----------------------- Download xls ------------------
 
@@ -53,6 +54,7 @@ function commitDeleteRows(rowIds) {
     axios.delete('/api/job', {data: rowIds})
         .then((res) => {
             table.setData(res.data)
+            restoreColumnLayout()
         }).catch((e) => {
         console.log(e)
     })

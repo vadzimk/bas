@@ -21,6 +21,7 @@ const table = new Tabulator("#table", {
     persistenceMode: "local", //store persistence information in local storage
     clipboard: true, //enable clipboard functionality
     responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
+    selectable: true,  // enable row selection
     columnDefaults: {
         tooltip: makeToolTipFunction(),
         editor: "input",
@@ -37,10 +38,12 @@ window.onbeforeunload = function () { // save column layout before page reloads
     window.localStorage.setItem("tabulator-backup-column-layout", JSON.stringify(columnLayout))
 }
 
-function restoreColumnLayout() {
+
+export function restoreColumnLayout() {
     const columnLayout = window.localStorage.getItem('tabulator-backup-column-layout')
     table.setColumnLayout(JSON.parse(columnLayout));
 }
+
 
 axios.get('/api/jobs').then((res) => {
     table.setData(res.data)
