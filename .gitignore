@@ -1,9 +1,10 @@
 .idea
 backend/out
 __pycache__
-.env
+.env*
 *.xls
 .flaskenv
 debug.py
 redis_data
 *.sqlite
+postgres_data_dev
