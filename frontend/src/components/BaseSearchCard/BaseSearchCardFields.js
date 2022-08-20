@@ -54,7 +54,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.radiusOptions}
                     value={formikProps.values.radius}
                     onChange={(value) => formikProps.setFieldValue('radius', value)}
-                    disabled={rest.formSubmitted}
+                    disabled={!rest.enabledRadiusDateExperienceLimit}
 
                 />
             </div>
@@ -66,7 +66,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.ageOptions}
                     value={formikProps.values.age}
                     onChange={(value) => formikProps.setFieldValue('age', value)}
-                    disabled={rest.formSubmitted}
+                    disabled={!rest.enabledRadiusDateExperienceLimit}
 
                 />
             </div>
@@ -78,7 +78,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     options={rest.experienceOptions}
                     value={formikProps.values.experience}
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
-                    disabled={rest.formSubmitted}
+                    disabled={!rest.enabledRadiusDateExperienceLimit}
 
 
                 />
@@ -92,7 +92,7 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
                     onChange={formikProps.handleChange}
                     size="small"
                     sx={{width: 70}}
-                    disabled={rest.formSubmitted}
+                    disabled={!rest.enabledRadiusDateExperienceLimit}
 
                 />
             </div>

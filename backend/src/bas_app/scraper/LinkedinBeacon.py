@@ -145,7 +145,7 @@ class LinkedinBeacon(BaseBeacon):
             .find_all('button', class_='org-people-bar-graph-element--is-selectable')
 
         self.make_company_attribute(
-            'main_country_number_employees', lambda: country_buttons[0].find('strong').text)
+            'main_country_number_employees', lambda: country_buttons[0].find('strong').text.replace(',', ''))
 
         self.make_company_attribute('main_country_name',
                                     lambda: country_buttons[0].find('span',
