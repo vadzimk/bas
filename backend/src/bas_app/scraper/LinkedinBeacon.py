@@ -138,7 +138,7 @@ class LinkedinBeacon(BaseBeacon):
                                     lambda: re.search(r'((\d+,?)+)',
                                                       employee_soup.find('span',
                                                                          string=re.compile(
-                                                                             ".*employees.*")).text).group(1))
+                                                                             ".*employees.*")).text).group(1).replace(',', ''))
 
         country_buttons = employee_soup \
             .find('div', class_='insight-container') \

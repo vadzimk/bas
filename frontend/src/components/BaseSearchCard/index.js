@@ -22,6 +22,11 @@ const BaseSearchCard = (props) => {
     const [taskId, setTaskId] = useState(null)
     const [formValues, setFormValues] = useState(initialValues)
     const [message, setMessage] = useState('')
+    const showProgressBar = formSubmitted
+    const showRevoke = formSubmitted && !taskDone
+    const showRestart = formSubmitted && taskDone
+    const enabledRadiusDateExperienceLimit =false
+    const enabledDeleteButton = !formSubmitted || taskDone
 
     const handleSubmit = async (values) => {
         console.log('values', values)
@@ -38,7 +43,7 @@ const BaseSearchCard = (props) => {
     }
 
 
-    const other = {...props, formSubmitted}
+    const other = {...props, formSubmitted, }
 
     async function handleRevoke() {
         console.log("revoke")
