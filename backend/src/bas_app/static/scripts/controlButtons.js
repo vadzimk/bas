@@ -37,7 +37,11 @@ document.getElementById("add-column").addEventListener("click", function () {
 });
 
 document.getElementById("reset-table-layout").addEventListener("click", function () {
-    window.localStorage.removeItem('tabulator-table-columns')
+    Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('tabulator')) {
+            window.localStorage.removeItem(key)
+        }
+    })
 });
 
 document.getElementById('commit-deleted').addEventListener('click', function () {

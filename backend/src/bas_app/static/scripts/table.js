@@ -8,6 +8,7 @@ import attachDetail from "./attachDetail.js";
 import cellMenu from "./menus/cellMenu.js";
 
 const table = new Tabulator("#table", {
+    // ajaxURL: '/api/jobs',
     maxHeight: "80vh",
     // maxHeight: "100%",
     autoColumns: true,  // automatically make columns structure by examining the first row of the table.
@@ -31,8 +32,19 @@ const table = new Tabulator("#table", {
     },
 })
 
+window.onbeforeunload = function () { // save column layout before page reloads
+    const columnLayout = table.getColumnLayout()
+    window.localStorage.setItem("tabulator-backup-column-layout", JSON.stringify(columnLayout))
+}
+
+function restoreColumnLayout() {
+    const columnLayout = window.localStorage.getItem('tabulator-backup-column-layout')
+    table.setColumnLayout(JSON.parse(columnLayout));
+}
+
 axios.get('/api/jobs').then((res) => {
     table.setData(res.data)
+    restoreColumnLayout()
 }).catch((err) => console.log(err))
 
 let currentRowElement;

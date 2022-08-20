@@ -15,6 +15,8 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field.includes('url')
             || column.field.includes('id')
             || column.field.includes('html')
+            || column.field === 'estimated_salary'
+            || column.field === 'hiring_insights'
         ) {
             column.visible = false
         }
@@ -100,6 +102,7 @@ export default function autoColumnsDefinitions(definitions) {
                     flipValue(cell)
                     cell.getRow().getCell('plan_apply_flag').setValue(false)
                 }
+                column.visible = true
             }
         }
         if (column.field.includes('number')) {
