@@ -1,13 +1,19 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Formik, Form} from 'formik'
-import BaseSearchCardFields from "./BaseSearchCardFields";
+import BaseSearchCardFields, {searchOptionsPropTypes} from "./BaseSearchCardFields";
 import {createSearch, revokeSearchTask} from "../../services/searchService";
 import LinearWithValueLabel from "./LinearWithValueLabel";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PropTypes from "prop-types";
 
-
-const BaseSearchCard = (props) => {
+BaseSearchCard.propTypes = {
+    onDelete: PropTypes.func.isRequired,
+    userId: PropTypes.number.isRequired,
+    handleAccountFailure: PropTypes.func.isRequired,
+    ...searchOptionsPropTypes
+}
+export default function BaseSearchCard({onDelete, userId, handleAccountFailure, ...rest}) {
     const initialValues = {
         what: '',
         where: '',
@@ -22,11 +28,13 @@ const BaseSearchCard = (props) => {
     const [taskId, setTaskId] = useState(null)
     const [formValues, setFormValues] = useState(initialValues)
     const [message, setMessage] = useState('')
+
     const showProgressBar = formSubmitted
     const showRevoke = formSubmitted && !taskDone
     const showRestart = formSubmitted && taskDone
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const enabledDeleteButton = !formSubmitted || taskDone
+    const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
 
     const handleSubmit = async (values) => {
         console.log('values', values)
@@ -34,7 +42,8 @@ const BaseSearchCard = (props) => {
         const {task_id} = await createSearch(
             {
                 ...values,
-                experience: values.experience.map(item => item.value)
+                experience: values.experience.map(item => item.value),
+                user_id: userId
             })
         setTaskId(task_id)
         setFormSubmitted(true)
@@ -42,7 +51,6 @@ const BaseSearchCard = (props) => {
         console.log('task_id', task_id)
     }
 
-    const other = {...props, formSubmitted, enabledRadiusDateExperienceLimit}
 
     async function handleRevoke() {
         console.log("revoke")
@@ -58,6 +66,10 @@ const BaseSearchCard = (props) => {
     const handleFailure = (message) => {
         setTaskDone(true)
         setMessage(message)
+        if (message.includes('Linkedin account')) {
+            handleAccountFailure()
+            console.log('handleFailure')
+        }
     }
 
     return (
@@ -109,17 +121,16 @@ const BaseSearchCard = (props) => {
             <div>
                 <Button variant="outlined"
                         sx={{height: "100%"}}
-                        onClick={() => props.onDelete()}
+                        onClick={() => onDelete()}
                         disabled={!enabledDeleteButton}
                 >
                     <DeleteIcon/>
                 </Button>
             </div>
             {message &&
-            <div>{message}</div>
+            <div style={{display: "flex", alignItems: "center"}}><p>{message}</p></div>
             }
         </div>
     )
 }
 
-export default BaseSearchCard

@@ -14,8 +14,9 @@ from .. import db, create_app
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
 
-async def async_task(search_fields, task_update_state):
+async def async_task(search_fields,linkedin_credentials, task_update_state):
     """
+    :param linkedin_credentials:
     :param search_fields: dictionary of search fields
     :return: None - result of the task is stored in db
     because of how celery.Task is configured we don't need the app_context() here
@@ -24,12 +25,12 @@ async def async_task(search_fields, task_update_state):
     new_search = LinkedinSearch(**search_fields)  # TODO need to sanitize user input
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            # headless=False,
-                                            # slow_mo=100
+                                            headless=False,
+                                            slow_mo=100
                                             )
         bpage: PlayWrightPage = await browser.new_page()
 
-        bpage: PlayWrightPage = await new_search.create_session(bpage)  # one session for each task
+        bpage: PlayWrightPage = await new_search.create_session(bpage, linkedin_credentials)  # one session for each task
         task_update_state(state='BEGUN')
         await new_search.populate(bpage=bpage, task_update_state=task_update_state)  # TODO update state here
 
@@ -54,10 +55,16 @@ async def async_task(search_fields, task_update_state):
 
 
 @shared_task(bind=True)
-def scrape_linkedin(self, search_fields: dict):
-    """    :param search_fields:
+def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict):
+    """
+    :param linkedin_credentials: fake username and password for scraping
+    :param search_fields: for linkedin search
     :param self: celery sets this argument
     """
-    result = asyncio.run(async_task(search_fields=search_fields, task_update_state=self.update_state))
+    result = asyncio.run(async_task(
+        search_fields=search_fields,
+        linkedin_credentials=linkedin_credentials,
+        task_update_state=self.update_state
+    ))
     # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
     return result

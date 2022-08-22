@@ -5,6 +5,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {updateProgress} from "../../services/searchService";
 
+LinearProgressWithLabel.propTypes = {
+    value: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+};
 function LinearProgressWithLabel(props) {
     return (
         <Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -20,14 +24,13 @@ function LinearProgressWithLabel(props) {
     );
 }
 
-LinearProgressWithLabel.propTypes = {
-    /**
-     * The value of the progress indicator for the determinate and buffer variants.
-     * Value between 0 and 100.
-     */
-    value: PropTypes.number.isRequired,
-};
 
+LinearWithValueLabel.propTypes={
+    taskId: PropTypes.number,
+    onSuccess: PropTypes.func.isRequired,
+    onFailure: PropTypes.func.isRequired
+}
+// TODO right now polling is done inside this component but there will come time when this should be moved to one of the ancestor components
 export default function LinearWithValueLabel(props) {
     const [taskId, setTaskId] = React.useState(null)
     const [progress, setProgress] = React.useState(0);

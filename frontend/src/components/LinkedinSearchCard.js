@@ -1,9 +1,14 @@
 import React from "react";
 import BaseSearchCard from "./BaseSearchCard";
+import PropTypes from "prop-types";
 
-const LinkedinSearchCard = (props) => {
+LinkedinSearchCard.propTypes = {
+    onDelete: PropTypes.func.isRequired,
+    userId: PropTypes.number.isRequired,
+    handleAccountFailure: PropTypes.func.isRequired,
+}
 
-
+export default function LinkedinSearchCard (props) {
     const RADIUS_OPTIONS = [
         {label: 'all', value: ''},
         {label: 'exact', value: 'distance=0'},
@@ -35,8 +40,9 @@ const LinkedinSearchCard = (props) => {
             experienceOptions={EXPERIENCE_OPTIONS}
             ageOptions={AGE_OPTIONS}
             onDelete={props.onDelete}
+            userId={props.userId}
+            {...props}
         />
     )
 }
 
-export default LinkedinSearchCard

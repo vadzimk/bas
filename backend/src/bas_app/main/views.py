@@ -7,7 +7,7 @@ from flask import render_template, request, jsonify, Response, url_for
 from . import main
 
 from .. import db
-from ..models import Company, Job
+from ..models import Company, Job, User
 from ..main.tasks import scrape_linkedin
 
 
@@ -53,11 +53,16 @@ def update_job():
 
 @main.route('/api/search', methods=['POST'])
 def search():
-    form_values = json.loads(request.data)
-    print("form_values", form_values)
+    data: dict = json.loads(request.data)
+    print("data", data)
+    user_id = data.pop('user_id', None)
+    print("form_values", data)
+    print('userid', user_id)
     # TODO add field search_type
-
-    task = scrape_linkedin.s(search_fields=form_values).apply_async()
+    user = User.query.get_or_404(user_id)
+    linkedin_credentials = {'email': user.linkedin_email, 'password': user.linkedin_password}
+    print('linkedin_credentials', linkedin_credentials)
+    task = scrape_linkedin.s(search_fields=data, linkedin_credentials=linkedin_credentials).apply_async()
     print("task.id", task.id)
     return jsonify({'task_id': task.id}), 202
 
@@ -95,6 +100,34 @@ def search_revoke():
     scrape_linkedin.AsyncResult(task_id).revoke(terminate=True, signal='SIGKILL')
 
     return Response(status=204)
+
+
+# TODO replace user management with flask login
+@main.route('/api/user', methods=['PUT'])
+def update_user():
+    user_details = request.get_json()
+    print(user_details)
+    user_id = user_details.get("id")
+    print("user_id", user_id)
+    user = User.query.get_or_404(user_id)
+    # TODO add validation
+    user.linkedin_email = user_details.get('linkedin_email')
+    user.linkedin_password = user_details.get('linkedin_password')
+    db.session.commit()
+    return Response(status=204)
+
+
+@main.route('/api/user', methods=['POST'])
+def create_user():
+    user_details = request.get_json()
+    print(user_details)
+    user = User(
+        linkedin_email=user_details.get('linkedin_email'),
+        linkedin_password=user_details.get('linkedin_password')
+    )
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'id': user.id})
 
 
 def get_current_data():

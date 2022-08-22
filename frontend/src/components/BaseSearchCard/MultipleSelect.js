@@ -6,8 +6,15 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import PropTypes from "prop-types";
 
-
+MultipleSelect.propTypes={
+    label: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    value: PropTypes.any,
+    options: PropTypes.array.isRequired,
+    disabled: PropTypes.bool.isRequired,
+}
 export default function MultipleSelect({label, onChange, value, options, disabled}) {
     const [items, setItems] = React.useState([]);
 

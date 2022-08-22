@@ -7,7 +7,7 @@ from typing import List
 from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 
 from LinkedinPage import LinkedinPage
-from utils import AccountBlocked
+from utils import AccountBlocked, AccountNotFound
 from utils import override
 
 from BaseSearch import BaseSearch
@@ -84,20 +84,30 @@ class LinkedinSearch(BaseSearch):
             logging.error(f'Error going to {company_url} {e}')
 
     @override
-    async def create_session(self, bpage):
-        """ logs into the website and returns the bpage"""
+    async def create_session(self, bpage, linkedin_credentials):
+        """
+        logs into the website and returns the bpage
+        :raises AccountBlocked, AccountNotFound
+        """
         load_dotenv()
-        email = os.getenv('USERNAME')
-        password = os.getenv('PASSWORD')
+        email = linkedin_credentials.get('email')
+        password = linkedin_credentials.get('password')
         await bpage.goto(self._base_url)
         await bpage.fill('input#session_key', email)
         await bpage.fill('input#session_password', password)
         await bpage.click('button[type=submit]')
+
         try:
-            await bpage.wait_for_selector('text=Access to your account has been temporarily restricted', timeout=10000)
+            await bpage.wait_for_selector('text=Access to your account has been temporarily restricted', timeout=2000)
             raise AccountBlocked(f"Linkedin account blocked: {email}")
         except PlaywrightTimeoutError:
             pass  # account not blocked
+
+        try:
+            await bpage.wait_for_selector('text=Couldn’t find a LinkedIn account associated with this email', timeout=2000)
+            raise AccountNotFound(f"Linkedin account not found: {email}")
+        except PlaywrightTimeoutError:
+            pass  # account exists
         return bpage
 
     def attributes(self) -> str:

@@ -7,7 +7,7 @@ from sqlalchemy.sql import expression
 
 
 class Company(db.Model):
-    __tablename__ = 'Company'
+    __tablename__ = 'company'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     rating = db.Column(db.String, nullable=True)
@@ -29,7 +29,7 @@ class Company(db.Model):
 
 
 class Job(db.Model):
-    __tablename__ = 'Job'
+    __tablename__ = 'job'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     job_type = db.Column(db.String, nullable=True)
@@ -49,7 +49,7 @@ class Job(db.Model):
     plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
     did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
     note = db.Column(db.Text, nullable=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('Company.id'), nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
     searches = db.relationship('Search', back_populates='jobs')
 
@@ -69,7 +69,7 @@ class Job(db.Model):
 
 
 class SearchModel(db.Model):
-    __tablename__ = 'SearchModel'
+    __tablename__ = 'search_model'
     id = db.Column(db.Integer, primary_key=True)
     what = db.Column(db.String, nullable=True)
     where = db.Column(db.String, nullable=True)
@@ -80,7 +80,7 @@ class SearchModel(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'User'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     linkedin_email = db.Column(db.String, nullable=True)
     linkedin_password = db.Column(db.String,
@@ -89,20 +89,20 @@ class User(db.Model):
 
 
 class Search(db.Model):  # junction table Job-SearchModel
-    __tablename__ = 'Search'
+    __tablename__ = 'search'
     id = db.Column(db.Integer, primary_key=True)
     job_board_name = db.Column(db.String)
-    job_id = db.Column(db.Integer, db.ForeignKey('Job.id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
     jobs = db.relationship('Job', back_populates='searches')
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', back_populates='searches')
-    search_model_id = db.Column(db.Integer, db.ForeignKey('SearchModel.id'))
+    search_model_id = db.Column(db.Integer, db.ForeignKey('search_model.id'))
     search_model = db.relationship('SearchModel', back_populates='searches')
-    task_id = db.Column(db.Integer, db.ForeignKey('Task.id'))
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
     tasks = db.relationship('Task', back_populates='search')
 
 
 class Task(db.Model):
-    __tablename__ = 'Task'
+    __tablename__ = 'task'
     id = db.Column(db.Integer, primary_key=True)  # Celery task id
     search = db.relationship('Search', back_populates='tasks')

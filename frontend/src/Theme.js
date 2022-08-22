@@ -24,6 +24,10 @@ const theme = createTheme({
         h3: {
             ...defaultTheme.typography.h3,
             fontFamily: "'PT Sans', sans-serif",
+        },
+        h4: {
+            ...defaultTheme.typography.h4,
+            fontFamily: "'PT Sans', sans-serif",
         }
     }
 })

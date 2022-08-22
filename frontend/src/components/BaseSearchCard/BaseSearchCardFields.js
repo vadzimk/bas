@@ -8,7 +8,7 @@ import BasicSelect from "./BasicSelect";
 import MultipleSelect from "./MultipleSelect";
 import {css} from "@emotion/react";
 import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
+import PropTypes from "prop-types";
 
 const cardCss = {
     searchFlexContainer: css({
@@ -17,8 +17,25 @@ const cardCss = {
     }),
 }
 
-const BaseSearchCardFields = ({formikProps, ...rest}) => {
+const optionShape = PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired
+})
 
+export const searchOptionsPropTypes = {
+    radiusOptions: PropTypes.arrayOf(optionShape),
+    experienceOptions: PropTypes.arrayOf(optionShape),
+    ageOptions: PropTypes.arrayOf(optionShape),
+}
+
+BaseSearchCardFields.propTypes = {
+    formikProps: PropTypes.any,
+    formSubmitted: PropTypes.bool.isRequired,
+    enabledRadiusDateExperienceLimit: PropTypes.bool.isRequired,
+    ...searchOptionsPropTypes
+}
+
+export default function BaseSearchCardFields({formikProps, ...rest}) {
     return (
         <div css={cardCss.searchFlexContainer}>
             <div>
@@ -108,8 +125,5 @@ const BaseSearchCardFields = ({formikProps, ...rest}) => {
             </div>
 
         </div>
-
     )
-
 }
-export default BaseSearchCardFields
