@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {authUser, createUser} from "../services/userService";
 import {notify, notifyTemp, Ntypes} from "./notificationSlice";
-import {editUser} from "../services/userService";
+import api from "../services/api";
 
 const initialState = {
     id: null,
@@ -28,58 +27,68 @@ const userSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(registerUser.fulfilled, (state, action) => {
-            if (!action.payload) {
-                return
-            }
-            state.id = action.payload
-            window.localStorage.setItem('user-id', action.payload)
+            const {id} = action.payload
+            state.id = id
             console.log('hello form .addCase(registerUser.fulfilled)')
 
         })
-            .addCase(registerUser.rejected, (state, action) => {
-                state.error = action.payload.error
-                console.log('registerUser.rejected', action.payload.error)
-            })
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.id = action.payload.id
-                state.hasLinkedinCredentials = action.payload.linkedin_credentials
-                window.localStorage.setItem('user-id', action.payload)
+                const {id, linkedin_credentials} = action.payload
+                state.id = id
+                state.hasLinkedinCredentials = linkedin_credentials
                 console.log('hello from .addCase(loginUser.fulfilled)')
             })
-            .addCase(updateUser.fulfilled, (state, action)=>{
-                state.hasLinkedinCredentials = true
+            .addCase(updateUser.fulfilled, (state, action) => {
+                const {id, linkedin_credentials} = action.payload
+                state.id = id
+                state.hasLinkedinCredentials = linkedin_credentials
             })
-
-
     }
 })
 
-export const loginUser = createAsyncThunk('user/login', async (userFields, {dispatch}) => {
-    // userFields = {username}
-    const data = await authUser(userFields)
-    if (data.id) {
+export const loginUser = createAsyncThunk('user/login', async (userFields, {dispatch, rejectWithValue}) => {
+    // @param userFields: {username}
+    console.log('will do auth')
+    try {
+        const res = await api.post('/user/login', {...userFields})
         dispatch(notifyTemp({type: Ntypes.SUCCESS, message: `Hi, ${userFields.username}`}))
+        window.localStorage.setItem('user-id', res.data.id)
+        return res.data // data = {id, linkedin_credentials}
+    } catch (e) {
+        if (e.response.status === 404) {
+            dispatch(notifyTemp({type: Ntypes.ERROR, message: `Not found "${userFields.username}"`}))
+        } else {
+            dispatch(notifyTemp({type: Ntypes.ERROR, message: e.message}))
+        }
+        rejectWithValue(e.response.json())
     }
-    return data // {id, linkedin_credentials}
 })
 
-export const registerUser = createAsyncThunk('user/register', async (userFields, {dispatch}) => {
-    const data = await createUser(userFields)
-    if (data.error) {
-        dispatch(notify({message: data.error, type: Ntypes.ERROR}))
-        return
+export const registerUser = createAsyncThunk('user/register', async (userFields, {dispatch, rejectWithValue}) => {
+    // @param userFields: {linkedin_email, linkedin_password}
+    try {
+        const res = await api.post('/user', {...userFields})
+        window.localStorage.setItem('user-id', res.data.id)
+        return res.data
+    } catch (e) {
+        const message = e.response.data ? e.response.data : e.message
+        dispatch(notify({message: message, type: Ntypes.ERROR}))
+        rejectWithValue(e.response.json())
     }
-    return data.id
 })
 
-export const updateUser = createAsyncThunk('user/update', async (userfields, {dispatch}) => {
-    // userfields = {...values, id: userId}
-    const statusCode = await editUser(userfields)
-    if (statusCode !== 204) {
-        dispatch(notifyTemp({type: Ntypes.ERROR, message: 'Error'}))
-    } else {
+export const updateUser = createAsyncThunk('user/update', async (userFields, {dispatch, rejectWithValue}) => {
+    // @param userFields: {id, linkedin_email, linkedin_password}
+    try {
+        const res = await api.put('/user', {...userFields})
         dispatch(notifyTemp({type: Ntypes.SUCCESS, message: 'OK'}))
+        return res.data
+    } catch (e) {
+        const message = e.response.data ? e.response.data : e.message
+        dispatch(notifyTemp({type: Ntypes.ERROR, message}))
+        rejectWithValue(e.response.json())
     }
+
 })
 
 export const {userLoggedIn, userRegistered, userLogout} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core

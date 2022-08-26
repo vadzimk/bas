@@ -117,7 +117,8 @@ def update_user():
     user.linkedin_email = user_details.get('linkedin_email')
     user.linkedin_password = user_details.get('linkedin_password')
     db.session.commit()
-    return Response(status=204)
+    linkedin_credentials = (user.linkedin_email and user.linkedin_password) and True
+    return jsonify({"id": user.id, "linkedin_credentials": linkedin_credentials})
 
 
 @main.route('/api/user', methods=['POST'])
@@ -130,7 +131,7 @@ def create_user():
     username = user_details['username']
     user = User.query.filter_by(username=username).first()
     if user:
-        return jsonify({"error": f'username "{username}" already exists'})
+        return Response(f'username "{username}" already exists', status=409)
     user = User(
         username=username,
         linkedin_email=user_details.get('linkedin_email'),
@@ -139,6 +140,7 @@ def create_user():
     db.session.add(user)
     db.session.commit()
     return jsonify({'id': user.id})
+
 
 @main.route('/api/user/login', methods=['POST'])
 def login_user():
@@ -149,6 +151,8 @@ def login_user():
     print("login", user_details)
     user = User.query.filter_by(username=user_details['username']).first()
     print('user:', user)
+    if not user:
+        return Response(status=404)
     linkedin_credentials = (user.linkedin_email and user.linkedin_password) and True
     return jsonify({"id": user.id, "linkedin_credentials": linkedin_credentials})
 

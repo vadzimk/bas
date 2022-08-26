@@ -41,7 +41,6 @@ function App() {
     const handleSearchCardDelete = (id) => {
         setCards(cards.filter(c => c.id !== id))
     }
-
     return (
         <div
             // css={{backgroundColor: theme.palette.common.orange}}
@@ -49,29 +48,34 @@ function App() {
             {notification.type &&
             <Alert
                 severity={notification.type}
-                sx={{zIndex: "999999", position: "relative", justifyContent: "center"}}
+                sx={{zIndex: "999999", position: "fixed", justifyContent: "center", width: "100%"}}
             >
                 {notification.message}
             </Alert>
             }
 
             <div css={{display: 'flex', justifyContent: 'space-between', backgroundColor: theme.palette.common.blue1}}>
-                <div>
-                    <h3 style={theme.typography.h3}>Blanket Application Strategy</h3>
+                <div style={{height: "100px", display: "flex", flexDirection: "column", justifyContent: "flex-end"}}>
+                    <h3 css={{...theme.typography.h3}}>
+                        Blanket Application Strategy
+                    </h3>
                 </div>
-                <div style={{display: 'flex'}}>
-                    {user.id ?
-                        <>
-                            <Profile/>
-                            <Logout/>
-                        </>
-                        :
-                        <>
-                            <Register/>
-                            <Login/>
-                        </>
-                    }
+                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
+                    <div style={{display: 'flex',}}>
+                        {user.id ?
+                            <>
+                                <Profile/>
+                                <Logout/>
+                            </>
+                            :
+                            <>
+                                <Register/>
+                                <Login/>
+                            </>
+                        }
+                    </div>
                 </div>
+
             </div>
             <h3 style={theme.typography.h4}>Tasks</h3>
             <div style={{display: 'flex'}}>
@@ -87,7 +91,6 @@ function App() {
                     <LinkedinSearchCard
                         key={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
-                        userId={user.id}
                     />
                 )}
             </div>

@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 
 LinkedinSearchCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
-    userId: PropTypes.number.isRequired,
 }
 
 export default function LinkedinSearchCard (props) {
@@ -39,7 +38,6 @@ export default function LinkedinSearchCard (props) {
             experienceOptions={EXPERIENCE_OPTIONS}
             ageOptions={AGE_OPTIONS}
             onDelete={props.onDelete}
-            userId={props.userId}
             {...props}
         />
     )

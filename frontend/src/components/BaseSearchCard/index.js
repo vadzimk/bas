@@ -6,15 +6,14 @@ import LinearWithValueLabel from "./LinearWithValueLabel";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
 
 BaseSearchCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
-    userId: PropTypes.number.isRequired,
     ...searchOptionsPropTypes
 }
-export default function BaseSearchCard({onDelete, userId, ...rest}) {
+export default function BaseSearchCard({onDelete, ...rest}) {
     const initialValues = {
         what: '',
         where: '',
@@ -37,6 +36,7 @@ export default function BaseSearchCard({onDelete, userId, ...rest}) {
     const enabledDeleteButton = !formSubmitted || taskDone
     const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
     const dispatch = useDispatch()
+    const userId = useSelector(state=>state.user.id)
 
     const handleSubmit = async (values) => {
         console.log('values', values)
