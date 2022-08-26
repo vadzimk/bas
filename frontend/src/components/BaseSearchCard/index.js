@@ -6,14 +6,15 @@ import LinearWithValueLabel from "./LinearWithValueLabel";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
+import {useDispatch} from "react-redux";
+import {notify, Ntypes} from "../../reducers/notificationSlice";
 
 BaseSearchCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
     userId: PropTypes.number.isRequired,
-    handleAccountFailure: PropTypes.func.isRequired,
     ...searchOptionsPropTypes
 }
-export default function BaseSearchCard({onDelete, userId, handleAccountFailure, ...rest}) {
+export default function BaseSearchCard({onDelete, userId, ...rest}) {
     const initialValues = {
         what: '',
         where: '',
@@ -35,6 +36,7 @@ export default function BaseSearchCard({onDelete, userId, handleAccountFailure, 
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const enabledDeleteButton = !formSubmitted || taskDone
     const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
+    const dispatch = useDispatch()
 
     const handleSubmit = async (values) => {
         console.log('values', values)
@@ -67,8 +69,7 @@ export default function BaseSearchCard({onDelete, userId, handleAccountFailure, 
         setTaskDone(true)
         setMessage(message)
         if (message.includes('Linkedin account')) {
-            handleAccountFailure()
-            console.log('handleFailure')
+            dispatch(notify({type: Ntypes.ERROR, message}))
         }
     }
 

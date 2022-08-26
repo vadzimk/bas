@@ -15,6 +15,10 @@ const userSlice = createSlice({
             state.id = action.payload
             console.log('hello from userLoggedIn')
         },
+        userLogout: function (state, action){
+            state.id = null
+            window.localStorage.removeItem('user-id')
+        }
         // userRegistered: function (state, action) {
         //     state.id = action.payload
         //     console.log('hello from userRegistered')
@@ -58,5 +62,5 @@ export const registerUser = createAsyncThunk('user/register', async (userFields,
     return data.id
 })
 
-export const {userLoggedIn, userRegistered} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core
+export const {userLoggedIn, userRegistered, userLogout} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core
 export default userSlice.reducer

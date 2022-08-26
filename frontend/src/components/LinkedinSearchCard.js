@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 LinkedinSearchCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
     userId: PropTypes.number.isRequired,
-    handleAccountFailure: PropTypes.func.isRequired,
 }
 
 export default function LinkedinSearchCard (props) {

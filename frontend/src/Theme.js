@@ -8,7 +8,9 @@ const theme = createTheme({
             orange: '#ffba60',
             danger: '#ff1744',
             green: '#00e676',
-            blue: '#2196f3'
+            blue: '#2196f3',
+            blue1: '#d6e4ea',
+
         },
     },
     typography: {

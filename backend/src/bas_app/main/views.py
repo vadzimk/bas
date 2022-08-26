@@ -127,9 +127,10 @@ def create_user():
     """
     user_details = request.get_json()
     print(user_details)
-    user = User.query.filter_by(username=user_details['username']).first()
+    username = user_details['username']
+    user = User.query.filter_by(username=username).first()
     if user:
-        return jsonify({"error": 'username already exists'})
+        return jsonify({"error": f'username "{username}" already exists'})
     user = User(
         linkedin_email=user_details.get('linkedin_email'),
         linkedin_password=user_details.get('linkedin_password')
