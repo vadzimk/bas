@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {authUser, createUser} from "../services/searchService";
-import {notify, Ntypes} from "./notificationSlice";
+import {authUser, createUser} from "../services/userService";
+import {notify, notifyTemp, Ntypes} from "./notificationSlice";
+import {editUser} from "../services/userService";
 
 const initialState = {
     id: null,
@@ -15,7 +16,7 @@ const userSlice = createSlice({
             state.id = action.payload
             console.log('hello from userLoggedIn')
         },
-        userLogout: function (state, action){
+        userLogout: function (state, action) {
             state.id = null
             window.localStorage.removeItem('user-id')
         }
@@ -26,7 +27,7 @@ const userSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(registerUser.fulfilled, (state, action) => {
-            if(!action.payload){
+            if (!action.payload) {
                 return
             }
             state.id = action.payload
@@ -44,12 +45,16 @@ const userSlice = createSlice({
                 console.log('hello from .addCase(loginUser.fulfilled)')
             })
 
+
     }
 })
 
-export const loginUser = createAsyncThunk('user/login', async (userFields) => {
+export const loginUser = createAsyncThunk('user/login', async (userFields, {dispatch}) => {
     // userFields = {username}
     const data = await authUser(userFields)
+    if(data.id){
+        dispatch(notifyTemp({type: Ntypes.SUCCESS, message: `Hi, ${userFields.username}`}))
+    }
     return data.id
 })
 
@@ -60,6 +65,16 @@ export const registerUser = createAsyncThunk('user/register', async (userFields,
         return
     }
     return data.id
+})
+
+export const updateUser = createAsyncThunk('user/update', async (userfields, {dispatch}) => {
+    // userfields = {...values, id: userId}
+    const statusCode = await editUser(userfields)
+    if (statusCode !== 204) {
+        dispatch(notifyTemp({type: Ntypes.ERROR, message: 'Error'}))
+    } else {
+        dispatch(notifyTemp({type: Ntypes.SUCCESS, message: 'OK'}))
+    }
 })
 
 export const {userLoggedIn, userRegistered, userLogout} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core

@@ -44,7 +44,7 @@ function App() {
             {notification.type &&
             <Alert
                 severity={notification.type}
-                sx={{zIndex: "999999", position: "relative"}}
+                sx={{zIndex: "999999", position: "relative", justifyContent: "center" }}
             >
                 {notification.message}
             </Alert>

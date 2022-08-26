@@ -1,18 +1,15 @@
 import React, {useState} from 'react'
 import {Button} from "@mui/material";
-import {updateUser} from "../../services/searchService";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import UserDetailsDialogue from "./UserDetailsDialogue";
+import {updateUser} from "../../reducers/userSlice";
 
 export default function Profile() {
     const [isUserUpdateOpen, setIsUserUpdateOpen] = useState(false)
     const userId = useSelector(state => state.user.id)
-
+    const dispatch = useDispatch()
     const handleUpdateUser = async (values) => {
-        const statusCode = await updateUser({...values, id: userId})
-        if (statusCode !== 204) {
-            console.log('update user status', statusCode)
-        }
+        dispatch(updateUser({...values, id: userId}))
         setIsUserUpdateOpen(false)
     }
     return (

@@ -1,3 +1,5 @@
+import {createAsyncThunk} from "@reduxjs/toolkit";
+
 const {createSlice} = require("@reduxjs/toolkit");
 export const Ntypes = Object.freeze({
     ERROR: 'error',
@@ -25,6 +27,18 @@ const notificationSlice = createSlice({
             state.type = null
         }
     }
+})
+
+const sleep = (ms)=>new Promise(resolve => {setTimeout(()=>resolve(), ms)})
+
+export const notifyTemp = createAsyncThunk('notification/timed', async (conf, {dispatch})=>{
+    // notification with timeout
+    // conf = {type: Ntypes, message, timeout: sec }
+    const {timeout, ...notification} = conf
+    const ms = timeout ? timeout * 1000 : 5000
+    dispatch(notify(notification))
+    await sleep(ms)
+    dispatch(notify({type: null, message: ''}))
 })
 
 export const {notify, clearNotification} = notificationSlice.actions
