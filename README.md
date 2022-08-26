@@ -15,8 +15,8 @@ to save even more time on your applications
 
 ## Demo
 
-![Current version demo search](Screenshot%202022-08-21%20at%206.39.48%20PM.png)
-![Current version demo results](Screenshot%202022-08-21%20at%206.39.30%20PM.png)
+![Current version demo search](Screenshot%202022-08-26%20at%2012.12.04%20PM.png)
+![Current version demo results](Screenshot%202022-08-26%20at%2012.16.28%20PM.png)
 
 ## Stack
 

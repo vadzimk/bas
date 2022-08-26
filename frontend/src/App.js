@@ -19,7 +19,7 @@ import {notify, Ntypes} from "./reducers/notificationSlice";
 function App() {
     const theme = useTheme()
     const [cardIdCounter, setCardIdCounter] = useState(0)
-    const [cards, setCards] = useState([])
+    const [cards, setCards] = useState([]) // TODO move this state to redux tasks
     const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();

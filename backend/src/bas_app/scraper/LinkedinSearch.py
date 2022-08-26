@@ -60,7 +60,10 @@ class LinkedinSearch(BaseSearch):
     async def populate_job_post_details(beacon, job_url, bpage):
         try:
             await bpage.goto(job_url)
-            await bpage.locator('span.artdeco-button__text:has-text("See more")').click()
+            try:
+                await bpage.locator('span.artdeco-button__text:has-text("See more")').click(timeout=2000)
+            except PlaywrightTimeoutError as e:
+                logging.warning(e)
             job_view = bpage.locator('.job-view-layout')
             job_view_html = await job_view.inner_html()
             beacon.populate_from_details(job_view_html)
