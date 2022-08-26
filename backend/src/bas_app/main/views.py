@@ -132,6 +132,7 @@ def create_user():
     if user:
         return jsonify({"error": f'username "{username}" already exists'})
     user = User(
+        username=username,
         linkedin_email=user_details.get('linkedin_email'),
         linkedin_password=user_details.get('linkedin_password')
     )

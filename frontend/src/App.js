@@ -78,7 +78,7 @@ function App() {
                 </Button>}
             </div>
             <div>
-                {cards.map(card =>
+                {userId && cards.map(card =>
                     <LinkedinSearchCard
                         key={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
