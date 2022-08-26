@@ -6,6 +6,7 @@ import {editUser} from "../services/userService";
 const initialState = {
     id: null,
     status: 'idle', //  idle, loading, succeeded, failed TODO do i need this?
+    hasLinkedinCredentials: false,
 }
 
 const userSlice = createSlice({
@@ -17,8 +18,8 @@ const userSlice = createSlice({
             console.log('hello from userLoggedIn')
         },
         userLogout: function (state, action) {
-            state.id = null
             window.localStorage.removeItem('user-id')
+            return initialState
         }
         // userRegistered: function (state, action) {
         //     state.id = action.payload
@@ -40,9 +41,13 @@ const userSlice = createSlice({
                 console.log('registerUser.rejected', action.payload.error)
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.id = action.payload
+                state.id = action.payload.id
+                state.hasLinkedinCredentials = action.payload.linkedin_credentials
                 window.localStorage.setItem('user-id', action.payload)
                 console.log('hello from .addCase(loginUser.fulfilled)')
+            })
+            .addCase(updateUser.fulfilled, (state, action)=>{
+                state.hasLinkedinCredentials = true
             })
 
 
@@ -52,10 +57,10 @@ const userSlice = createSlice({
 export const loginUser = createAsyncThunk('user/login', async (userFields, {dispatch}) => {
     // userFields = {username}
     const data = await authUser(userFields)
-    if(data.id){
+    if (data.id) {
         dispatch(notifyTemp({type: Ntypes.SUCCESS, message: `Hi, ${userFields.username}`}))
     }
-    return data.id
+    return data // {id, linkedin_credentials}
 })
 
 export const registerUser = createAsyncThunk('user/register', async (userFields, {dispatch}) => {

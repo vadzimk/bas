@@ -1,6 +1,5 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
-const {createSlice} = require("@reduxjs/toolkit");
 export const Ntypes = Object.freeze({
     ERROR: 'error',
     WARNING: 'warning',
@@ -23,8 +22,7 @@ const notificationSlice = createSlice({
             console.log('notification: ', action.payload.message)
         },
         clearNotification: function (state, action) {
-            state.message = '';
-            state.type = null
+            return initialState  // resets the state
         }
     }
 })

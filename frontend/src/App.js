@@ -11,6 +11,7 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
+import {notify, Ntypes} from "./reducers/notificationSlice";
 
 
 // import theme from "./Theme";
@@ -19,7 +20,7 @@ function App() {
     const theme = useTheme()
     const [cardIdCounter, setCardIdCounter] = useState(0)
     const [cards, setCards] = useState([])
-    const userId = useSelector(state => state.user.id)
+    const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
     useEffect(() => {
@@ -30,6 +31,10 @@ function App() {
     }, [])
 
     const handleNewSearchCard = () => {
+        if (!user.hasLinkedinCredentials) {
+            dispatch(notify({type: Ntypes.ERROR, message: 'Linkedin credentials are missing, please UPDATE USER'}))
+            return
+        }
         setCards([...cards, {id: cardIdCounter}])
         setCardIdCounter(cardIdCounter + 1)
     }
@@ -44,7 +49,7 @@ function App() {
             {notification.type &&
             <Alert
                 severity={notification.type}
-                sx={{zIndex: "999999", position: "relative", justifyContent: "center" }}
+                sx={{zIndex: "999999", position: "relative", justifyContent: "center"}}
             >
                 {notification.message}
             </Alert>
@@ -55,7 +60,7 @@ function App() {
                     <h3 style={theme.typography.h3}>Blanket Application Strategy</h3>
                 </div>
                 <div style={{display: 'flex'}}>
-                    {userId ?
+                    {user.id ?
                         <>
                             <Profile/>
                             <Logout/>
@@ -71,18 +76,18 @@ function App() {
             <h3 style={theme.typography.h4}>Tasks</h3>
             <div style={{display: 'flex'}}>
 
-                {userId && <Button
+                {user.id && <Button
                     variant="outlined"
                     onClick={handleNewSearchCard}>
                     New Search
                 </Button>}
             </div>
             <div>
-                {userId && cards.map(card =>
+                {user.id && cards.map(card =>
                     <LinkedinSearchCard
                         key={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
-                        userId={userId}
+                        userId={user.id}
                     />
                 )}
             </div>

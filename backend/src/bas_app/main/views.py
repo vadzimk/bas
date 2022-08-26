@@ -149,7 +149,8 @@ def login_user():
     print("login", user_details)
     user = User.query.filter_by(username=user_details['username']).first()
     print('user:', user)
-    return jsonify({"id": user.id})
+    linkedin_credentials = (user.linkedin_email and user.linkedin_password) and True
+    return jsonify({"id": user.id, "linkedin_credentials": linkedin_credentials})
 
 
 def get_current_data():
