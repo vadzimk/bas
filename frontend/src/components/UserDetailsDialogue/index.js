@@ -7,18 +7,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import UserDetailsForm from "./UserDetailsForm";
 import PropTypes from "prop-types";
 
-UserDetailsDialog.propTypes = {
+UserDetailsDialogue.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
 }
 
-export default function UserDetailsDialog({isOpen, ...other}) {
+export default function UserDetailsDialogue({isOpen, ...other}) {
     const title = "Update Account"
     const content = <>
         <DialogContentText>
-            <a href="https://www.1secmail.com/" target="_blank">Generate Email</a>
-            <span> And enter fake <a href="https://www.linkedin.com/signup/" target="_blank">Linkedin</a> credentials to scrape it. </span>
+            <a href="https://www.1secmail.com/" target="_blank" rel="noreferrer">Generate Email</a>
+            <span> And enter fake <a href="https://www.linkedin.com/signup/" target="_blank" rel="noreferrer">Linkedin</a> credentials to scrape it. </span>
         </DialogContentText>
         <DialogContentText>
             <span>First name: </span><span><b>Baton</b></span>

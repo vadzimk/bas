@@ -105,6 +105,9 @@ def search_revoke():
 # TODO replace user management with flask login
 @main.route('/api/user', methods=['PUT'])
 def update_user():
+    """
+    user_details = {id, linkedin_email, linkedin_password}
+    """
     user_details = request.get_json()
     print(user_details)
     user_id = user_details.get("id")
@@ -119,8 +122,14 @@ def update_user():
 
 @main.route('/api/user', methods=['POST'])
 def create_user():
+    """
+    user_details = {linkedin_email, linkedin_password, username}
+    """
     user_details = request.get_json()
     print(user_details)
+    user = User.query.filter_by(username=user_details['username']).first()
+    if user:
+        return jsonify({"error": 'username already exists'})
     user = User(
         linkedin_email=user_details.get('linkedin_email'),
         linkedin_password=user_details.get('linkedin_password')
@@ -128,6 +137,17 @@ def create_user():
     db.session.add(user)
     db.session.commit()
     return jsonify({'id': user.id})
+
+@main.route('/api/user/login', methods=['POST'])
+def login_user():
+    """
+    user_details = {username}
+    """
+    user_details = request.get_json()
+    print("login", user_details)
+    user = User.query.filter_by(username=user_details['username']).first()
+    print('user:', user)
+    return jsonify({"id": user.id})
 
 
 def get_current_data():
