@@ -38,6 +38,7 @@ to save even more time on your applications
 ```bash
 docker-compose -f docker-compose.yml up
 ```
+Application will be available on localhost:80  
 
 ## Limitations of the current version
 - Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it is not adjusted to prevent blocking. There is a button to update Linkedin credentials once the previous account gets blocked.

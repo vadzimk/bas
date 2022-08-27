@@ -6,6 +6,13 @@ workflow:
 
 stages:
   - build
+  - release
+
+.use_docker_hub_secrets:
+  before_script:
+    - set -o allexport
+    - source $ENV_GITLAB
+    - set +o allexport
 
 build_image:
   stage: build
@@ -19,16 +26,31 @@ build_image:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - set -o allexport
-    - source $ENV_GITLAB
-    - set +o allexport
+  extends: .use_docker_hub_secrets
   script: # authenticate in dockerhub registry from inside the executor
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY
     - export PACKAGE_VERSION=$(grep -m 1 version ./backend/pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
     - echo $PACKAGE_VERSION
     - export APP_VERSION=$PACKAGE_VERSION.$CI_PIPELINE_IID
     - ls -al
-    - docker build -t $CI_REGISTRY_IMAGE:$APP_VERSION -f Dockerfile .
+    - docker build -t $DOCKER_HUB_REPO:$APP_VERSION -f Dockerfile .
     - docker push $DOCKER_HUB_REPO:$APP_VERSION
 
+pushrm:
+  stage: release
+  image:
+    name: chko/docker-pushrm
+    entrypoint: ["/bin/sh", "-c", "/docker-pushrm"]
+  extends: .use_docker_hub_secrets
+  script:
+    - export |
+      DOCKER_USER=$DOCKER_REGISTRY_USER
+      DOCKER_PASS=$DOCKER_REGISTRY_PASSWORD
+      PUSHRM_SHORT="My short description"
+      PUSHRM_TARGET=docker.io/$DOCKER_REGISTRY_USER/$DOCKER_HUB_REPO
+      PUSHRM_DEBUG=1
+      PUSHRM_FILE=$CI_PROJECT_DIR/dockerhub/README.md
+    - mkdir dockerhub
+    - mv README_DOCKERHUB.md dockerhub/README.md
+    - ls -al dockerhub/
+    - "/bin/true"
