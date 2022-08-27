@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+. wait-for-postgres.sh $DATABASE_URL
 . /venv/bin/activate
 cd /usr/src/app/src
 if [ ! -d migrations ];

@@ -47,10 +47,11 @@ services:
 
   flask_backend:
     container_name: bas_backend
-    image: bas_backend
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: vadzimk/bas
+#    image: bas_backend
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://postgres:1@postgres_prod:5432/bas
       - CELERY_BROKER_URL=redis://redis_prod:6379/0
@@ -59,10 +60,6 @@ services:
       - "80:5000"
     networks:
       - bas_prod_network
-
-
-
-
-
-
-
+    depends_on:
+      - postgres  # will not wait for database being created
+      - redis

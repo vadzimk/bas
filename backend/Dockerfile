@@ -2,7 +2,7 @@ FROM python:3.10-slim as base
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONUNBUFFERED=1
-RUN apt-get update && apt-get install -y gcc libffi-dev g++
+RUN apt-get update && apt-get install -y gcc libffi-dev g++ postgresql-client
 WORKDIR /app
 
 FROM base as builder
@@ -19,6 +19,7 @@ RUN . /venv/bin/activate \
     && playwright install-deps
 
 COPY . .
+RUN chmod +x wait-for-postgres.sh
 RUN chmod +x docker-entrypoint.sh
 EXPOSE 5000
 CMD ["./docker-entrypoint.sh"]

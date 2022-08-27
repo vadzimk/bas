@@ -9,10 +9,18 @@
 ## Usage
 
 ```bash
+chmod +x postgres-init-db.sh
 docker-compose -f docker-compose.yml up
 ```
 Application will be available on localhost:80  
 
+## postgres-init-db.sh
+```sh
+#!/bin/sh
+set -e
+psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = $DATABASE_NAME" \
+| grep -q 1 || psql -U $POSTGRES_USER -c "CREATE DATABASE $DATABASE_NAME"
+```
 
 
 ## docker-compose.yml
@@ -65,8 +73,8 @@ services:
       - bas_prod_network
 
   flask_backend:
-    image: vadzimk/bas
     container_name: bas_backend
+    image: vadzimk/bas
     environment:
       - DATABASE_URL=postgresql://postgres:1@postgres_prod:5432/bas
       - CELERY_BROKER_URL=redis://redis_prod:6379/0
@@ -75,4 +83,7 @@ services:
       - "80:5000"
     networks:
       - bas_prod_network
+    depends_on:
+      - postgres  # will not wait for database being created
+      - redis
 ```

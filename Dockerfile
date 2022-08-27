@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONUNBUFFERED=1
-RUN apt-get update && apt-get install -y gcc libffi-dev g++
+RUN apt-get update && apt-get install -y gcc libffi-dev g++ postgresql-client
 
 FROM node:16.13.0-alpine as client
 WORKDIR /usr/src/app
@@ -26,7 +26,10 @@ RUN . /venv/bin/activate \
     && playwright install chromium \
     && playwright install-deps
 
+FROM builder
+WORKDIR /usr/src/app
 COPY ./backend .
+RUN chmod +x wait-for-postgres.sh
 RUN chmod +x docker-entrypoint.sh
 COPY --from=client /usr/src/app/build/ /usr/src/app/src/bas_app/static/
 RUN mv src/bas_app/static/static/* src/bas_app/static/
