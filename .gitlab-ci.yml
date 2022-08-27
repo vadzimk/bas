@@ -39,7 +39,7 @@ pushrm:
   variables:
       DOCKER_USER: $DOCKER_REGISTRY_USER
       DOCKER_PASS: $DOCKER_REGISTRY_PASSWORD
-      PUSHRM_SHORT: "My short description"
+      PUSHRM_SHORT: "Blanket application strategy"
       PUSHRM_TARGET: docker.io/$DOCKER_HUB_REPO
       PUSHRM_DEBUG: 1
       PUSHRM_FILE: $CI_PROJECT_DIR/dockerhub/README.md
