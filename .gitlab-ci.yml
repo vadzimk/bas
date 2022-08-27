@@ -25,9 +25,9 @@ build_image:
     - set +o allexport
   script: # authenticate in dockerhub registry from inside the executor
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY
-    - PACKAGE_VERSION = $(grep -m 1 version ./backend/pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
-    - echo PACKAGE_VERSION
-    - APP_VERSION=$PACKAGE_VERSION.$CI_PIPELINE_IID
+    - export PACKAGE_VERSION=$(grep -m 1 version ./backend/pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
+    - echo $PACKAGE_VERSION
+    - export APP_VERSION=$PACKAGE_VERSION.$CI_PIPELINE_IID
     - docker build -t $CI_REGISTRY_IMAGE:$APP_VERSION - f Dokerfile .
     - docker push $CI_REGISTRY_IMAGE:$APP_VERSION
 
