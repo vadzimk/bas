@@ -28,6 +28,6 @@ build_image:
     - export PACKAGE_VERSION=$(grep -m 1 version ./backend/pyproject.toml | tr -s ' ' | tr -d '"' | tr -d "'" | cut -d' ' -f3)
     - echo $PACKAGE_VERSION
     - export APP_VERSION=$PACKAGE_VERSION.$CI_PIPELINE_IID
-    - docker build -t $CI_REGISTRY_IMAGE:$APP_VERSION - f Dokerfile .
+    - docker build -t $CI_REGISTRY_IMAGE:$APP_VERSION -f Dokerfile .
     - docker push $CI_REGISTRY_IMAGE:$APP_VERSION
 
