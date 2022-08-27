@@ -1,0 +1,13 @@
+*Dockerfile
+node_modules/
+build/
+.gitignore
+.env*
+
+
+.venv
+.idea
+out
+*.sqlite
+.env
+.flaskenv

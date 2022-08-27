@@ -25,8 +25,8 @@ async def async_task(search_fields,linkedin_credentials, task_update_state):
     new_search = LinkedinSearch(**search_fields)  # TODO need to sanitize user input
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            headless=False,
-                                            slow_mo=100
+                                            # headless=False,
+                                            # slow_mo=100
                                             )
         bpage: PlayWrightPage = await browser.new_page()
 

@@ -26,15 +26,14 @@ services:
     container_name: postgres_prod
     expose:
       - 5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1
-      - DATABASE_NAME=bas
+    env_file:
+      - .env.dev.postgres
     volumes:
       - ./postgres-init-db.sh:/docker-entrypoint-initdb.d/postgres-init-db.sh
       - postgres_data_prod/:/var/lib/postgresql/data
     networks:
       - bas_prod_network
+
 
   adminer:
     image: adminer
@@ -45,18 +44,33 @@ services:
     networks:
       - bas_prod_network
 
+# TODO containerize celery worker
+
   flask_backend:
     container_name: bas_backend
     image: bas_backend
     build:
-      context: .
+      context: ./backend/
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://postgres:1@postgres_prod:5432/bas
       - CELERY_BROKER_URL=redis://redis_prod:6379/0
       - CELERY_RESULT_BACKEND=redis://redis_prod:6379/0
+    expose:
+      - 5000
+    networks:
+      - bas_prod_network
+
+
+
+  frontend:
+    container_name: bas_frontend
+    image: bas_frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
     ports:
-      - "80:5000"
+      - "80:3000"
     networks:
       - bas_prod_network
 

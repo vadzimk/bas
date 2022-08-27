@@ -4,8 +4,9 @@
 
 ## Overview
 
-This is an Indeed/Linkedin job board scrapper.
-It will scape job Linkedin and Indeed job boards for you and let you select eligible companies and listings  
+This is an Indeed/Linkedin job board scrapper.  
+It runs in Docker locally only.
+It will scape Linkedin (and in soon Indeed) job boards for you and let you select eligible companies and listings.  
 You can additionaly use auto-apply browser extensions:
 [joinrhubarb](www.joinrhubarb.com),
 [easyjobs](www.easyjobs.so),
@@ -34,16 +35,27 @@ to save even more time on your applications
 
 ## Usage
 
-coming soon
+```bash
+docker-compose -f docker-compose.yml up
+```
+
+## Limitations of the current version
+- Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it is not adjusted to prevent blocking. There is a button to update Linkedin credentials once the previous account gets blocked.
+- Current version only has Linkedin Tasks in the frontend.  Indeed tasks feature frontend is not implemented.  
 
 ## Development
+```bash
 docker-compose -f docker-compose.dev.yml up -d
 cd src  
 flask db init  _# adds support to db migrations_  
 flask db migrate _# creates migration script_  
 flask db upgrade _# applies changes to db_  
 celery -A app.celery worker --loglevel=info  --concurrency=1
-flask run -p 5000  
+export FLASK_DEBUG=1
+flask run -p 5000
+``` 
+
+
 
 ## Diagrams
 ### Use-case

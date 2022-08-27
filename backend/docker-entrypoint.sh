@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 . /venv/bin/activate
-cd /app/src
-if [ ! -d /app/src/migrations ];
+cd /usr/src/app/src
+if [ ! -d migrations ];
 then
   flask db init; # adds support to db migrations
   flask db migrate; # creates migration script
 fi;
 flask db upgrade # applies changes to db
-exec celery -A app.celery worker --loglevel=info -d
-exec gunicorn --bind 0.0.0.0:5000 app:app
+exec celery -A app.celery worker --loglevel=info --concurrency=1 &
+exec gunicorn --bind 0.0.0.0:5000 --workers=1 app:app

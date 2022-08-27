@@ -2,7 +2,7 @@ import json
 import logging
 
 import pandas as pd
-from flask import render_template, request, jsonify, Response, url_for
+from flask import render_template, request, jsonify, Response, url_for, send_from_directory, send_file
 
 from . import main
 
@@ -16,7 +16,8 @@ from ..main.tasks import scrape_linkedin
 def index():
     # TODO add button start scrape , can be done using Celery
     # TODO add functionality on delete row marked deleted in db
-    return render_template("index.html", title="BAS")
+    # return render_template("index.html", title="BAS")
+    return send_from_directory('static', 'index.html')  # TODO temporarily serves react build from static folder
 
 
 @main.route('/results')
