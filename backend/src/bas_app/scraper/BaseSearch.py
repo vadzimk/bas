@@ -98,12 +98,12 @@ class BaseSearch(ABC):
         """ Populate job post details form 'iframe' and
         populate company details from the company profile page
         """
-        print("*"*15)
-        job_count = 0
-        for p in self._pages:
-            job_count += len(p.beacons)
-        print(job_count, "job_count for all pages")
-        print("*"*15)
+        # print("*"*15)
+        # job_count = 0
+        # for p in self._pages:
+        #     job_count += len(p.beacons)
+        # print(job_count, "job_count for all pages")
+        # print("*"*15)
 
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
@@ -132,15 +132,15 @@ class BaseSearch(ABC):
                 self._task_state_meta['current'] += 1
                 self.update_state()
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
-                print(self._page_count_with_limit, "_page_count_with_limit")
-                print(page_index, "page_index")
-                print(p.JOBS_ON_PAGE, "JOBS_ON_PAGE")
-                print(b_index + 1, "b_index + 1")
-                print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
-                print(self._total_skipped, "total_skipped")
-                print("-"*10)
-        print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
-        print(self._total_skipped, "total_skipped")
+        #         print(self._page_count_with_limit, "_page_count_with_limit")
+        #         print(page_index, "page_index")
+        #         print(p.JOBS_ON_PAGE, "JOBS_ON_PAGE")
+        #         print(b_index + 1, "b_index + 1")
+        #         print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
+        #         print(self._total_skipped, "total_skipped")
+        #         print("-"*10)
+        # print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
+        # print(self._total_skipped, "total_skipped")
 
 
     @staticmethod
@@ -194,7 +194,7 @@ class BaseSearch(ABC):
                 self._task_state_meta['current'] += 1
                 self.update_state()
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
-                print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
-                print("-"*10)
+                # print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
+                # print("-"*10)
         self._pages = pages
         return bpage

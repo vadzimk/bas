@@ -65,12 +65,12 @@ class LinkedinBeacon(BaseBeacon):
                             )  # TODO test for multiple benefits
 
         self.make_attribute('description_markdown',
-                            lambda: markdownify(str(soup.select_one('#job-details'))))
+                            lambda: markdownify(str(soup.select_one('.jobs-unified-description'))))
         self.make_attribute('description_text',
-                            lambda: soup.select_one('#job-details').get_text())
+                            lambda: soup.select_one('.jobs-unified-description').get_text())
 
         self.make_attribute('description_html',
-                            lambda: replace_p_br_p(str(soup.select_one('#job-details'))))
+                            lambda: replace_p_br_p(str(soup.select_one('.jobs-unified-description'))))
 
         self.make_company_attribute('profile_url',
                                     lambda: re.sub(r"life/$", "",
@@ -140,7 +140,7 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_company_attribute("number_employees",
                                     lambda: re.search(r'((\d+,?)+)',
-                                                      employee_soup.find('span',
+                                                      employee_soup.find('h2',
                                                                          string=re.compile(
                                                                              ".*employees.*")).text).group(1).replace(',', ''))
 
