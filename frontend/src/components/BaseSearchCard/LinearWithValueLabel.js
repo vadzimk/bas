@@ -26,7 +26,7 @@ function LinearProgressWithLabel(props) {
 
 
 LinearWithValueLabel.propTypes={
-    taskId: PropTypes.number,
+    taskId: PropTypes.string,
     onSuccess: PropTypes.func.isRequired,
     onFailure: PropTypes.func.isRequired
 }

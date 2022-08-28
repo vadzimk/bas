@@ -34,8 +34,12 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}".split('?')[0])
 
+        # Linkedin changed this class name
+        # self.make_company_attribute('name',
+        #                             lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
+
         self.make_company_attribute('name',
-                                    lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
+                                    lambda: self._beacon.find('span', class_='job-card-container__primary-description').text)
 
         self.make_company_attribute('rating',
                                     lambda: '')
