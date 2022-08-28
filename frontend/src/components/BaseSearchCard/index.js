@@ -8,12 +8,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
+import {createTask} from "../../reducers/searchCardsSlice";
 
 BaseSearchCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
+    cardId: PropTypes.number.isRequired,
     ...searchOptionsPropTypes
 }
-export default function BaseSearchCard({onDelete, ...rest}) {
+export default function BaseSearchCard({onDelete, cardId, ...rest}) {
     const initialValues = {
         what: '',
         where: '',
@@ -36,21 +38,39 @@ export default function BaseSearchCard({onDelete, ...rest}) {
     const enabledDeleteButton = !formSubmitted || taskDone
     const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
     const dispatch = useDispatch()
-    const userId = useSelector(state=>state.user.id)
+    // const userId = useSelector(state => state.user.id)
+    const card = useSelector(state =>
+        state.searchCards.cards.find(c => c.id === cardId))
+
+    useEffect(() => {
+        const tasksLength = card.tasks.length
+        if (tasksLength>0) {
+            const {task_id} = card.tasks[tasksLength-1]
+            setTaskId(task_id)
+        }
+        console.log('task_id', card.task_id)
+        console.log('card', card)
+
+    }, [card])
 
     const handleSubmit = async (values) => {
         console.log('values', values)
         console.log('submit')
-        const {task_id} = await createSearch(
-            {
-                ...values,
-                experience: values.experience.map(item => item.value),
-                user_id: userId
-            })
-        setTaskId(task_id)
+        dispatch(createTask({
+            ...values,
+            experience: values.experience.map(item => item.value),
+            cardId
+        }))
+        // TODO replace with dispatch
+        // const {task_id} = await createSearch(
+        //     {
+        //         ...values,
+        //         experience: values.experience.map(item => item.value),
+        //         user_id: userId
+        //     })
+        // setTaskId(task_id)
         setFormSubmitted(true)
         setFormValues(values)
-        console.log('task_id', task_id)
     }
 
 

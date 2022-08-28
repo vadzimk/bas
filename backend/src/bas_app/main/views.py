@@ -7,7 +7,7 @@ from flask import render_template, request, jsonify, Response, url_for, send_fro
 from . import main
 
 from .. import db
-from ..models import Company, Job, User
+from ..models import Company, Job, User, SearchModel
 from ..main.tasks import scrape_linkedin
 
 
@@ -63,9 +63,18 @@ def search():
     user = User.query.get_or_404(user_id)
     linkedin_credentials = {'email': user.linkedin_email, 'password': user.linkedin_password}
     print('linkedin_credentials', linkedin_credentials)
+    search_model = SearchModel(
+        what=data.get('what'),
+        where=data.get('where'),
+        age=data.get('age'),
+        radius=data.get('radius'),
+        experience=data.get('experience')
+    )
+    db.session.add(search_model)
+    db.session.commit()
     task = scrape_linkedin.s(search_fields=data, linkedin_credentials=linkedin_credentials).apply_async()
     print("task.id", task.id)
-    return jsonify({'task_id': task.id}), 202
+    return jsonify({'task_id': task.id, 'model_id': search_model.id}), 202
 
 
 @main.route('/api/status/<task_id>')

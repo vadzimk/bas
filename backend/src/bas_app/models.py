@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import db
 from sqlalchemy.sql import expression
-
+from sqlalchemy.dialects.postgresql import ARRAY
 
 class Company(db.Model):
     __tablename__ = 'company'
@@ -75,7 +75,7 @@ class SearchModel(db.Model):
     where = db.Column(db.String, nullable=True)
     age = db.Column(db.String, nullable=True)
     radius = db.Column(db.String, nullable=True)
-    experience = db.Column(db.String, nullable=True)
+    experience = db.Column(ARRAY(db.String), nullable=True)
     searches = db.relationship('Search', back_populates='search_model')
 
 
@@ -106,4 +106,5 @@ class Search(db.Model):  # junction table Job-SearchModel
 class Task(db.Model):
     __tablename__ = 'task'
     id = db.Column(db.Integer, primary_key=True)  # Celery task id
+    timestamp = db.Column(db.DateTime(timezone=True), default=db.func.now())
     search = db.relationship('Search', back_populates='tasks')

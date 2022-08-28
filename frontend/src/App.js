@@ -20,7 +20,6 @@ import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
 function App() {
     const theme = useTheme()
     const cards = useSelector(state => state.searchCards.cards)
-    console.log('len', cards.length)
     const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
@@ -90,6 +89,7 @@ function App() {
                 {user.id && cards.map(card =>
                     <LinkedinSearchCard
                         key={card.id}
+                        cardId={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
                     />
                 )}
