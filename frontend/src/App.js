@@ -12,34 +12,34 @@ import Profile from "./components/Profile";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
 import {notify, Ntypes} from "./reducers/notificationSlice";
+import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
 
 
 // import theme from "./Theme";
 
 function App() {
     const theme = useTheme()
-    const [cardIdCounter, setCardIdCounter] = useState(0)
-    const [cards, setCards] = useState([]) // TODO move this state to redux tasks
+    const cards = useSelector(state => state.searchCards.cards)
+    console.log('len', cards.length)
     const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
     useEffect(() => {
-        const userId = window.localStorage.getItem('user-id')
-        if (userId) {
-            dispatch(userLoggedIn(userId))
+        const user = JSON.parse(window.localStorage.getItem('bas-user')) // TODO persist the whole user object
+        if (user?.id) {
+            dispatch(userLoggedIn(user))
         }
     }, [])
 
     const handleNewSearchCard = () => {
-        if (!user.hasLinkedinCredentials) {
+        if (!user.linkedin_credentials) {
             dispatch(notify({type: Ntypes.ERROR, message: 'Linkedin credentials are missing, please UPDATE USER'}))
             return
         }
-        setCards([...cards, {id: cardIdCounter}])
-        setCardIdCounter(cardIdCounter + 1)
+        dispatch(addSearchCard())
     }
     const handleSearchCardDelete = (id) => {
-        setCards(cards.filter(c => c.id !== id))
+        dispatch(deleteSearchCard(id))
     }
     return (
         <div

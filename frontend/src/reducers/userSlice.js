@@ -5,7 +5,7 @@ import api from "../services/api";
 const initialState = {
     id: null,
     status: 'idle', //  idle, loading, succeeded, failed TODO do i need this?
-    hasLinkedinCredentials: false,
+    linkedin_credentials: false,
 }
 
 const userSlice = createSlice({
@@ -13,11 +13,10 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         userLoggedIn: function (state, action) {
-            state.id = action.payload
-            console.log('hello from userLoggedIn')
+            return {...state, ...action.payload}  // replace state entirely
         },
         userLogout: function (state, action) {
-            window.localStorage.removeItem('user-id')
+            window.localStorage.removeItem('bas-user')
             return initialState
         }
         // userRegistered: function (state, action) {
@@ -35,13 +34,13 @@ const userSlice = createSlice({
             .addCase(loginUser.fulfilled, (state, action) => {
                 const {id, linkedin_credentials} = action.payload
                 state.id = id
-                state.hasLinkedinCredentials = linkedin_credentials
+                state.linkedin_credentials = linkedin_credentials
                 console.log('hello from .addCase(loginUser.fulfilled)')
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 const {id, linkedin_credentials} = action.payload
                 state.id = id
-                state.hasLinkedinCredentials = linkedin_credentials
+                state.linkedin_credentials = linkedin_credentials
             })
     }
 })
@@ -52,7 +51,7 @@ export const loginUser = createAsyncThunk('user/login', async (userFields, {disp
     try {
         const res = await api.post('/user/login', {...userFields})
         dispatch(notifyTemp({type: Ntypes.SUCCESS, message: `Hi, ${userFields.username}`}))
-        window.localStorage.setItem('user-id', res.data.id)
+        window.localStorage.setItem('bas-user', JSON.stringify(res.data))
         return res.data // data = {id, linkedin_credentials}
     } catch (e) {
         if (e.response.status === 404) {
@@ -68,7 +67,7 @@ export const registerUser = createAsyncThunk('user/register', async (userFields,
     // @param userFields: {linkedin_email, linkedin_password}
     try {
         const res = await api.post('/user', {...userFields})
-        window.localStorage.setItem('user-id', res.data.id)
+        window.localStorage.setItem('bas-user', JSON.stringify(res.data))
         return res.data
     } catch (e) {
         const message = e.response.data ? e.response.data : e.message

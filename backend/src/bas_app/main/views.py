@@ -140,7 +140,8 @@ def create_user():
     )
     db.session.add(user)
     db.session.commit()
-    return jsonify({'id': user.id})
+    linkedin_credentials = (user.linkedin_email and user.linkedin_password) and True
+    return jsonify({"id": user.id, "linkedin_credentials": linkedin_credentials})
 
 
 @main.route('/api/user/login', methods=['POST'])
