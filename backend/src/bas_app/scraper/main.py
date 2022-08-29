@@ -16,6 +16,10 @@ import os
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
+linkedin_credentials = {
+    'email': 'rdq3ef81kn@esiix.com',
+    'password': 'GJrPhL3ErSTJ9UE'
+}
 
 indeed_searches = [
     # {
@@ -132,7 +136,8 @@ async def do_search(searches: List[BaseSearch]):
             first_pass = True
             for one_search in searches:
                 if first_pass:
-                    bpage = await one_search.create_session(bpage)  # one session for each task
+                    bpage = await one_search.create_session(bpage,
+                                                            linkedin_credentials=linkedin_credentials)  # one session for each task
                 await one_search.populate(bpage)
                 await asyncio.sleep(1)
                 first_pass = False
@@ -176,10 +181,6 @@ async def start_all(indeed_searches, linkedin_searches):
 
 def main():
     asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
-
-
-
-
 
 
 if __name__ == '__main__':

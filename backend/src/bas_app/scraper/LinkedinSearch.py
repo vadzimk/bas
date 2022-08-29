@@ -5,9 +5,8 @@ from enum import Enum
 
 from typing import List
 from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
-
 from LinkedinPage import LinkedinPage
-from utils import AccountBlocked, AccountNotFound
+from utils import AccountBlocked, AccountNotFound, PageCrashed
 from utils import override
 
 from BaseSearch import BaseSearch
@@ -69,6 +68,8 @@ class LinkedinSearch(BaseSearch):
             beacon.populate_from_details(job_view_html)
         except Exception as e:
             logging.error(f'Error going to {job_url} {e}')
+            if "Navigation failed because page crashed!" in str(e):
+                raise PageCrashed(str(e))
 
     @override
     @staticmethod
@@ -85,6 +86,8 @@ class LinkedinSearch(BaseSearch):
             beacon.populate_from_company_profile(about_company_html, about_employees_html)
         except Exception as e:
             logging.error(f'Error going to {company_url} {e}')
+            if "Navigation failed because page crashed!" in str(e):
+                raise PageCrashed(str(e))
 
     @override
     async def create_session(self, bpage, linkedin_credentials):

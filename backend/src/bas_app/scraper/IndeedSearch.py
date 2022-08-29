@@ -6,7 +6,7 @@ import time
 import urllib
 from enum import Enum
 from typing import List
-from utils import override
+from utils import override, PageCrashed
 from IndeedPage import IndeedPage
 from BaseSearch import BaseSearch
 
@@ -67,6 +67,8 @@ class IndeedSearch(BaseSearch):
             beacon.populate_from_details(text)
         except Exception as e:
             logging.error(f'Error going to {job_url}', e)
+            if "Navigation failed because page crashed!" in str(e):
+                raise PageCrashed(str(e))
 
     @override
     @staticmethod
@@ -79,6 +81,8 @@ class IndeedSearch(BaseSearch):
             beacon.populate_from_company_profile(about_company_html, None)
         except Exception as e:
             logging.error(f'Error going to {company_url} {e}')
+            if "Navigation failed because page crashed!" in str(e):
+                raise PageCrashed(str(e))
 
     @override
     async def create_session(self, bpage):

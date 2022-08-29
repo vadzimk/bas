@@ -94,12 +94,21 @@ class TaskError():
 class SearchResultsEmpty(RuntimeError, TaskError):
     pass
 
+
 class AccountBlocked(RuntimeError, TaskError):
     pass
+
 
 class AccountNotFound(RuntimeError, TaskError):
     pass
 
+
+class PageCrashed(RuntimeError, TaskError):
+    pass
+
+
+class AttributeEmpty(RuntimeError, TaskError):
+    pass
 
 # ---------------------------------------------
 

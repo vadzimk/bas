@@ -34,7 +34,7 @@ class BaseSearch(ABC):
         self._limit: int = int(limit) if limit else sys.maxsize
         self._task_update_state = None
         self._task_state_meta = {
-            'total': 0, # page_count + beacon count
+            'total': 0,  # page_count + beacon count
             'current': 0,
             'job_count': 0,
             'job_duplicates_current': 0
@@ -52,7 +52,7 @@ class BaseSearch(ABC):
         return self._task_state_meta
 
     @abstractmethod
-    async def create_session(self, bpage):
+    async def create_session(self, bpage, linkedin_credentials: dict = None):
         """ logs into the website and returns the bpage"""
         return bpage
 
@@ -108,11 +108,12 @@ class BaseSearch(ABC):
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
                 job_url = b.dict['url']
-                job = Job.query.filter_by(url=job_url).first() # TODO monitor this returned none although the url was found in db, probably change to postgresdb
+                job = Job.query.filter_by(
+                    url=job_url).first()  # TODO monitor this returned none although the url was found in db, probably change to postgresdb
                 if not job:
                     logging.warning(f'no job in db for {b.dict}')
                 if job and job.description_text:  # job details and company details are already in db
-                    self._total_skipped +=1
+                    self._total_skipped += 1
                     self._task_state_meta['current'] += 1
                     self._task_state_meta['job_duplicates_current'] += 1
                     self.update_state()
@@ -141,7 +142,6 @@ class BaseSearch(ABC):
         #         print("-"*10)
         # print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
         # print(self._total_skipped, "total_skipped")
-
 
     @staticmethod
     def save_beacon_company_db(beacon):

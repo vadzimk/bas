@@ -1,6 +1,8 @@
+import asyncio
 import copy
 import logging
 import re
+import time
 
 from bs4 import BeautifulSoup
 from bs4.element import PageElement, Tag
@@ -34,20 +36,13 @@ class LinkedinBeacon(BaseBeacon):
 
         self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}".split('?')[0])
 
-        # Linkedin changed this class name
-        # self.make_company_attribute('name',
-        #                             lambda: self._beacon.find('a', class_='job-card-container__company-name').text)
-
         self.make_company_attribute('name',
-                                    lambda: self._beacon.find('span', class_='job-card-container__primary-description').text)
-
-        self.make_company_attribute('rating',
-                                    lambda: '')
+                                    lambda: self._beacon.find('a',
+                                                              class_='job-card-container__company-name').text,
+                                    )
 
         self.make_company_attribute('location',
                                     lambda: self._beacon.find('div', class_='artdeco-entity-lockup__caption').text)
-
-
 
         # self.make_attribute('number_of_applicants',
         #                     lambda: self._beacon.find('span', class_='jobs-unified-top-card__applicant-count').text)
@@ -64,13 +59,20 @@ class LinkedinBeacon(BaseBeacon):
                                               soup.find_all('.featured-benefits__benefit-list'))
                             )  # TODO test for multiple benefits
 
+        # because make_attribute lambdas are signifying the results
+        description = soup.select_one('.jobs-unified-description') \
+                      or soup.select_one('#job-details')
+
         self.make_attribute('description_markdown',
-                            lambda: markdownify(str(soup.select_one('.jobs-unified-description'))))
+                            lambda: markdownify(str(description)) if description else None,
+                            )
         self.make_attribute('description_text',
-                            lambda: soup.select_one('.jobs-unified-description').get_text())
+                            lambda: description.get_text(),
+                            )
 
         self.make_attribute('description_html',
-                            lambda: replace_p_br_p(str(soup.select_one('.jobs-unified-description'))))
+                            lambda: replace_p_br_p(str(description)) if description else None,
+                            )
 
         self.make_company_attribute('profile_url',
                                     lambda: re.sub(r"life/$", "",
@@ -128,8 +130,9 @@ class LinkedinBeacon(BaseBeacon):
                                         'dd').text.strip())
 
         self.make_company_attribute('size',
-                                    lambda: BaseBeacon.company_size_map.get(company_soup.find('dt', string=re.compile(".*Company size.*"))
-                                    .find_next('dd').text.replace(' employees', '').strip()))
+                                    lambda: BaseBeacon.company_size_map.get(
+                                        company_soup.find('dt', string=re.compile(".*Company size.*"))
+                                            .find_next('dd').text.replace(' employees', '').strip()))
 
         # find number of employess on linkedin from the employees section
         # self.make_attribute('company_employees_on_linkedin',
@@ -142,7 +145,15 @@ class LinkedinBeacon(BaseBeacon):
                                     lambda: re.search(r'((\d+,?)+)',
                                                       employee_soup.find('h2',
                                                                          string=re.compile(
-                                                                             ".*employees.*")).text).group(1).replace(',', ''))
+                                                                             ".*employees.*")).text).group(1).replace(
+                                        ',', ''),
+                                    lambda: re.search(r'((\d+,?)+)',
+                                                      employee_soup.find('span',
+                                                                         string=re.compile(
+                                                                             ".*employees.*")).text).group(
+                                        1).replace(
+                                        ',', ''),
+                                    )
 
         country_buttons = employee_soup \
             .find('div', class_='insight-container') \

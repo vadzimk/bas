@@ -59,9 +59,9 @@ class Job(db.Model):
 
     @date_posted.setter
     def date_posted(self, value):
-        value_type = type(value)
-        if value_type != 'str':
-            print('value_type', value_type, value)
+        # value_type = type(value)
+        # if value_type != 'str':
+        #     print('value_type', value_type, value)
         self._date_posted = datetime.fromisoformat(value) if value else None
 
     def __repr__(self):

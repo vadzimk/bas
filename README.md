@@ -45,6 +45,7 @@ Application will be available on localhost:80
 ## Limitations of the current version
 - Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it is not adjusted to prevent blocking. There is a button to update Linkedin credentials once the previous account gets blocked.
 - Current version only has Linkedin Tasks in the frontend.  Indeed tasks feature frontend is not implemented.  
+- Playwright by Microsoft has a bug that leaks memory. I did not know that, so the headless browser may crash with error [Navigation failed because page crashed!](https://github.com/microsoft/playwright/issues/6319)
 
 ## Development
 ```bash

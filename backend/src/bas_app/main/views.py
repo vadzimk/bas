@@ -3,6 +3,7 @@ import logging
 
 import pandas as pd
 from flask import render_template, request, jsonify, Response, url_for, send_from_directory, send_file
+from sqlalchemy import inspect
 
 from . import main
 
@@ -45,8 +46,10 @@ def update_job():
     record = json.loads(request.data)
     id = record['id']
     record.pop('id', None)
-    print('record', record.keys())
-    res = db.session.query(Job).filter(Job.id == id).update(record)
+    mapper = inspect(Job)
+    job_column_keys = [column.key for column in mapper.attrs]
+    record_for_update = {k: v for k, v in record.items() if k in job_column_keys}
+    res = db.session.query(Job).filter(Job.id == id).update(record_for_update)
     db.session.commit()
     print("res", res)
     return jsonify(get_current_data())

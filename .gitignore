@@ -10,3 +10,4 @@ redis_data
 postgres_data_dev
 .venv
 analytics
+.run

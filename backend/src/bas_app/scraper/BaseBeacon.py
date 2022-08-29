@@ -25,10 +25,10 @@ class BaseBeacon(ABC):
         "less than 10": "2-10",
         "2-10": "2-10",
     }
+
     def __init__(self, beacon: PageElement):
         self._beacon: PageElement = beacon
         self._job_post: Dict[str, str | dict] = {"company": {}}
-
 
     @property
     def dict(self):
@@ -47,29 +47,35 @@ class BaseBeacon(ABC):
         """ all must be company attributes """
         pass
 
-    def make_attribute(self, name: str, command: Callable):
+    def make_attribute_helper(self, dslice: dict, key: str, *commands: Callable):
         """
-        Creates an optional attribute on the self._job_post dict
+        Creates an optional attribute on the dslice
         and catches if the classname was not found by BeautifulSoap
-        :param name: attribute name
-        :param command: lambda function as a command to extract attribute from a beacon:PageElement
+        :param dslice: the dictionary to put attributes on
+        :param key: attribute name
+        :param commands:  functions as commands to extract attribute from a beacon:PageElement
         :return: None
         example usage: self.make_attribute('title', lambda: self._beacon.find_next('a', class_='jcs-JobTitle').text)
         """
-        attribute_value = None
-        try:
-            attribute_value = str(command()).strip()
-        except Exception as e:
-            logging.warning(f'Error finding [{name}] {e} for job {self._job_post.get("url")}')
-        self._job_post[name] = attribute_value
+        errors = []
+        for command in commands:
+            if dslice.get(key):
+                break
+            try:
+                attribute_value = command()
+                if attribute_value and attribute_value != 'None':
+                    dslice[key] = str(attribute_value).strip()
+            except Exception as e:
+                errors.append(f' | {str(e)}')
+        if not dslice.get(key):
+            logging.warning(f'Error finding [{key}] for job or company {self._job_post.get("url")}'
+                            f' {(e for e in errors)}')
 
-    def make_company_attribute(self, name: str, command: Callable):
-        attribute_value = None
-        try:
-            attribute_value = str(command()).strip()
-        except Exception as e:
-            logging.warning(f'Error finding [{name}] {e} for job {self._job_post.get("url")}')
-        self._job_post['company'][name] = attribute_value
+    def make_attribute(self, name: str, *commands: Callable):
+        self.make_attribute_helper(self._job_post, name, *commands)
+
+    def make_company_attribute(self, name: str, *commands: Callable):
+        self.make_attribute_helper(self._job_post['company'], name, *commands)
 
     def populate_company_from_bec(self, other_bec):
         self._job_post['company'] = copy.deepcopy(other_bec._job_post['company'])
