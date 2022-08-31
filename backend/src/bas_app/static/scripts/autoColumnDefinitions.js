@@ -11,6 +11,10 @@ export default function autoColumnsDefinitions(definitions) {
     definitions.forEach((column) => {
         // column.headerFilter = true; // add header filter to every column
 
+        if(column.field ==='title' || column.field === 'note'){ // show row count
+            column.bottomCalc = "count"
+        }
+
         if (column.field.includes('description')
             || column.field.includes('url')
             || column.field.includes('id')

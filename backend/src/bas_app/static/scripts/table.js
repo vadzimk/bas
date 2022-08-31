@@ -78,7 +78,9 @@ table.on('cellEdited', function (cell) {
         id: cell.getRow().getData().id,
         [column]: cell.getValue()
     }
-    axios.put('/api/job', recordToSend).catch(e => console.log(e))
+    axios.put('/api/job', recordToSend)
+        .then(res=>{table.setData(res.data); restoreColumnLayout()})
+        .catch(e => console.log(e))
 
 })
 

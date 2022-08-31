@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Type
 
 import pandas as pd
 from flask import render_template, request, jsonify, Response, url_for, send_from_directory, send_file
@@ -41,17 +42,36 @@ def delete_job():
     return jsonify(get_current_data())
 
 
+def make_record_for_update(record: dict, model: Type[db.Model]):
+    """
+    :returns dict that contains column:new_value
+    :record: record to update
+    :model: model of the table to get the column names from
+    """
+    mapper = inspect(model)
+    column_keys = [column.key for column in mapper.attrs]
+    record_for_update = {k: v for k, v in record.items() if k in column_keys}
+    return record_for_update
+
+
 @main.route('/api/job', methods=['PUT'])
 def update_job():
     record = json.loads(request.data)
+    print('record:', record)
     id = record['id']
     record.pop('id', None)
-    mapper = inspect(Job)
-    job_column_keys = [column.key for column in mapper.attrs]
-    record_for_update = {k: v for k, v in record.items() if k in job_column_keys}
-    res = db.session.query(Job).filter(Job.id == id).update(record_for_update)
+    # TODO this is assuming across all tables all the column names are unique, need to find solution to use table prefix
+    record_for_job_update = make_record_for_update(record, Job)
+    record_for_company_update = make_record_for_update(record, Company)
+    touched = 0
+    if record_for_job_update:  # empty dict evaluate to false
+        touched += db.session.query(Job).filter(Job.id == id).update(record_for_job_update)
+    if record_for_company_update:
+        job = Job.query.get(id)
+        touched += db.session.query(Company).filter(Company.id == job.company_id).update(record_for_company_update)
     db.session.commit()
-    print("res", res)
+    if not touched:
+        return Response(status=400)
     return jsonify(get_current_data())
 
 
@@ -177,7 +197,7 @@ def get_current_data():
         .filter(Job.is_deleted == False).statement
 
     df = pd.read_sql(result, db.session.bind)
-    print(df.info())
+    # print(df.info())
 
     columns = [
         'id',
