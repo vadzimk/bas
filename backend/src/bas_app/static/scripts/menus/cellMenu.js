@@ -1,7 +1,7 @@
 import table from "../table.js";
 import {multiColumnFilter} from "../filter.js";
 import {state} from "../table.js";
-
+const undoDeleteButton = document.getElementById('undo-delete')
 const cellMenu = [
     {
         label: "<i class=\"fa-solid fa-filter\"></i> Filter By Cell Value",
@@ -70,8 +70,14 @@ const cellMenu = [
                 action: function (e, cell) {
                     const row = cell.getRow()
                     const id = row.getData().job_id
-                    row.delete();
-                    state.deletedRows.push(id)
+                    state.deletedRows.push([id])
+                    undoDeleteButton.classList.add('is-info')
+                    axios.delete('/api/job', {data: [id]})
+                        .then((res) => {
+                            row.delete();
+                        }).catch((e) => {
+                        console.log(e)
+                    })
 
                 }
             },
@@ -79,11 +85,19 @@ const cellMenu = [
                 label: "<i class=\"fa-solid fa-trash-can\"></i> Delete Selected Rows",
                 action: function (e, cell) {
                     const selectedRows = table.getSelectedRows();
-                    const ids = []
-                    selectedRows.forEach((r) => {
-                        state.deletedRows.push(r.getData().id)
-                        r.delete()
+                    if(!selectedRows.length){
+                        return
+                    }
+                    const ids = selectedRows.map((r) => r.getData().job_id)
+                    axios.delete('/api/job', {data: ids})
+                        .then((res) => {
+                            selectedRows.forEach(row=>row.delete())
+                        }).catch((e) => {
+                        console.log(e)
                     })
+
+                    state.deletedRows.push(ids)
+                    undoDeleteButton.classList.add('is-info')
                 }
             },
             // {

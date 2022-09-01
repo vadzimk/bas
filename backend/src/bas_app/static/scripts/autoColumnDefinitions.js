@@ -30,9 +30,9 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field === 'company_name'
             || column.field.includes('overview')) {
             const url_fields = {
-                'title': 'url',
-                'name': 'homepage_url',
-                'overview': 'profile_url',
+                'title': 'job_url',
+                'name': 'company_homepage_url',
+                'overview': 'company_profile_url',
             }
             // column.formatter = 'link';
             column.formatter = (cell, formatterParams, onRendered) => {
@@ -57,7 +57,7 @@ export default function autoColumnsDefinitions(definitions) {
             column.tooltip = makeToolTipFunction(
                 {
                     innerHtmlGetterFunction: (cell) =>
-                        cell.getRow().getData().other_locations_employees_html
+                        cell.getRow().getData().company_other_locations_employees_html
                 })
         }
 

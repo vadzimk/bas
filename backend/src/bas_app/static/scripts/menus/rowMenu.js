@@ -1,5 +1,6 @@
-// this is not used in favor of the cellMenu, because cellMenu can access current cell value
-
+/*
+* this is not used in favor of the cellMenu, because cellMenu can access current cell value
+*/
 
 import table from "../table.js";
 import positionPopups from "../positionPopups.js";
@@ -60,6 +61,7 @@ const rowMenu = [
                 label: "<i class='fas fa-trash'></i> Delete Row In Focus",
                 action: function (e, row) {
                     row.delete();
+
                 }
             },
             {

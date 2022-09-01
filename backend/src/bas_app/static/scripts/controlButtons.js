@@ -1,4 +1,4 @@
-import table, {restoreColumnLayout} from "./table.js";
+import table from "./table.js";
 import {state} from "./table.js";
 
 
@@ -45,16 +45,32 @@ document.getElementById("reset-table-layout").addEventListener("click", function
     })
 });
 
-document.getElementById('commit-deleted').addEventListener('click', function () {
-    if (state.deletedRows.length)
-        commitDeleteRows(state.deletedRows)
+const undoDeleteButton = document.getElementById('undo-delete')
+undoDeleteButton.addEventListener('click', function () {
+    if (!state.deletedRows.length) {
+        return
+    }
+    const {deletedRows} = state
+    const idsToUnDelete = deletedRows[deletedRows.length - 1]
+    console.log('idsToUnDelete', idsToUnDelete)
+    unDeleteRows(idsToUnDelete)
+    state.deletedRows.pop()
 })
 
-function commitDeleteRows(rowIds) {
-    axios.delete('/api/job', {data: rowIds})
+function unDeleteRows(jobIds) {
+    if(!jobIds){
+        console.log("jobIds", jobIds)
+        return
+    }
+    const records = jobIds.map(id=>({job_id: id, job_is_deleted: false}))
+    console.log("records to undo", records)
+    axios.put('/api/jobs',  records)
         .then((res) => {
             table.setData(res.data)
-            restoreColumnLayout()
+            if(!state.deletedRows.length){
+            undoDeleteButton.classList.remove('is-info')
+
+            }
         }).catch((e) => {
         console.log(e)
     })

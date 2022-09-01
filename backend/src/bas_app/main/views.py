@@ -1,9 +1,9 @@
 import json
-import logging
+
 from typing import Type
 
 import pandas as pd
-from flask import render_template, request, jsonify, Response, url_for, send_from_directory, send_file
+from flask import render_template, request, jsonify, Response, send_from_directory
 from sqlalchemy import inspect, LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import main
@@ -35,6 +35,7 @@ def jobs():
 @main.route('/api/job', methods=['DELETE'])
 def delete_job():
     records = json.loads(request.data)
+    print(records)
     db.session.query(Job) \
         .filter(Job.id.in_(tuple(records))) \
         .update({Job.is_deleted: True})
@@ -44,37 +45,63 @@ def delete_job():
 
 def make_record_for_update(record: dict, model: Type[db.Model]):
     """
-    :returns dict that contains column:new_value
+    :returns dict that contains column:new_value for the table model
     :record: record to update
     :model: model of the table to get the column names from
     """
-    mapper = inspect(model)
     table_name = model.__table__.name
+    print('table_name', table_name)
+    record = {k: v for k, v in record.items() if
+              k.startswith((table_name + "_"))}  # filters only  columns for this model
+    print('only columns for this model', record)
+    record = {k.removeprefix((table_name + "_")): v for k, v in record.items()}  # removes the prefix table name
+    print('removes the prefix table name', record)
+    print('record_out', record)
+    return record
 
-    column_keys = [column.key for column in mapper.attrs]
-    record = {k.lstrip((table_name + "_")): v for k, v in record.items()}  # removes the prefix table name
-    record_for_update = {k: v for k, v in record.items() if k in column_keys}
-    return record_for_update
 
-
-@main.route('/api/job', methods=['PUT'])
-def update_job():
-    record = json.loads(request.data)
-    print('record:', record)
-    id = record['job_id']  # records are prefixed with table_name_
-    record.pop('id', None)
-    # TODO this is assuming across all tables all the column names are unique, need to find solution to use table prefix
+def update_one(record):
+    """
+    updates one record but does not call db.session.commit() yet
+    :returns True if success False is failed
+    """
+    id = record.pop('job_id', None)  # records are prefixed with table_name_
     record_for_job_update = make_record_for_update(record, Job)
+    print('record_for_job_update', record_for_job_update)
     record_for_company_update = make_record_for_update(record, Company)
+    print('record_for_company_update', record_for_company_update)
     touched = 0
     if record_for_job_update:  # empty dict evaluate to false
         touched += db.session.query(Job).filter(Job.id == id).update(record_for_job_update)
     if record_for_company_update:
         job = Job.query.get(id)
         touched += db.session.query(Company).filter(Company.id == job.company_id).update(record_for_company_update)
-    db.session.commit()
     if not touched:
+        return False
+    return True
+
+
+@main.route('/api/job', methods=['PUT'])
+def update_job():
+    record = json.loads(request.data)
+    print('record:', record)
+    success = update_one(record)
+    db.session.commit()
+    if not success:
         return Response(status=400)
+    return jsonify(get_current_data())
+
+
+@main.route('/api/jobs', methods=['PUT'])
+def update_many_jobs():
+    """ currently only undo delete jobs """
+    records = json.loads(request.data)
+    print('records:', records)
+    for rec in records:
+        success = update_one(rec)
+        if not success:
+            return Response(status=400)
+    db.session.commit()
     return jsonify(get_current_data())
 
 
@@ -217,9 +244,6 @@ def get_current_data():
         'job_description_html',
         'job_hiring_insights',
         'job_url',
-        'job_plan_apply_flag',
-        'job_did_apply_flag',
-        'job_note',
         'company_name',
         'company_rating',
         'company_industry',
@@ -233,6 +257,10 @@ def get_current_data():
         'company_other_locations_employees_html',
         'company_profile_url',
         'company_homepage_url',
+        'job_plan_apply_flag',
+        'job_did_apply_flag',
+        'job_note',
+        'company_note',
     ]
     df = df.reindex(columns=columns)
 

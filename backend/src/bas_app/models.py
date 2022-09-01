@@ -22,6 +22,7 @@ class Company(db.Model):
     other_locations_employees_html = db.Column(db.String, nullable=True)
     profile_url = db.Column(db.String, index=True)
     homepage_url = db.Column(db.String, index=True, nullable=True)
+    note = db.Column(db.String, nullable=True)
     jobs = db.relationship('Job', back_populates='company')
 
     def __repr__(self):

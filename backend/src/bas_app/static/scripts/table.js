@@ -8,6 +8,8 @@ import attachDetail from "./attachDetail.js";
 import cellMenu from "./menus/cellMenu.js";
 
 const table = new Tabulator("#table", {
+     // debugEventsExternal:true, //console log external events
+    // debugEventsInternal:true, //console log internal events
     // ajaxURL: '/api/jobs',
     maxHeight: "80vh",
     // maxHeight: "100%",
@@ -33,21 +35,21 @@ const table = new Tabulator("#table", {
     },
 })
 
-window.onbeforeunload = function () { // save column layout before page reloads
-    const columnLayout = table.getColumnLayout()
-    window.localStorage.setItem("tabulator-backup-column-layout", JSON.stringify(columnLayout))
-}
+// window.onbeforeunload = function () { // save column layout before page reloads
+//     const columnLayout = table.getColumnLayout()
+//     window.localStorage.setItem("tabulator-backup-column-layout", JSON.stringify(columnLayout))
+// }
 
 
-export function restoreColumnLayout() {
-    const columnLayout = window.localStorage.getItem('tabulator-backup-column-layout')
-    table.setColumnLayout(JSON.parse(columnLayout));
-}
+// export function restoreColumnLayout() {
+//     const columnLayout = window.localStorage.getItem('tabulator-backup-column-layout')
+//     table.setColumnLayout(JSON.parse(columnLayout));
+// }
 
 
 axios.get('/api/jobs').then((res) => {
     table.setData(res.data)
-    restoreColumnLayout()
+    // restoreColumnLayout()
 }).catch((err) => console.log(err))
 
 let currentRowElement;
@@ -78,15 +80,22 @@ table.on('cellEdited', function (cell) {
         job_id: cell.getRow().getData().job_id,
         [column]: cell.getValue()
     }
+    if(!recordToSend.job_id){
+        return
+    }
     axios.put('/api/job', recordToSend)
-        .then(res=>{table.setData(res.data); restoreColumnLayout()})
+        .then(res=>{
+            table.setData(res.data);
+            // restoreColumnLayout()
+        })
         .catch(e => console.log(e))
 
 })
 
 
+
 export const state = {
-    deletedRows: [],
+    deletedRows: [],  // array of arrays of int
 }
 
 export default table;
