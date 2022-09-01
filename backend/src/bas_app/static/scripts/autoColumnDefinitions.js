@@ -11,7 +11,7 @@ export default function autoColumnsDefinitions(definitions) {
     definitions.forEach((column) => {
         // column.headerFilter = true; // add header filter to every column
 
-        if(column.field ==='title' || column.field === 'note'){ // show row count
+        if(column.field ==='job_title' || column.field === 'job_note'){ // show row count
             column.bottomCalc = "count"
         }
 
@@ -19,15 +19,15 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field.includes('url')
             || column.field.includes('id')
             || column.field.includes('html')
-            || column.field === 'estimated_salary'
-            || column.field === 'hiring_insights'
+            || column.field === 'job_estimated_salary'
+            || column.field === 'job_hiring_insights'
         ) {
             column.visible = false
         }
 
         // +++++++++ Format as linnk +++++++++++
         if (column.field.includes('title')
-            || column.field === 'name'
+            || column.field === 'company_name'
             || column.field.includes('overview')) {
             const url_fields = {
                 'title': 'url',
@@ -53,7 +53,7 @@ export default function autoColumnsDefinitions(definitions) {
 
         }
 
-        if (column.field === 'other_locations_employees') {
+        if (column.field === 'company_other_locations_employees') {
             column.tooltip = makeToolTipFunction(
                 {
                     innerHtmlGetterFunction: (cell) =>
@@ -61,7 +61,7 @@ export default function autoColumnsDefinitions(definitions) {
                 })
         }
 
-        if (column.field === 'date_posted') {
+        if (column.field === 'job_date_posted') {
             column.title = 'Posted Days Ago'
             column.formatter = function (cell, formatterParams, onRendered) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
@@ -90,7 +90,7 @@ export default function autoColumnsDefinitions(definitions) {
                 cell.setValue(newValue)
             }
 
-            if (column.field === 'plan_apply_flag') {
+            if (column.field === 'job_plan_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component
@@ -99,7 +99,7 @@ export default function autoColumnsDefinitions(definitions) {
 
 
                 }
-            } else if (column.field === 'did_apply_flag') {
+            } else if (column.field === 'job_did_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component

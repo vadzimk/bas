@@ -75,7 +75,7 @@ table.on("cellEditing", function (cell) {
 table.on('cellEdited', function (cell) {
     const column = cell.getField()
     const recordToSend = {
-        id: cell.getRow().getData().id,
+        job_id: cell.getRow().getData().job_id,
         [column]: cell.getValue()
     }
     axios.put('/api/job', recordToSend)

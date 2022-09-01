@@ -4,7 +4,7 @@ from typing import Type
 
 import pandas as pd
 from flask import render_template, request, jsonify, Response, url_for, send_from_directory, send_file
-from sqlalchemy import inspect
+from sqlalchemy import inspect, LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import main
 
@@ -49,7 +49,10 @@ def make_record_for_update(record: dict, model: Type[db.Model]):
     :model: model of the table to get the column names from
     """
     mapper = inspect(model)
+    table_name = model.__table__.name
+
     column_keys = [column.key for column in mapper.attrs]
+    record = {k.lstrip((table_name + "_")): v for k, v in record.items()}  # removes the prefix table name
     record_for_update = {k: v for k, v in record.items() if k in column_keys}
     return record_for_update
 
@@ -58,7 +61,7 @@ def make_record_for_update(record: dict, model: Type[db.Model]):
 def update_job():
     record = json.loads(request.data)
     print('record:', record)
-    id = record['id']
+    id = record['job_id']  # records are prefixed with table_name_
     record.pop('id', None)
     # TODO this is assuming across all tables all the column names are unique, need to find solution to use table prefix
     record_for_job_update = make_record_for_update(record, Job)
@@ -194,42 +197,42 @@ def login_user():
 def get_current_data():
     result = db.session.query(Job, Company) \
         .join(Job) \
-        .filter(Job.is_deleted == False).statement
+        .filter(Job.is_deleted == False).set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
 
     df = pd.read_sql(result, db.session.bind)
     # print(df.info())
 
     columns = [
-        'id',
-        'title',
-        'job_type',
-        'qualifications',
-        'salary',
-        'estimated_salary',
-        'date_posted',
-        'multiple_candidates',
-        'benefits',
-        'description_markdown',
-        'description_text',
-        'description_html',
-        'hiring_insights',
-        'name',
-        'rating',
-        'industry',
-        'size',
-        'overview',
-        'number_employees',
-        'location',
-        'main_country_name',
-        'main_country_number_employees',
-        'other_locations_employees',
-        'other_locations_employees_html',
-        'plan_apply_flag',
-        'did_apply_flag',
-        'note',
-        'profile_url',
-        'homepage_url',
-        'url',
+        'job_id',
+        'job_title',
+        'job_job_type',
+        'job_qualifications',
+        'job_salary',
+        'job_estimated_salary',
+        'job_date_posted',
+        'job_multiple_candidates',
+        'job_benefits',
+        'job_description_markdown',
+        'job_description_text',
+        'job_description_html',
+        'job_hiring_insights',
+        'job_url',
+        'job_plan_apply_flag',
+        'job_did_apply_flag',
+        'job_note',
+        'company_name',
+        'company_rating',
+        'company_industry',
+        'company_size',
+        'company_overview',
+        'company_number_employees',
+        'company_location',
+        'company_main_country_name',
+        'company_main_country_number_employees',
+        'company_other_locations_employees',
+        'company_other_locations_employees_html',
+        'company_profile_url',
+        'company_homepage_url',
     ]
     df = df.reindex(columns=columns)
 

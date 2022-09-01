@@ -69,7 +69,7 @@ const cellMenu = [
                 label: "<i class=\"fa-solid fa-trash-arrow-up\"></i> Delete Row In Focus",
                 action: function (e, cell) {
                     const row = cell.getRow()
-                    const id = row.getData().id
+                    const id = row.getData().job_id
                     row.delete();
                     state.deletedRows.push(id)
 

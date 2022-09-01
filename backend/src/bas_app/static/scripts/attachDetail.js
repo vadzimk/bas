@@ -1,8 +1,8 @@
 // --------------------- Display Detail -------------------
 export default function attachDetail(row) {
-    document.querySelector('#detail').innerHTML = row.getData().description_html
-    const homeUrl = row.getData().homepage_url
-    const listingUrl = row.getData().url
+    document.querySelector('#detail').innerHTML = row.getData().job_description_html
+    const homeUrl = row.getData().company_homepage_url
+    const listingUrl = row.getData().job_url
 
 
     const homepage = document.querySelector('#homepage-ref')
@@ -24,12 +24,12 @@ export default function attachDetail(row) {
     }
 
     const title = document.querySelector('#title-ref')
-    title.textContent = row.getData().title
+    title.textContent = row.getData().job_title
     const companyNameHeader = document.querySelector('#company-name-ref')
-    companyNameHeader.textContent = row.getData().name
+    companyNameHeader.textContent = row.getData().company_name
 
     const boardLogo = document.querySelector('#board-logo')
-    const profile_url = row.getData().profile_url
+    const profile_url = row.getData().company_profile_url
 
     if (profile_url.includes('indeed')) {
         boardLogo.src = 'static/assets/icons8-indeed.svg'
