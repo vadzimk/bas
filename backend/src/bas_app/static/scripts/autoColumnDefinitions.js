@@ -25,7 +25,17 @@ export default function autoColumnsDefinitions(definitions) {
             column.visible = false
         }
 
-        // +++++++++ Format as linnk +++++++++++
+        column.editable = false
+        if(column.field.includes('note')
+        || column.field.includes('salary')
+        || column.field.includes('benefits')
+        || column.field.includes('rating')
+        || column.field.includes('industry')
+        ){
+            column.editable = true;
+        }
+
+        // +++++++++ Format as link +++++++++++
         if (column.field.includes('title')
             || column.field === 'company_name'
             || column.field.includes('overview')) {
@@ -67,6 +77,8 @@ export default function autoColumnsDefinitions(definitions) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
             }
             column.sorter = "number"
+            column.editable = false;
+            column.tooltip = false;
         }
         if (column.field.includes('flag')) {
             column.editable = false;

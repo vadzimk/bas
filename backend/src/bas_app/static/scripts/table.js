@@ -8,7 +8,7 @@ import attachDetail from "./attachDetail.js";
 import cellMenu from "./menus/cellMenu.js";
 
 const table = new Tabulator("#table", {
-     // debugEventsExternal:true, //console log external events
+    // debugEventsExternal:true, //console log external events
     // debugEventsInternal:true, //console log internal events
     // ajaxURL: '/api/jobs',
     maxHeight: "80vh",
@@ -24,6 +24,7 @@ const table = new Tabulator("#table", {
     clipboard: true, //enable clipboard functionality
     responsiveLayout: "collapse", // collapse columns that no longer fit on the table into a list under the row
     selectable: true,  // enable row selection
+    validationMode:"manual", // no vaildation is automatically performed on edit
     columnDefaults: {
         tooltip: makeToolTipFunction(),
         editor: "input",
@@ -75,23 +76,31 @@ table.on("cellEditing", function (cell) {
 });
 
 table.on('cellEdited', function (cell) {
-    const column = cell.getField()
-    const recordToSend = {
-        job_id: cell.getRow().getData().job_id,
-        [column]: cell.getValue()
-    }
-    if(!recordToSend.job_id){
+    const job_id = cell.getRow().getData().job_id
+    const oldValue = cell.getOldValue()
+    const newValue = cell.getValue()
+    if (([null, ""].includes(oldValue) && [null, ""].includes(newValue))
+        || oldValue.toString().trim() === newValue.toString().trim() ) {  // no change in cell value
         return
     }
+    console.log("updating", JSON.stringify(oldValue), typeof oldValue, "=>", JSON.stringify(newValue), typeof newValue)
+    const column = cell.getField()
+    const recordToSend = {
+        job_id,
+        [column]: newValue
+    }
+    if (!recordToSend.job_id) {
+        return
+    }
+    // TODO this causes the table to crash often, because it resets data while editing
     axios.put('/api/job', recordToSend)
-        .then(res=>{
+        .then(res => {
             table.setData(res.data);
             // restoreColumnLayout()
         })
         .catch(e => console.log(e))
 
 })
-
 
 
 export const state = {
