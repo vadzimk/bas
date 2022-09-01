@@ -11,7 +11,7 @@ export default function autoColumnsDefinitions(definitions) {
     definitions.forEach((column) => {
         // column.headerFilter = true; // add header filter to every column
 
-        if(column.field ==='job_title' || column.field === 'job_note'){ // show row count
+        if (column.field === 'job_title' || column.field === 'job_note') { // show row count
             column.bottomCalc = "count"
         }
 
@@ -21,19 +21,24 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field.includes('html')
             || column.field === 'job_estimated_salary'
             || column.field === 'job_hiring_insights'
+            || column.field.includes('salary')
+            || column.field.includes('benefits')
+            || column.field.includes('rating')
+
         ) {
             column.visible = false
         }
 
         column.editable = false
-        if(column.field.includes('note')
-        || column.field.includes('salary')
-        || column.field.includes('benefits')
-        || column.field.includes('rating')
-        || column.field.includes('industry')
-        ){
+        if (column.field.includes('note')
+            || column.field.includes('salary')
+            || column.field.includes('benefits')
+            || column.field.includes('rating')
+            || column.field.includes('industry')
+        ) {
             column.editable = true;
         }
+
 
         // +++++++++ Format as link +++++++++++
         if (column.field.includes('title')

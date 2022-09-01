@@ -36,6 +36,7 @@ const table = new Tabulator("#table", {
     },
 })
 
+
 // window.onbeforeunload = function () { // save column layout before page reloads
 //     const columnLayout = table.getColumnLayout()
 //     window.localStorage.setItem("tabulator-backup-column-layout", JSON.stringify(columnLayout))

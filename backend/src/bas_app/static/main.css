@@ -75,6 +75,10 @@
     border-bottom: solid rgba(127, 255, 212, 0.3) !important;
 }
 
+.tabulator-selected{
+    background-color: rgba(154, 188, 234, 0.6) !important;
+}
+
 #homepage-ref, #job-listing-ref {
     text-decoration: inherit;
     color: inherit;
