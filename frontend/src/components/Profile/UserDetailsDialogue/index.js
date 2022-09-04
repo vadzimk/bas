@@ -18,7 +18,7 @@ export default function UserDetailsDialogue({isOpen, ...other}) {
     const content = <>
         <DialogContentText>
             <a href="https://www.1secmail.com/" target="_blank" rel="noreferrer">Generate Email</a>
-            <span> And enter fake <a href="https://www.linkedin.com/signup/" target="_blank" rel="noreferrer">Linkedin</a> credentials to scrape it. </span>
+            <span> And enter mock <a href="https://www.linkedin.com/signup/" target="_blank" rel="noreferrer">Linkedin</a> credentials to scrape it. </span>
         </DialogContentText>
         <DialogContentText>
             <span>First name: </span><span><b>Baton</b></span>
