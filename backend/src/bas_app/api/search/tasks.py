@@ -9,11 +9,11 @@ from celery.result import AsyncResult
 from playwright.async_api import async_playwright
 from playwright.async_api._generated import Page as PlayWrightPage
 
-from ..models import Job
-from ..scraper.BaseSearch import BaseSearch
-from ..scraper.IndeedSearch import IndeedSearch
-from ..scraper.LinkedinSearch import LinkedinSearch
-from .. import db, create_app
+from bas_app.models import Job
+from bas_app.scraper.BaseSearch import BaseSearch
+from bas_app.scraper.IndeedSearch import IndeedSearch
+from bas_app.scraper.LinkedinSearch import LinkedinSearch
+from bas_app import db, create_app
 
 
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/

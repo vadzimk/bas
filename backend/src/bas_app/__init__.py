@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from config import config
+
 from .celery_utils import make_celery
 
 
@@ -28,7 +29,14 @@ def create_app(config_name):
     ext_celery.init_app(app)
 
     from .main import main as main_blueprint
+    from .api.user import user as user_blueprint
+    from .api.job import job as job_blueprint
+    from .api.search import search as search_blueprint
+
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(user_blueprint)
+    app.register_blueprint(job_blueprint)
+    app.register_blueprint(search_blueprint)
 
     return app
 
