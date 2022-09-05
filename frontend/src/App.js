@@ -4,7 +4,7 @@
 import {Alert, Button} from "@mui/material";
 import React, {useEffect, useState} from 'react';
 import {useTheme, css} from "@emotion/react";
-import LinkedinSearchCard from "./components/LinkedinSearchCard";
+import LinkedinSearchCard from "./components/SearchCard/LinkedinSearchCard";
 import {useSelector, useDispatch} from "react-redux";
 import {loginUser, userLoggedIn} from "./reducers/userSlice";
 import Register from "./components/Register";
@@ -13,7 +13,8 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import {notify, Ntypes} from "./reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
-import {IndeedSearchCard} from "./components/IndeedSearchCard";
+import {IndeedSearchCard} from "./components/SearchCard/IndeedSearchCard";
+import {SearchCard} from "./components/SearchCard";
 
 
 // import theme from "./Theme";
@@ -102,7 +103,7 @@ function App() {
             </div>
             <div>
                 {user.id && cards.map(card =>
-                    <Card
+                    <SearchCard
                         key={card.id}
                         cardId={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
@@ -114,13 +115,5 @@ function App() {
     )
 }
 
-function Card({platform, ...other}) {
-    const platforms = {
-        'linkedin': LinkedinSearchCard,
-        'indeed': IndeedSearchCard,
-    }
-    const Component = platforms[platform]
-    return <Component {...other}/>
-}
 
 export default App;

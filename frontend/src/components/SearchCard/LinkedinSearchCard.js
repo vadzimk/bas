@@ -1,13 +1,15 @@
 import React from "react";
-import BaseSearchCard from "./BaseSearchCard";
+import BaseSearchCard from "../BaseSearchCard";
 import PropTypes from "prop-types";
+import MultipleSelect from "../BaseSearchCard/MultipleSelect";
+import linkedin_logo from "../../assets/icons8-linkedin-2.svg"
 
 LinkedinSearchCard.propTypes = {
     onDelete: PropTypes.func.isRequired,
     cardId: PropTypes.number.isRequired
 }
 
-export default function LinkedinSearchCard (props) {
+export default function LinkedinSearchCard(props) {
     const RADIUS_OPTIONS = [
         {label: 'all', value: ''},
         {label: 'exact', value: 'exact'},
@@ -31,14 +33,23 @@ export default function LinkedinSearchCard (props) {
         {label: 'week', value: 'week'},
         {label: 'day', value: 'day'},
     ]
-
+    const initialValues = {
+        what: '',
+        where: '',
+        radius: '',
+        age: '',
+        experience: [],
+        limit: '',
+    }
 
     return (
         <BaseSearchCard
+            initialValues={initialValues}
             radiusOptions={RADIUS_OPTIONS}
             experienceOptions={EXPERIENCE_OPTIONS}
             ageOptions={AGE_OPTIONS}
             onDelete={props.onDelete}
+            ExperienceSelect={MultipleSelect}
             {...props}
         />
     )

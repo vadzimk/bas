@@ -9,21 +9,20 @@ import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {createTask} from "../../reducers/searchCardsSlice";
+import BasicSelect from "./BasicSelect";
+import MultipleSelect from "./MultipleSelect";
 
 BaseSearchCard.propTypes = {
+    initialValues: PropTypes.oneOf([PropTypes.string, PropTypes.array]).isRequired,
     onDelete: PropTypes.func.isRequired,
     cardId: PropTypes.number.isRequired,
+    ExperienceSelect: PropTypes.func.isRequired,
     ...searchOptionsPropTypes
 }
-export default function BaseSearchCard({onDelete, cardId, ...rest}) {
-    const initialValues = {
-        what: '',
-        where: '',
-        radius: '',
-        age: '',
-        experience: [],
-        limit: '',
-    }
+export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest}) {
+
+
+
 
     const [formSubmitted, setFormSubmitted] = useState(false)
     const [taskDone, setTaskDone] = useState(false)
@@ -37,11 +36,9 @@ export default function BaseSearchCard({onDelete, cardId, ...rest}) {
     const enabledDeleteButton = !formSubmitted || taskDone
     const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
     const dispatch = useDispatch()
-    // const userId = useSelector(state => state.user.id)
     const card = useSelector(state =>
         state.searchCards.cards.find(c => c.id === cardId))
     const formRef = useRef()  // get form values as formRef.current.values
-
 
     useEffect(() => {
         const tasksLength = card.tasks.length
@@ -57,20 +54,15 @@ export default function BaseSearchCard({onDelete, cardId, ...rest}) {
     const handleSubmit = async (values) => {
         console.log('values', values)
         console.log('submit')
+        console.log(typeof values.experience)
         dispatch(createTask({
             ...values,
-            experience: values.experience.map(item => item.value),
+            experience: typeof values.experience ==='string'
+                ? values.experience
+                : values.experience.map(item => item.value),
             cardId,
             job_board: card.job_board
         }))
-        // TODO replace with dispatch
-        // const {task_id} = await createSearch(
-        //     {
-        //         ...values,
-        //         experience: values.experience.map(item => item.value),
-        //         user_id: userId
-        //     })
-        // setTaskId(task_id)
         setFormSubmitted(true)
     }
 
@@ -96,13 +88,16 @@ export default function BaseSearchCard({onDelete, cardId, ...rest}) {
 
 
     return (
-        <div style={{display: "flex", flexDirection: "row", gap: "10px", margin: "10px 0"}}>
+        <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
             <div>
                 <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef}>
                     {(formikProps) => {
                         return (
                             <Form>
-                                <BaseSearchCardFields formikProps={formikProps} {...other}/>
+                                <BaseSearchCardFields
+                                    formikProps={formikProps}
+                                    {...other}
+                                />
                             </Form>
                         )
                     }}

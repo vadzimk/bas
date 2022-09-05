@@ -63,7 +63,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
 
                 />
             </div>
-            <div>
+            <div style={{width: 95}}>
                 {/*Radius*/}
                 <BasicSelect
                     label="Radius"
@@ -75,7 +75,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
 
                 />
             </div>
-            <div>
+            <div style={{width: 95}}>
                 {/*Age*/}
                 <BasicSelect
                     label="Date"
@@ -87,16 +87,15 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
 
                 />
             </div>
-            <div>
+            <div style={{width: 200}}>
                 {/*Experience*/}
-                <MultipleSelect
+                <rest.ExperienceSelect
                     label="Experience"
                     name="experience"
                     options={rest.experienceOptions}
                     value={formikProps.values.experience}
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
                     disabled={!rest.enabledRadiusDateExperienceLimit}
-
                 />
             </div>
             <div>
