@@ -47,12 +47,14 @@ class LinkedinSearch(BaseSearch):
                  age: Filters.Age = Filters.Age.ALL,
                  radius: Filters.Radius = Filters.Radius.ALL,
                  experience: List[Filters.Experience] = [Filters.Experience.ALL],
-                 limit: int = sys.maxsize
+                 limit: int = sys.maxsize,
+                 linkedin_credentials: dict
                  ):
         super().__init__(what, where, age, radius, experience, limit)
         self._base_url = f"""https://www.linkedin.com"""
         self._url = f"""{self._base_url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
         self._PageClass = LinkedinPage
+        self._linkedin_credentials = linkedin_credentials
 
     @override
     @staticmethod
@@ -90,14 +92,14 @@ class LinkedinSearch(BaseSearch):
                 raise PageCrashed(str(e))
 
     @override
-    async def create_session(self, bpage, linkedin_credentials):
+    async def create_session(self, bpage):
         """
         logs into the website and returns the bpage
         :raises AccountBlocked, AccountNotFound
         """
         load_dotenv()
-        email = linkedin_credentials.get('email')
-        password = linkedin_credentials.get('password')
+        email = self._linkedin_credentials.get('email')
+        password = self._linkedin_credentials.get('password')
         await bpage.goto(self._base_url)
         await bpage.fill('input#session_key', email)
         await bpage.fill('input#session_password', password)

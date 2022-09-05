@@ -24,7 +24,7 @@ async def async_task(search_fields, linkedin_credentials, task_update_state):
     because of how celery.Task is configured we don't need the app_context() here
     """
     print('starting search', search_fields)
-    new_search = LinkedinSearch(**search_fields)  # TODO need to sanitize user input
+    new_search = LinkedinSearch(**search_fields, linkedin_credentials=linkedin_credentials)  # TODO need to sanitize user input
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
                                             headless=False,
@@ -32,8 +32,7 @@ async def async_task(search_fields, linkedin_credentials, task_update_state):
                                             )
         bpage: PlayWrightPage = await browser.new_page()
 
-        bpage: PlayWrightPage = await new_search.create_session(bpage,
-                                                                linkedin_credentials)  # one session for each task
+        bpage: PlayWrightPage = await new_search.create_session(bpage)  # one session for each task
         task_update_state(state='BEGUN')
         await new_search.populate(bpage=bpage, task_update_state=task_update_state)  # TODO update state here
 

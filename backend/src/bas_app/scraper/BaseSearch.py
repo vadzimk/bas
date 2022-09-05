@@ -52,7 +52,7 @@ class BaseSearch(ABC):
         return self._task_state_meta
 
     @abstractmethod
-    async def create_session(self, bpage, linkedin_credentials: dict = None):
+    async def create_session(self, bpage):
         """ logs into the website and returns the bpage"""
         return bpage
 

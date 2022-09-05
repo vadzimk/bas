@@ -51,12 +51,13 @@ Application will be available on localhost:80
 ```bash
 docker-compose -f docker-compose.dev.yml up -d
 cd src  
-flask db init  _# adds support to db migrations_  
-flask db migrate _# creates migration script_  
-flask db upgrade _# applies changes to db_  
-celery -A app.celery worker --loglevel=info  --concurrency=1
+flask db init  # adds support to db migrations  
+flask db migrate # creates migration script  
+flask db upgrade # applies changes to db  
+celery -A app.celery worker --loglevel=info  --concurrency=1  # process 1 concurrent task in a queue
 export FLASK_DEBUG=1
 flask run -p 5000
+python -m bas_app.scraper.main # to run scraper in cli only  
 ``` 
 
 

@@ -118,7 +118,13 @@ linkedin_searches = [
 
 
 def mk_searches(searches: dict, Type: BaseSearch) -> List[BaseSearch]:
-    return [Type(**s) for s in searches]
+    result = []
+    for s in searches:
+        if Type is LinkedinSearch:
+            result.append(Type(**s, linkedin_credentials=linkedin_credentials))
+        else:
+            result.append(Type(**s))
+    return result
 
 
 async def do_search(searches: List[BaseSearch]):
@@ -136,8 +142,7 @@ async def do_search(searches: List[BaseSearch]):
             first_pass = True
             for one_search in searches:
                 if first_pass:
-                    bpage = await one_search.create_session(bpage,
-                                                            linkedin_credentials=linkedin_credentials)  # one session for each task
+                    bpage = await one_search.create_session(bpage)  # one session for each task
                 await one_search.populate(bpage)
                 await asyncio.sleep(1)
                 first_pass = False
