@@ -10,26 +10,26 @@ LinkedinSearchCard.propTypes = {
 export default function LinkedinSearchCard (props) {
     const RADIUS_OPTIONS = [
         {label: 'all', value: ''},
-        {label: 'exact', value: 'distance=0'},
-        {label: '5mi', value: 'distance=5'},
-        {label: '10mi', value: 'distance=10'},
-        {label: '25mi', value: 'distance=25'},
-        {label: '50mi', value: 'distance=50'},
+        {label: 'exact', value: 'exact'},
+        {label: '5mi', value: '5mi'},
+        {label: '10mi', value: '10mi'},
+        {label: '25mi', value: '25mi'},
+        {label: '50mi', value: '50mi'},
     ]
     const EXPERIENCE_OPTIONS = [
         {label: 'all', value: ''},
-        {label: 'internship', value: '1'},
-        {label: 'entry level', value: '2'},
-        {label: 'associate', value: '3'},
-        {label: 'mid-senior', value: '4'},
-        {label: 'director', value: '5'},
-        {label: 'executive', value: '6'},
+        {label: 'internship', value: 'internship'},
+        {label: 'entry level', value: 'entry level'},
+        {label: 'associate', value: 'associate'},
+        {label: 'mid-senior', value: 'mid-senior'},
+        {label: 'director', value: 'director'},
+        {label: 'executive', value: 'executive'},
     ]
     const AGE_OPTIONS = [
         {label: 'all', value: ''},
-        {label: 'month', value: '&f_TPR=r2592000'},
-        {label: 'week', value: '&f_TPR=r604800'},
-        {label: 'day', value: '&f_TPR=r86400'},
+        {label: 'month', value: 'month'},
+        {label: 'week', value: 'week'},
+        {label: 'day', value: 'day'},
     ]
 
 

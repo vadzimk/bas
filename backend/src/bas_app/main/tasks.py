@@ -1,12 +1,14 @@
 import asyncio
 import logging
 import os
+from enum import Enum
 
 from celery import shared_task
 from playwright.async_api import async_playwright
 from playwright.async_api._generated import Page as PlayWrightPage
 
 from ..models import Job
+from ..scraper.IndeedSearch import IndeedSearch
 from ..scraper.LinkedinSearch import LinkedinSearch
 from .. import db, create_app
 
@@ -14,7 +16,7 @@ from .. import db, create_app
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
 
-async def async_task(search_fields,linkedin_credentials, task_update_state):
+async def async_task(search_fields, linkedin_credentials, task_update_state):
     """
     :param linkedin_credentials:
     :param search_fields: dictionary of search fields
@@ -25,12 +27,13 @@ async def async_task(search_fields,linkedin_credentials, task_update_state):
     new_search = LinkedinSearch(**search_fields)  # TODO need to sanitize user input
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            # headless=False,
-                                            # slow_mo=100
+                                            headless=False,
+                                            slow_mo=100
                                             )
         bpage: PlayWrightPage = await browser.new_page()
 
-        bpage: PlayWrightPage = await new_search.create_session(bpage, linkedin_credentials)  # one session for each task
+        bpage: PlayWrightPage = await new_search.create_session(bpage,
+                                                                linkedin_credentials)  # one session for each task
         task_update_state(state='BEGUN')
         await new_search.populate(bpage=bpage, task_update_state=task_update_state)  # TODO update state here
 
@@ -62,9 +65,85 @@ def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict):
     :param self: celery sets this argument
     """
     result = asyncio.run(async_task(
-        search_fields=search_fields,
+        search_fields=convert_search_fields(search_fields, 'linkedin'),
         linkedin_credentials=linkedin_credentials,
         task_update_state=self.update_state
     ))
     # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
+    return result
+
+
+def convert_search_fields(input_fields: dict, job_board: str):
+    """ converts search field values to the enum values that a particular search can accept
+     including the experience filed that is either an array or a single value
+    examples can be found in the test_tasks.py file
+     """
+    reference = {
+        'linkedin': {
+            'radius': {
+                'all': LinkedinSearch.Filters.Radius.ALL,
+                'exact': LinkedinSearch.Filters.Radius.EXACT,
+                '5mi': LinkedinSearch.Filters.Radius.FIVE,
+                '10mi': LinkedinSearch.Filters.Radius.TEN,
+                '25mi': LinkedinSearch.Filters.Radius.TWENTY_FIVE,
+                '50': LinkedinSearch.Filters.Radius.FIFTY
+            },
+            'experience': {
+                'all': LinkedinSearch.Filters.Experience.ALL,
+                'internship': LinkedinSearch.Filters.Experience.INTERNSHIP,
+                'entry level': LinkedinSearch.Filters.Experience.ENTRY_LEVEL,
+                'associate': LinkedinSearch.Filters.Experience.ASSOCIATE,
+                'mid-senior': LinkedinSearch.Filters.Experience.MID_SENIOR,
+                'director': LinkedinSearch.Filters.Experience.DIRECTOR,
+                'executive': LinkedinSearch.Filters.Experience.EXECUTIVE
+            },
+            'age': {
+                'all': LinkedinSearch.Filters.Age.ALL,
+                'month': LinkedinSearch.Filters.Age.PAST_MONTH,
+                'week': LinkedinSearch.Filters.Age.PAST_WEEK,
+                'day': LinkedinSearch.Filters.Age.PAST_24H
+            }
+        },
+        'indeed': {
+            'radius': {
+                'all': IndeedSearch.Filters.Radius.ALL,
+                'exact': IndeedSearch.Filters.Radius.EXACT,
+                '5mi': IndeedSearch.Filters.Radius.FIVE,
+                '10mi': IndeedSearch.Filters.Radius.TEN,
+                '15mi': IndeedSearch.Filters.Radius.FIFTEEN,
+                '25mi': IndeedSearch.Filters.Radius.TWENTY_FIVE,
+                '100mi': IndeedSearch.Filters.Radius.HUNDRED,
+            },
+            'experience': {
+                'all': IndeedSearch.Filters.Experience.ALL,
+                'entry level': IndeedSearch.Filters.Experience.ENTRY,
+                'mid': IndeedSearch.Filters.Experience.MID,
+                'senior': IndeedSearch.Filters.Experience.SENIOR,
+            },
+            'age': {
+                'all': IndeedSearch.Filters.Age.ALL,
+                '1 day': IndeedSearch.Filters.Age.ONE,
+                '3 days': IndeedSearch.Filters.Age.TREE,
+                '7 days': IndeedSearch.Filters.Age.SEVEN,
+                '14 days': IndeedSearch.Filters.Age.FOURTEEN,
+            },
+            'education': {
+                'school': IndeedSearch.Filters.Education.SCHOOL,
+                'associates': IndeedSearch.Filters.Education.ASSOCIATES,
+                'bachelors': IndeedSearch.Filters.Education.BACHELORS,
+                'masters': IndeedSearch.Filters.Education.MASTERS,
+            }
+        }
+    }
+    result = {}
+    for k, v in input_fields.items():
+        if k in reference[job_board].keys():
+            if k == 'experience' and job_board == 'linkedin':
+                experience = [reference[job_board][k][exp] for exp in input_fields[k]]
+                result[k] = experience
+            else:
+                result[k] = reference[job_board][k][v]
+
+        else:
+            result[k] = v
     return result

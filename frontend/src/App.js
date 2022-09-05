@@ -13,9 +13,11 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import {notify, Ntypes} from "./reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
+import {IndeedSearchCard} from "./components/IndeedSearchCard";
 
 
 // import theme from "./Theme";
+
 
 function App() {
     const theme = useTheme()
@@ -30,16 +32,24 @@ function App() {
         }
     }, [])
 
-    const handleNewSearchCard = () => {
+    const handleNewSearchCardLinkedin = () => {
         if (!user.linkedin_credentials) {
             dispatch(notify({type: Ntypes.ERROR, message: 'Linkedin credentials are missing, please UPDATE USER'}))
             return
         }
-        dispatch(addSearchCard())
+        dispatch(addSearchCard('linkedin'))
     }
+
+    const handleNewSearchCardIndeed = () => {
+        // TODO not implemented
+        dispatch(addSearchCard('indeed'))
+    }
+
     const handleSearchCardDelete = (id) => {
         dispatch(deleteSearchCard(id))
     }
+
+
     return (
         <div
             // css={{backgroundColor: theme.palette.common.orange}}
@@ -81,21 +91,36 @@ function App() {
 
                 {user.id && <Button
                     variant="outlined"
-                    onClick={handleNewSearchCard}>
-                    New Search
+                    onClick={handleNewSearchCardLinkedin}>
+                    Linkedin Search
+                </Button>}
+                {user.id && <Button
+                    variant="outlined"
+                    onClick={handleNewSearchCardIndeed}>
+                    Indeed Search
                 </Button>}
             </div>
             <div>
                 {user.id && cards.map(card =>
-                    <LinkedinSearchCard
+                    <Card
                         key={card.id}
                         cardId={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
+                        platform={card.jobBoard}
                     />
                 )}
             </div>
         </div>
     )
+}
+
+function Card({platform, ...other}) {
+    const platforms = {
+        'linkedin': LinkedinSearchCard,
+        'indeed': IndeedSearchCard,
+    }
+    const Component = platforms[platform]
+    return <Component {...other}/>
 }
 
 export default App;

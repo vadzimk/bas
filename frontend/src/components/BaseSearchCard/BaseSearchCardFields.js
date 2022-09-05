@@ -97,7 +97,6 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
                     disabled={!rest.enabledRadiusDateExperienceLimit}
 
-
                 />
             </div>
             <div>

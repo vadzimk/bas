@@ -17,7 +17,8 @@ const searchCardsSlice = createSlice({
                 id: state.nextCardId,
                 tasks: [],
                 model_id: null,
-                formValues: {}
+                formValues: {},
+                jobBoard: action.payload
             }
             state.cards = [...state.cards, newCard]
             state.nextCardId = state.nextCardId + 1
