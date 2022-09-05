@@ -60,7 +60,8 @@ export default function BaseSearchCard({onDelete, cardId, ...rest}) {
         dispatch(createTask({
             ...values,
             experience: values.experience.map(item => item.value),
-            cardId
+            cardId,
+            job_board: card.job_board
         }))
         // TODO replace with dispatch
         // const {task_id} = await createSearch(
@@ -112,6 +113,7 @@ export default function BaseSearchCard({onDelete, cardId, ...rest}) {
                 <div style={{width: "10%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
                     <LinearWithValueLabel
                         taskId={taskId}
+                        cardId={cardId}
                         onSuccess={() => setTaskDone(true)}
                         onFailure={(message) => handleFailure(message)}
                     />

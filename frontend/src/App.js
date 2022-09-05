@@ -106,7 +106,7 @@ function App() {
                         key={card.id}
                         cardId={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
-                        platform={card.jobBoard}
+                        platform={card.job_board}
                     />
                 )}
             </div>

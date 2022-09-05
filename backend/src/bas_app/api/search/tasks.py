@@ -78,7 +78,7 @@ def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict):
 
 
 @shared_task(bind=True)
-def scrape_indeed(self, search_fields: dict, linkedin_credentials: dict):
+def scrape_indeed(self, search_fields: dict):
     """
     all parameters of a celery task must be serializable
     :param self: celery sets this argument

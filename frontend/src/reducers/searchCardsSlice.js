@@ -18,7 +18,8 @@ const searchCardsSlice = createSlice({
                 tasks: [],
                 model_id: null,
                 formValues: {},
-                jobBoard: action.payload
+                job_board: action.payload,
+                submitSuccess: null
             }
             state.cards = [...state.cards, newCard]
             state.nextCardId = state.nextCardId + 1
@@ -33,6 +34,7 @@ const searchCardsSlice = createSlice({
             state.cards = state.cards.map(c=>c.id===cardId
                 ? {...c,
                     model_id,
+                    submitSuccess: true,
                     tasks: [...c.tasks, {task_id} ]}
                 : {...c})
 
