@@ -2,12 +2,15 @@ import asyncio
 import logging
 import os
 from enum import Enum
+from typing import Type
 
 from celery import shared_task
+from celery.result import AsyncResult
 from playwright.async_api import async_playwright
 from playwright.async_api._generated import Page as PlayWrightPage
 
 from ..models import Job
+from ..scraper.BaseSearch import BaseSearch
 from ..scraper.IndeedSearch import IndeedSearch
 from ..scraper.LinkedinSearch import LinkedinSearch
 from .. import db, create_app
@@ -16,15 +19,12 @@ from .. import db, create_app
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
 
-async def async_task(search_fields, linkedin_credentials, task_update_state):
+async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
     """
-    :param linkedin_credentials:
-    :param search_fields: dictionary of search fields
+    :param new_search: LinkedinSearch or IndeedSearch object
     :return: None - result of the task is stored in db
     because of how celery.Task is configured we don't need the app_context() here
     """
-    print('starting search', search_fields)
-    new_search = LinkedinSearch(**search_fields, linkedin_credentials=linkedin_credentials)  # TODO need to sanitize user input
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
                                             headless=False,
@@ -59,17 +59,71 @@ async def async_task(search_fields, linkedin_credentials, task_update_state):
 @shared_task(bind=True)
 def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict):
     """
+    all parameters of a celery task must be serializable
+    :param self: celery sets this argument
     :param linkedin_credentials: fake username and password for scraping
     :param search_fields: for linkedin search
-    :param self: celery sets this argument
+
     """
+    print('starting linkedin search', search_fields)
+    search_fields = convert_search_fields(search_fields, 'linkedin')
+    new_search = LinkedinSearch(**search_fields, linkedin_credentials=linkedin_credentials)
+    # TODO it creates a new loop for each task, replace with a single loop
     result = asyncio.run(async_task(
-        search_fields=convert_search_fields(search_fields, 'linkedin'),
-        linkedin_credentials=linkedin_credentials,
+        new_search=new_search,
         task_update_state=self.update_state
     ))
     # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
     return result
+
+
+@shared_task(bind=True)
+def scrape_indeed(self, search_fields: dict, linkedin_credentials: dict):
+    """
+    all parameters of a celery task must be serializable
+    :param self: celery sets this argument
+    :param linkedin_credentials: fake username and password for scraping
+    :param search_fields: for linkedin search
+    """
+    print('starting indeed search', search_fields)
+    search_fields = convert_search_fields(search_fields, 'indeed')
+    new_search = IndeedSearch(**search_fields)
+    # TODO it creates a new loop for each task, replace with a single loop
+    result = asyncio.run(async_task(
+        new_search=new_search,
+        task_update_state=self.update_state
+    ))
+    # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
+    return result
+
+
+def get_task_state(task_id):
+    """
+    :param task_id:
+    :return: {
+    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS"
+    "info": {  # up to date version in BaseSearch.py
+        "total": int,
+        "current": int,
+        "job_count": int
+    }
+}
+    """
+    task = AsyncResult(task_id)
+    if task.state == 'SUCCESS':
+        info = task.get()
+    elif task.state == 'PROGRESS':
+        info = task.info
+    else:
+        info = str(task.info)
+    return {
+        'state': task.state,
+        'info': info
+    }
+
+
+def revoke_task(task_id):
+    AsyncResult(task_id).revoke(terminate=True, signal='SIGKILL')
 
 
 def convert_search_fields(input_fields: dict, job_board: str):

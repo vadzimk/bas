@@ -10,7 +10,7 @@ from . import main
 
 from .. import db
 from ..models import Company, Job, User, SearchModel
-from ..main.tasks import scrape_linkedin
+from ..main.tasks import scrape_linkedin, get_task_state, revoke_task
 
 
 @main.route('/', )
@@ -132,37 +132,19 @@ def search():
 
 @main.route('/api/status/<task_id>')
 def search_status(task_id):
-    """
-    :param task_id:
-    :return: {
-    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS"
-    "info": {  # up to date version in BaseSearch.py
-        "total": int,
-        "current": int,
-        "job_count": int
-    }
-}
-    """
-    task = scrape_linkedin.AsyncResult(task_id)
-    if task.state == 'SUCCESS':
-        info = task.get()
-    elif task.state == 'PROGRESS':
-        info = task.info
-    else:
-        info = str(task.info)
-    response = {
-        'state': task.state,
-        'info': info
-    }
+    response = get_task_state(task_id)
     return jsonify(response)
 
 
 @main.route('/api/revoke', methods=['POST'])
 def search_revoke():
     task_id = request.get_json().get('task_id')
-    scrape_linkedin.AsyncResult(task_id).revoke(terminate=True, signal='SIGKILL')
-
-    return Response(status=204)
+    revoke_task(task_id)
+    new_status = get_task_state(task_id)
+    if new_status['state'] == 'REVOKED':
+        return Response(status=204)
+    else:
+        return Response(status=500)
 
 
 # TODO replace user management with flask login
