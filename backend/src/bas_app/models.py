@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, time
 
+from sqlalchemy import func, text
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import db
@@ -23,6 +24,8 @@ class Company(db.Model):
     profile_url = db.Column(db.String, index=True)
     homepage_url = db.Column(db.String, index=True, nullable=True)
     note = db.Column(db.String, nullable=True)
+    timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
+    timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     jobs = db.relationship('Job', back_populates='company')
 
     def __repr__(self):
@@ -51,6 +54,8 @@ class Job(db.Model):
     did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
     note = db.Column(db.Text, nullable=True)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+    timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
+    timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
     searches = db.relationship('Search', back_populates='jobs')
 

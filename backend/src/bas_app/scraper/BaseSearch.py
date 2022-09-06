@@ -63,7 +63,6 @@ class BaseSearch(ABC):
         :param task_update_state: the celery.Task.update_state() method to update task state passed from tasks
         """
         self._task_update_state = task_update_state
-        # TODO click on "request a new confirmation link" of found
         bpage: PlayWrightPage = await self.flip_pages(bpage)
         await self.populate_details(bpage)
 
@@ -112,6 +111,7 @@ class BaseSearch(ABC):
                     url=job_url).first()  # TODO monitor this returned none although the url was found in db, probably change to postgresdb
                 if not job:
                     logging.warning(f'no job in db for {b.dict}')
+                    # indeed creates a new unique url each time you browse, now way around duplicates
                 if job and job.description_text:  # job details and company details are already in db
                     self._total_skipped += 1
                     self._task_state_meta['current'] += 1
@@ -124,7 +124,9 @@ class BaseSearch(ABC):
                 company_profile_url = b.dict['company'].get('profile_url')
                 company_homepage_url = b.dict['company'].get('homepage_url')
                 # TODO implement utils.normalize_company_homepage_url and compare with normalized url
-                company = Company.query.filter_by(homepage_url=b.dict['company'].get('profile_url')).first()
+                # TODO change schema to have linkedin_profile_url and indeed_profile_url to aggregate from company data from both platforms
+                # TODO if particular profile_url_missing then update values,else skip going to profile_url
+                company = Company.query.filter_by(profile_url=company_profile_url).first()
                 if company:  # company already in db
                     continue
                 await self.populate_company_details(b, company_profile_url, bpage)

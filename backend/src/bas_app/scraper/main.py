@@ -24,10 +24,11 @@ linkedin_credentials = {
 indeed_searches = [
     {
         'what': "react developer",
-        'where': "Los Angeles",
+        'where': "Los Angeles, California",
         'age': IndeedSearch.Filters.Age.ONE,
         'radius': IndeedSearch.Filters.Radius.EXACT,
-        'experience': IndeedSearch.Filters.Experience.ENTRY
+        'experience': IndeedSearch.Filters.Experience.ENTRY,
+        'limit': 1
     },
     # {
     #     'what': "python developer",
