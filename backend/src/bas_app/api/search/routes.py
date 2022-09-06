@@ -1,4 +1,5 @@
 import json
+import time
 
 from flask import request, jsonify, Response
 
@@ -59,9 +60,11 @@ def search_status(task_id):
 def search_revoke():
     task_id = request.get_json().get('task_id')
     revoke_task(task_id)
-    new_status = get_task_state(task_id)
-    if new_status['state'] == 'REVOKED':
-        return Response("ok", status=204)
-    else:
-        return Response("could not revoke", status=500)
+    new_status = None
+    for _ in range(9):
+        time.sleep(0.5)
+        new_status = get_task_state(task_id)['state']
+        if new_status == 'REVOKED':
+            return Response("ok", status=204)
+    return Response("could not revoke", status=500)
 

@@ -105,7 +105,7 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
             </div>
             <>
                 {showProgressBar &&
-                <div style={{width: "10%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                <div style={{width: "100px", flexShrink: 0, display: "flex", flexDirection: "column", justifyContent: "center"}}>
                     <LinearWithValueLabel
                         taskId={taskId}
                         cardId={cardId}

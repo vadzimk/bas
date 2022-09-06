@@ -1,9 +1,9 @@
 # Blanket application strategy
 
-(Job board scrapper)
+(Job board crawler)
 
 ## Overview
-**[Github](https://github.com/vadzimk/bas)**
+See **[Github](https://github.com/vadzimk/bas)**
 
 
 ## Usage
@@ -15,7 +15,7 @@ docker-compose -f docker-compose.yml up
 Application will be available on `localhost:80` and 
 results page on `localhost:80/results`
 
-## postgres-init-db.sh
+#### postgres-init-db.sh
 ```sh
 #!/bin/sh
 set -e
@@ -24,7 +24,7 @@ psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = $DATABASE_
 ```
 
 
-## docker-compose.yml
+#### docker-compose.yml
 ```yaml
 version: "3.5"
 

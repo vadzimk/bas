@@ -38,7 +38,7 @@ BaseSearchCardFields.propTypes = {
 export default function BaseSearchCardFields({formikProps, ...rest}) {
     return (
         <div css={cardCss.searchFlexContainer}>
-            <div>
+            <div style={{width: 225}}>
                 {/*What*/}
                 <TextField
                     label="What"
@@ -50,7 +50,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                     disabled={rest.formSubmitted}
                 />
             </div>
-            <div>
+            <div style={{width: 225}}>
                 {/*Where*/}
                 <TextField
                     label="Where"

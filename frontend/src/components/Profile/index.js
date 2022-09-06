@@ -13,7 +13,7 @@ export default function Profile() {
         setIsUserUpdateOpen(false)
     }
     return (
-        <div>
+        <div style={{flexShrink:0}}>
             <UserDetailsDialogue
                 isOpen={isUserUpdateOpen}
                 handleClose={() => setIsUserUpdateOpen(false)}
