@@ -28,8 +28,8 @@ async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
     """
     async with async_playwright() as pwt:
         browser = await pwt.chromium.launch(args=[''],
-                                            headless=False,
-                                            slow_mo=100
+                                            # headless=False,
+                                            # slow_mo=100
                                             )
         bpage: PlayWrightPage = await browser.new_page()
 
