@@ -4,7 +4,7 @@ import urllib
 from enum import Enum
 
 from typing import List
-from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 from LinkedinPage import LinkedinPage
 from utils import AccountBlocked, AccountNotFound, PageCrashed
 from utils import override

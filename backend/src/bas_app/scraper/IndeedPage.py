@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import traceback
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,6 +12,7 @@ from IndeedBeacon import IndeedBeacon
 from BasePage import BasePage
 from utils import override, save_safe, make_soup
 import re
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
 
 class IndeedPage(BasePage):
@@ -26,16 +28,24 @@ class IndeedPage(BasePage):
     @override
     async def populate(self, bpage):
         # self._soup = make_soup(self._url, f'response{self._page_index}.html')
+        try:
+            await bpage.locator('button.popover-x-button-close').click(timeout=5000)
+            logging.info("Popup on indeed page")
+        except PlaywrightTimeoutError as e:
+            pass  # No popup on current page
         self._soup = await self.make_beacon_soup(bpage)
         self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
+
         print('job_count', self._job_count)
         self._beacons: List[BaseBeacon] = self.make_beacon_list()
         # self.save_beacons_csv()
 
     @override
     def count_total_jobs(self, ) -> int:
-        # count_text = self._soup.select_one('#searchCountPages').text
-        count_text = self._soup.select_one('.jobsearch-JobCountAndSortPane-jobCount').text
+        count_text = (self._soup.select_one('#searchCountPages')
+                      or
+                      self._soup.select_one('.jobsearch-JobCountAndSortPane-jobCount')).text
+
         # m = re.search(r"of (\d+) jobs", count_text)
         m = re.search(r"(\d+) jobs", count_text)
         return int(m.group(1))
