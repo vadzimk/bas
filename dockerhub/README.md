@@ -12,7 +12,8 @@
 chmod +x postgres-init-db.sh
 docker-compose -f docker-compose.yml up
 ```
-Application will be available on localhost:80  
+Application will be available on `localhost:80` and 
+results page on `localhost:80/results`
 
 ## postgres-init-db.sh
 ```sh

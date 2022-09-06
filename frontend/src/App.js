@@ -4,7 +4,7 @@
 import {Alert, Button} from "@mui/material";
 import React, {useEffect, useState} from 'react';
 import {useTheme, css} from "@emotion/react";
-import LinkedinSearchCard from "./components/LinkedinSearchCard";
+import LinkedinSearchCard from "./components/SearchCard/LinkedinSearchCard";
 import {useSelector, useDispatch} from "react-redux";
 import {loginUser, userLoggedIn} from "./reducers/userSlice";
 import Register from "./components/Register";
@@ -13,9 +13,12 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import {notify, Ntypes} from "./reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
+import {IndeedSearchCard} from "./components/SearchCard/IndeedSearchCard";
+import {SearchCard} from "./components/SearchCard";
 
 
 // import theme from "./Theme";
+
 
 function App() {
     const theme = useTheme()
@@ -30,16 +33,24 @@ function App() {
         }
     }, [])
 
-    const handleNewSearchCard = () => {
+    const handleNewSearchCardLinkedin = () => {
         if (!user.linkedin_credentials) {
             dispatch(notify({type: Ntypes.ERROR, message: 'Linkedin credentials are missing, please UPDATE USER'}))
             return
         }
-        dispatch(addSearchCard())
+        dispatch(addSearchCard('linkedin'))
     }
+
+    const handleNewSearchCardIndeed = () => {
+        // TODO not implemented
+        dispatch(addSearchCard('indeed'))
+    }
+
     const handleSearchCardDelete = (id) => {
         dispatch(deleteSearchCard(id))
     }
+
+
     return (
         <div
             // css={{backgroundColor: theme.palette.common.orange}}
@@ -81,21 +92,28 @@ function App() {
 
                 {user.id && <Button
                     variant="outlined"
-                    onClick={handleNewSearchCard}>
-                    New Search
+                    onClick={handleNewSearchCardLinkedin}>
+                    Linkedin Search
+                </Button>}
+                {user.id && <Button
+                    variant="outlined"
+                    onClick={handleNewSearchCardIndeed}>
+                    Indeed Search
                 </Button>}
             </div>
             <div>
                 {user.id && cards.map(card =>
-                    <LinkedinSearchCard
+                    <SearchCard
                         key={card.id}
                         cardId={card.id}
                         onDelete={() => handleSearchCardDelete(card.id)}
+                        platform={card.job_board}
                     />
                 )}
             </div>
         </div>
     )
 }
+
 
 export default App;

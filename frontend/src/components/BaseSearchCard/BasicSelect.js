@@ -16,8 +16,8 @@ BasicSelect.propTypes ={
 export default function BasicSelect({value, label, onChange, options, disabled}) {
 
     return (
-        <Box sx={{minWidth: 95}}>
-            <FormControl sx={{minWidth: 95}} size="small">
+        <Box>
+            <FormControl sx={{width: '100%'}} size="small">
                 <InputLabel>{label}</InputLabel>
                 <Select
                     value={value}

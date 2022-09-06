@@ -22,13 +22,14 @@ linkedin_credentials = {
 }
 
 indeed_searches = [
-    # {
-    #     'what': "react frontend developer",
-    #     'where': "Los Angeles",
-    #     'age': IndeedSearch.Filters.Age.SEVEN,
-    #     'radius': IndeedSearch.Filters.Radius.ALL,
-    #     'experience': IndeedSearch.Filters.Experience.ALL
-    # },
+    {
+        'what': "react developer",
+        'where': "Los Angeles, California",
+        'age': IndeedSearch.Filters.Age.ONE,
+        'radius': IndeedSearch.Filters.Radius.EXACT,
+        'experience': IndeedSearch.Filters.Experience.ENTRY,
+        'limit': 1
+    },
     # {
     #     'what': "python developer",
     #     'where': "Los Angeles",
@@ -104,21 +105,27 @@ linkedin_searches = [
     #     ],
     #     'limit': 1
     # },
-    {
-        'what': f"""react developer""",
-        'where': "Los Angeles, California",
-        'age': LinkedinSearch.Filters.Age.PAST_WEEK,
-        'radius': LinkedinSearch.Filters.Radius.ALL,
-        'experience': [
-            LinkedinSearch.Filters.Experience.ALL,
-        ],
-        'limit': 1
-    },
+    # {
+    #     'what': f"""react developer""",
+    #     'where': "Los Angeles, California",
+    #     'age': LinkedinSearch.Filters.Age.PAST_WEEK,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.ALL,
+    #     ],
+    #     'limit': 1
+    # },
 ]
 
 
 def mk_searches(searches: dict, Type: BaseSearch) -> List[BaseSearch]:
-    return [Type(**s) for s in searches]
+    result = []
+    for s in searches:
+        if Type is LinkedinSearch:
+            result.append(Type(**s, linkedin_credentials=linkedin_credentials))
+        else:
+            result.append(Type(**s))
+    return result
 
 
 async def do_search(searches: List[BaseSearch]):
@@ -136,8 +143,7 @@ async def do_search(searches: List[BaseSearch]):
             first_pass = True
             for one_search in searches:
                 if first_pass:
-                    bpage = await one_search.create_session(bpage,
-                                                            linkedin_credentials=linkedin_credentials)  # one session for each task
+                    bpage = await one_search.create_session(bpage)  # one session for each task
                 await one_search.populate(bpage)
                 await asyncio.sleep(1)
                 first_pass = False

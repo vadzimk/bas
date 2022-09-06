@@ -57,3 +57,7 @@ class TestBaseBeacon(unittest.TestCase):
         )
         self.assertEqual(value4, self.beacon._job_post[attr4])
         print(self.beacon._job_post)
+
+
+if __name__ == '__main__':
+    unittest.main()

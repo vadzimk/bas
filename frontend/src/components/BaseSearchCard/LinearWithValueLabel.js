@@ -4,11 +4,13 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {updateProgress} from "../../services/searchService";
+import {useSelector} from "react-redux";
 
 LinearProgressWithLabel.propTypes = {
     value: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
 };
+
 function LinearProgressWithLabel(props) {
     return (
         <Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -25,16 +27,21 @@ function LinearProgressWithLabel(props) {
 }
 
 
-LinearWithValueLabel.propTypes={
+LinearWithValueLabel.propTypes = {
     taskId: PropTypes.string,
+    cardId: PropTypes.number.isRequired,
     onSuccess: PropTypes.func.isRequired,
     onFailure: PropTypes.func.isRequired
 }
-// TODO right now polling is done inside this component but there will come time when this should be moved to one of the ancestor components
+// TODO right now polling is done inside this component but there will come time when this should be moved to one of the ancestor components?
+
 export default function LinearWithValueLabel(props) {
     const [taskId, setTaskId] = React.useState(null)
     const [progress, setProgress] = React.useState(0);
     const [progressData, setProgressData] = React.useState(null)
+    const {submitSuccess} = useSelector(state =>
+        state.searchCards.cards.find(c => c.id === props.cardId))
+
     const isFinished = progressData &&
         (progressData.state === 'SUCCESS' || progressData.state === 'REVOKED' || progressData.state === 'FAILURE')
     const colour = {
@@ -52,6 +59,7 @@ export default function LinearWithValueLabel(props) {
     //         "job_count": int
     //     }
 
+
     const handleUpdateProgress = async () => {
         const data = await updateProgress(taskId)
         console.log(data)
@@ -63,7 +71,7 @@ export default function LinearWithValueLabel(props) {
         } else if (data.state === 'SUCCESS') {
             setProgress(100)
             props.onSuccess()
-        } else if(data.state==='FAILURE'){
+        } else if (data.state === 'FAILURE') {
             props.onFailure(data.info)
         }
     }
@@ -77,7 +85,7 @@ export default function LinearWithValueLabel(props) {
     }, [props.taskId, taskId])
 
     React.useEffect(() => {
-        const timer = !isFinished && setInterval(() => handleUpdateProgress(), 5000)
+        const timer = (submitSuccess && !isFinished) && setInterval(() => handleUpdateProgress(), 5000)
         return timer ? (() => clearInterval(timer)) : undefined
     }, [taskId, isFinished]);
 
