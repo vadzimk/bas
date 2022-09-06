@@ -7,18 +7,22 @@ from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
 from bas_app.models import Job
 from utils import cleanup, create_project
+from config import pwt_args
 from playwright.async_api import async_playwright
 
 from app import create_app, db
-
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')  # access  flask-sqlalchemy
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 
+
 linkedin_credentials = {
-    'email': 'rdq3ef81kn@esiix.com',
-    'password': 'GJrPhL3ErSTJ9UE'
+    'email': os.getenv('LINKEDIN_EMAIL'),
+    'password': os.getenv('LINKEDIN_PASSWORD')
 }
 
 indeed_searches = [
@@ -128,16 +132,16 @@ def mk_searches(searches: dict, Type: BaseSearch) -> List[BaseSearch]:
     return result
 
 
+
+
+
 async def do_search(searches: List[BaseSearch]):
     """
     :param searches:
     :return: None - result of the task now does not contain data, it is stored in db
     """
     async with async_playwright() as pwt:
-        browser = await pwt.chromium.launch(args=[''],
-                                            headless=False,
-                                            slow_mo=50
-                                            )
+        browser = await pwt.chromium.launch_persistent_context(**pwt_args())
         bpage = await browser.new_page()
         with app.app_context():
             first_pass = True

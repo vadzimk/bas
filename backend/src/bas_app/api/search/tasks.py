@@ -18,6 +18,7 @@ from bas_app import db, create_app
 
 
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
+from config import pwt_args
 
 
 async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
@@ -27,10 +28,7 @@ async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
     because of how celery.Task is configured we don't need the app_context() here
     """
     async with async_playwright() as pwt:
-        browser = await pwt.chromium.launch(args=[''],
-                                            # headless=False,
-                                            # slow_mo=100
-                                            )
+        browser = await pwt.chromium.launch_persistent_context(**pwt_args())
         bpage: PlayWrightPage = await browser.new_page()
 
         bpage: PlayWrightPage = await new_search.create_session(bpage)  # one session for each task

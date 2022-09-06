@@ -1,7 +1,8 @@
+import logging
 import os
 from datetime import timedelta
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 load_dotenv()
 
@@ -44,9 +45,36 @@ config = {
     'default': DevelopmentConfig
 }
 
+
 # TODO remove - this is the contents of .flaskenv
 # FLASK_APP=app.py
 # FLASK_DEBUG=1
 # FLASK_RUN_HOST=0.0.0.0
 # FLASK_RUN_PORT=80
 # FLASK_CONFIG=development
+
+
+def pwt_args():
+    """
+    :return playwright arguments to launch_persistent_context depending on development or production environment
+    """
+    load_dotenv(find_dotenv('.env.dev'))
+
+    pwt_dev_args = {
+        "args": [''],
+        "headless": False,
+        "slow_mo": 100,
+        "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.48 Safari/537.36",
+        "user_data_dir": ""
+    }
+
+    pwt_prod_update_args = {
+        "headless": True,
+        "slow_mo": 500,
+    }
+
+    logging.info(f"environment {os.getenv('ENVIRONMENT')}")
+    pwt_arguments = pwt_dev_args
+    if not os.getenv('ENVIRONMENT') == 'dev':
+        pwt_arguments.update(pwt_prod_update_args)
+    return pwt_arguments
