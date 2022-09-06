@@ -22,13 +22,13 @@ linkedin_credentials = {
 }
 
 indeed_searches = [
-    # {
-    #     'what': "react frontend developer",
-    #     'where': "Los Angeles",
-    #     'age': IndeedSearch.Filters.Age.SEVEN,
-    #     'radius': IndeedSearch.Filters.Radius.ALL,
-    #     'experience': IndeedSearch.Filters.Experience.ALL
-    # },
+    {
+        'what': "react developer",
+        'where': "Los Angeles",
+        'age': IndeedSearch.Filters.Age.ONE,
+        'radius': IndeedSearch.Filters.Radius.EXACT,
+        'experience': IndeedSearch.Filters.Experience.ENTRY
+    },
     # {
     #     'what': "python developer",
     #     'where': "Los Angeles",
@@ -104,16 +104,16 @@ linkedin_searches = [
     #     ],
     #     'limit': 1
     # },
-    {
-        'what': f"""react developer""",
-        'where': "Los Angeles, California",
-        'age': LinkedinSearch.Filters.Age.PAST_WEEK,
-        'radius': LinkedinSearch.Filters.Radius.ALL,
-        'experience': [
-            LinkedinSearch.Filters.Experience.ALL,
-        ],
-        'limit': 1
-    },
+    # {
+    #     'what': f"""react developer""",
+    #     'where': "Los Angeles, California",
+    #     'age': LinkedinSearch.Filters.Age.PAST_WEEK,
+    #     'radius': LinkedinSearch.Filters.Radius.ALL,
+    #     'experience': [
+    #         LinkedinSearch.Filters.Experience.ALL,
+    #     ],
+    #     'limit': 1
+    # },
 ]
 
 

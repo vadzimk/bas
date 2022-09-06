@@ -22,12 +22,19 @@ def search_jobs():
     linkedin_credentials = {'email': user.linkedin_email, 'password': user.linkedin_password}
     print('linkedin_credentials', linkedin_credentials)
     # TODO update the value of job_board in search
+    experience = data.get('experience')
+    if type(experience) is str:
+        experience = [experience]
+    elif type(experience) is list:
+        pass
+    else:
+        return Response('experience must be str or list', status=400)
     search_model = SearchModel(
         what=data.get('what'),
         where=data.get('where'),
         age=data.get('age'),
         radius=data.get('radius'),
-        experience=data.get('experience')
+        experience=experience
     )
     db.session.add(search_model)
     db.session.commit()

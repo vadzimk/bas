@@ -110,6 +110,7 @@ class PageCrashed(RuntimeError, TaskError):
 class AttributeEmpty(RuntimeError, TaskError):
     pass
 
+
 # ---------------------------------------------
 
 def replace_p_br_p(html_repr):
@@ -159,3 +160,15 @@ def age_to_date(age):
         date_value = age
 
     return date_value
+
+
+def normalize_company_homepage_url(in_url: str) -> str:
+    """
+    used to uniquely identify company_homepage_url for possible duplicates,
+    especially when implementing feature to ignore company
+    :in_url: input url any url route of the company possibly with parameters
+    :return: url that matches home/index page only
+    """
+    # TODO not implemented
+    # https://stackoverflow.com/questions/3735841/split-with-single-colon-but-not-double-colon-using-regex
+    return in_url

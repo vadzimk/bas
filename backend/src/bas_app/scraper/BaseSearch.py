@@ -123,12 +123,13 @@ class BaseSearch(ABC):
                 await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                 company_profile_url = b.dict['company'].get('profile_url')
                 company_homepage_url = b.dict['company'].get('homepage_url')
+                # TODO implement utils.normalize_company_homepage_url and compare with normalized url
                 company = Company.query.filter_by(homepage_url=b.dict['company'].get('profile_url')).first()
                 if company:  # company already in db
                     continue
                 await self.populate_company_details(b, company_profile_url, bpage)
                 created_company = self.save_beacon_company_db(b)
-                job.company_id = created_company.id  # TODO and it throws error here AttributeError: 'NoneType' object has no attribute 'company_id'
+                job.company_id = created_company.id  # TODO ? and it throws error here AttributeError: 'NoneType' object has no attribute 'company_id'
                 db.session.commit()
                 self._task_state_meta['current'] += 1
                 self.update_state()

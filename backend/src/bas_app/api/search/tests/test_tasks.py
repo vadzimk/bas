@@ -1,8 +1,6 @@
-import sys
-import subprocess
 import unittest
 
-from backend.tests.sut import convert_search_fields
+from bas_app.api.search.tasks import convert_search_fields
 
 
 class TestTasks(unittest.TestCase):
@@ -46,5 +44,4 @@ class TestTasks(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if '--unittest' in sys.argv:
-        subprocess.call([sys.executable, '-m', 'unittest', 'discover'])
+    unittest.main()
