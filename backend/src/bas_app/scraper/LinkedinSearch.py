@@ -16,6 +16,8 @@ from dotenv import load_dotenv
 
 
 class LinkedinSearch(BaseSearch):
+    NAVIGATE_DELAY = 10
+
     class Filters:
         class Radius(str, Enum):
             EXACT = 'distance=0'
@@ -62,6 +64,9 @@ class LinkedinSearch(BaseSearch):
         try:
             await bpage.goto(job_url)
             try:
+                job_page_not_found = bpage.locator('div:has-text("The job you were looking for was not found. Redirecting you to the home page")')
+                if job_page_not_found:
+                    logging.error("Linkedin doesn't want to show page vvv")
                 await bpage.locator('span.artdeco-button__text:has-text("See more")').click(timeout=2000)
             except PlaywrightTimeoutError as e:
                 logging.warning(e)
