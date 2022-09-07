@@ -101,6 +101,7 @@ class LinkedinSearch(BaseSearch):
         email = self._linkedin_credentials.get('email')
         password = self._linkedin_credentials.get('password')
         await bpage.goto(self._base_url)
+        print(email, password)
         await bpage.fill('input#session_key', email)
         await bpage.fill('input#session_password', password)
         await bpage.click('button[type=submit]')

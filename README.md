@@ -1,21 +1,18 @@
 # Blanket application strategy
 
-(Job board crawler)
-
 ## Overview
 
-This is an Indeed/Linkedin job board crawler.  
-It runs in Docker locally only.  
-All data are saved to database locally.  
-Repeated postings are crawled only once.  
+This app automates browser to search for jobs on Indeed/Linkedin job-boards and presents results in a tabular form such that you can see all info about companies and openings at a glance.  
+It runs **in Docker locally** only.  
+All data are saved to a database locally.   
 You can 
  - filter by postings to your liking  
- - mark deleted postings of no interest to you  
- - save notes about the postings and companies  
+ - mark as deleted postings that are of no interest to you  
+ - save notes about postings and companies  
  - automatically ignore certain companies [not implemented]
  
 
-You can additionaly use auto-apply browser extensions:
+Further you can utilize the following auto-apply browser extensions:
 [joinrhubarb](www.joinrhubarb.com),
 [easyjobs](www.easyjobs.so),
 [simplify](www.simplify.jobs)
@@ -49,6 +46,7 @@ See [Docker Hub](https://hub.docker.com/r/vadzimk/bas) for usage
 ## Limitations of the current version
 - Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it is not adjusted to prevent blocking. There is a button [UPDATE USER] to update Linkedin credentials once the previous account gets blocked. 
 - Playwright by Microsoft has a bug that leaks memory. I did not know that before selecting an automation framework, so the headless browser may crash with error [Navigation failed because page crashed!](https://github.com/microsoft/playwright/issues/6319)
+- Before filling out search form determine the "Where" location that is auto suggested on a particular job-board, for example should be "Los Angeles, California" for Linkedin and "Los Angeles, CA" for Indeed.  
 
 ## Development
 ```bash

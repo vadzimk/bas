@@ -1,9 +1,7 @@
 # Blanket application strategy
 
-(Job board crawler)
-
 ## Overview
-See **[Github](https://github.com/vadzimk/bas)**
+See **[Github page](https://github.com/vadzimk/bas)** 
 
 
 ## Usage
