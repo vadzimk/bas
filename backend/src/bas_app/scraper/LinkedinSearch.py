@@ -74,7 +74,7 @@ class LinkedinSearch(BaseSearch):
             job_view_html = await job_view.inner_html()
             beacon.populate_from_details(job_view_html)
         except Exception as e:
-            logging.error(f'Error going to {job_url} {e}')
+            logging.error(f'Error going to job_url {job_url} {e}')
             if "Navigation failed because page crashed!" in str(e):
                 raise PageCrashed(str(e))
 
@@ -92,7 +92,7 @@ class LinkedinSearch(BaseSearch):
 
             beacon.populate_from_company_profile(about_company_html, about_employees_html)
         except Exception as e:
-            logging.error(f'Error going to {company_url} {e}')
+            logging.error(f'Error going to company_url {company_url} {e}')
             if "Navigation failed because page crashed!" in str(e):
                 raise PageCrashed(str(e))
 

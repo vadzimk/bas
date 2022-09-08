@@ -8,7 +8,7 @@ from typing import List, Optional
 from BasePage import BasePage
 from bas_app import db
 from bas_app.models import Job, Company
-from bas_app.scraper.utils import filter_attributes_job
+from bas_app.scraper.BaseBeacon import BaseBeacon
 from typing import Type
 from playwright.async_api._generated import Page as PlayWrightPage
 
@@ -79,31 +79,34 @@ class BaseSearch(ABC):
     async def populate_job_post_details(beacon, job_url, bpage: PlayWrightPage):
         pass
 
+    # @staticmethod
+    # def insert_or_update_job_db(beacon):
+    #     """ creates or updates job record in db"""
+    #     job = Job.query.filter_by(url=beacon.dict.get('url')).first()
+    #     if not job:  # create record
+    #         job_attributes = filter_attributes_job(beacon)
+    #         job = Job(**job_attributes)
+    #         db.session.add(job)
+    #     else:  # update record
+    #         for k, v in filter_attributes_job(beacon).items():
+    #             if v:
+    #                 setattr(job, k, v)
+    #     db.session.commit()
+
     @staticmethod
-    def create_or_update_job_db(beacon):
+    def insert_or_update_job_db(beacon: Type[BaseBeacon]):
         """ creates or updates job record in db"""
-        job = Job.query.filter_by(url=beacon.dict.get('url')).first()
-        if not job:  # create record
-            job_attributes = filter_attributes_job(beacon)
-            job = Job(**job_attributes)
-            db.session.add(job)
-        else:  # update record
-            for k, v in filter_attributes_job(beacon).items():
-                if v:
-                    setattr(job, k, v)
-        db.session.commit()
+        BaseSearch.insert_or_update_relation_helper(
+            Table=Job,
+            fields=beacon.job_attributes_only,
+            filter_column='url',
+            filter_value=beacon.dict.get('url')
+        )
 
     async def populate_details(self, bpage: PlayWrightPage):
         """ Populate job post details form 'iframe' and
         populate company details from the company profile page
         """
-        # print("*"*15)
-        # job_count = 0
-        # for p in self._pages:
-        #     job_count += len(p.beacons)
-        # print(job_count, "job_count for all pages")
-        # print("*"*15)
-
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
                 job_url = b.dict['url']
@@ -113,34 +116,69 @@ class BaseSearch(ABC):
                 if not (job and job.description_text):  # not (job details and company details) are already in db
                     await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                     await self.populate_job_post_details(b, job_url, bpage)
-                    self.create_or_update_job_db(b)
-                company_profile_url = b.dict['company'].get('profile_url')
-                company_homepage_url = b.dict['company'].get('homepage_url')
+                    self.insert_or_update_job_db(b)
+                try:
+                    company_profile_url = b.dict['company'].get('profile_url') or (job and job.company and job.company.profile_url)
+                except Exception as e:
+                    print("excapt")
+                    raise e
                 # TODO implement utils.normalize_company_homepage_url and compare with normalized url
                 # TODO change schema to have linkedin_profile_url and indeed_profile_url to aggregate from company data from both platforms
                 # TODO if particular profile_url_missing then update values,else skip going to profile_url
-                company = Company.query.filter_by(profile_url=company_profile_url).first()
-                if not company:  # not company already in db
+                company = company_profile_url and Company.query.filter_by(profile_url=company_profile_url).first()
+                if not (company and company.homepage_url):  # not company already in db
                     # continue
                     await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
                     await self.populate_company_details(b, company_profile_url, bpage)
-                    company = self.save_beacon_company_db(b)
+                    company = self.insert_or_update_company_db(b)
                 job.company_id = company.id
                 db.session.commit()
                 self._task_state_meta['current'] += 1
                 self.update_state()
 
+    @staticmethod
+    def insert_or_update_relation_helper(Table: db.Model, fields: dict, filter_column: str, filter_value: str):
+        """ generic insert or update relation into db
+        inserts a new row or updates it if exists
+        :Table: db.Model to insert fields
+        :fields: attributes of the row {attribute:value}
+        :filter_column: where column
+        :filter_value: where value
+        :return: query row result
+        """
+        where = {filter_column: filter_value}
+        existing_row = Table.query.filter_by(**where).first()
+        if not existing_row:  # create record
+            new_row = Table(**fields)
+            db.session.add(new_row)
+        else:  # update record
+            for k, v in fields.items():
+                if v:
+                    setattr(existing_row, k, v)
+        db.session.commit()
+        return existing_row or new_row
+
+    # @staticmethod
+    # def insert_or_update_company_db(beacon):
+    #     """ saves company attributes of the beacon to db if company not present in db"""
+    #     company = Company.query.filter_by(profile_url=beacon.dict['company'].get('profile_url')).first()
+    #     if not company:
+    #         company_attributes = beacon.dict['company']
+    #         company = Company(**company_attributes)
+    #         db.session.add(company)
+    #     db.session.commit()
+    #     return company
 
 
     @staticmethod
-    def save_beacon_company_db(beacon):
+    def insert_or_update_company_db(beacon):
         """ saves company attributes of the beacon to db if company not present in db"""
-        company = Company.query.filter_by(profile_url=beacon.dict['company'].get('profile_url')).first()
-        if not company:
-            company_attributes = beacon.dict['company']
-            company = Company(**company_attributes)
-            db.session.add(company)
-        db.session.commit()
+        company = BaseSearch.insert_or_update_relation_helper(
+            Table=Company,
+            fields=beacon.dict['company'],
+            filter_column='profile_url',
+            filter_value=beacon.dict['company'].get('profile_url')
+        )
         return company
 
     def copy_company_details(self, from_bec, to_bec):

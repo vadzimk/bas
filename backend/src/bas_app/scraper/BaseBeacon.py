@@ -30,9 +30,17 @@ class BaseBeacon(ABC):
         self._beacon: PageElement = beacon
         self._job_post: Dict[str, str | dict] = {"company": {}}
 
+
     @property
     def dict(self):
         return self._job_post
+
+    @property
+    def job_attributes_only(self) -> dict:
+        """
+        :return dict containing attributes of job and not company """
+        job_attributes = {k: v for k, v in self.dict.items() if k != 'company'}  # copy only job attributes
+        return job_attributes
 
     @abstractmethod
     def populate_from_job_card(self):
@@ -79,3 +87,5 @@ class BaseBeacon(ABC):
 
     def populate_company_from_bec(self, other_bec):
         self._job_post['company'] = copy.deepcopy(other_bec._job_post['company'])
+
+

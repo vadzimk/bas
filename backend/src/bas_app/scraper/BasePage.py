@@ -10,8 +10,6 @@ from abc import ABC, abstractmethod
 from bas_app import db
 from bas_app.models import Job
 
-from utils import filter_attributes_job
-
 
 class BasePage(ABC):
     JOBS_ON_PAGE = None
@@ -55,7 +53,6 @@ class BasePage(ABC):
         for b in self._beacons:
             job = Job.query.filter_by(url=b.dict.get('url')).first()
             if not job:
-                job_attributes = filter_attributes_job(b)
-                job = Job(**job_attributes)
+                job = Job(**b.job_attributes_only)
                 db.session.add(job)
         db.session.commit()

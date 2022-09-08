@@ -125,14 +125,6 @@ def replace_p_br_p(html_repr):
     return dsoup
 
 
-def filter_attributes_job(b: BaseBeacon) -> dict:
-    """
-    :argument b beacon obj
-    :return dict containing attributes of job and not company """
-    job_attributes = {k: v for k, v in b.dict.items() if k != 'company'}  # copy only job attributes
-    return job_attributes
-
-
 def age_to_date(age):
     if age == 'Today' \
             or age == 'Just posted' \

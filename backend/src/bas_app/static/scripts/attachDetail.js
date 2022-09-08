@@ -1,12 +1,15 @@
 // --------------------- Display Detail -------------------
 export default function attachDetail(row) {
     document.querySelector('#detail').innerHTML = row.getData().job_description_html
-    const homeUrl = row.getData().company_homepage_url
+    let homeUrl = row.getData().company_homepage_url
     const listingUrl = row.getData().job_url
 
 
     const homepage = document.querySelector('#homepage-ref')
     if (homeUrl) {
+        if (homeUrl.toLowerCase().startsWith('www')){
+            homeUrl = `http://${homeUrl}`
+        }
         homepage.href = homeUrl
         homepage.target = "_blank"
         homepage.parentElement.style.display = "block"
