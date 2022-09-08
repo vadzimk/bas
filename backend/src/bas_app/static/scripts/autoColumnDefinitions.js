@@ -11,7 +11,11 @@ export default function autoColumnsDefinitions(definitions) {
     definitions.forEach((column) => {
         // column.headerFilter = true; // add header filter to every column
 
-        if (column.field === 'job_title' || column.field === 'job_note') { // show row count
+        // Total calculations
+        if (column.field === 'job_title'
+            || column.field.includes('flag')
+            || column.field.includes('note')
+        ) { // show row count
             column.bottomCalc = "count"
         }
 
