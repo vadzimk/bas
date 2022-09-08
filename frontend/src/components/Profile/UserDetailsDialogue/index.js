@@ -18,7 +18,7 @@ export default function UserDetailsDialogue({isOpen, ...other}) {
     const content = <>
         <DialogContentText>
             Generate Email on
-            <a href="https://www.1secmail.com/" target="_blank" rel="noreferrer"> 1secmail </a> or <a href="https://tempail.com" target="_blank" rel="noreferrer"> tempail</a>
+            <a href="https://www.1secmail.com/" target="_blank" rel="noreferrer"> 1secmail </a> or <a href="https://tempmail.ninja" target="_blank" rel="noreferrer"> tempmail</a>
             <span> And enter mock <a href="https://www.linkedin.com/signup/" target="_blank" rel="noreferrer">Linkedin</a> credentials to scrape it. </span>
         </DialogContentText>
         <DialogContentText>
