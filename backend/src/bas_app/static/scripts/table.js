@@ -80,8 +80,9 @@ table.on('cellEdited', function (cell) {
     const job_id = cell.getRow().getData().job_id
     const oldValue = cell.getOldValue()
     const newValue = cell.getValue()
-    if (([null, ""].includes(oldValue) && [null, ""].includes(newValue))
-        || oldValue.toString().trim() === newValue.toString().trim() ) {  // no change in cell value
+    if (
+        ([null, ""].includes(oldValue) && [null, ""].includes(newValue))
+        || oldValue?.toString().trim() === newValue?.toString().trim() ) {  // no change in cell value
         return
     }
     console.log("updating", JSON.stringify(oldValue), typeof oldValue, "=>", JSON.stringify(newValue), typeof newValue)
