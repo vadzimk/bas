@@ -26,6 +26,15 @@ const searchCardsSlice = createSlice({
         },
         deleteSearchCard: function (state, action) {
             state.cards = state.cards.filter(c => c.id !== action.payload)
+        },
+        updateSearchCard: function (state, action){
+            state.cards = state.cards.map(c=> {
+                if(c.id === action.payload.id){
+                    return {...c, formValues: action.payload.values}
+                } else {
+                    return {...c}
+                }
+            })
         }
     },
     extraReducers: builder => {
@@ -59,5 +68,5 @@ export const createTask = createAsyncThunk('tasks/create', async (
 
 })
 
-export const {addSearchCard, deleteSearchCard} = searchCardsSlice.actions
+export const {addSearchCard, deleteSearchCard, updateSearchCard} = searchCardsSlice.actions
 export default searchCardsSlice.reducer

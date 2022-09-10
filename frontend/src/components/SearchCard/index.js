@@ -47,8 +47,9 @@ export function SearchCard() {
 }
 
 export const JobBoardContext = createContext({
+    initialValues: null,
     radiusOptions: null,
     experienceOptions: null,
     ageOptions: null,
-    ExperienceSelect: null,
+    ExperienceSelect: null
 })
