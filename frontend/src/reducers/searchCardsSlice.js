@@ -49,7 +49,6 @@ export const createTask = createAsyncThunk('tasks/create', async (
         getState
     }) => {
     // newSearch = formValues
-    // TODO need to have the id of the card here
     const state = getState()
     try {
         const res = await api.post('/search', {...newSearch, user_id: state.user.id})

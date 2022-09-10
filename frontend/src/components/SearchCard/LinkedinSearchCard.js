@@ -1,13 +1,8 @@
 import React from "react";
 import BaseSearchCard from "../BaseSearchCard";
-import PropTypes from "prop-types";
 import MultipleSelect from "../BaseSearchCard/MultipleSelect";
 import {JobBoardContext} from "./index";
 
-LinkedinSearchCard.propTypes = {
-    onDelete: PropTypes.func.isRequired,
-    cardId: PropTypes.number.isRequired
-}
 
 export default function LinkedinSearchCard() {
     const RADIUS_OPTIONS = [

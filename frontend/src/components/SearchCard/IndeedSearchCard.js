@@ -1,14 +1,8 @@
 import React from 'react';
 import BaseSearchCard from "../BaseSearchCard";
-import PropTypes from "prop-types";
 import BasicSelect from "../BaseSearchCard/BasicSelect";
-import MultipleSelect from "../BaseSearchCard/MultipleSelect";
 import {JobBoardContext} from "./index";
 
-IndeedSearchCard.propTypes = {
-    onDelete: PropTypes.func.isRequired,
-    cardId: PropTypes.number.isRequired
-}
 
 export function IndeedSearchCard(props) {
     const RADIUS_OPTIONS = [
@@ -58,9 +52,7 @@ export function IndeedSearchCard(props) {
             ageOptions: AGE_OPTIONS,
             ExperienceSelect: BasicSelect
         }}>
-            <BaseSearchCard
-                {...props}
-            />
+            <BaseSearchCard/>
         </JobBoardContext.Provider>
     )
 }

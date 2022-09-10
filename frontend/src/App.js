@@ -109,8 +109,8 @@ function App() {
                         cardId: card.id,
                         onDelete: () => handleSearchCardDelete(card.id),
                         platform: card.job_board,
-                    }}>
-                        <SearchCard key={card.id}/>
+                    }} key={card.id}>
+                        <SearchCard />
                     </SearchCardContext.Provider>
                 )}
             </div>
