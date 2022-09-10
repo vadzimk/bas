@@ -9,7 +9,7 @@ redis_data
 *.sqlite
 postgres_data_dev
 .venv
-analytics
+
 .run
 man.py
 out

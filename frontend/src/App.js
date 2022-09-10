@@ -2,9 +2,8 @@
 /** @jsxImportSource @emotion/react */
 
 import {Alert, Button} from "@mui/material";
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useTheme, css} from "@emotion/react";
-import LinkedinSearchCard from "./components/SearchCard/LinkedinSearchCard";
 import {useSelector, useDispatch} from "react-redux";
 import {loginUser, userLoggedIn} from "./reducers/userSlice";
 import Register from "./components/Register";
@@ -13,12 +12,16 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import {notify, Ntypes} from "./reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
-import {IndeedSearchCard} from "./components/SearchCard/IndeedSearchCard";
 import {SearchCard} from "./components/SearchCard";
 
 
 // import theme from "./Theme";
 
+export const SearchCardContext = createContext({
+    cardId: null,
+    onDelete: null,
+    platform: null
+})
 
 function App() {
     const theme = useTheme()
@@ -42,7 +45,6 @@ function App() {
     }
 
     const handleNewSearchCardIndeed = () => {
-        // TODO not implemented
         dispatch(addSearchCard('indeed'))
     }
 
@@ -103,12 +105,13 @@ function App() {
             </div>
             <div>
                 {user.id && cards.map(card =>
-                    <SearchCard
-                        key={card.id}
-                        cardId={card.id}
-                        onDelete={() => handleSearchCardDelete(card.id)}
-                        platform={card.job_board}
-                    />
+                    <SearchCardContext.Provider value={{
+                        cardId: card.id,
+                        onDelete: () => handleSearchCardDelete(card.id),
+                        platform: card.job_board,
+                    }}>
+                        <SearchCard key={card.id}/>
+                    </SearchCardContext.Provider>
                 )}
             </div>
         </div>

@@ -2,10 +2,13 @@ import LinkedinSearchCard from "./LinkedinSearchCard";
 import {IndeedSearchCard} from "./IndeedSearchCard";
 import linkedin_logo from "../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../assets/icons8-indeed.svg"
-import { Card as MuiCard} from '@mui/material';
+import {Card as MuiCard} from '@mui/material';
+import {createContext, useContext} from "react";
+import {SearchCardContext} from "../../App";
 
 
-export function SearchCard({platform, ...other}) {
+export function SearchCard() {
+    const {platform} = useContext(SearchCardContext)
     const platforms = {
         linkedin: {
             component: LinkedinSearchCard,
@@ -22,7 +25,8 @@ export function SearchCard({platform, ...other}) {
             <div style={{margin: "auto 0"}}>
                 <MuiCard
                     variant="outlined"
-                    sx={{height: 38,
+                    sx={{
+                        height: 38,
                         width: 38,
                         display: "flex",
                         justifyContent: "center",
@@ -37,7 +41,14 @@ export function SearchCard({platform, ...other}) {
 
                 </MuiCard>
             </div>
-            <Component {...other}/>
+            <Component/>
         </div>
     )
 }
+
+export const JobBoardContext = createContext({
+    radiusOptions: null,
+    experienceOptions: null,
+    ageOptions: null,
+    ExperienceSelect: null,
+})

@@ -83,6 +83,6 @@ services:
     networks:
       - bas_prod_network
     depends_on:
-      - postgres  # will not wait for database being created
+      - postgres
       - redis
 ```

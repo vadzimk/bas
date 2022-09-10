@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useContext, useEffect, useRef, useState} from 'react'
 import {Formik, Form} from 'formik'
 import BaseSearchCardFields, {searchOptionsPropTypes} from "./BaseSearchCardFields";
 import {revokeSearchTask} from "../../services/searchService";
@@ -9,21 +9,14 @@ import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {createTask} from "../../reducers/searchCardsSlice";
-import BasicSelect from "./BasicSelect";
-import MultipleSelect from "./MultipleSelect";
-
-BaseSearchCard.propTypes = {
-    initialValues: PropTypes.oneOf([PropTypes.string, PropTypes.array]).isRequired,
-    onDelete: PropTypes.func.isRequired,
-    cardId: PropTypes.number.isRequired,
-    ExperienceSelect: PropTypes.func.isRequired,
-    ...searchOptionsPropTypes
-}
-export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest}) {
+import {JobBoardContext} from "../SearchCard";
+import {SearchCardContext} from "../../App";
 
 
+export default function BaseSearchCard() {
+    const {onDelete, cardId,} = useContext(SearchCardContext)
 
-
+    const {initialValues}=useContext(JobBoardContext)
     const [formSubmitted, setFormSubmitted] = useState(false)
     const [taskDone, setTaskDone] = useState(false)
     const [taskId, setTaskId] = useState(null)
@@ -34,7 +27,6 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
     const showRestart = formSubmitted && taskDone
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const enabledDeleteButton = !formSubmitted || taskDone
-    const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
     const dispatch = useDispatch()
     const card = useSelector(state =>
         state.searchCards.cards.find(c => c.id === cardId))
@@ -96,7 +88,8 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
                             <Form>
                                 <BaseSearchCardFields
                                     formikProps={formikProps}
-                                    {...other}
+                                    formSubmitted={formSubmitted}
+                                    enabledRadiusDateExperienceLimit={enabledRadiusDateExperienceLimit}
                                 />
                             </Form>
                         )

@@ -2,13 +2,14 @@
 /** @jsxImportSource @emotion/react */
 // the above comments are necessary to make the css prop work
 
-import React from 'react'
+import React, {useContext} from 'react'
 import {TextField} from "@mui/material";
 import BasicSelect from "./BasicSelect";
 import MultipleSelect from "./MultipleSelect";
 import {css} from "@emotion/react";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
+import {JobBoardContext} from "../SearchCard";
 
 const cardCss = {
     searchFlexContainer: css({
@@ -17,25 +18,20 @@ const cardCss = {
     }),
 }
 
-const optionShape = PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired
-})
-
-export const searchOptionsPropTypes = {
-    radiusOptions: PropTypes.arrayOf(optionShape),
-    experienceOptions: PropTypes.arrayOf(optionShape),
-    ageOptions: PropTypes.arrayOf(optionShape),
-}
-
 BaseSearchCardFields.propTypes = {
     formikProps: PropTypes.any,
     formSubmitted: PropTypes.bool.isRequired,
     enabledRadiusDateExperienceLimit: PropTypes.bool.isRequired,
-    ...searchOptionsPropTypes
 }
 
-export default function BaseSearchCardFields({formikProps, ...rest}) {
+export default function BaseSearchCardFields({formikProps,formSubmitted, enabledRadiusDateExperienceLimit}) {
+    const {
+        radiusOptions,
+        experienceOptions,
+        ageOptions,
+        ExperienceSelect
+    } = useContext(JobBoardContext)
+
     return (
         <div css={cardCss.searchFlexContainer}>
             <div style={{width: 225}}>
@@ -47,7 +43,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                     value={formikProps.values.what}
                     onChange={formikProps.handleChange}
                     size="small"
-                    disabled={rest.formSubmitted}
+                    disabled={formSubmitted}
                 />
             </div>
             <div style={{width: 225}}>
@@ -59,7 +55,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                     value={formikProps.values.where}
                     onChange={formikProps.handleChange}
                     size="small"
-                    disabled={rest.formSubmitted}
+                    disabled={formSubmitted}
 
                 />
             </div>
@@ -68,10 +64,10 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                 <BasicSelect
                     label="Radius"
                     name="radius"
-                    options={rest.radiusOptions}
+                    options={radiusOptions}
                     value={formikProps.values.radius}
                     onChange={(value) => formikProps.setFieldValue('radius', value)}
-                    disabled={!rest.enabledRadiusDateExperienceLimit}
+                    disabled={!enabledRadiusDateExperienceLimit}
 
                 />
             </div>
@@ -80,22 +76,22 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                 <BasicSelect
                     label="Date"
                     name="age"
-                    options={rest.ageOptions}
+                    options={ageOptions}
                     value={formikProps.values.age}
                     onChange={(value) => formikProps.setFieldValue('age', value)}
-                    disabled={!rest.enabledRadiusDateExperienceLimit}
+                    disabled={!enabledRadiusDateExperienceLimit}
 
                 />
             </div>
             <div style={{width: 200}}>
                 {/*Experience*/}
-                <rest.ExperienceSelect
+                <ExperienceSelect
                     label="Experience"
                     name="experience"
-                    options={rest.experienceOptions}
+                    options={experienceOptions}
                     value={formikProps.values.experience}
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
-                    disabled={!rest.enabledRadiusDateExperienceLimit}
+                    disabled={!enabledRadiusDateExperienceLimit}
                 />
             </div>
             <div>
@@ -107,7 +103,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                     onChange={formikProps.handleChange}
                     size="small"
                     sx={{width: 70}}
-                    disabled={!rest.enabledRadiusDateExperienceLimit}
+                    disabled={!enabledRadiusDateExperienceLimit}
 
                 />
             </div>
@@ -116,7 +112,7 @@ export default function BaseSearchCardFields({formikProps, ...rest}) {
                     variant="outlined"
                     sx={{height: "100%"}}
                     type="submit"
-                    disabled={rest.formSubmitted}
+                    disabled={formSubmitted}
                 >
                     Submit
                 </Button>
