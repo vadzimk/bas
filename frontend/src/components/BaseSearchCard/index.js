@@ -1,28 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useContext, useEffect, useRef, useState} from 'react'
 import {Formik, Form} from 'formik'
-import BaseSearchCardFields, {searchOptionsPropTypes} from "./BaseSearchCardFields";
+import BaseSearchCardFields from "./BaseSearchCardFields";
 import {revokeSearchTask} from "../../services/searchService";
 import LinearWithValueLabel from "./LinearWithValueLabel";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
-import {createTask} from "../../reducers/searchCardsSlice";
-import BasicSelect from "./BasicSelect";
-import MultipleSelect from "./MultipleSelect";
-
-BaseSearchCard.propTypes = {
-    initialValues: PropTypes.oneOf([PropTypes.string, PropTypes.array]).isRequired,
-    onDelete: PropTypes.func.isRequired,
-    cardId: PropTypes.number.isRequired,
-    ExperienceSelect: PropTypes.func.isRequired,
-    ...searchOptionsPropTypes
-}
-export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest}) {
+import {createTask, updateSearchCard} from "../../reducers/searchCardsSlice";
+import {JobBoardContext} from "../SearchCard";
+import {SearchCardContext} from "../../App";
 
 
-
+export default function BaseSearchCard() {
+    const {onDelete, cardId,} = useContext(SearchCardContext)
 
     const [formSubmitted, setFormSubmitted] = useState(false)
     const [taskDone, setTaskDone] = useState(false)
@@ -34,10 +25,13 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
     const showRestart = formSubmitted && taskDone
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const enabledDeleteButton = !formSubmitted || taskDone
-    const other = {...rest, formSubmitted, enabledRadiusDateExperienceLimit}
     const dispatch = useDispatch()
     const card = useSelector(state =>
         state.searchCards.cards.find(c => c.id === cardId))
+    let {initialValues} = useContext(JobBoardContext)
+    if (card.formValues && Object.keys(card.formValues).length > 0) { // has values in redux state use them
+        initialValues = card.formValues
+    }
     const formRef = useRef()  // get form values as formRef.current.values
 
     useEffect(() => {
@@ -57,7 +51,7 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
         console.log(typeof values.experience)
         dispatch(createTask({
             ...values,
-            experience: typeof values.experience ==='string'
+            experience: typeof values.experience === 'string'
                 ? values.experience
                 : values.experience.map(item => item.value),
             cardId,
@@ -86,6 +80,12 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
         }
     }
 
+    const handleFormBlur = (values) => {
+        console.log('values', values)
+        dispatch(updateSearchCard({id: cardId, values}))
+
+    }
+
 
     return (
         <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
@@ -93,10 +93,11 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
                 <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef}>
                     {(formikProps) => {
                         return (
-                            <Form>
+                            <Form onBlur={() => handleFormBlur(formikProps.values)}>
                                 <BaseSearchCardFields
                                     formikProps={formikProps}
-                                    {...other}
+                                    formSubmitted={formSubmitted}
+                                    enabledRadiusDateExperienceLimit={enabledRadiusDateExperienceLimit}
                                 />
                             </Form>
                         )
@@ -105,7 +106,13 @@ export default function BaseSearchCard({onDelete, cardId, initialValues, ...rest
             </div>
             <>
                 {showProgressBar &&
-                <div style={{width: "100px", flexShrink: 0, display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                <div style={{
+                    width: "100px",
+                    flexShrink: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center"
+                }}>
                     <LinearWithValueLabel
                         taskId={taskId}
                         cardId={cardId}

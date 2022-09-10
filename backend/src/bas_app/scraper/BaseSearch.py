@@ -18,7 +18,7 @@ class FoundException(Exception):
 
 
 class BaseSearch(ABC):
-    NAVIGATE_DELAY = 3
+    NAVIGATE_DELAY = 5
 
     def __init__(self, what, where, age, radius, experience, limit, education=''):
         self._query = what
@@ -114,7 +114,7 @@ class BaseSearch(ABC):
                     url=job_url).first()  # TODO monitor this returned none although the url was found in db, probably change to postgresdb
                 # indeed creates a new unique url each time you browse, now way around duplicates
                 if not (job and job.description_text):  # not (job details and company details) are already in db
-                    await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
+                    await asyncio.sleep(self.NAVIGATE_DELAY)
                     await self.populate_job_post_details(b, job_url, bpage)
                     self.insert_or_update_job_db(b)
                 try:
@@ -128,7 +128,7 @@ class BaseSearch(ABC):
                 company = company_profile_url and Company.query.filter_by(profile_url=company_profile_url).first()
                 if not (company and company.homepage_url):  # not company already in db
                     # continue
-                    await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
+                    await asyncio.sleep(self.NAVIGATE_DELAY)
                     await self.populate_company_details(b, company_profile_url, bpage)
                     company = self.insert_or_update_company_db(b)
                 job.company_id = company.id
@@ -220,7 +220,7 @@ class BaseSearch(ABC):
                 await make_page(1, self._url, self._PageClass)
                 self._task_state_meta['current'] += 1
                 self.update_state()
-                await asyncio.sleep(BaseSearch.NAVIGATE_DELAY)
+                await asyncio.sleep(self.NAVIGATE_DELAY)
                 # print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
                 # print("-"*10)
         self._pages = pages

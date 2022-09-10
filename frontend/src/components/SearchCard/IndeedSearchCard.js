@@ -1,13 +1,8 @@
 import React from 'react';
 import BaseSearchCard from "../BaseSearchCard";
-import PropTypes from "prop-types";
 import BasicSelect from "../BaseSearchCard/BasicSelect";
+import {JobBoardContext} from "./index";
 
-
-IndeedSearchCard.propTypes = {
-    onDelete: PropTypes.func.isRequired,
-    cardId: PropTypes.number.isRequired
-}
 
 export function IndeedSearchCard(props) {
     const RADIUS_OPTIONS = [
@@ -33,12 +28,13 @@ export function IndeedSearchCard(props) {
         {label: '14 days', value: '14 days'},
 
     ]
-    const EDUCATION_OPTIONS = [
-        {label: 'school', value: 'school'},
-        {label: 'associates', value: 'associates'},
-        {label: 'bachelors', value: 'bachelors'},
-        {label: 'masters', value: 'masters'},
-    ]
+    // decided to have uniform form fields
+    // const EDUCATION_OPTIONS = [
+    //     {label: 'school', value: 'school'},
+    //     {label: 'associates', value: 'associates'},
+    //     {label: 'bachelors', value: 'bachelors'},
+    //     {label: 'masters', value: 'masters'},
+    // ]
     const initialValues = {
         what: '',
         where: '',
@@ -49,14 +45,14 @@ export function IndeedSearchCard(props) {
     }
 
     return (
-        <BaseSearchCard
-            initialValues={initialValues}
-            radiusOptions={RADIUS_OPTIONS}
-            experienceOptions={EXPERIENCE_OPTIONS}
-            ageOptions={AGE_OPTIONS}
-            onDelete={props.onDelete}
-            ExperienceSelect={BasicSelect}
-            {...props}
-        />
+        <JobBoardContext.Provider value={{
+            initialValues: initialValues,
+            radiusOptions: RADIUS_OPTIONS,
+            experienceOptions: EXPERIENCE_OPTIONS,
+            ageOptions: AGE_OPTIONS,
+            ExperienceSelect: BasicSelect
+        }}>
+            <BaseSearchCard/>
+        </JobBoardContext.Provider>
     )
 }
