@@ -23,6 +23,7 @@ export default function BaseSearchCard() {
     const showProgressBar = formSubmitted
     const showRevoke = formSubmitted && !taskDone
     const showRestart = formSubmitted && taskDone
+    const showSubmit = !showRevoke && !showRestart
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const enabledDeleteButton = !formSubmitted || taskDone
     const dispatch = useDispatch()
@@ -88,7 +89,7 @@ export default function BaseSearchCard() {
 
 
     return (
-        <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
+        <div style={{display: "flex", flexDirection: "row"}}>
             <div>
                 <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef}>
                     {(formikProps) => {
@@ -98,13 +99,49 @@ export default function BaseSearchCard() {
                                     formikProps={formikProps}
                                     formSubmitted={formSubmitted}
                                     enabledRadiusDateExperienceLimit={enabledRadiusDateExperienceLimit}
+                                    showSubmit={showSubmit}
                                 />
                             </Form>
                         )
                     }}
                 </Formik>
             </div>
-            <>
+
+            <div style={{display: "flex", flexDirection: "row", gap: "4px"}}>
+                <div>
+                    {showRevoke &&
+                    <Button
+                        variant="outlined"
+                        sx={{height: "100%", width: "95px"}}
+                        onClick={handleRevoke}
+                        disabled={taskDone}
+                    >
+                        Revoke
+                    </Button>
+                    }
+                    {showRestart &&
+                    <Button
+                        variant="outlined"
+                        sx={{height: "100%", width: "85px"}}
+                        onClick={handleRestart}
+                        disabled={!taskDone}
+                    >
+                        Restart
+                    </Button>
+                    }
+                </div>
+                {/*revoke || restart*/}
+
+                <div>
+                    <Button variant="outlined"
+                            sx={{height: "100%"}}
+                            onClick={() => onDelete()}
+                            disabled={!enabledDeleteButton}
+                    >
+                        <DeleteIcon/>
+                    </Button>
+                </div>
+                {/*delete*/}
                 {showProgressBar &&
                 <div style={{
                     width: "100px",
@@ -121,41 +158,10 @@ export default function BaseSearchCard() {
                     />
                 </div>
                 }
-                <div>
-                    {showRevoke &&
-                    <Button
-                        variant="outlined"
-                        sx={{height: "100%", width: "95px"}}
-                        onClick={handleRevoke}
-                        disabled={taskDone}
-                    >
-                        Revoke
-                    </Button>
-                    }
-                    {showRestart &&
-                    <Button
-                        variant="outlined"
-                        sx={{height: "100%", width: "95px"}}
-                        onClick={handleRestart}
-                        disabled={!taskDone}
-                    >
-                        Restart
-                    </Button>
-                    }
-                </div>
-            </>
-            <div>
-                <Button variant="outlined"
-                        sx={{height: "100%"}}
-                        onClick={() => onDelete()}
-                        disabled={!enabledDeleteButton}
-                >
-                    <DeleteIcon/>
-                </Button>
+                {message &&
+                <div style={{display: "flex", alignItems: "center"}}><p>{message}</p></div>
+                }
             </div>
-            {message &&
-            <div style={{display: "flex", alignItems: "center"}}><p>{message}</p></div>
-            }
         </div>
     )
 }

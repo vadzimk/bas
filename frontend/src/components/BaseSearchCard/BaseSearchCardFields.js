@@ -15,6 +15,7 @@ const cardCss = {
     searchFlexContainer: css({
         display: 'flex',
         flexDirection: 'row',
+        gap: "4px",
     }),
 }
 
@@ -22,9 +23,10 @@ BaseSearchCardFields.propTypes = {
     formikProps: PropTypes.any,
     formSubmitted: PropTypes.bool.isRequired,
     enabledRadiusDateExperienceLimit: PropTypes.bool.isRequired,
+    showSubmit: PropTypes.bool.isRequired,
 }
 
-export default function BaseSearchCardFields({formikProps,formSubmitted, enabledRadiusDateExperienceLimit}) {
+export default function BaseSearchCardFields({formikProps,formSubmitted, showSubmit,enabledRadiusDateExperienceLimit}) {
     const {
         radiusOptions,
         experienceOptions,
@@ -108,14 +110,15 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, enabled
                 />
             </div>
             <div>
-                <Button
+                {showSubmit &&
+                    <Button
                     variant="outlined"
-                    sx={{height: "100%"}}
+                    sx={{height: "100%", width: "85px"}}
                     type="submit"
                     disabled={formSubmitted}
                 >
                     Submit
-                </Button>
+                </Button>}
             </div>
 
         </div>

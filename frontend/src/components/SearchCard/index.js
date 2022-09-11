@@ -21,7 +21,7 @@ export function SearchCard() {
     }
     const Component = platforms[platform].component
     return (
-        <div style={{display: "flex", margin: "10px 0"}}>
+        <div style={{display: "flex", margin: "10px 0", gap: "4px"}}>
             <div style={{margin: "auto 0"}}>
                 <MuiCard
                     variant="outlined"

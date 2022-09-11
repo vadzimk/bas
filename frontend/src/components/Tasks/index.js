@@ -44,7 +44,7 @@ export default function Tasks() {
             // css={{backgroundColor: theme.palette.common.orange}}
         >
             <h3 style={theme.typography.h4}>Tasks</h3>
-            <div style={{display: 'flex'}}>
+            <div style={{display: 'flex', gap: "4px"}}>
 
                 {user.id && <Button
                     variant="outlined"
