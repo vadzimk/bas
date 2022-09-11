@@ -1,3 +1,6 @@
+/* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
+/** @jsxImportSource @emotion/react */
+
 import {userLoggedIn} from "../../reducers/userSlice";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "../../reducers/searchCardsSlice";
@@ -43,11 +46,13 @@ export default function Tasks() {
         <div
             style={{
                 maxWidth: "1600px",
-                margin: "0 auto",
-
+                margin: "0px auto",
+                display: 'flex',
+                flexDirection: 'column',
+                gap: "10px 0"
             }}>
 
-            <h3 style={theme.typography.h4}>Tasks</h3>
+            <h3 css={theme.typography.h5}>Tasks</h3>
             <div style={{display: 'flex', gap: "4px"}}>
 
                 {user.id && <Button
@@ -61,7 +66,7 @@ export default function Tasks() {
                     Indeed Search
                 </Button>}
             </div>
-            <div>
+            <div >
                 {user.id && cards.map(card =>
                     <SearchCardContext.Provider value={{
                         cardId: card.id,

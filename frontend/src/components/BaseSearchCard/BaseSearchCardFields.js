@@ -36,7 +36,7 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, showSub
 
     return (
         <div css={cardCss.searchFlexContainer}>
-            <div style={{width: 225}}>
+            <div style={{width: 180}}>
                 {/*What*/}
                 <TextField
                     label="What"
@@ -48,7 +48,7 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, showSub
                     disabled={formSubmitted}
                 />
             </div>
-            <div style={{width: 225}}>
+            <div style={{width: 180}}>
                 {/*Where*/}
                 <TextField
                     label="Where"
@@ -85,7 +85,7 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, showSub
 
                 />
             </div>
-            <div style={{width: 200}}>
+            <div style={{width: 180}}>
                 {/*Experience*/}
                 <ExperienceSelect
                     label="Experience"
