@@ -106,13 +106,12 @@ export default function BaseSearchCard() {
                     }}
                 </Formik>
             </div>
-
             <div style={{display: "flex", flexDirection: "row", gap: "4px"}}>
                 <div>
                     {showRevoke &&
                     <Button
                         variant="outlined"
-                        sx={{height: "100%", width: "95px"}}
+                        sx={{height: "100%", width: "85px"}}
                         onClick={handleRevoke}
                         disabled={taskDone}
                     >
@@ -130,8 +129,6 @@ export default function BaseSearchCard() {
                     </Button>
                     }
                 </div>
-                {/*revoke || restart*/}
-
                 <div>
                     <Button variant="outlined"
                             sx={{height: "100%"}}
@@ -141,7 +138,6 @@ export default function BaseSearchCard() {
                         <DeleteIcon/>
                     </Button>
                 </div>
-                {/*delete*/}
                 {showProgressBar &&
                 <div style={{
                     width: "100px",
