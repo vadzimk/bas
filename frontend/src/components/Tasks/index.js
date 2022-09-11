@@ -3,7 +3,7 @@ import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "../../reducers/searchCardsSlice";
 import {SearchCard} from "../SearchCard";
 import {SearchCardContext} from "../../App";
-import { Button} from "@mui/material";
+import {Button} from "@mui/material";
 import {useTheme, css} from "@emotion/react";
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect} from "react";
@@ -41,8 +41,12 @@ export default function Tasks() {
 
     return (
         <div
-            // css={{backgroundColor: theme.palette.common.orange}}
-        >
+            style={{
+                maxWidth: "1600px",
+                margin: "0 auto",
+
+            }}>
+
             <h3 style={theme.typography.h4}>Tasks</h3>
             <div style={{display: 'flex', gap: "4px"}}>
 
@@ -64,7 +68,7 @@ export default function Tasks() {
                         onDelete: () => handleSearchCardDelete(card.id),
                         platform: card.job_board,
                     }} key={card.id}>
-                        <SearchCard />
+                        <SearchCard/>
                     </SearchCardContext.Provider>
                 )}
             </div>
