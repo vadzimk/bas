@@ -27,7 +27,6 @@ function App() {
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
     const {pathname} = useLocation();
-    console.log("location", pathname);
 
     useEffect(() => {
         const user = JSON.parse(window.localStorage.getItem('bas-user')) // TODO persist the whole user object
@@ -41,11 +40,11 @@ function App() {
         <div style={{position: "relative"}}>
             <div css={{height: "100px", backgroundColor: theme.palette.common.blue1}}/>
             <div style={{position: "absolute", top: 0, left: 0, width: "100%"}}>
-                <div css={{maxWidth: "1600px", margin: "0 auto"}}>
+                <div css={{maxWidth: "1600px", margin: "0 auto", display: "flex", flexDirection: "column"}}>
                     {notification.type &&
                     <Alert
                         severity={notification.type}
-                        sx={{zIndex: "999999", position: "fixed", justifyContent: "center", width: "100%"}}>
+                        sx={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center"}}>
                         {notification.message}
                     </Alert>
                     }
