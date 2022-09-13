@@ -11,6 +11,7 @@ const table = new Tabulator("#table", {
     // debugEventsExternal:true, //console log external events
     // debugEventsInternal:true, //console log internal events
     // ajaxURL: '/api/jobs',
+    index: "job_id", //set the index field
     maxHeight: "80vh",
     // maxHeight: "100%",
     autoColumns: true,  // automatically make columns structure by examining the first row of the table.

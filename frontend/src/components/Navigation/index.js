@@ -33,7 +33,7 @@ function ResultsOrTasks({pathname}) {
 
 export default function Navigation({user, pathname}) {
     return (
-        <div style={{display: 'flex', gap: "4px"}}>
+        <div style={{display: 'flex', gap: "4px", margin: "8px 0"}}>
             {user.id ?
                 <>
                     <ResultsOrTasks pathname={pathname}/>

@@ -55,9 +55,9 @@ function App() {
                             height: "100px",
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "flex-end"
+                            justifyContent: "flex-end",
                         }}>
-                            <h3 css={{...theme.typography.h4}}>
+                            <h3 css={{...theme.typography.h4, margin: "8px 0"}}>
                                 Blanket Application Strategy
                             </h3>
                         </div>
