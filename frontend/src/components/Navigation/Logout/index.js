@@ -1,8 +1,8 @@
 import React from 'react'
-import {Button} from "@mui/material";
+import {Button} from "@chakra-ui/react";
 import {useDispatch} from "react-redux";
-import {userLogout} from "../../reducers/userSlice";
-import {clearNotification} from "../../reducers/notificationSlice";
+import {userLogout} from "../../../reducers/userSlice";
+import {clearNotification} from "../../../reducers/notificationSlice";
 
 export default function Logout() {
     const dispatch = useDispatch()
@@ -14,7 +14,6 @@ export default function Logout() {
     return (
         <div>
             <Button
-                variant="outlined"
                 onClick={handleLogout}
             >
                 Exit

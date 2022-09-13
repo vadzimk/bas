@@ -2,7 +2,7 @@ import {createTheme} from '@mui/material'
 
 const defaultTheme = createTheme()
 
-const theme = createTheme({
+export const themeMui = createTheme({
     palette: {
         common: {
             orange: '#ffba60',
@@ -38,4 +38,3 @@ const theme = createTheme({
     }
 })
 
-export default theme

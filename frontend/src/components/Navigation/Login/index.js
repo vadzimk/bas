@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import {Button} from "@mui/material";
-import {loginUser} from "../../reducers/userSlice";
+import {loginUser} from "../../../reducers/userSlice";
 import {useDispatch} from "react-redux";
 import {UserLoginDialogue} from "./UserLoginDialogue";
+
+import {Button} from "@chakra-ui/react"
 
 export default function Login() {
     const [isUserLoginOpen, setIsUserLoginOpen] = useState(false)
@@ -20,7 +21,7 @@ export default function Login() {
                 handleClose={() => setIsUserLoginOpen(false)}
             />
             <Button
-                variant="outlined"
+                variant="outline"
                 onClick={() => setIsUserLoginOpen(true)}
             >
                 Existing User

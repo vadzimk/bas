@@ -1,11 +1,9 @@
 import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 import UserDetailsForm from "./UserDetailsForm";
 import PropTypes from "prop-types";
+import {ModalOverlay, Modal, ModalHeader, ModalContent, ModalBody, Text, Link} from "@chakra-ui/react"
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 UserDetailsDialogue.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -16,30 +14,33 @@ UserDetailsDialogue.propTypes = {
 export default function UserDetailsDialogue({isOpen, ...other}) {
     const title = "Update Account"
     const content = <>
-        <DialogContentText>
+        <Text>
             Generate Email on
-            <a href="https://www.1secmail.com/" target="_blank" rel="noreferrer"> 1secmail </a> or <a href="https://tempmail.ninja" target="_blank" rel="noreferrer"> tempmail</a>
+            <Link isExternal href="https://www.1secmail.com/" target="_blank" rel="noreferrer"> 1secmail<ExternalLinkIcon mx='2px'/> </Link> or <Link isExternal href="https://tempmail.ninja" target="_blank" rel="noreferrer"> tempmail<ExternalLinkIcon mx='2px'/></Link>
             <span> And enter mock <a href="https://www.linkedin.com/signup/" target="_blank" rel="noreferrer">Linkedin</a> credentials to scrape it. </span>
-        </DialogContentText>
-        <DialogContentText>
+        </Text>
+        <Text>
             <span>First name: </span><span><b>Baton</b></span>
-        </DialogContentText>
-        <DialogContentText>
+        </Text>
+        <Text>
             <span>Last name: </span><span><b>Crusader</b></span>
-        </DialogContentText>
+        </Text>
     </>
 
     return (
         <div>
-            <Dialog open={isOpen}>
-                <DialogTitle>{title}</DialogTitle>
-                <DialogContent>
+            <Modal isOpen={isOpen}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>{title}</ModalHeader>
+                <ModalBody>
                     {content}
                     <UserDetailsForm
                         {...other}
                     />
-                </DialogContent>
-            </Dialog>
+                </ModalBody>
+                </ModalContent>
+            </Modal>
         </div>
     );
 }

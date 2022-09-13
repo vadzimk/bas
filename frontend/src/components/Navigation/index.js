@@ -1,30 +1,33 @@
-import {Link} from "react-router-dom";
-import Profile from "../Profile";
-import Logout from "../Logout";
-import Register from "../Register";
-import Login from "../Login";
-import {Button} from "@mui/material";
+import {Link as ReRoLink} from "react-router-dom";
+import Profile from "./Profile";
+import Logout from "./Logout";
+import Register from "./Register";
+import Login from "./Login";
+import {Button, Link} from '@chakra-ui/react'
 
 function ResultsOrTasks({pathname}) {
     return (<>
             {pathname === '/'
                 ? <Button
-                    component={Link}
-                    to="/task-results"
-                    variant="outlined"
-                    sx={{width: "85px"}}
+                    style={{width: "85px"}}
                 >
-                    Results
+                    <Link
+                        to="/task-results"
+                        as={ReRoLink}
+                    >
+                        Results
+                    </Link>
                 </Button>
                 :
                 <Button
-                    component={Link}
-                    to="/"
-                    variant="outlined"
-                    sx={{width: "85px"}}
-
+                    style={{width: "85px"}}
                 >
-                    Tasks
+                    <Link
+                        to="/"
+                        as={ReRoLink}
+                    >
+                        Tasks
+                    </Link>
                 </Button>
             }
         </>

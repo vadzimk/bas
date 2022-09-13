@@ -11,7 +11,7 @@ import {createTask, revokeTask, updateSearchCardFormValues} from "../../reducers
 import {JobBoardContext} from "../SearchCard";
 import {SearchCardContext} from "../../App";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import theme from "../../Theme";
+import {themeMui} from "../../ThemeMui";
 
 const colour = {
     'PENDING': 'secondary',
@@ -142,7 +142,7 @@ export default function BaseSearchCard() {
                 }
                 {message &&
                 <div style={{display: "flex", alignItems: "center", maxHeight: "60px"}}><p
-                    css={theme.typography.p}>{message}</p></div>
+                    css={themeMui.typography.p}>{message}</p></div>
                 }
             </div>
         </div>

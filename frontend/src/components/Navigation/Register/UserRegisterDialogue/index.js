@@ -1,9 +1,7 @@
 import React from 'react'
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import PropTypes from "prop-types";
 import UserLoginForm from "../../Login/UserLoginDialogue/UserLoginForm";
-import {DialogContent} from "@mui/material";
+import {ModalOverlay, Modal, ModalHeader, ModalContent} from "@chakra-ui/react"
 
 UserRegisterDialogue.propTypes = {
     isOpen: PropTypes.bool.isRequired
@@ -12,15 +10,17 @@ UserRegisterDialogue.propTypes = {
 export default function UserRegisterDialogue(props) {
 
     return (
-        <Dialog open={props.isOpen}>
-            <DialogTitle>
+        <Modal isOpen={props.isOpen}>
+            <ModalOverlay />
+            <ModalContent>
+                    <ModalHeader>
                 New User
-            </DialogTitle>
-            <DialogContent>
+                    </ModalHeader>
+
                 <UserLoginForm
                     {...props}
                 />
-            </DialogContent>
-        </Dialog>
+            </ModalContent>
+        </Modal>
     )
 }

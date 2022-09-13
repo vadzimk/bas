@@ -1,7 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
 /** @jsxImportSource @emotion/react */
 
-import {Alert, Button} from "@mui/material";
 import React, {createContext, useEffect,} from 'react';
 import {useTheme, css} from "@emotion/react";
 import {useSelector, useDispatch} from "react-redux";
@@ -12,6 +11,8 @@ import Tasks from "./components/Tasks";
 import {Routes, Route, Link, useLocation} from "react-router-dom";
 import Results from "./components/Results";
 import Navigation from "./components/Navigation";
+
+import {Alert, AlertIcon, Text} from '@chakra-ui/react'
 
 // import theme from "./Theme";
 
@@ -43,8 +44,10 @@ function App() {
                 <div css={{maxWidth: "1600px", margin: "0 auto", display: "flex", flexDirection: "column"}}>
                     {notification.type &&
                     <Alert
-                        severity={notification.type}
-                        sx={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center"}}>
+                        status={notification.type}
+                        style={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center"}}
+                    >
+                        <AlertIcon/>
                         {notification.message}
                     </Alert>
                     }
@@ -57,9 +60,9 @@ function App() {
                             flexDirection: "column",
                             justifyContent: "flex-end",
                         }}>
-                            <h3 css={{...theme.typography.h4, margin: "8px 0"}}>
+                            <Text fontSize="4xl" >
                                 Blanket Application Strategy
-                            </h3>
+                            </Text>
                         </div>
                         <div style={{
                             display: 'flex',

@@ -1,9 +1,7 @@
 import React from 'react'
-import TextField from "@mui/material/TextField";
 import {Formik} from "formik";
 import PropTypes from "prop-types";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
+import {ModalBody, FormLabel, ModalFooter, Button, Input} from "@chakra-ui/react"
 
 UserLoginForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
@@ -29,22 +27,25 @@ export default function UserLoginForm({handleSubmit, handleClose}) {
             onSubmit={handleSubmit}>
             {(formikProps) => (
                 <form onSubmit={formikProps.handleSubmit}>
-                    <TextField
-                        margin="dense"
-                        label="Username"
-                        name="username"
-                        fullWidth
-                        variant="standard"
-                        onChange={formikProps.handleChange}
-                        value={formikProps.values.username}
-                        error={formikProps.errors.username && formikProps.touched.username}
-                    />
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
+                    <ModalBody>
+                        <FormLabel>Username</FormLabel>
+                        <Input
+                            // margin="dense"
+                            // label="Username"
+                            // fullWidth
+                            name="username"
+                            variant="outline"
+                            onChange={formikProps.handleChange}
+                            value={formikProps.values.username}
+                            // error={formikProps.errors.username && formikProps.touched.username}
+                        />
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={handleClose} mr={3} variant='outline'>Cancel</Button>
                         <Button type="submit">
                             Submit
                         </Button>
-                    </DialogActions>
+                    </ModalFooter>
                 </form>)}
         </Formik>
     )

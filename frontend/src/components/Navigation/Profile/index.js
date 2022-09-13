@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import {Button} from "@mui/material";
+import {Button} from "@chakra-ui/react";
 import {useDispatch, useSelector} from "react-redux";
 import UserDetailsDialogue from "./UserDetailsDialogue";
-import {updateUser} from "../../reducers/userSlice";
+import {updateUser} from "../../../reducers/userSlice";
 
 export default function Profile() {
     const [isUserUpdateOpen, setIsUserUpdateOpen] = useState(false)
@@ -20,7 +20,6 @@ export default function Profile() {
                 handleSubmit={handleUpdateUser}
             />
             <Button
-                variant="outlined"
                 onClick={() => setIsUserUpdateOpen(true)}
             >
                 Update User

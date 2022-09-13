@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import {registerUser} from "../../reducers/userSlice";
-import {Button} from "@mui/material";
+import {registerUser} from "../../../reducers/userSlice";
+import {Button} from "@chakra-ui/react";
 import UserRegisterDialogue from "./UserRegisterDialogue";
 import {useDispatch, useSelector} from "react-redux";
-import {clearNotification} from "../../reducers/notificationSlice";
+import {clearNotification} from "../../../reducers/notificationSlice";
 
 export default function Register() {
 
@@ -36,7 +36,6 @@ export default function Register() {
                 handleClose={handleCancelClick}
             />
             <Button
-                variant="outlined"
                 onClick={handleNewUserClick}
             >
                 New User
