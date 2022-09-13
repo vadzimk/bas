@@ -1,10 +1,10 @@
 import LinkedinSearchCard from "./LinkedinSearchCard";
 import {IndeedSearchCard} from "./IndeedSearchCard";
-import linkedin_logo from "../../assets/icons8-linkedin-2.svg"
-import indeed_logo from "../../assets/icons8-indeed.svg"
+import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
+import indeed_logo from "../../../assets/icons8-indeed.svg"
 import {Card as MuiCard} from '@mui/material';
 import {createContext, useContext} from "react";
-import {SearchCardContext} from "../../App";
+import {SearchCardContext} from "../../../App";
 
 
 export function SearchCard() {

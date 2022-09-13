@@ -9,7 +9,7 @@ import MultipleSelect from "./MultipleSelect";
 import {css} from "@emotion/react";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
-import {JobBoardContext} from "../SearchCard";
+import {JobBoardContext} from "../Tasks/SearchCard";
 
 const cardCss = {
     searchFlexContainer: css({

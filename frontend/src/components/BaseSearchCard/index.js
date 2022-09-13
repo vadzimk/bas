@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useDispatch, useSelector} from "react-redux";
 import {createTask, revokeTask, updateSearchCardFormValues} from "../../reducers/searchCardsSlice";
-import {JobBoardContext} from "../SearchCard";
+import {JobBoardContext} from "../Tasks/SearchCard";
 import {SearchCardContext} from "../../App";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import {themeMui} from "../../ThemeMui";

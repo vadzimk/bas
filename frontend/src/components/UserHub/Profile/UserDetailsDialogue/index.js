@@ -12,7 +12,7 @@ UserDetailsDialogue.propTypes = {
 }
 
 export default function UserDetailsDialogue({isOpen, ...other}) {
-    const title = "Update Account"
+    const title = "Update Mock Account"
     const content = <>
         <Text>
             Generate Email on

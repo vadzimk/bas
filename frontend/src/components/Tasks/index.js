@@ -1,19 +1,15 @@
-/* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
-/** @jsxImportSource @emotion/react */
 
 import {userLoggedIn} from "../../reducers/userSlice";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "../../reducers/searchCardsSlice";
-import {SearchCard} from "../SearchCard";
+import {SearchCard} from "./SearchCard";
 import {SearchCardContext} from "../../App";
-import {Button} from "@mui/material";
-import {useTheme, css} from "@emotion/react";
+import {Button} from "@chakra-ui/react";
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect} from "react";
 
 
 export default function Tasks() {
-    const theme = useTheme()
     const cards = useSelector(state => state.searchCards.cards)
     const user = useSelector(state => state.user)
 
@@ -55,12 +51,10 @@ export default function Tasks() {
             <div style={{display: 'flex', gap: "4px"}}>
 
                 {user.id && <Button
-                    variant="outlined"
                     onClick={handleNewSearchCardLinkedin}>
                     Linkedin Search
                 </Button>}
                 {user.id && <Button
-                    variant="outlined"
                     onClick={handleNewSearchCardIndeed}>
                     Indeed Search
                 </Button>}
