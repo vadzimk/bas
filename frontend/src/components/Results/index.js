@@ -11,7 +11,6 @@ export default function Results() {
     const user = useSelector(state => state.user)
     if (user?.id) return (
         <div>
-            <h2 css={themeMui.typography.h5}>Results</h2>
             <div style={{display: "flex", flexDirection: "row"}}>
                 <TableWithControls/>
                 <RightPanel/>

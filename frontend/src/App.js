@@ -8,11 +8,11 @@ import {userLoggedIn} from "./reducers/userSlice";
 
 
 import Tasks from "./components/Tasks";
-import {Routes, Route, Link, useLocation} from "react-router-dom";
 import Results from "./components/Results";
-import Navigation from "./components/Navigation";
+import UserHub from "./components/UserHub";
 
 import {Alert, AlertIcon, Text} from '@chakra-ui/react'
+import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 
 // import theme from "./Theme";
 
@@ -27,7 +27,7 @@ function App() {
     const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
-    const {pathname} = useLocation();
+
 
     useEffect(() => {
         const user = JSON.parse(window.localStorage.getItem('bas-user')) // TODO persist the whole user object
@@ -41,11 +41,12 @@ function App() {
         <div style={{position: "relative"}}>
             <div css={{height: "100px", backgroundColor: theme.palette.common.blue1}}/>
             <div style={{position: "absolute", top: 0, left: 0, width: "100%"}}>
+                <Tabs variant='solid-rounded'  isLazy={true}>
                 <div css={{maxWidth: "1600px", margin: "0 auto", display: "flex", flexDirection: "column"}}>
                     {notification.type &&
-                    <Alert
+                    <Alert rounded="base"
                         status={notification.type}
-                        style={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center"}}
+                        style={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center", width: "auto"}}
                     >
                         <AlertIcon/>
                         {notification.message}
@@ -58,25 +59,35 @@ function App() {
                             height: "100px",
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "flex-end",
+                            justifyContent: "space-between",
                         }}>
-                            <Text fontSize="4xl" >
+                            <Text fontSize="4xl">
                                 Blanket Application Strategy
                             </Text>
+                            {user.id &&
+                                <TabList mb={2}>
+                                <Tab mr={3}>Tasks</Tab>
+                                <Tab>Results</Tab>
+                            </TabList>}
                         </div>
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'flex-end',
                         }}>
-                            <Navigation user={user} pathname={pathname}/>
+                            <UserHub />
                         </div>
                     </div>
                 </div>
-                <Routes>
-                    <Route path="/" element={<Tasks/>}/>
-                    <Route path="/task-results" element={<Results/>}/>
-                </Routes>
+                    <TabPanels>
+                        <TabPanel>
+                            <Tasks/>
+                        </TabPanel>
+                        <TabPanel>
+                            <Results/>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
             </div>
         </div>
     )

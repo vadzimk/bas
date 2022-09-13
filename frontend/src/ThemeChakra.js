@@ -10,7 +10,7 @@ import {
 
 
 export const themeChakra = extendTheme(
-    withDefaultColorScheme({colorScheme: 'teal'}),
+    withDefaultColorScheme({colorScheme: 'linkedin'}),
     withDefaultSize({size: 'sm'}),
     // withDefaultVariant({variant: 'outline'}),  // alert will be unfilled
     {

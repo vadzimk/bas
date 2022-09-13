@@ -1,9 +1,8 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import App from './App'
-import {BrowserRouter as Router} from 'react-router-dom'
 import {ThemeProvider as MuiThemeProvider} from "@mui/material";
-import {ThemeProvider as EmotionThemeProvider} from "@emotion/react";
+// import {ThemeProvider as EmotionThemeProvider} from "@emotion/react";
 import {themeMui} from './ThemeMui'
 import {Provider} from "react-redux";
 import {store} from "./store";
@@ -23,9 +22,7 @@ root.render(
                     <MuiThemeProvider theme={themeMui}>
                 <ChakraProvider theme={themeChakra}>
                         {/*<EmotionThemeProvider theme={themeMui}>*/}
-                        <Router>
                             <App/>
-                        </Router>
                         {/*</EmotionThemeProvider>*/}
                 </ChakraProvider>
                     </MuiThemeProvider>

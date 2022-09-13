@@ -52,7 +52,6 @@ export default function Tasks() {
                 gap: "10px 0"
             }}>
 
-            <h3 css={theme.typography.h5}>Tasks</h3>
             <div style={{display: 'flex', gap: "4px"}}>
 
                 {user.id && <Button

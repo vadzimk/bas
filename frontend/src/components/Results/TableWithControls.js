@@ -67,7 +67,7 @@ export default function TableWithControls() {
     return (
 
         <div id="table-container">
-            <div style={{display: "flex", justifyContent: "start", gap: "4px", margin: "8px 0"}}>
+            <div style={{display: "flex", justifyContent: "start", gap: "4px", }}>
                 <div>
                     <TextField
                         label="Filter"
