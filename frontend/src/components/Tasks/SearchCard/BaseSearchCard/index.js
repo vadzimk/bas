@@ -4,22 +4,21 @@
 import React, {useContext, useRef} from 'react'
 import {Formik, Form} from 'formik'
 import BaseSearchCardFields from "./BaseSearchCardFields";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {Button, Text} from "@chakra-ui/react";
+import {CloseIcon} from "@chakra-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
-import {createTask, revokeTask, updateSearchCardFormValues} from "../../reducers/searchCardsSlice";
-import {JobBoardContext} from "../Tasks/SearchCard";
-import {SearchCardContext} from "../../App";
+import {createTask, revokeTask, updateSearchCardFormValues} from "../../../../reducers/searchCardsSlice";
+import {JobBoardContext} from "../index";
+import {SearchCardContext} from "../../../../App";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import {themeMui} from "../../ThemeMui";
 
 const colour = {
-    'PENDING': 'secondary',
-    'BEGUN': 'primary',
-    'PROGRESS': 'primary',
-    'SUCCESS': 'success',
-    'REVOKED': 'warning',
-    'FAILURE': 'error'
+    'PENDING': 'gray',
+    'BEGUN': 'blue',
+    'PROGRESS': 'blue',
+    'SUCCESS': 'green',
+    'REVOKED': 'yellow',
+    'FAILURE': 'red'
 }
 
 export default function BaseSearchCard() {
@@ -73,12 +72,24 @@ export default function BaseSearchCard() {
         console.log('values', values)
         dispatch(updateSearchCardFormValues({id: cardId, values}))
     }
-
+    const validate = (values) => {
+        const errors = {};
+        if (!values.what) {
+            errors.what = 'Required'
+        }
+        if(!values.where){
+            errors.where='Required'
+        }
+        if(values.limit && !Number.isInteger(values.limit)){
+            errors.limit = 'Integer expected'
+        }
+        return errors
+    }
 
     return (
         <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
             <div>
-                <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef}>
+                <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef} validate={validate}>
                     {(formikProps) => {
                         return (
                             <Form onBlur={() => handleFormBlur(formikProps.values)}>
@@ -94,11 +105,11 @@ export default function BaseSearchCard() {
                 </Formik>
             </div>
             <div style={{display: "flex", flexDirection: "row", gap: "4px", alignItems: "center"}}>
-                <div style={{maxHeight: "40px"}}>
+                <div style={{height: "40px"}}>
                     {showRevoke &&
                     <Button
-                        variant="outlined"
-                        sx={{height: "100%", width: "85px"}}
+                        variant="outline"
+                        style={{height: "100%", width: "85px"}}
                         onClick={handleRevoke}
                         disabled={taskDone}
                     >
@@ -107,8 +118,8 @@ export default function BaseSearchCard() {
                     }
                     {showRestart &&
                     <Button
-                        variant="outlined"
-                        sx={{height: "100%", width: "85px"}}
+                        variant="outline"
+                        style={{height: "100%", width: "85px"}}
                         onClick={handleRestart}
                         disabled={!taskDone}
                     >
@@ -116,13 +127,13 @@ export default function BaseSearchCard() {
                     </Button>
                     }
                 </div>
-                <div style={{maxHeight: "40px"}}>
-                    <Button variant="outlined"
-                            sx={{height: "100%"}}
+                <div style={{height: "40px"}}>
+                    <Button variant="outline"
+                            style={{height: "100%"}}
                             onClick={() => onDelete()}
                             disabled={!enabledDeleteButton}
                     >
-                        <DeleteIcon/>
+                        <CloseIcon/>
                     </Button>
                 </div>
                 {
@@ -141,8 +152,9 @@ export default function BaseSearchCard() {
                     </div>
                 }
                 {message &&
-                <div style={{display: "flex", alignItems: "center", maxHeight: "60px"}}><p
-                    css={themeMui.typography.p}>{message}</p></div>
+                <div style={{display: "flex", alignItems: "center", maxHeight: "60px"}}>
+                    <Text>{message}</Text>
+                </div>
                 }
             </div>
         </div>

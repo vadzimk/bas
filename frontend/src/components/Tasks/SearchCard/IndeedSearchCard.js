@@ -1,6 +1,6 @@
 import React from 'react';
-import BaseSearchCard from "../../BaseSearchCard";
-import BasicSelect from "../../BaseSearchCard/BasicSelect";
+import BaseSearchCard from "./BaseSearchCard";
+import BasicSelect from "./BaseSearchCard/BasicSelect";
 import {JobBoardContext} from "./index";
 
 

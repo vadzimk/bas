@@ -20,7 +20,7 @@ root.render(
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                     <MuiThemeProvider theme={themeMui}>
-                <ChakraProvider theme={themeChakra}>
+                <ChakraProvider theme={themeChakra} resetCSS={true}>
                         {/*<EmotionThemeProvider theme={themeMui}>*/}
                             <App/>
                         {/*</EmotionThemeProvider>*/}

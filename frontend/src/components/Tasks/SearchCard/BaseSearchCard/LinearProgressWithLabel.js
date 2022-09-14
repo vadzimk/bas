@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import {Box, Text, Progress} from '@chakra-ui/react';
 
 
 LinearProgressWithLabel.propTypes = {
@@ -12,15 +12,15 @@ LinearProgressWithLabel.propTypes = {
 
 export default function LinearProgressWithLabel({progress: value, color}) {
     return (
-        <Box sx={{width: '100%'}}>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Box sx={{width: '100%', mr: 1}}>
-                    <LinearProgress variant="determinate" color={color} value={value} />
+        <Box style={{width: '100%'}}>
+            <Box style={{display: 'flex', alignItems: 'center'}}>
+                <Box style={{width: '100%', marginRight: "1px"}}>
+                    <Progress size="lg" colorScheme={color} value={value} />
                 </Box>
-                <Box sx={{minWidth: 35}}>
-                    <Typography variant="body2" color="text.secondary">{`${Math.round(
+                <Box style={{minWidth: 35}}>
+                    <Text >{`${Math.round(
                         value,
-                    )}%`}</Typography>
+                    )}%`}</Text>
                 </Box>
             </Box>
         </Box>

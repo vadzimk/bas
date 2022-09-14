@@ -2,10 +2,9 @@ import LinkedinSearchCard from "./LinkedinSearchCard";
 import {IndeedSearchCard} from "./IndeedSearchCard";
 import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
-import {Card as MuiCard} from '@mui/material';
 import {createContext, useContext} from "react";
 import {SearchCardContext} from "../../../App";
-
+import { Box, Image } from '@chakra-ui/react'
 
 export function SearchCard() {
     const {platform} = useContext(SearchCardContext)
@@ -21,25 +20,25 @@ export function SearchCard() {
     }
     const Component = platforms[platform].component
     return (
-        <div style={{display: "flex", margin: "8px 0", gap: "4px", height: "60px"}}>
+        <div style={{display: "flex", margin: "8px 0", gap: "4px"}}>
             <div style={{margin: "auto 0"}}>
-                <MuiCard
-                    variant="outlined"
-                    sx={{
-                        height: 38,
-                        width: 38,
+                <Box
+                    as='button' borderRadius='base' overflow='hidden' borderWidth='2px'
+                    style={{
+                        height: 32,
+                        width: 32,
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center"
                     }}
                 >
-                    <img
+                    <Image
                         src={platforms[platform].logo}
                         alt="Linkedin"
-                        style={{height: "25px"}}
+                        style={{height: "22px"}}
                     />
 
-                </MuiCard>
+                </Box>
             </div>
             <Component/>
         </div>

@@ -4,15 +4,24 @@ import {
     withDefaultColorScheme,
     withDefaultSize,
     withDefaultVariant,
+    withDefaultProps,
     theme as baseTheme,
 } from '@chakra-ui/react'
-
 
 
 export const themeChakra = extendTheme(
     withDefaultColorScheme({colorScheme: 'linkedin'}),
     withDefaultSize({size: 'sm'}),
-    // withDefaultVariant({variant: 'outline'}),  // alert will be unfilled
+    withDefaultProps({
+        defaultProps: {
+            // variant: 'outline',
+            size: 'sm',
+            borderRadius: 'base',
+
+        },
+        // components: ['Input', 'NumberInput', 'PinInput'],
+    }),
+
     {
         fonts: {
             body: "system-ui, sans-serif",

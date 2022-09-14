@@ -3,13 +3,11 @@
 // the above comments are necessary to make the css prop work
 
 import React, {useContext} from 'react'
-import {TextField} from "@mui/material";
 import BasicSelect from "./BasicSelect";
-import MultipleSelect from "./MultipleSelect";
 import {css} from "@emotion/react";
-import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
-import {JobBoardContext} from "../Tasks/SearchCard";
+import {JobBoardContext} from "../index";
+import {Input, Button} from "@chakra-ui/react";
 
 const cardCss = {
     searchFlexContainer: css({
@@ -26,7 +24,12 @@ BaseSearchCardFields.propTypes = {
     showSubmit: PropTypes.bool.isRequired,
 }
 
-export default function BaseSearchCardFields({formikProps,formSubmitted, showSubmit,enabledRadiusDateExperienceLimit}) {
+export default function BaseSearchCardFields({
+                                                 formikProps,
+                                                 formSubmitted,
+                                                 showSubmit,
+                                                 enabledRadiusDateExperienceLimit
+                                             }) {
     const {
         radiusOptions,
         experienceOptions,
@@ -38,27 +41,28 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, showSub
         <div css={cardCss.searchFlexContainer}>
             <div style={{width: 180}}>
                 {/*What*/}
-                <TextField
-                    label="What"
+                <Input
+                    placeholder="What"
                     name="what"
-                    variant="outlined"
                     value={formikProps.values.what}
                     onChange={formikProps.handleChange}
-                    size="small"
                     disabled={formSubmitted}
+                    borderRadius="base"
+                    isInvalid={formikProps.errors.what && formikProps.touched.what}
+                    errorBorderColor='red.200'
                 />
             </div>
             <div style={{width: 180}}>
                 {/*Where*/}
-                <TextField
-                    label="Where"
-                    variant="outlined"
+                <Input
+                    placeholder="Where"
                     name="where"
                     value={formikProps.values.where}
                     onChange={formikProps.handleChange}
-                    size="small"
                     disabled={formSubmitted}
-
+                    borderRadius="base"
+                    isInvalid={formikProps.errors.where && formikProps.touched.where}
+                    errorBorderColor='red.200'
                 />
             </div>
             <div style={{width: 95}}>
@@ -85,7 +89,7 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, showSub
 
                 />
             </div>
-            <div style={{width: 180}}>
+            <div style={{width: 340}}>
                 {/*Experience*/}
                 <ExperienceSelect
                     label="Experience"
@@ -94,30 +98,32 @@ export default function BaseSearchCardFields({formikProps,formSubmitted, showSub
                     value={formikProps.values.experience}
                     onChange={(value) => formikProps.setFieldValue('experience', value)}
                     disabled={!enabledRadiusDateExperienceLimit}
-                />
-            </div>
-            <div>
-                <TextField
-                    label="Limit"
-                    variant="outlined"
-                    name="limit"
-                    value={formikProps.values.limit}
-                    onChange={formikProps.handleChange}
-                    size="small"
-                    sx={{width: 70}}
-                    disabled={!enabledRadiusDateExperienceLimit}
 
                 />
             </div>
             <div>
+                <Input
+                    placeholder="Limit"
+                    variant="outline"
+                    name="limit"
+                    value={formikProps.values.limit}
+                    onChange={formikProps.handleChange}
+                    style={{width: "70px"}}
+                    disabled={!enabledRadiusDateExperienceLimit}
+                    borderRadius="base"
+                    isInvalid={formikProps.errors.limit && formikProps.touched.limit}
+                    errorBorderColor='red.200'
+                />
+            </div>
+            <div>
                 {showSubmit &&
-                    <Button
-                    variant="outlined"
-                    sx={{height: "100%", width: "85px"}}
+                <Button
+                    // variant="outline"
+                    style={{width: "85px"}}
                     type="submit"
                     disabled={formSubmitted}
                 >
-                    Submit
+                    Start
                 </Button>}
             </div>
 
