@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import math
+import random
 import sys
 from abc import ABC, abstractmethod
 from typing import List, Optional
@@ -18,7 +19,7 @@ class FoundException(Exception):
 
 
 class BaseSearch(ABC):
-    NAVIGATE_DELAY = 5
+    NAVIGATE_DELAY = 15
 
     def __init__(self, what, where, age, radius, experience, limit, education=''):
         self._query = what
@@ -42,6 +43,10 @@ class BaseSearch(ABC):
         }
         self._page_count_with_limit = None
         self._total_skipped = 0
+
+    def get_navigate_delay(self):
+        assert self.NAVIGATE_DELAY > 10
+        return random.uniform(self.NAVIGATE_DELAY - 8, self.NAVIGATE_DELAY + 8)
 
     @property
     def pages(self):
@@ -114,11 +119,12 @@ class BaseSearch(ABC):
                     url=job_url).first()  # TODO monitor this returned none although the url was found in db, probably change to postgresdb
                 # indeed creates a new unique url each time you browse, now way around duplicates
                 if not (job and job.description_text):  # not (job details and company details) are already in db
-                    await asyncio.sleep(self.NAVIGATE_DELAY)
+                    await asyncio.sleep(self.get_navigate_delay())
                     await self.populate_job_post_details(b, job_url, bpage)
                     self.insert_or_update_job_db(b)
                 try:
-                    company_profile_url = b.dict['company'].get('profile_url') or (job and job.company and job.company.profile_url)
+                    company_profile_url = b.dict['company'].get('profile_url') or (
+                                job and job.company and job.company.profile_url)
                 except Exception as e:
                     print("excapt")
                     raise e
@@ -128,7 +134,7 @@ class BaseSearch(ABC):
                 company = company_profile_url and Company.query.filter_by(profile_url=company_profile_url).first()
                 if not (company and company.homepage_url):  # not company already in db
                     # continue
-                    await asyncio.sleep(self.NAVIGATE_DELAY)
+                    await asyncio.sleep(self.get_navigate_delay())
                     await self.populate_company_details(b, company_profile_url, bpage)
                     company = self.insert_or_update_company_db(b)
                 job.company_id = company.id
@@ -168,7 +174,6 @@ class BaseSearch(ABC):
     #         db.session.add(company)
     #     db.session.commit()
     #     return company
-
 
     @staticmethod
     def insert_or_update_company_db(beacon):
@@ -220,7 +225,7 @@ class BaseSearch(ABC):
                 await make_page(1, self._url, self._PageClass)
                 self._task_state_meta['current'] += 1
                 self.update_state()
-                await asyncio.sleep(self.NAVIGATE_DELAY)
+                await asyncio.sleep(self.get_navigate_delay())
                 # print(f'''{self._task_state_meta['current']}/{self._task_state_meta['total']} "current"''')
                 # print("-"*10)
         self._pages = pages
