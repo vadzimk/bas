@@ -12,12 +12,12 @@ LinearProgressWithLabel.propTypes = {
 
 export default function LinearProgressWithLabel({progress: value, color}) {
     return (
-        <Box style={{width: '100%'}}>
-            <Box style={{display: 'flex', alignItems: 'center'}}>
-                <Box style={{width: '100%', marginRight: "1px"}}>
-                    <Progress size="lg" colorScheme={color} value={value} />
+        <Box style={{width: '100%', marginTop: "4px"}}>
+            <Box style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Box style={{width: '100px', marginRight: "4px", flexShrink: 0}}>
+                    <Progress height="100%" colorScheme={color} value={value} style={{margin: "auto 0"}} />
                 </Box>
-                <Box style={{minWidth: 35}}>
+                <Box style={{width: "50px"}}>
                     <Text >{`${Math.round(
                         value,
                     )}%`}</Text>

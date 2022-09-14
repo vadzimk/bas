@@ -87,7 +87,7 @@ export default function BaseSearchCard() {
     }
 
     return (
-        <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+        <div style={{display: "flex", flexDirection: "row"}}>
             <div>
                 <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef} validate={validate}>
                     {(formikProps) => {
@@ -104,14 +104,15 @@ export default function BaseSearchCard() {
                     }}
                 </Formik>
             </div>
-            <div style={{display: "flex", flexDirection: "row", gap: "4px", alignItems: "center"}}>
-                <div style={{height: "40px"}}>
+            <div style={{display: "flex", flexDirection: "row", gap: "4px", }}>
+                <div>
                     {showRevoke &&
                     <Button
                         variant="outline"
-                        style={{height: "100%", width: "85px"}}
+                        style={{width: "85px"}}
                         onClick={handleRevoke}
                         disabled={taskDone}
+                        size='sm'
                     >
                         Revoke
                     </Button>
@@ -119,19 +120,20 @@ export default function BaseSearchCard() {
                     {showRestart &&
                     <Button
                         variant="outline"
-                        style={{height: "100%", width: "85px"}}
+                        style={{width: "85px"}}
                         onClick={handleRestart}
                         disabled={!taskDone}
+                        size='sm'
                     >
                         Restart
                     </Button>
                     }
                 </div>
-                <div style={{height: "40px"}}>
+                <div>
                     <Button variant="outline"
-                            style={{height: "100%"}}
                             onClick={() => onDelete()}
                             disabled={!enabledDeleteButton}
+                            size="sm"
                     >
                         <CloseIcon/>
                     </Button>
@@ -139,11 +141,11 @@ export default function BaseSearchCard() {
                 {
                     showProgressBar &&
                     <div style={{
-                        width: "100px",
+                        width: "154px",
                         flexShrink: 0,
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent: "center"
+                        // justifyContent: "center"
                     }}>
                         <LinearProgressWithLabel
                             progress={progress}
@@ -152,7 +154,7 @@ export default function BaseSearchCard() {
                     </div>
                 }
                 {message &&
-                <div style={{display: "flex", alignItems: "center", maxHeight: "60px"}}>
+                <div style={{display: "flex", maxHeight: "60px", overflow: "scroll"}}>
                     <Text>{message}</Text>
                 </div>
                 }
