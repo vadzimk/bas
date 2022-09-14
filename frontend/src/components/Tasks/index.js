@@ -42,6 +42,7 @@ export default function Tasks() {
         <div
             style={{
                 maxWidth: "1600px",
+                padding: "0 32px",
                 margin: "0px auto",
                 display: 'flex',
                 flexDirection: 'column',

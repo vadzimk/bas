@@ -1,8 +1,6 @@
-/* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
-/** @jsxImportSource @emotion/react */
+
 
 import React, {createContext, useEffect,} from 'react';
-import {useTheme, css} from "@emotion/react";
 import {useSelector, useDispatch} from "react-redux";
 import {userLoggedIn} from "./reducers/userSlice";
 
@@ -14,8 +12,6 @@ import UserHub from "./components/UserHub";
 import {Alert, AlertIcon, Text} from '@chakra-ui/react'
 import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 
-// import theme from "./Theme";
-
 export const SearchCardContext = createContext({
     cardId: null,
     onDelete: null,
@@ -23,14 +19,14 @@ export const SearchCardContext = createContext({
 })
 
 function App() {
-    const theme = useTheme()
+
     const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
 
 
     useEffect(() => {
-        const user = JSON.parse(window.localStorage.getItem('bas-user')) // TODO persist the whole user object
+        const user = JSON.parse(window.localStorage.getItem('bas-user'))
         if (user?.id) {
             dispatch(userLoggedIn(user))
         }
@@ -39,10 +35,10 @@ function App() {
 
     return (
         <div style={{position: "relative"}}>
-            <div css={{height: "100px", backgroundColor: theme.palette.common.blue1}}/>
+            <div style={{height: "100px", backgroundColor: "#d6e4ea"}}/>
             <div style={{position: "absolute", top: 0, left: 0, width: "100%"}}>
                 <Tabs variant='solid-rounded'  isLazy={true}>
-                <div css={{maxWidth: "1600px", margin: "0 auto", display: "flex", flexDirection: "column"}}>
+                <div style={{maxWidth: "1600px", margin: "0 auto", padding: "0 32px", display: "flex", flexDirection: "column"}}>
                     {notification.type &&
                     <Alert rounded="base"
                         status={notification.type}
@@ -52,7 +48,7 @@ function App() {
                         {notification.message}
                     </Alert>
                     }
-                    <div css={{
+                    <div style={{
                         display: 'flex', justifyContent: 'space-between'
                     }}>
                         <div style={{
@@ -60,8 +56,9 @@ function App() {
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "space-between",
+                            flexShrink: 0,
                         }}>
-                            <Text fontSize="4xl">
+                            <Text fontSize="3xl">
                                 Blanket Application Strategy
                             </Text>
                             {user.id &&

@@ -1,4 +1,4 @@
-import {TextField, Button} from '@mui/material'
+import {Input, Button} from '@chakra-ui/react'
 import React, {useEffect, useState} from "react";
 
 import api from "../../services/api";
@@ -67,34 +67,35 @@ export default function TableWithControls() {
     return (
 
         <div id="table-container">
-            <div style={{display: "flex", justifyContent: "start", gap: "4px", }}>
+            <div style={{display: "flex", justifyContent: "start", gap: "4px", marginBottom: "8px" }}>
                 <div>
-                    <TextField
-                        label="Filter"
-                        size="small"
+                    <Input
+                        placeholder="Filter"
+                        size="sm"
                         id="filter-value"
+                        borderRadius="base"
                     />
                 </div>
                 <Button
-                    variant="outlined"
+                    variant="outline"
                     // sx={{height: "100%", width: "85px"}}
                     // disabled={formSubmitted}
                     id="filter-clear"
-                    size="small"
+                    size="sm"
                 >
                     Clear
                 </Button>
                 <Button
                     id="reset-table-layout"
-                    variant="outlined"
-                    size="small"
+                    variant="outline"
+                    size="sm"
                 >
                     Reset Layout
                 </Button>
                 <Button
                     id="undo-delete"
-                    variant="outlined"
-                    size="small"
+                    variant="outline"
+                    size="sm"
                 >
                     Undo Delete
                 </Button>

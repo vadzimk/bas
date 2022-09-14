@@ -10,7 +10,7 @@ import {
 
 
 export const themeChakra = extendTheme(
-    withDefaultColorScheme({colorScheme: 'linkedin'}),
+    withDefaultColorScheme({colorScheme: 'telegram'}),
     withDefaultSize({size: 'sm'}),
     withDefaultProps({
         defaultProps: {

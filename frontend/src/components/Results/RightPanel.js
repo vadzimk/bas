@@ -1,4 +1,4 @@
-import {Button, Link} from '@mui/material'
+import {Button, Link} from '@chakra-ui/react'
 
 export default function RightPanel() {
     return (
@@ -17,13 +17,13 @@ export default function RightPanel() {
                     flexDirection: "row",
                     justifyContent: "flex-end",
                     flexShrink: 0,
-                    height: "40px"
+                    height: "40px",
+                    gap: "4px"
                 }}>
                     <Button
-                        type="button"
+                        variant="outline"
+                        size="sm"
                         className="button"
-                        variant="outlined"
-                        size="small"
                     >
                         <Link
                             id="homepage-ref"
@@ -32,10 +32,9 @@ export default function RightPanel() {
                         </Link>
                     </Button>
                     <Button
-                        type="button"
+                        variant="outline"
+                        size="sm"
                         className="button"
-                        variant="outlined"
-                        size="small"
                     >
                         <Link id="job-listing-ref">
                             <img
