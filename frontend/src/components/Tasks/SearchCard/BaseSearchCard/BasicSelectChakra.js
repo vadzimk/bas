@@ -17,7 +17,7 @@ export default function BasicSelect({value, label, onChange, options, disabled})
             value={value}
             options={options}
             onChange={onChange}
-            disabled={disabled}
+            isDisabled={disabled}
             style={{width: "100%"}}
             size="sm"
             useBasicStyles

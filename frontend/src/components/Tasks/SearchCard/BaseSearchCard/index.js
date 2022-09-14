@@ -46,17 +46,35 @@ export default function BaseSearchCard() {
     const progress = currentTask?.progress || 0
     const formRef = useRef()  // get form values as formRef.current.values
 
-    const handleSubmit = async (values) => {
-        console.log('values', values)
+    const handleSubmit = async (formValues) => {
+        console.log('values', formValues)
         console.log('submit')
-        dispatch(createTask({
-            ...values,
-            experience: typeof values.experience === 'string'
-                ? values.experience
-                : values.experience.map(item => item.value),
+        console.log("values.experience", formValues.experience)
+        const formdata = {
+            ...formValues,
+            experience: Array.isArray(formValues.experience)
+                ? formValues.experience.map(item => item.value)
+                : formValues.experience?.value,
             cardId,
             job_board: card.job_board
-        }))
+        }
+        const data = {
+            cardId,
+            job_board: card.job_board
+        }
+        // get value property form each field on formValues
+        for (const [k, v] of Object.entries(formValues)) {
+            if (typeof v === "string") {
+                data[k] = v
+            } else if (Array.isArray(v)) {
+                data[k] = v.map(item => item.value)
+            } else {
+                data[k] = v.value
+            }
+        }
+
+        dispatch(createTask(data))
+        console.log("data---", data)
     }
 
     const handleRevoke = () => {
@@ -77,10 +95,10 @@ export default function BaseSearchCard() {
         if (!values.what) {
             errors.what = 'Required'
         }
-        if(!values.where){
-            errors.where='Required'
+        if (!values.where) {
+            errors.where = 'Required'
         }
-        if(values.limit && !Number.isInteger(values.limit)){
+        if (values.limit && !Number.isInteger(values.limit)) {
             errors.limit = 'Integer expected'
         }
         return errors
@@ -104,7 +122,7 @@ export default function BaseSearchCard() {
                     }}
                 </Formik>
             </div>
-            <div style={{display: "flex", flexDirection: "row", gap: "4px", }}>
+            <div style={{display: "flex", flexDirection: "row", gap: "4px",}}>
                 <div>
                     {showRevoke &&
                     <Button

@@ -42,7 +42,7 @@ export default function MultipleSelect({label, onChange, value, options, disable
                 isMulti={true}
                 value={value}
                 onChange={handleChange}
-                disabled={disabled}
+                isDisabled={disabled}
                 options={options}
                 size="sm"
                 closeMenuOnSelect={false}
