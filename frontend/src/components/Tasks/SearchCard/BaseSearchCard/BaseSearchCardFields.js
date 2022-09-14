@@ -3,19 +3,11 @@
 // the above comments are necessary to make the css prop work
 
 import React, {useContext} from 'react'
-import BasicSelect from "./BasicSelect";
-import {css} from "@emotion/react";
+import BasicSelect from "./BasicSelectChakra";
 import PropTypes from "prop-types";
 import {JobBoardContext} from "../index";
 import {Input, Button} from "@chakra-ui/react";
 
-const cardCss = {
-    searchFlexContainer: css({
-        display: 'flex',
-        flexDirection: 'row',
-        gap: "4px",
-    }),
-}
 
 BaseSearchCardFields.propTypes = {
     formikProps: PropTypes.any,
@@ -38,7 +30,7 @@ export default function BaseSearchCardFields({
     } = useContext(JobBoardContext)
 
     return (
-        <div css={cardCss.searchFlexContainer}>
+        <div style={{display: 'flex', flexDirection: 'row', gap: "4px"}}>
             <div style={{width: 180}}>
                 {/*What*/}
                 <Input
@@ -65,7 +57,7 @@ export default function BaseSearchCardFields({
                     errorBorderColor='red.200'
                 />
             </div>
-            <div style={{width: 95}}>
+            <div style={{width: 124}}>
                 {/*Radius*/}
                 <BasicSelect
                     label="Radius"
@@ -77,7 +69,7 @@ export default function BaseSearchCardFields({
 
                 />
             </div>
-            <div style={{width: 95}}>
+            <div style={{width: 124}}>
                 {/*Age*/}
                 <BasicSelect
                     label="Date"
@@ -108,7 +100,7 @@ export default function BaseSearchCardFields({
                     name="limit"
                     value={formikProps.values.limit}
                     onChange={formikProps.handleChange}
-                    style={{width: "70px"}}
+                    style={{width: "57px"}}
                     disabled={!enabledRadiusDateExperienceLimit}
                     borderRadius="base"
                     isInvalid={formikProps.errors.limit && formikProps.touched.limit}

@@ -1,11 +1,5 @@
-import * as React from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
+import React, {useState} from 'react';
 import {Select} from 'chakra-react-select';
-import Checkbox from '@mui/material/Checkbox';
 import PropTypes from "prop-types";
 
 MultipleSelect.propTypes = {
@@ -16,7 +10,7 @@ MultipleSelect.propTypes = {
     disabled: PropTypes.bool.isRequired,
 }
 export default function MultipleSelect({label, onChange, value, options, disabled}) {
-    const [items, setItems] = React.useState([]);
+    const [items, setItems] = useState([]);
 
     console.log("options", options)
     console.log("incoming value", value)
@@ -43,15 +37,11 @@ export default function MultipleSelect({label, onChange, value, options, disable
 
     return (
         <div>
-            {/*<FormControl sx={{width: "100%"}} size="small">*/}
-            {/*    <InputLabel>{label}</InputLabel>*/}
             <Select
                 placeholder={label}
                 isMulti={true}
                 value={value}
                 onChange={handleChange}
-                // input={<OutlinedInput label={label}/>}
-                // renderValue={(selected) => selected.join(', ')}
                 disabled={disabled}
                 options={options}
                 size="sm"
@@ -64,18 +54,9 @@ export default function MultipleSelect({label, onChange, value, options, disable
                         ...provided,
                         borderRadius: "base"
                     }),
-
                 }}
 
             />
-            {/*    {options.map((option) => (*/}
-            {/*        <MenuItem key={option.label} value={option.label}>*/}
-            {/*            <Checkbox checked={items.indexOf(option.label) > -1}/>*/}
-            {/*            <ListItemText primary={option.label}/>*/}
-            {/*        </MenuItem>*/}
-            {/*    ))}*/}
-            {/*</Select>*/}
-            {/*</FormControl>*/}
         </div>
     );
 }
