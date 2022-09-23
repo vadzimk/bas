@@ -52,7 +52,6 @@ undoDeleteButton.addEventListener('click', function () {
     }
     const {deletedRows} = state
     const idsToUnDelete = deletedRows[deletedRows.length - 1]
-    console.log('idsToUnDelete', idsToUnDelete)
     unDeleteRows(idsToUnDelete)
     state.deletedRows.pop()
 })

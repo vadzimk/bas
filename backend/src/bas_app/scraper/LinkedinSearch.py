@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 
 class LinkedinSearch(BaseSearch):
-    NAVIGATE_DELAY = 20
+    NAVIGATE_DELAY = 30
 
     class Filters:
         class Radius(str, Enum):

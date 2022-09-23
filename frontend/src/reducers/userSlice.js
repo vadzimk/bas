@@ -28,14 +28,11 @@ const userSlice = createSlice({
         builder.addCase(registerUser.fulfilled, (state, action) => {
             const {id} = action.payload
             state.id = id
-            console.log('hello form .addCase(registerUser.fulfilled)')
-
         })
             .addCase(loginUser.fulfilled, (state, action) => {
                 const {id, linkedin_credentials} = action.payload
                 state.id = id
                 state.linkedin_credentials = linkedin_credentials
-                console.log('hello from .addCase(loginUser.fulfilled)')
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 const {id, linkedin_credentials} = action.payload

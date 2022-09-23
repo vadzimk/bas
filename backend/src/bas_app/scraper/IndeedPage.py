@@ -10,7 +10,7 @@ from typing import List
 
 from IndeedBeacon import IndeedBeacon
 from BasePage import BasePage
-from utils import override, save_safe, make_soup
+from utils import override, save_safe, make_soup, SearchResultsEmpty
 import re
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
@@ -18,12 +18,11 @@ from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 class IndeedPage(BasePage):
     JOBS_ON_PAGE = 15
 
-    def  __init__(self, page_index: int, url: str):
+    def __init__(self, page_index: int, url: str):
         super().__init__(page_index, url)
         self._PAGE_MULTIPLIER: int = 10
         self._url: str = f"{url}{'&start=' + str(self._PAGE_MULTIPLIER * page_index) if page_index else ''}"
         logging.info(f"IndeedPage:  going to url: {self._url}")
-
 
     @override
     async def populate(self, bpage):
@@ -34,8 +33,9 @@ class IndeedPage(BasePage):
         except PlaywrightTimeoutError as e:
             pass  # No popup on current page
         self._soup = await self.make_beacon_soup(bpage)
+        if not self._soup.find('.jobsearch-NoResult-messageContainer'):
+            raise SearchResultsEmpty("Search results empty")
         self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
-
         print('job_count', self._job_count)
         self._beacons: List[BaseBeacon] = self.make_beacon_list()
         # self.save_beacons_csv()
@@ -55,7 +55,6 @@ class IndeedPage(BasePage):
         await asyncio.sleep(1)  # wait for page to load data
         text = await bpage.inner_html('html')
         return BeautifulSoup(text, 'html.parser')
-
 
     @override
     def make_beacon_list(self) -> List[BaseBeacon]:

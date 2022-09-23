@@ -1,21 +1,16 @@
-/* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
-/** @jsxImportSource @emotion/react */
 
-import {Alert, Button} from "@mui/material";
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import {useTheme, css} from "@emotion/react";
+
+import React, {createContext, useEffect,} from 'react';
 import {useSelector, useDispatch} from "react-redux";
-import {loginUser, userLoggedIn} from "./reducers/userSlice";
-import Register from "./components/Register";
-import Profile from "./components/Profile";
-import Login from "./components/Login";
-import Logout from "./components/Logout";
-import {notify, Ntypes} from "./reducers/notificationSlice";
-import {addSearchCard, deleteSearchCard} from "./reducers/searchCardsSlice";
-import {SearchCard} from "./components/SearchCard";
+import {userLoggedIn} from "./reducers/userSlice";
 
 
-// import theme from "./Theme";
+import Tasks from "./components/Tasks";
+import Results from "./components/Results";
+import UserHub from "./components/UserHub";
+
+import {Alert, AlertIcon, Text} from '@chakra-ui/react'
+import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -24,95 +19,72 @@ export const SearchCardContext = createContext({
 })
 
 function App() {
-    const theme = useTheme()
-    const cards = useSelector(state => state.searchCards.cards)
+
     const user = useSelector(state => state.user)
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
+
+
     useEffect(() => {
-        const user = JSON.parse(window.localStorage.getItem('bas-user')) // TODO persist the whole user object
+        const user = JSON.parse(window.localStorage.getItem('bas-user'))
         if (user?.id) {
             dispatch(userLoggedIn(user))
         }
     }, [])
 
-    const handleNewSearchCardLinkedin = () => {
-        if (!user.linkedin_credentials) {
-            dispatch(notify({type: Ntypes.ERROR, message: 'Linkedin credentials are missing, please UPDATE USER'}))
-            return
-        }
-        dispatch(addSearchCard('linkedin'))
-    }
-
-    const handleNewSearchCardIndeed = () => {
-        dispatch(addSearchCard('indeed'))
-    }
-
-    const handleSearchCardDelete = (id) => {
-        dispatch(deleteSearchCard(id))
-    }
-
 
     return (
-        <div
-            // css={{backgroundColor: theme.palette.common.orange}}
-        >
-            {notification.type &&
-            <Alert
-                severity={notification.type}
-                sx={{zIndex: "999999", position: "fixed", justifyContent: "center", width: "100%"}}
-            >
-                {notification.message}
-            </Alert>
-            }
-
-            <div css={{display: 'flex', justifyContent: 'space-between', backgroundColor: theme.palette.common.blue1}}>
-                <div style={{height: "100px", display: "flex", flexDirection: "column", justifyContent: "flex-end"}}>
-                    <h3 css={{...theme.typography.h3}}>
-                        Blanket Application Strategy
-                    </h3>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
-                    <div style={{display: 'flex',}}>
-                        {user.id ?
-                            <>
-                                <Profile/>
-                                <Logout/>
-                            </>
-                            :
-                            <>
-                                <Register/>
-                                <Login/>
-                            </>
-                        }
+        <div style={{position: "relative"}}>
+            <div style={{height: "100px", backgroundColor: "#d6e4ea"}}/>
+            <div style={{position: "absolute", top: 0, left: 0, width: "100%"}}>
+                <Tabs variant='solid-rounded'  isLazy={true}>
+                <div style={{maxWidth: "1600px", margin: "0 auto", padding: "0 32px", display: "flex", flexDirection: "column"}}>
+                    {notification.type &&
+                    <Alert rounded="base"
+                        status={notification.type}
+                        style={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center", width: "auto"}}
+                    >
+                        <AlertIcon/>
+                        {notification.message}
+                    </Alert>
+                    }
+                    <div style={{
+                        display: 'flex', justifyContent: 'space-between'
+                    }}>
+                        <div style={{
+                            height: "100px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            flexShrink: 0,
+                        }}>
+                            <Text fontSize="3xl">
+                                Blanket Application Strategy
+                            </Text>
+                            {user.id &&
+                                <TabList mb={2}>
+                                <Tab mr={3}>Tasks</Tab>
+                                <Tab>Results</Tab>
+                            </TabList>}
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'flex-end',
+                        }}>
+                            <UserHub />
+                        </div>
                     </div>
                 </div>
-
-            </div>
-            <h3 style={theme.typography.h4}>Tasks</h3>
-            <div style={{display: 'flex'}}>
-
-                {user.id && <Button
-                    variant="outlined"
-                    onClick={handleNewSearchCardLinkedin}>
-                    Linkedin Search
-                </Button>}
-                {user.id && <Button
-                    variant="outlined"
-                    onClick={handleNewSearchCardIndeed}>
-                    Indeed Search
-                </Button>}
-            </div>
-            <div>
-                {user.id && cards.map(card =>
-                    <SearchCardContext.Provider value={{
-                        cardId: card.id,
-                        onDelete: () => handleSearchCardDelete(card.id),
-                        platform: card.job_board,
-                    }} key={card.id}>
-                        <SearchCard />
-                    </SearchCardContext.Provider>
-                )}
+                    <TabPanels>
+                        <TabPanel>
+                            <Tasks/>
+                        </TabPanel>
+                        <TabPanel>
+                            <Results/>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
             </div>
         </div>
     )

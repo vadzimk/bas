@@ -1,0 +1,123 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css');
+
+/*.wrapper {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*}*/
+
+.details-container {
+    /*width: 100%;*/
+    display: flex;
+    flex-direction: row;
+}
+
+#detail {
+    width: 100%;
+    overflow-y: auto;
+}
+
+#table-container {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+/*.table-coontrol {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    justify-content: start;*/
+/*}*/
+
+/* Makes multi-line table rows */
+/*.tabulator-row .tabulator-cell {*/
+/*    white-space: pre-wrap;*/
+/*}*/
+
+
+#right_panel {
+    position: absolute;
+    /*position: relative;*/
+    width: 30%;
+    padding-left: 8px;
+    height: 100%;
+    right: 0;
+    background-color: #d6e4ea;
+    display: flex;
+    flex-direction: column;
+}
+
+#right_panel::after {
+    content: '';
+    background-color: #bec4d0;
+    position: absolute;
+    left: 0;
+    width: 8px;
+    height: 100%;
+    cursor: ew-resize;
+}
+
+/* keeps menu at the top of the window */
+/*.tabulator-menu.tabulator-popup-container {*/
+/*    top: 0px !important;*/
+/*    position: absolute;*/
+/*}*/
+
+#company-references {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #bec4d0;
+    position: sticky;
+}
+
+.current-row {
+    border-top: solid rgba(127, 255, 212, 0.3) !important;
+    border-bottom: solid rgba(127, 255, 212, 0.3) !important;
+}
+
+.tabulator-selected{
+    background-color: rgba(154, 188, 234, 0.6) !important;
+}
+
+#homepage-ref, #job-listing-ref {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+.tabulator-tooltip {
+    font-size: 16px !important;
+}
+
+/*.details-button-container {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    justify-content: flex-end;*/
+/*    flex-shrink: 0;*/
+/*}*/
+
+/*.details-button-container img {*/
+/*    height: 1.6em;*/
+/*}*/
+
+/*.details-button-container button {*/
+/*    display: none;*/
+/*}*/
+
+/*.details-header-container {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    font-weight: bold;*/
+/*}*/
+
+.tabulator-menu {
+    max-height: 20vh;
+    bottom: unset !important;
+}
+
+.search-flex-container {
+    display: flex;
+    flex-direction: row;
+}
+

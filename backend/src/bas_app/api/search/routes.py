@@ -64,7 +64,10 @@ def search_revoke():
     for _ in range(9):
         time.sleep(0.5)
         new_status = get_task_state(task_id)['state']
-        if new_status == 'REVOKED':
-            return Response("ok", status=204)
+        if new_status == 'REVOKED' or new_status == 'PENDING':
+            return jsonify({
+                    "state": "REVOKED",
+                    "info": "revoked"
+                })
     return Response("could not revoke", status=500)
 

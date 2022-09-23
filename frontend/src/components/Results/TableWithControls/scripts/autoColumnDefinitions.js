@@ -73,6 +73,7 @@ export default function autoColumnsDefinitions(definitions) {
 
         }
 
+        // TODO throws error
         if (column.field === 'company_other_locations_employees') {
             column.tooltip = makeToolTipFunction(
                 {
