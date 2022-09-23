@@ -8,9 +8,10 @@ from celery import shared_task
 from celery.result import AsyncResult
 from playwright.async_api import async_playwright
 from playwright.async_api._generated import Page as PlayWrightPage
+from sqlalchemy import delete
 
 from bas_app.api.search.search_fields_reference import reference
-from bas_app.models import Job
+from bas_app.models import Job, Search
 from bas_app.scraper.BaseSearch import BaseSearch
 from bas_app.scraper.IndeedSearch import IndeedSearch
 from bas_app.scraper.LinkedinSearch import LinkedinSearch
@@ -44,6 +45,7 @@ async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
         # Delete the unmatched rows (SQLAlchemy generates a single DELETE statement from this loop)
         count_deleted = 0
         for job in q:
+            db.session.execute(delete(Search).where(Search.job_id == job.id))
             db.session.delete(job)
             count_deleted += 1
         db.session.commit()

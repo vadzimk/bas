@@ -54,10 +54,12 @@ class BasePage(ABC):
         """
         for b in self._beacons:
             job = Job.query.filter_by(url=b.dict.get('url')).first()
+
             if not job:
                 job = Job(**b.job_attributes_only)
                 db.session.add(job)
                 db.session.commit()
+
             match self.__class__.__name__:
                 case "LinkedinPage":
                     job_board_name = 'Linkedin'
