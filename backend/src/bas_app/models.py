@@ -99,18 +99,22 @@ class Search(db.Model):  # junction table Job-SearchModel
     __tablename__ = 'search'
     id = db.Column(db.Integer, primary_key=True)
     job_board_name = db.Column(db.String)
+
     job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
     jobs = db.relationship('Job', back_populates='searches')
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', back_populates='searches')
+
     search_model_id = db.Column(db.Integer, db.ForeignKey('search_model.id'))
     search_model = db.relationship('SearchModel', back_populates='searches')
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
+
+    task_id = db.Column(db.String, db.ForeignKey('task.id'))
     tasks = db.relationship('Task', back_populates='search')
 
 
 class Task(db.Model):
     __tablename__ = 'task'
-    id = db.Column(db.Integer, primary_key=True)  # Celery task id
+    id = db.Column(db.String, primary_key=True)  # Celery task id
     timestamp = db.Column(db.DateTime(timezone=True), default=db.func.now())
     search = db.relationship('Search', back_populates='tasks')

@@ -6,7 +6,7 @@ from flask import request, jsonify, Response
 from . import search
 from ... import db
 from .tasks import scrape_linkedin, get_task_state, revoke_task, scrape_indeed
-from ...models import User, SearchModel
+from ...models import User, SearchModel, Task, Search
 
 
 @search.route('/api/search', methods=['POST'])
@@ -38,7 +38,6 @@ def search_jobs():
         experience=experience
     )
     db.session.add(search_model)
-    db.session.commit()
     match job_board:
         case 'linkedin':
             task = scrape_linkedin.s(search_fields=data, linkedin_credentials=linkedin_credentials).apply_async()
@@ -46,8 +45,13 @@ def search_jobs():
             task = scrape_indeed.s(search_fields=data).apply_async()
         case _:
             return Response("invalid job board", status=400)
+    task_in_db = Task(id=task.id)
+    db.session.add(task_in_db)
+
+    db.session.commit()
     print("task.id", task.id)
-    return jsonify({'task_id': task.id, 'model_id': search_model.id}), 202
+    print("task_in_db.id", task_in_db.id)
+    return jsonify({'task_id': task_in_db.id, 'model_id': search_model.id}), 202
 
 
 @search.route('/api/status/<task_id>')
@@ -66,8 +70,7 @@ def search_revoke():
         new_status = get_task_state(task_id)['state']
         if new_status == 'REVOKED' or new_status == 'PENDING':
             return jsonify({
-                    "state": "REVOKED",
-                    "info": "revoked"
-                })
+                "state": "REVOKED",
+                "info": "revoked"
+            })
     return Response("could not revoke", status=500)
-
