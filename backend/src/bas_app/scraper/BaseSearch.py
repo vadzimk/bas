@@ -21,13 +21,12 @@ class FoundException(Exception):
 class BaseSearch(ABC):
     NAVIGATE_DELAY = 15
 
-    def __init__(self, what, where, age, radius, experience, limit, education=''):
+    def __init__(self, what, where, age, radius, experience, limit, user_id, search_model_id, task_id):
         self._query = what
         self._location = where
         self._age = age
         self._radius = radius
         self._experience = experience
-        self._education = education
         self._pages: Optional[List[BasePage]] = None
         self._PageClass = BasePage
         self._url = None
@@ -39,10 +38,12 @@ class BaseSearch(ABC):
             'current': 0,
             'job_count': 0,
             'job_duplicates_current': 0
-
         }
         self._page_count_with_limit = None
-        self._total_skipped = 0
+        self._total_skipped = 0,
+        self._user_id = user_id,
+        self._search_model_id = search_model_id,
+        self._task_id = task_id
 
     def get_navigate_delay(self):
         assert self.NAVIGATE_DELAY > 10
@@ -124,7 +125,7 @@ class BaseSearch(ABC):
                     self.insert_or_update_job_db(b)
                 try:
                     company_profile_url = b.dict['company'].get('profile_url') or (
-                                job and job.company and job.company.profile_url)
+                            job and job.company and job.company.profile_url)
                 except Exception as e:
                     print("excapt")
                     raise e
@@ -207,7 +208,10 @@ class BaseSearch(ABC):
                 logging.critical(f'Retrying once to go to url {self._url}')
                 await asyncio.sleep(1)
                 await page.populate(bpage)
-            page.save_beacons_job_db()  # this is synchronous
+            page.save_beacons_job_db(
+                user_id=self._user_id,
+                search_model_id=self._search_model_id,
+                task_id=self._task_id)  # this is synchronous
             pages.append(page)
 
         pages: List[BasePage] = []

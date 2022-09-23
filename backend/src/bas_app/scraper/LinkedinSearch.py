@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 
 class LinkedinSearch(BaseSearch):
-    NAVIGATE_DELAY = 30
+    NAVIGATE_DELAY = 20
 
     class Filters:
         class Radius(str, Enum):
@@ -50,9 +50,13 @@ class LinkedinSearch(BaseSearch):
                  radius: Filters.Radius = Filters.Radius.ALL,
                  experience: List[Filters.Experience] = [Filters.Experience.ALL],
                  limit: int = sys.maxsize,
-                 linkedin_credentials: dict
+                 linkedin_credentials: dict,
+                 user_id: int = None,
+                 search_model_id: int = None,
+                 task_id: str = None,
                  ):
-        super().__init__(what, where, age, radius, experience, limit)
+        super().__init__(what=what, where=where, age=age, radius=radius, experience=experience, limit=limit, user_id=user_id, search_model_id=search_model_id, task_id=task_id)
+
         self._base_url = f"""https://www.linkedin.com"""
         self._url = f"""{self._base_url}/jobs/search/?{self._radius}{self.attributes()}{self._age}&keywords={urllib.parse.quote(self._query)}&location={urllib.parse.quote(self._location)}"""
         self._PageClass = LinkedinPage
@@ -64,7 +68,8 @@ class LinkedinSearch(BaseSearch):
         try:
             await bpage.goto(job_url)
             try:
-                job_page_not_found = bpage.locator('div:has-text("The job you were looking for was not found. Redirecting you to the home page")')
+                job_page_not_found = bpage.locator(
+                    'div:has-text("The job you were looking for was not found. Redirecting you to the home page")')
                 if job_page_not_found:
                     logging.error(job_page_not_found)
                 await bpage.locator('span.artdeco-button__text:has-text("See more")').click(timeout=2000)
@@ -118,7 +123,8 @@ class LinkedinSearch(BaseSearch):
             pass  # account not blocked
 
         try:
-            await bpage.wait_for_selector('text=Couldn’t find a LinkedIn account associated with this email', timeout=2000)
+            await bpage.wait_for_selector('text=Couldn’t find a LinkedIn account associated with this email',
+                                          timeout=2000)
             raise AccountNotFound(f"Linkedin account not found: {email}")
         except PlaywrightTimeoutError:
             pass  # account exists

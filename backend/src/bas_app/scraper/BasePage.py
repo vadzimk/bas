@@ -8,7 +8,7 @@ from pandas import DataFrame
 from abc import ABC, abstractmethod
 
 from bas_app import db
-from bas_app.models import Job
+from bas_app.models import Job, Search
 
 
 class BasePage(ABC):
@@ -48,11 +48,30 @@ class BasePage(ABC):
         """ makes beacon list and saves to self._beacons """
         pass
 
-    def save_beacons_job_db(self):
-        """ saves self._beacons job attributes to db after the beacons on the search page have been scrolled"""
+    def save_beacons_job_db(self, user_id, search_model_id, task_id,):
+        """ saves self._beacons job attributes to Job and Search tables after the beacons on the search page have
+        been scrolled
+        """
         for b in self._beacons:
             job = Job.query.filter_by(url=b.dict.get('url')).first()
             if not job:
                 job = Job(**b.job_attributes_only)
                 db.session.add(job)
-        db.session.commit()
+                db.session.commit()
+            match self.__class__.__name__:
+                case "LinkedinPage":
+                    job_board_name = 'Linkedin'
+                case "IndeedPage":
+                    job_board_name = 'Indeed'
+                case _:
+                    raise Exception('did not match classname in BasePage.save_beacons_job_db')
+
+            search_in_db = Search(
+                job_board_name=job_board_name,
+                job_id=job.id,
+                user_id=user_id,
+                search_model_id=search_model_id,
+                task_id=task_id
+            )
+            db.session.add(search_in_db)
+            db.session.commit()

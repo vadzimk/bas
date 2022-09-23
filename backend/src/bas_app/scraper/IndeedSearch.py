@@ -50,9 +50,14 @@ class IndeedSearch(BaseSearch):
                  radius=Filters.Radius.ALL,
                  experience=Filters.Experience.ALL,
                  education=Filters.Education.ALL,
-                 limit: int = sys.maxsize
+                 limit: int = sys.maxsize,
+                 user_id: int = None,
+                 search_model_id: int = None,
+                 task_id: str = None,
                  ):
-        super().__init__(what, where, age, radius, experience, education, limit)
+        super().__init__(what=what, where=where, age=age, radius=radius, experience=experience, limit=limit, user_id=user_id, search_model_id=search_model_id, task_id=task_id)
+
+        self._education = education or ''
         self._url = f"""https://www.indeed.com/jobs?q={urllib.parse.quote(self._query)}&l={urllib.parse.quote(self._location)}{self.attributes()}{self._radius}&fromage={self._age}"""
         self._PageClass = IndeedPage
 

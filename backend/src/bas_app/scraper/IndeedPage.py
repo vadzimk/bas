@@ -33,7 +33,7 @@ class IndeedPage(BasePage):
         except PlaywrightTimeoutError as e:
             pass  # No popup on current page
         self._soup = await self.make_beacon_soup(bpage)
-        if not self._soup.find('.jobsearch-NoResult-messageContainer'):
+        if self._soup.find('.jobsearch-NoResult-messageContainer'):
             raise SearchResultsEmpty("Search results empty")
         self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
         print('job_count', self._job_count)

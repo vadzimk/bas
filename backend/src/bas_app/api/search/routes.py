@@ -38,16 +38,26 @@ def search_jobs():
         experience=experience
     )
     db.session.add(search_model)
+    db.session.commit()
+    print("search_model.id", search_model.id)
     match job_board:
         case 'linkedin':
-            task = scrape_linkedin.s(search_fields=data, linkedin_credentials=linkedin_credentials).apply_async()
+            task = scrape_linkedin.s(
+                search_fields=data,
+                linkedin_credentials=linkedin_credentials,
+                user_id=user_id,
+                search_model_id=search_model.id
+            ).apply_async()
         case 'indeed':
-            task = scrape_indeed.s(search_fields=data).apply_async()
+            task = scrape_indeed.s(
+                search_fields=data,
+                user_id=user_id,
+                search_model_id=search_model.id
+            ).apply_async()
         case _:
             return Response("invalid job board", status=400)
     task_in_db = Task(id=task.id)
     db.session.add(task_in_db)
-
     db.session.commit()
     print("task.id", task.id)
     print("task_in_db.id", task_in_db.id)

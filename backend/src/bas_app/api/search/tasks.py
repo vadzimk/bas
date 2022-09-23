@@ -16,7 +16,6 @@ from bas_app.scraper.IndeedSearch import IndeedSearch
 from bas_app.scraper.LinkedinSearch import LinkedinSearch
 from bas_app import db, create_app
 
-
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 from config import pwt_args
 
@@ -56,17 +55,23 @@ async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
 
 
 @shared_task(bind=True)
-def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict):
+def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict, user_id: int,
+                    search_model_id: int):
     """
     all parameters of a celery task must be serializable
     :param self: celery sets this argument
     :param linkedin_credentials: fake username and password for scraping
     :param search_fields: for linkedin search
-
+    :param user_id: id of row in db table user
+    :param search_model_id: id of row in db table search_model
     """
     print('starting linkedin search', search_fields)
     search_fields = convert_search_fields(search_fields, 'linkedin')
-    new_search = LinkedinSearch(**search_fields, linkedin_credentials=linkedin_credentials)
+    new_search = LinkedinSearch(**search_fields,
+                                linkedin_credentials=linkedin_credentials,
+                                user_id=user_id,
+                                search_model_id=search_model_id,
+                                task_id=self.request.id)
     # TODO it creates a new loop for each task, replace with a single loop
     result = asyncio.run(async_task(
         new_search=new_search,
@@ -77,16 +82,21 @@ def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict):
 
 
 @shared_task(bind=True)
-def scrape_indeed(self, search_fields: dict):
+def scrape_indeed(self, search_fields: dict, user_id: int,
+                  search_model_id: int):
     """
     all parameters of a celery task must be serializable
     :param self: celery sets this argument
-    :param linkedin_credentials: fake username and password for scraping
     :param search_fields: for linkedin search
+    :param user_id: id of row in db table user
+    :param search_model_id: id of row in db table search_model
     """
     print('starting indeed search', search_fields)
     search_fields = convert_search_fields(search_fields, 'indeed')
-    new_search = IndeedSearch(**search_fields)
+    new_search = IndeedSearch(**search_fields,
+                              user_id=user_id,
+                              search_model_id=search_model_id,
+                              task_id=self.request.id)
     # TODO it creates a new loop for each task, replace with a single loop
     result = asyncio.run(async_task(
         new_search=new_search,
@@ -101,7 +111,7 @@ def get_task_state(task_id):
     :param task_id:
     :return: {
     "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS"
-    "info": {  # up to date version in BaseSearch.py
+    "info": {  # up-to-date version in BaseSearch.py
         "total": int,
         "current": int,
         "job_count": int
