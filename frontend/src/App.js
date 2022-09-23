@@ -77,7 +77,7 @@ function App() {
                     </div>
                 </div>
                     <TabPanels>
-                        <TabPanel>
+                        <TabPanel style={{display: "flex"}}>
                             <Tasks/>
                         </TabPanel>
                         <TabPanel>

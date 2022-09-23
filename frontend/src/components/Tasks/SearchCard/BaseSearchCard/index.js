@@ -166,7 +166,9 @@ export default function BaseSearchCard() {
                     </div>
                 }
                 {message &&
-                <div style={{display: "flex", maxHeight: "60px", overflow: "scroll"}}>
+                <div style={{display: "flex", maxHeight: "60px", maxWidth: "900px",
+                    overflow: "auto"
+                }}>
                     <Text>{message}</Text>
                 </div>
                 }

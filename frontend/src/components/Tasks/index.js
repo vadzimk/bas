@@ -3,7 +3,7 @@ import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "../../reducers/searchCardsSlice";
 import {SearchCard} from "./SearchCard";
 import {SearchCardContext} from "../../App";
-import {Button} from "@chakra-ui/react";
+import {Button, Stack, Checkbox} from "@chakra-ui/react";
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {SearchIcon} from "@chakra-ui/icons"
@@ -41,12 +41,12 @@ export default function Tasks() {
     return (
         <div
             style={{
-                maxWidth: "1600px",
+                // maxWidth: "600px",
                 padding: "0 32px",
                 margin: "0px auto",
                 display: 'flex',
                 flexDirection: 'column',
-                gap: "10px 0"
+                // gap: "10px 0"
             }}>
 
             <div style={{display: 'flex', gap: "4px"}}>
@@ -66,16 +66,25 @@ export default function Tasks() {
                     </Button>
                 </>}
             </div>
-            <div>
-                {user.id && cards.map(card =>
-                    <SearchCardContext.Provider value={{
-                        cardId: card.id,
-                        onDelete: () => handleSearchCardDelete(card.id),
-                        platform: card.job_board,
-                    }} key={card.id}>
-                        <SearchCard/>
-                    </SearchCardContext.Provider>
-                )}
+            <div style={{marginTop: "16px"}}>
+                <Checkbox
+                    defaultChecked
+                    // onChange={} // TODO select all cards
+                    size="lg"
+                    borderColor="#0088CC"
+                    style={{height: "55px"}}
+                ></Checkbox>
+                <Stack>
+                    {user.id && cards.map(card =>
+                        <SearchCardContext.Provider value={{
+                            cardId: card.id,
+                            onDelete: () => handleSearchCardDelete(card.id),
+                            platform: card.job_board,
+                        }} key={card.id}>
+                            <SearchCard/>
+                        </SearchCardContext.Provider>
+                    )}
+                </Stack>
             </div>
         </div>
     )
