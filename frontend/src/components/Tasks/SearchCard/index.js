@@ -5,9 +5,15 @@ import indeed_logo from "../../../assets/icons8-indeed.svg"
 import {createContext, useContext} from "react";
 import {SearchCardContext} from "../../../App";
 import { Box, Image, Checkbox } from '@chakra-ui/react'
+import {useSelector, useDispatch} from 'react-redux'
+import {toggledCard} from "../../../reducers/searchCardsSlice";
+
 
 export function SearchCard() {
     const {platform, cardId} = useContext(SearchCardContext)
+        const card = useSelector(state =>
+        state.searchCards.cards.find(c => c.id === cardId))
+    const dispatch = useDispatch();
     const platforms = {
         linkedin: {
             component: LinkedinSearchCard,
@@ -20,17 +26,19 @@ export function SearchCard() {
             alt: "Indeed"
         }
     }
+    const handleCardCheckChange = (e)=>{
+        dispatch(toggledCard(Number(e.target.value)))
+    }
     const Component = platforms[platform].component
     return (
         <div style={{display: "flex", margin: "16px 0 0 0", gap: "4px", height: "55px"}}>
             <div>
             <Checkbox
-                defaultChecked
+                isChecked={card.isChecked}
                 value={cardId}
-                // onChange={} // TODO select this card
+                onChange={handleCardCheckChange} // TODO select this card
                 size="lg"
                 borderColor="#0088CC"
-
             >
                 <Box
                     borderRadius='base' overflow='hidden'  border='1px' borderColor='gray.300'

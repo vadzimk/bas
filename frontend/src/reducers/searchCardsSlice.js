@@ -23,7 +23,8 @@ const searchCardsSlice = createSlice({
                 model_id: null,
                 formValues: {},
                 job_board: action.payload,
-                submitSuccess: null
+                submitSuccess: null,
+                isChecked: true,
             }
             state.cards = [...state.cards, newCard]
             state.nextCardId = state.nextCardId + 1
@@ -65,6 +66,16 @@ const searchCardsSlice = createSlice({
                 }
             })
         },
+        toggledCard: function (state, action) {
+            const cardId = action.payload
+            state.cards = state.cards.map(c =>
+                c.id === cardId ? {...c, isChecked: !c.isChecked} : {...c}
+            )
+        },
+        setAllCardsChecked: function (state, action) {
+            state.cards = state.cards.map(c => ({...c, isChecked: action.payload})
+            )
+        }
     },
     extraReducers: builder => {
         builder.addCase(createTask.fulfilled, (state, action) => {
@@ -113,7 +124,7 @@ function _subscribeTask({cardId, task_id}, dispatch) {
             if (data.state === 'FAILURE') {
                 if (data.info.includes('Linkedin account')) {
                     dispatch(notify({type: Ntypes.ERROR, message: data.info}))
-                } else{
+                } else {
                     dispatch(notifyTemp({type: Ntypes.ERROR, message: data.info}))
                 }
             }
@@ -151,6 +162,8 @@ export const {
     deleteSearchCard,
     updateSearchCardFormValues,
     updateSearchCardTaskStatus,
+    toggledCard,
+    setAllCardsChecked
 } = searchCardsSlice.actions
 
 export default searchCardsSlice.reducer
