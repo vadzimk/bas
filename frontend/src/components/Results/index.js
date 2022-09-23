@@ -4,16 +4,19 @@ import TableWithControls from "./TableWithControls";
 import {useSelector} from "react-redux";
 import {useEffect, useRef, useState} from "react";
 
+export const emptyDetail = {
+    job_id: "",
+    description: "",
+    company_homepage_url: "",
+    job_url: "",
+    title: "",
+    company_name: "",
+    boardLogo: "",
+}
 export default function Results() {
+
     const user = useSelector(state => state.user)
-    const [detail, setDetail] = useState({
-        description: "",
-        company_homepage_url: "",
-        job_url: "",
-        title: "",
-        company_name: "",
-        boardLogo: "",
-    })
+    const [detail, setDetail] = useState(emptyDetail)
 
     // ------------------------- Draggable panel ----------------------------
 
@@ -50,8 +53,15 @@ export default function Results() {
     if (user?.id) return (
         <div>
             <div style={{display: "flex", flexDirection: "row"}}>
-                <TableWithControls setDetail={setDetail} tableContainerRef={tableContainerRef}/>
-                <RightPanel detail={detail} panelRef={panelRef}/>
+                <TableWithControls
+                    detail={detail}
+                    setDetail={setDetail}
+                    tableContainerRef={tableContainerRef}
+                />
+                <RightPanel
+                    detail={detail}
+                    panelRef={panelRef}
+                />
             </div>
         </div>
 

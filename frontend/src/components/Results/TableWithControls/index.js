@@ -2,18 +2,27 @@ import {Input, Button} from '@chakra-ui/react'
 import React, {useEffect, useState} from "react";
 import api from "../../../services/api";
 import BasTabulator from "./BasTabulatorF";
+import {emptyDetail} from "../index";
 
-export default function TableWithControls({setDetail, tableContainerRef}) {
+export default function TableWithControls({detail, setDetail, tableContainerRef}) {
     const [table, setTable] = useState()
     const [filterValue, setFilterValue] = useState("")
     const [deletedRows, setDeletedRows] = useState([]) // array of arrays (each deletion pushes an array)
+
+    useEffect(() => {
+        if (table) {
+            const isDetailInTable = Boolean(table.getRows().find(r => r.getData().job_id === detail.job_id))
+            if (!isDetailInTable) {
+                setDetail(emptyDetail)
+            }
+        }
+    })
 
     function handleFilterValueChange(e) {
         console.log("filter-value", e.target.value)
         setFilterValue(e.target.value)
         multiColumnFilter(e.target.value, table)
     }
-
 
     function multiColumnFilter(value, table) {
         const filters = [];
@@ -121,14 +130,13 @@ export default function TableWithControls({setDetail, tableContainerRef}) {
             action: function (e, cell) {
                 const row = cell.getRow()
                 const id = row.getData().job_id
-                setDeletedRows([...deletedRows, [id]])
                 api.delete('/job', {data: [id]})
                     .then((res) => {
                         row.delete();
+                        setDeletedRows([...deletedRows, [id]])
                     }).catch((e) => {
                     console.log(e)
                 })
-
             }
         },
         {
@@ -143,12 +151,10 @@ export default function TableWithControls({setDetail, tableContainerRef}) {
                 api.delete('/job', {data: ids})
                     .then((res) => {
                         selectedRows.forEach(row => row.delete())
+                        setDeletedRows([...deletedRows, ids])
                     }).catch((e) => {
                     console.log(e)
                 })
-
-                // state.deletedRows.push(ids)
-                // undoDeleteButton.classList.add('is-info')
             }
         },
 

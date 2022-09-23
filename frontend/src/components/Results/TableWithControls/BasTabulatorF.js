@@ -20,6 +20,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
     function attachDetail(row) {
         console.log("calls attach detail---")
         const detail = {
+            job_id: "",
             description: "",
             company_homepage_url: "",
             job_url: "",
@@ -27,6 +28,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
             company_name: "",
             boardLogo: "",
         }
+        detail.job_id = row.getData().job_id
         detail.description = row.getData().job_description_html
         detail.company_homepage_url = row.getData().company_homepage_url
         if (detail.company_homepage_url?.toLowerCase().startsWith('www')) {
@@ -91,7 +93,6 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
             currentRowElement.classList.add('current-row')
         }
 
-        // TODO detach detail when no row selected
         aTable.on('rowClick', function (e, row) {
             attachDetail(row)
             highlightCurrentRowElement(row)
