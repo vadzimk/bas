@@ -35,10 +35,9 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
         detail.job_url = row.getData().job_url
         detail.title = row.getData().job_title
         detail.company_name = row.getData().company_name
-        const profile_url = row.getData().company_profile_url
-        if (profile_url.includes('indeed')) {
+        if (detail.job_url.includes('indeed')) {
             detail.boardLogo = indeed_logo
-        } else if (profile_url.includes('linkedin')) {
+        } else if (detail.job_url.includes('linkedin')) {
             detail.boardLogo = linkedin_logo
         }
         setDetail(detail)

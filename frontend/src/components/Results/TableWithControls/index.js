@@ -44,7 +44,7 @@ export default function TableWithControls({setDetail, tableContainerRef}) {
 
     function handleUndoDelete() {
         // http://tabulator.info/docs/5.3/history#undo
-        if (deletedRows.length) {
+        if (!deletedRows.length) {
             return
         }
         const idsToUnDelete = deletedRows[deletedRows.length - 1]
@@ -59,7 +59,7 @@ export default function TableWithControls({setDetail, tableContainerRef}) {
         }
         const records = jobIds.map(id => ({job_id: id, job_is_deleted: false}))
         console.log("records to undo", records)
-        api.put('/api/jobs', records)
+        api.put('/jobs', records)
             .then((res) => {
                 table.setData(res.data)
             }).catch((e) => {
@@ -121,8 +121,7 @@ export default function TableWithControls({setDetail, tableContainerRef}) {
             action: function (e, cell) {
                 const row = cell.getRow()
                 const id = row.getData().job_id
-                // state.deletedRows.push([id])
-                // undoDeleteButton.classList.add('is-info')
+                setDeletedRows([...deletedRows, [id]])
                 api.delete('/job', {data: [id]})
                     .then((res) => {
                         row.delete();
@@ -174,7 +173,6 @@ export default function TableWithControls({setDetail, tableContainerRef}) {
                 <Button
                     variant="outline"
                     sx={{width: "114px"}}
-                    disabled={filterValue === ""}
                     id="filter-clear"
                     size="sm"
                     onClick={handleClearFilter}
