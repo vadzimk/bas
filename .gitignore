@@ -11,5 +11,5 @@ postgres_data_dev
 .venv
 
 .run
-man.py
+my_searches.py
 out
