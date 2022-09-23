@@ -1,4 +1,3 @@
-
 import {userLoggedIn} from "../../reducers/userSlice";
 import {notify, Ntypes} from "../../reducers/notificationSlice";
 import {addSearchCard, deleteSearchCard} from "../../reducers/searchCardsSlice";
@@ -7,6 +6,7 @@ import {SearchCardContext} from "../../App";
 import {Button} from "@chakra-ui/react";
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect} from "react";
+import {SearchIcon} from "@chakra-ui/icons"
 
 
 export default function Tasks() {
@@ -51,16 +51,22 @@ export default function Tasks() {
 
             <div style={{display: 'flex', gap: "4px"}}>
 
-                {user.id && <Button
-                    onClick={handleNewSearchCardLinkedin}>
-                    Linkedin Search
-                </Button>}
-                {user.id && <Button
-                    onClick={handleNewSearchCardIndeed}>
-                    Indeed Search
-                </Button>}
+                {user.id && <>
+                    <Button
+                        rightIcon={<SearchIcon/>}
+                        variant="outline"
+                        onClick={handleNewSearchCardLinkedin}>
+                        New Linkedin
+                    </Button>
+                    <Button
+                        rightIcon={<SearchIcon/>}
+                        variant="outline"
+                        onClick={handleNewSearchCardIndeed}>
+                        New Indeed
+                    </Button>
+                </>}
             </div>
-            <div >
+            <div>
                 {user.id && cards.map(card =>
                     <SearchCardContext.Provider value={{
                         cardId: card.id,

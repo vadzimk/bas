@@ -28,7 +28,6 @@ export default function BaseSearchCard() {
         state.searchCards.cards.find(c => c.id === cardId))
     const currentTask = card.tasks[card.tasks.length - 1]
     const progressData = currentTask?.status
-    console.log("currentTask", currentTask)
     const taskDone = Boolean(progressData &&
         (progressData.state === 'SUCCESS' || progressData.state === 'REVOKED' || progressData.state === 'FAILURE'))
     const message = taskDone && typeof currentTask.status.info === "string" && currentTask.status.info
@@ -47,9 +46,6 @@ export default function BaseSearchCard() {
     const formRef = useRef()  // get form values as formRef.current.values
 
     const handleSubmit = async (formValues) => {
-        console.log('values', formValues)
-        console.log('submit')
-        console.log("values.experience", formValues.experience)
         const formdata = {
             ...formValues,
             experience: Array.isArray(formValues.experience)
@@ -74,7 +70,6 @@ export default function BaseSearchCard() {
         }
 
         dispatch(createTask(data))
-        console.log("data---", data)
     }
 
     const handleRevoke = () => {
@@ -87,7 +82,6 @@ export default function BaseSearchCard() {
     }
 
     const handleFormBlur = (values) => {
-        console.log('values', values)
         dispatch(updateSearchCardFormValues({id: cardId, values}))
     }
     const validate = (values) => {

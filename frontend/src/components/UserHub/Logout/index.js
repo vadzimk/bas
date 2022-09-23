@@ -15,6 +15,7 @@ export default function Logout() {
         <div>
             <Button
                 onClick={handleLogout}
+                variant="outline"
             >
                 Exit
             </Button>

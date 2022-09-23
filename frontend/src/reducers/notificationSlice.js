@@ -19,7 +19,6 @@ const notificationSlice = createSlice({
         notify: function (state, action) {
             state.message = action.payload.message;
             state.type = action.payload.type;
-            console.log('notification: ', action.payload.message)
         },
         clearNotification: function (state, action) {
             return initialState  // resets the state

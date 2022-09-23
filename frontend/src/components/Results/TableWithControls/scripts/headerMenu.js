@@ -7,7 +7,7 @@ export default function headerMenu () {
 
     for (let column of columns) {
 
-        //create checkbox element using font ! fantastic, fabulous, terrific, brilliant, marvellous, epic ! icons
+        //create checkbox element using  icons
         let icon = document.createElement("i");
         icon.classList.add("fas");
         icon.classList.add(column.isVisible() ? "fa-check-square" : "fa-square");
