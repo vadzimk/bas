@@ -88,6 +88,11 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
     }, [])
 
     useEffect(() => {
+        if(table?.getData()?.length){
+            table.replaceData(data)
+            console.log("replaced data")
+            return
+        }
 
         const aTable = new TabulatorFull(tableRef, tableConfig)
         let currentRowElement;
