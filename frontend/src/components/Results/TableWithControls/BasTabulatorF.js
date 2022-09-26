@@ -2,7 +2,7 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import {TabulatorFull} from "tabulator-tables"; //import Tabulator library
 
 import React, {useEffect, useState} from "react";
-import {getResults} from "../../../services/resultService";
+import {getResults, updateRow} from "../../../services/resultService";
 import {useSelector} from 'react-redux'
 import autoColumnsDefinitions from "./scripts/autoColumnDefinitions";
 import makeToolTipFunction from "./scripts/tooltip";
@@ -116,7 +116,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
             highlightCurrentRowElement(row)
         });
 
-        aTable.on('cellEdited', function (cell) {
+        aTable.on('cellEdited', async function (cell) {
             const job_id = cell.getRow().getData().job_id
             const oldValue = cell.getOldValue()
             const newValue = cell.getValue()
@@ -135,11 +135,10 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
                 return
             }
             // TODO this causes the table to crash often, because it resets data while editing
-            api.put('/job', recordToSend)
-                .then(res => {
-                    aTable.setData(res.data);
-                })
-                .catch(e => console.log(e))
+            // Did not use redux here because it crashes saying job_id is read only
+            const res_data = await updateRow(recordToSend, checkedModels, userId)
+
+            aTable.updateData(res_data);
 
         })
         setTable(aTable)

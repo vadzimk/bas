@@ -45,10 +45,13 @@ def delete_job():
 
 @job.route('/api/job', methods=['PUT'])
 def update_job():
-    record = json.loads(request.data)
+    request_data = json.loads(request.data)
+    record = request_data.get('record')
+    user_id = request_data.get('user_id')
+    model_ids = [int(m_id) for m_id in request_data.get('model_ids')]
     print('record:', record)
     success = update_one(record)
     db.session.commit()
     if not success:
         return Response(status=400)
-    return jsonify(get_current_data())
+    return jsonify(get_current_data_for_models(models=model_ids, user_id=user_id))
