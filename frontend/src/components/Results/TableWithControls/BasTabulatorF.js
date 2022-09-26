@@ -2,7 +2,7 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import {TabulatorFull} from "tabulator-tables"; //import Tabulator library
 
 import React, {useEffect, useState} from "react";
-import {getAllResults} from "../../../services/resultService";
+import {getResults} from "../../../services/resultService";
 import {useSelector} from 'react-redux'
 import autoColumnsDefinitions from "./scripts/autoColumnDefinitions";
 import makeToolTipFunction from "./scripts/tooltip";
@@ -10,9 +10,14 @@ import headerMenu from "./scripts/headerMenu";
 import api from "../../../services/api";
 import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
+import {fetchResults} from "../../../reducers/resultsSlice";
+
 
 const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
     const {id: userId} = useSelector(state => state.user)
+    const checkedModels = useSelector(state => state.searchCards.cards.filter(c => c.isChecked === true).map(c => c.model_id).filter(id => id != null))
+
+
     const [data, setData] = useState([])
     let tableRef = React.useRef()
 
@@ -75,13 +80,15 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
         },
     }
 
+
     useEffect(() => {
-        getAllResults().then(data => {
+        getResults(checkedModels, userId).then(data => {
             setData(data)
         }).catch(e => console.log(e))
     }, [])
 
     useEffect(() => {
+
         const aTable = new TabulatorFull(tableRef, tableConfig)
         let currentRowElement;
 
@@ -126,7 +133,6 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
             api.put('/job', recordToSend)
                 .then(res => {
                     aTable.setData(res.data);
-                    // restoreColumnLayout()
                 })
                 .catch(e => console.log(e))
 
@@ -135,7 +141,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
     }, [data])
 
 
-    return <div ref={r => (tableRef = r)}/>
+    return <div ref={r => (tableRef = r)} style={{height: "100%"}}/>
 }
 
 export default BasTabulator

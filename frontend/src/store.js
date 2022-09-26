@@ -1,18 +1,20 @@
 // using the confitureStore api
 import {configureStore} from '@reduxjs/toolkit';
-import userReducer from './reducers/userSlice'
-import notificationReducer from "./reducers/notificationSlice";
-import searchCardsReducer from './reducers/searchCardsSlice'
 import {combineReducers} from 'redux';
 import {persistReducer} from 'redux-persist'
 import thunk from 'redux-thunk'
 import storage from 'redux-persist/lib/storage'
+import userSlice from "./reducers/userSlice";
+import notificationSlice from "./reducers/notificationSlice";
+import searchCardsSlice from "./reducers/searchCardsSlice";
+import resultsSlice from "./reducers/resultsSlice";
 
 // using redux-persist example from https://codesandbox.io/s/izxb6?file=/src/app/store.js
 const reducers = combineReducers({
-        user: userReducer,
-        notification: notificationReducer,
-        searchCards: searchCardsReducer
+        user: userSlice.reducer,
+        notification: notificationSlice.reducer,
+        searchCards: searchCardsSlice.reducer,
+        results: resultsSlice.reducer,
 })
 
 const persistConfig = {

@@ -52,7 +52,7 @@ export default function Results() {
 
     if (user?.id) return (
         <div>
-            <div style={{display: "flex", flexDirection: "row"}}>
+            <div style={{display: "flex", flexDirection: "row", minHeight: "80vh"}}>
                 <TableWithControls
                     detail={detail}
                     setDetail={setDetail}

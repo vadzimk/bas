@@ -68,7 +68,10 @@ class Job(db.Model):
         # value_type = type(value)
         # if value_type != 'str':
         #     print('value_type', value_type, value)
-        self._date_posted = datetime.fromisoformat(value) if value else None
+        try:
+            self._date_posted = datetime.fromisoformat(value) if value else None
+        except ValueError:
+            self._date_posted = None
 
     def __repr__(self):
         return f'<Job {self.date_posted} {self.title} {self.url}>'

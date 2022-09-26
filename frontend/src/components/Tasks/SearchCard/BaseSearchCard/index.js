@@ -92,7 +92,7 @@ export default function BaseSearchCard() {
         if (!values.where) {
             errors.where = 'Required'
         }
-        if (values.limit && !Number.isInteger(values.limit)) {
+        if (values.limit && !Number.isInteger(Number(values.limit))) {
             errors.limit = 'Integer expected'
         }
         return errors
@@ -167,7 +167,7 @@ export default function BaseSearchCard() {
                 }
                 {message &&
                 <div style={{display: "flex", maxHeight: "60px", maxWidth: "900px",
-                    overflow: "auto"
+                    overflow: "hidden"
                 }}>
                     <Text>{message}</Text>
                 </div>

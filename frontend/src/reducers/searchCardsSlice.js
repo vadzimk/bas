@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 import api from "../services/api";
 import {revokeSearchTask, updateProgress} from "../services/searchService";
 import {notify, notifyTemp, Ntypes} from "./notificationSlice";
+import {fetchResults} from "./resultsSlice";
 
 
 const initialState = {
@@ -121,6 +122,7 @@ function _subscribeTask({cardId, task_id}, dispatch) {
         timer = setInterval(async () => {
             data = await updateProgress(task_id)
             dispatch(updateSearchCardTaskStatus({cardId, task_id, data}))
+            dispatch(fetchResults())
             if (data.state === 'FAILURE') {
                 if (data.info.includes('Linkedin account')) {
                     dispatch(notify({type: Ntypes.ERROR, message: data.info}))
@@ -166,4 +168,4 @@ export const {
     setAllCardsChecked
 } = searchCardsSlice.actions
 
-export default searchCardsSlice.reducer
+export default searchCardsSlice

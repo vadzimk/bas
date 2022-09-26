@@ -1,5 +1,3 @@
-
-
 import React, {createContext, useEffect,} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {userLoggedIn} from "./reducers/userSlice";
@@ -11,6 +9,7 @@ import UserHub from "./components/UserHub";
 
 import {Alert, AlertIcon, Text} from '@chakra-ui/react'
 import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
+import {fetchResults} from "./reducers/resultsSlice";
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -32,50 +31,66 @@ function App() {
         }
     }, [])
 
+    // useEffect(() => {
+    //     dispatch(fetchResults())
+    // }, [])
+
 
     return (
         <div style={{position: "relative"}}>
             <div style={{height: "100px", backgroundColor: "#d6e4ea"}}/>
             <div style={{position: "absolute", top: 0, left: 0, width: "100%"}}>
-                <Tabs variant='solid-rounded'  isLazy={true}>
-                <div style={{maxWidth: "1600px", margin: "0 auto", padding: "0 32px", display: "flex", flexDirection: "column"}}>
-                    {notification.type &&
-                    <Alert rounded="base"
-                        status={notification.type}
-                        style={{zIndex: "999999", position: "fixed", justifyContent: "center", alignSelf: "center", width: "auto"}}
-                    >
-                        <AlertIcon/>
-                        {notification.message}
-                    </Alert>
-                    }
+                <Tabs variant='solid-rounded' isLazy={true}>
                     <div style={{
-                        display: 'flex', justifyContent: 'space-between'
+                        maxWidth: "1600px",
+                        margin: "0 auto",
+                        padding: "0 32px",
+                        display: "flex",
+                        flexDirection: "column"
                     }}>
+                        {notification.type &&
+                            <Alert rounded="base"
+                                   status={notification.type}
+                                   style={{
+                                       zIndex: "999999",
+                                       position: "fixed",
+                                       justifyContent: "center",
+                                       alignSelf: "center",
+                                       width: "auto"
+                                   }}
+                            >
+                                <AlertIcon/>
+                                {notification.message}
+                            </Alert>
+                        }
                         <div style={{
-                            height: "100px",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            flexShrink: 0,
+                            display: 'flex', justifyContent: 'space-between'
                         }}>
-                            <Text fontSize="3xl">
-                                Blanket Application Strategy
-                            </Text>
-                            {user.id &&
-                                <TabList mb={2}>
-                                <Tab mr={3}>Tasks</Tab>
-                                <Tab>Results</Tab>
-                            </TabList>}
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-end',
-                        }}>
-                            <UserHub />
+                            <div style={{
+                                height: "100px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                flexShrink: 0,
+                            }}>
+                                <Text fontSize="3xl">
+                                    Blanket Application Strategy
+                                </Text>
+                                {user.id &&
+                                    <TabList mb={2}>
+                                        <Tab mr={3}>Tasks</Tab>
+                                        <Tab>Results</Tab>
+                                    </TabList>}
+                            </div>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'flex-end',
+                            }}>
+                                <UserHub/>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <TabPanels>
                         <TabPanel style={{display: "flex"}}>
                             <Tasks/>

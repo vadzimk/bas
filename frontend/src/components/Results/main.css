@@ -73,8 +73,8 @@
 }
 
 .current-row {
-    border-top: solid rgba(127, 255, 212, 0.3) !important;
-    border-bottom: solid rgba(127, 255, 212, 0.3) !important;
+    background-color:rgba(127, 255, 212, 0.3) !important;
+
 }
 
 .tabulator-selected{

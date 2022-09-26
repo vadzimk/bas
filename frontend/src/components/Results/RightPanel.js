@@ -20,7 +20,12 @@ export default function RightPanel({detail, panelRef}) {
 
 
     return (
-        <div id="right_panel" className="details-container" ref={panelRef}>
+        <div
+            id="right_panel"
+            className="details-container"
+            ref={panelRef}
+            // style={{height: "auto"}}
+        >
             <div id="company-references">
                 <div style={{
                     display: "flex",

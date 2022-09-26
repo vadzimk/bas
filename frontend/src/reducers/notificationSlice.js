@@ -39,4 +39,4 @@ export const notifyTemp = createAsyncThunk('notification/timed', async (conf, {d
 })
 
 export const {notify, clearNotification} = notificationSlice.actions
-export default notificationSlice.reducer
+export default notificationSlice

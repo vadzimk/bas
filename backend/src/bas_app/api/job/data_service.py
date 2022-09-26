@@ -1,17 +1,19 @@
 import json
-from typing import Type
+from typing import Type, List
 
 import pandas as pd
 from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from bas_app import db
-from bas_app.models import Job, Company
+from bas_app.models import Job, Company, Search
 from .columns_to_display import columns
+
 
 def get_current_data():
     result = db.session.query(Job, Company) \
         .join(Job) \
-        .filter(Job.is_deleted == False).set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
+        .filter(Job.is_deleted == False)\
+        .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
 
     df = pd.read_sql(result, db.session.bind)
     # print(df.info())
@@ -24,9 +26,29 @@ def get_current_data():
     return table_json
 
 
+def get_current_data_for_models(models: List[int], user_id: int):
+    return get_current_data()
+    # TODO revert this
+    # result = db.session.query(Job, Company) \
+    #     .join(Search.jobs) \
+    #     .filter(Search.search_model_id.in_(models)) \
+    #     .filter(Search.user_id == user_id) \
+    #     .join(Job.company)\
+    #     .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
+    #
+    # df = pd.read_sql(result, db.session.bind)
+    #
+    # df = df.reindex(columns=columns)
+    #
+    # # logging.info(f'info: {df.info()}')
+    #
+    # table_json = json.loads(df.to_json(orient='records'))
+    # return table_json
+
+
 def make_record_for_update(record: dict, model: Type[db.Model]):
     """
-    :returns dict that contains column:new_value for the table model
+    :returns: dict that contains column:new_value for the table model
     :record: record to update
     :model: model of the table to get the column names from
     """

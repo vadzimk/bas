@@ -88,4 +88,4 @@ export const updateUser = createAsyncThunk('user/update', async (userFields, {di
 })
 
 export const {userLoggedIn, userRegistered, userLogout} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core
-export default userSlice.reducer
+export default userSlice

@@ -3,14 +3,20 @@ import json
 from flask import jsonify, request, Response
 
 from . import job
-from .data_service import get_current_data, update_one
+from .data_service import get_current_data, update_one, get_current_data_for_models
 from ... import db
 from ...models import Job
 
 
+def results_request_args():
+    user_id = int(request.args.get('user_id'))
+    models = [int(model_id) for model_id in request.args.getlist('model_id')]
+    return models, user_id
+
+
 @job.route('/api/jobs')
 def jobs():
-    return jsonify(get_current_data())
+    return jsonify(get_current_data_for_models(*results_request_args()))
 
 
 @job.route('/api/jobs', methods=['PUT'])
