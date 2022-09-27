@@ -43,7 +43,7 @@ const searchCardsSlice = createSlice({
             })
         },
         updateSearchCardTaskStatus: function (state, action) {
-            const {cardId, task_id, data} = action.payload
+            const {model_id, task_id, data} = action.payload
             const computeProgress = (data) => {
                 if (data.state === 'PROGRESS') {
                     return 100 * data.info.current / data.info.total
@@ -53,7 +53,7 @@ const searchCardsSlice = createSlice({
             }
             const progress = computeProgress(data)
             state.cards = state.cards.map(c => {
-                if (c.id === cardId) {
+                if (c.model_id === model_id) {
                     return {
                         ...c,
                         tasks: c.tasks.map(t => t.task_id === task_id ? {
@@ -89,6 +89,47 @@ const searchCardsSlice = createSlice({
             } : {...c})
 
         })
+            .addCase(fetchCards.fulfilled, (state, action) => {
+
+                state.cards = action.payload.map(c => {
+                    let experience;
+                    if (c.job_board_name ==='Indeed'){
+                        experience = c.experience[0]
+                    }
+
+                    const oldCard = {
+                        id: state.nextCardId,
+                        tasks: [],
+                        model_id: c.id,
+                        formValues: {
+                            what: c.what,
+                            where: c.where,
+                            age: {label: c.age || 'all', value: c.age},
+                            radius: {label: c.radius || 'all', value: c.radius},
+                            experience: {label: experience || 'all', value: experience}
+                        },
+                        job_board: c.job_board_name.toLowerCase(),
+                        submitSuccess: null,
+                        isChecked: true,
+                    }
+                    state.nextCardId = state.nextCardId + 1
+                    return oldCard
+                })
+            })
+    }
+})
+
+export const fetchCards = createAsyncThunk('cards/fetch', async (_, {dispatch, rejectWithValue, getState}) => {
+    const state = getState()
+    try {
+        const res = await api.get('/cards', {
+            params: {
+                user_id: state.user.id
+            },
+        })
+        return JSON.parse(res.data)
+    } catch (e) {
+        rejectWithValue(e.response.json())
     }
 })
 
@@ -103,7 +144,7 @@ export const createTask = createAsyncThunk('tasks/create', async (
     const state = getState()
     try {
         const res = await api.post('/search', {...newSearch, user_id: state.user.id}) // res.data={task_id:string, model_id:string}
-        _subscribeTask({cardId, task_id: res.data.task_id}, dispatch)
+        _subscribeTask({model_id: res.data.model_id, task_id: res.data.task_id}, dispatch)
         return {
             task_id: res.data.task_id,
             model_id: res.data.model_id,
@@ -115,14 +156,14 @@ export const createTask = createAsyncThunk('tasks/create', async (
 
 })
 
-function _subscribeTask({cardId, task_id}, dispatch) {
+function _subscribeTask({model_id, task_id}, dispatch) {
     let timer
     let data
     try {
         timer = setInterval(async () => {
             data = await updateProgress(task_id)
-            dispatch(updateSearchCardTaskStatus({cardId, task_id, data}))
-            dispatch(fetchResults())
+            dispatch(updateSearchCardTaskStatus({model_id, task_id, data}))
+            // dispatch(fetchResults()) // not fetching results in redux ...
             if (data.state === 'FAILURE') {
                 if (data.info.includes('Linkedin account')) {
                     dispatch(notify({type: Ntypes.ERROR, message: data.info}))

@@ -27,23 +27,23 @@ def get_current_data():
 
 
 def get_current_data_for_models(models: List[int], user_id: int):
-    return get_current_data()
+    # return get_current_data()
     # TODO revert this
-    # result = db.session.query(Job, Company) \
-    #     .join(Search.jobs) \
-    #     .filter(Search.search_model_id.in_(models)) \
-    #     .filter(Search.user_id == user_id) \
-    #     .join(Job.company)\
-    #     .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
-    #
-    # df = pd.read_sql(result, db.session.bind)
-    #
-    # df = df.reindex(columns=columns)
-    #
-    # # logging.info(f'info: {df.info()}')
-    #
-    # table_json = json.loads(df.to_json(orient='records'))
-    # return table_json
+    result = db.session.query(Job, Company) \
+        .join(Search.jobs) \
+        .filter(Search.search_model_id.in_(models)) \
+        .filter(Search.user_id == user_id) \
+        .join(Job.company)\
+        .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
+
+    df = pd.read_sql(result, db.session.bind)
+
+    df = df.reindex(columns=columns)
+
+    # logging.info(f'info: {df.info()}')
+
+    table_json = json.loads(df.to_json(orient='records'))
+    return table_json
 
 
 def make_record_for_update(record: dict, model: Type[db.Model]):

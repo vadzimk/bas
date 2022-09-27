@@ -45,6 +45,8 @@ export default function Tasks() {
         dispatch(setAllCardsChecked(e.target.checked))
     }
 
+    console.log("cards", cards)
+
     if (user.id)
         return (
             <div

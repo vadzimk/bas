@@ -10,6 +10,7 @@ import UserHub from "./components/UserHub";
 import {Alert, AlertIcon, Text} from '@chakra-ui/react'
 import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 import {fetchResults} from "./reducers/resultsSlice";
+import {fetchCards} from "./reducers/searchCardsSlice";
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -31,9 +32,9 @@ function App() {
         }
     }, [])
 
-    // useEffect(() => {
-    //     dispatch(fetchResults())
-    // }, [])
+    useEffect(() => {
+        dispatch(fetchCards())
+    }, [user?.id])
 
 
     return (
@@ -79,7 +80,9 @@ function App() {
                                 {user.id &&
                                     <TabList mb={2}>
                                         <Tab mr={3}>Tasks</Tab>
-                                        <Tab>Results</Tab>
+                                        <Tab mr={3}>Results</Tab>
+                                        <Tab mr={3}>Plan Apply</Tab>
+                                        <Tab mr={3}>Did Apply</Tab>
                                     </TabList>}
                             </div>
                             <div style={{
@@ -94,6 +97,12 @@ function App() {
                     <TabPanels>
                         <TabPanel style={{display: "flex"}}>
                             <Tasks/>
+                        </TabPanel>
+                        <TabPanel>
+                            <Results/>
+                        </TabPanel>
+                        <TabPanel>
+                            <Results/>
                         </TabPanel>
                         <TabPanel>
                             <Results/>
