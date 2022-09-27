@@ -31,6 +31,7 @@ def get_current_data_for_models(models: List[int], user_id: int):
     # TODO revert this
     result = db.session.query(Job, Company) \
         .join(Search.jobs) \
+        .filter(Job.is_deleted == False)\
         .filter(Search.search_model_id.in_(models)) \
         .filter(Search.user_id == user_id) \
         .join(Job.company)\
