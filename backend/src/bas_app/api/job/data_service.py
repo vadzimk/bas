@@ -34,7 +34,7 @@ def get_current_data_for_models(models: List[int], user_id: int):
         .filter(Search.search_model_id.in_(models)) \
         .filter(Search.user_id == user_id) \
         .join(Job.company)\
-        .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
+        .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct().statement
 
     df = pd.read_sql(result, db.session.bind)
 

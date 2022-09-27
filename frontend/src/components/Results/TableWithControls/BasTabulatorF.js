@@ -138,7 +138,8 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
             // Did not use redux here because it crashes saying job_id is read only
             const res_data = await updateRow(recordToSend, checkedModels, userId)
 
-            aTable.updateData(res_data);
+            // aTable.updateData(res_data);
+            aTable.replaceData(res_data);
 
         })
         setTable(aTable)
