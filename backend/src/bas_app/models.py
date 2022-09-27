@@ -85,6 +85,7 @@ class SearchModel(db.Model):
     age = db.Column(db.String, nullable=True)
     radius = db.Column(db.String, nullable=True)
     experience = db.Column(ARRAY(db.String), nullable=True)
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
     searches = db.relationship('Search', back_populates='search_model')
 
 

@@ -93,8 +93,15 @@ const searchCardsSlice = createSlice({
 
                 state.cards = action.payload.map(c => {
                     let experience;
-                    if (c.job_board_name ==='Indeed'){
-                        experience = c.experience[0]
+                    if (c.job_board_name === 'Indeed') {
+                        experience = {
+                            label: c.experience[0] || 'all',
+                            value: c.experience[0]
+                        }
+                    }
+                    else if (c.job_board_name === 'Linkedin') {
+                        console.log("c.experience", c.experience)
+                        experience = c.experience.map(exp=>({label: exp || 'all', value: exp}))
                     }
 
                     const oldCard = {
@@ -106,7 +113,7 @@ const searchCardsSlice = createSlice({
                             where: c.where,
                             age: {label: c.age || 'all', value: c.age},
                             radius: {label: c.radius || 'all', value: c.radius},
-                            experience: {label: experience || 'all', value: experience}
+                            experience,
                         },
                         job_board: c.job_board_name.toLowerCase(),
                         submitSuccess: null,
