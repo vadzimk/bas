@@ -3,11 +3,18 @@ import React, {useEffect, useState} from "react";
 import api from "../../../services/api";
 import BasTabulator from "./BasTabulatorF";
 import {emptyDetail} from "../index";
+import {useSelector, useDispatch} from "react-redux"
+import {saveOldRecord, undoUpdateResults} from "../../../reducers/resultsSlice";
+import {updateResultsRow} from "../../../services/resultService";
 
-export default function TableWithControls({detail, setDetail, tableContainerRef}) {
+
+export default function TableWithControls({detail, setDetail, tableContainerRef, getData, updateRow}) {
     const [table, setTable] = useState()
     const [filterValue, setFilterValue] = useState("")
     const [deletedRows, setDeletedRows] = useState([]) // array of arrays (each deletion pushes an array)
+    const {updatedRecordsOldValues} = useSelector(state => state.results)
+    const state = useSelector(state => state)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (table) {
@@ -50,6 +57,24 @@ export default function TableWithControls({detail, setDetail, tableContainerRef}
         setFilterValue("")
     }
 
+    async function handleUndoUpdate() {
+        try {
+            const record = state.results.updatedRecordsOldValues[state.results.updatedRecordsOldValues.length - 1]
+            const model_ids = state.searchCards.cards
+                .filter(c => c.isChecked === true)
+                .map(c => c.model_id)
+            const user_id = state.user.id
+            const res_data = await updateResultsRow(record, model_ids, user_id)
+            // TODO need to pop the last value from updatedRecordsOldValues !!!! but need redux for it
+            table.updateData(res_data);
+            // table.replaceData(res_data);
+
+        } catch (e) {
+            console.log(e)
+        }
+
+
+    }
 
     function handleUndoDelete() {
         // http://tabulator.info/docs/5.3/history#undo
@@ -195,13 +220,23 @@ export default function TableWithControls({detail, setDetail, tableContainerRef}
                 >
                     Undo Delete
                 </Button>
-                {/*            <span>Shift+Enter to submit cell </span>*/}
+                <Button
+                    variant="outline"
+                    sx={{width: "114px"}}
+                    size="sm"
+                    onClick={handleUndoUpdate}
+                    disabled={updatedRecordsOldValues?.length === 0}
+                >
+                    Undo Update
+                </Button>
             </div>
             <BasTabulator
                 table={table}
                 setTable={setTable}
                 setDetail={setDetail}
                 cellMenu={cellMenu}
+                getData={getData}
+                updateRow={updateRow}
             />
         </div>
     )

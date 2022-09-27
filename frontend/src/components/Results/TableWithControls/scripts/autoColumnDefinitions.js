@@ -118,7 +118,7 @@ export default function autoColumnsDefinitions(definitions) {
                     //e - the click event object
                     //cell - cell component
                     flipValue(cell)
-                    cell.getRow().getCell('did_apply_flag').setValue(false)
+                    cell.getRow().getCell('job_did_apply_flag').setValue(false)
 
 
                 }
@@ -127,7 +127,7 @@ export default function autoColumnsDefinitions(definitions) {
                     //e - the click event object
                     //cell - cell component
                     flipValue(cell)
-                    cell.getRow().getCell('plan_apply_flag').setValue(false)
+                    cell.getRow().getCell('job_plan_apply_flag').setValue(false)
                 }
                 column.visible = true
             }

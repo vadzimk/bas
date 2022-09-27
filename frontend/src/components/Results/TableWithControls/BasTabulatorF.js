@@ -2,7 +2,7 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import {TabulatorFull} from "tabulator-tables"; //import Tabulator library
 
 import React, {useEffect, useState} from "react";
-import {getResults, updateRow} from "../../../services/resultService";
+import {getResults, updateResultsRow} from "../../../services/resultService";
 import {useSelector} from 'react-redux'
 import autoColumnsDefinitions from "./scripts/autoColumnDefinitions";
 import makeToolTipFunction from "./scripts/tooltip";
@@ -10,14 +10,15 @@ import headerMenu from "./scripts/headerMenu";
 import api from "../../../services/api";
 import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
-import {fetchResults} from "../../../reducers/resultsSlice";
+import {fetchResults, saveOldRecord} from "../../../reducers/resultsSlice";
+import {useDispatch} from 'react-redux'
 
 
-const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
+const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}) => {
     const {id: userId} = useSelector(state => state.user)
     const checkedModels = useSelector(state => state.searchCards.cards.filter(c => c.isChecked === true).map(c => c.model_id).filter(id => id != null))
 
-
+    const dispatch = useDispatch()
     const [data, setData] = useState([])
     let tableRef = React.useRef()
 
@@ -82,9 +83,10 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
 
 
     useEffect(() => {
-        getResults(checkedModels, userId).then(data => {
+        getData(checkedModels, userId).then(data => {
             setData(data)
         }).catch(e => console.log(e))
+
     }, [])
 
     useEffect(() => {
@@ -140,6 +142,11 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu}) => {
 
             // aTable.updateData(res_data);
             aTable.replaceData(res_data);
+            const oldRecord = {
+                job_id,
+                [column]: oldValue
+            }
+            dispatch(saveOldRecord(oldRecord)) // TODO this should be on success, but can't make tabulator work with redux
 
         })
         setTable(aTable)

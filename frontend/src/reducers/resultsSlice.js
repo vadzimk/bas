@@ -1,15 +1,21 @@
-import {getResults, updateRow} from "../services/resultService";
+import {getResults, updateResultsRow} from "../services/resultService";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 
 
 const initialState = {
-    data: []
+    data: [],
+    deletedRecords: [],
+    updatedRecordsOldValues: [],
 }
 
 const resultsSlice = createSlice({
     name: "results",
     initialState,
-    reducers: {},
+    reducers: {
+        saveOldRecord: function (state, action) {
+            state.updatedRecordsOldValues = [...state.updatedRecordsOldValues, action.payload]
+        }
+    },
     extraReducers: builder => {
         builder.addCase(fetchResults.fulfilled, (state, action) => {
             state.data = [...action.payload]
@@ -43,11 +49,32 @@ export const updateData = createAsyncThunk('results/update', async (recordToSend
     getState
 }) => {
     try {
-        return await updateRow(recordToSend)
+        return await updateResultsRow(recordToSend)
     } catch (e) {
         rejectWithValue(e.response.json())
     }
 })
 
+export const undoUpdateResults = createAsyncThunk('results/undoUpdateResults', async (_, {
+    dispatch,
+    rejectWithValue,
+    getState
+}) => {
+    try {
+        const state = getState()
+        const record = state.results.updatedRecordsOldValues[state.results.updatedRecordsOldValues.length - 1]
+        const model_ids = state.searchCards.cards
+            .filter(c => c.isChecked === true)
+            .map(c => c.model_id)
+        const user_id = state.user.id
+        return await updateResultsRow(record, model_ids, user_id)
+    } catch (e) {
+        rejectWithValue(e.response.json())
+    }
+})
+
+export const {
+    saveOldRecord
+} = resultsSlice.actions
 
 export default resultsSlice

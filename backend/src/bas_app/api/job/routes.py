@@ -1,11 +1,13 @@
 import json
 
+import pandas as pd
 from flask import jsonify, request, Response
+from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import job
-from .data_service import get_current_data, update_one, get_current_data_for_models
+from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply
 from ... import db
-from ...models import Job
+from ...models import Job, Company, Search
 
 
 def results_request_args():
@@ -55,3 +57,23 @@ def update_job():
     if not success:
         return Response(status=400)
     return jsonify(get_current_data_for_models(models=model_ids, user_id=user_id))
+
+
+@job.route('/api/jobs/plan-apply')
+def plan_apply():
+    user_id = int(request.args.get('user_id'))
+    return jsonify(get_plan_apply(user_id))
+
+@job.route('/api/jobs/plan-apply', methods=['PUT'])
+def update_job_plan_apply():
+    request_data = json.loads(request.data)
+    record = request_data.get('record')
+    user_id = request_data.get('user_id')
+    print('record:', record)
+    success = update_one(record)
+    db.session.commit()
+    if not success:
+        return Response(status=400)
+    return jsonify(get_plan_apply(user_id))
+
+

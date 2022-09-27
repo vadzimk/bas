@@ -11,6 +11,8 @@ import {Alert, AlertIcon, Text} from '@chakra-ui/react'
 import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
 import {fetchResults} from "./reducers/resultsSlice";
 import {fetchCards} from "./reducers/searchCardsSlice";
+import {PlanApply} from "./components/PlanApply";
+import {getResults, updateResultsRow} from "./services/resultService";
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -99,13 +101,19 @@ function App() {
                             <Tasks/>
                         </TabPanel>
                         <TabPanel>
-                            <Results/>
+                            <Results
+                                getData={getResults}
+                                updateRow={updateResultsRow}
+                            />
                         </TabPanel>
                         <TabPanel>
-                            <Results/>
+                            <PlanApply/>
                         </TabPanel>
                         <TabPanel>
-                            <Results/>
+                            <Results
+                                getData={getResults}
+                                updateRow={updateResultsRow}
+                            />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

@@ -13,7 +13,7 @@ export const emptyDetail = {
     company_name: "",
     boardLogo: "",
 }
-export default function Results() {
+export default function Results({getData, updateRow}) {
 
     const user = useSelector(state => state.user)
     const [detail, setDetail] = useState(emptyDetail)
@@ -57,6 +57,8 @@ export default function Results() {
                     detail={detail}
                     setDetail={setDetail}
                     tableContainerRef={tableContainerRef}
+                    getData={getData}
+                    updateRow={updateRow}
                 />
                 <RightPanel
                     detail={detail}

@@ -12,11 +12,29 @@ from .columns_to_display import columns
 def get_current_data():
     result = db.session.query(Job, Company) \
         .join(Job) \
-        .filter(Job.is_deleted == False)\
+        .filter(Job.is_deleted == False) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).statement
 
     df = pd.read_sql(result, db.session.bind)
     # print(df.info())
+
+    df = df.reindex(columns=columns)
+
+    # logging.info(f'info: {df.info()}')
+
+    table_json = json.loads(df.to_json(orient='records'))
+    return table_json
+
+
+def get_plan_apply(user_id: int):
+    stmt = db.select(Job, Company) \
+        .join(Search.jobs) \
+        .filter(Job.is_deleted == False) \
+        .filter(Job.plan_apply_flag == True) \
+        .filter(Search.user_id == user_id) \
+        .join(Job.company) \
+        .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
+    df = pd.read_sql(stmt, db.session.bind)
 
     df = df.reindex(columns=columns)
 
@@ -31,10 +49,10 @@ def get_current_data_for_models(models: List[int], user_id: int):
     # TODO revert this
     result = db.session.query(Job, Company) \
         .join(Search.jobs) \
-        .filter(Job.is_deleted == False)\
+        .filter(Job.is_deleted == False) \
         .filter(Search.search_model_id.in_(models)) \
         .filter(Search.user_id == user_id) \
-        .join(Job.company)\
+        .join(Job.company) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct().statement
 
     df = pd.read_sql(result, db.session.bind)
