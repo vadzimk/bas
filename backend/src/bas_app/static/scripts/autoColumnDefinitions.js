@@ -13,7 +13,7 @@ export default function autoColumnsDefinitions(definitions) {
         // column.headerFilter = true; // add header filter to every column
 
         // Total calculations
-        if (column.field === 'job_title'
+        if (column.field === 'Job_title'
             || column.field.includes('flag')
             || column.field.includes('note')
         ) { // show row count
@@ -24,8 +24,8 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field.includes('url')
             || column.field.includes('id')
             || column.field.includes('html')
-            || column.field === 'job_estimated_salary'
-            || column.field === 'job_hiring_insights'
+            || column.field === 'Job_estimated_salary'
+            || column.field === 'Job_hiring_insights'
             || column.field.includes('salary')
             || column.field.includes('benefits')
             || column.field.includes('rating')
@@ -47,7 +47,7 @@ export default function autoColumnsDefinitions(definitions) {
 
         // +++++++++ Format as link +++++++++++
         if (column.field.includes('title')
-            || column.field === 'company_name'
+            || column.field === 'Company_name'
             || column.field.includes('overview')) {
             const url_fields = {
                 'title': 'job_url',
@@ -73,15 +73,15 @@ export default function autoColumnsDefinitions(definitions) {
 
         }
 
-        if (column.field === 'company_other_locations_employees') {
+        if (column.field === 'Company_other_locations_employees') {
             column.tooltip = makeToolTipFunction(
                 {
                     innerHtmlGetterFunction: (cell) =>
-                        cell.getRow().getData().company_other_locations_employees_html
+                        cell.getRow().getData().Company_other_locations_employees_html
                 })
         }
 
-        if (column.field === 'job_date_posted') {
+        if (column.field === 'Job_date_posted') {
             column.title = 'Posted Days Ago'
             column.formatter = function (cell, formatterParams, onRendered) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
@@ -112,7 +112,7 @@ export default function autoColumnsDefinitions(definitions) {
                 cell.setValue(newValue)
             }
 
-            if (column.field === 'job_plan_apply_flag') {
+            if (column.field === 'Job_plan_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component
@@ -121,7 +121,7 @@ export default function autoColumnsDefinitions(definitions) {
 
 
                 }
-            } else if (column.field === 'job_did_apply_flag') {
+            } else if (column.field === 'Job_did_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component

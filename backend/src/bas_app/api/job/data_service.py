@@ -2,10 +2,10 @@ import json
 from typing import Type, List
 
 import pandas as pd
-from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
+from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL, or_
 
 from bas_app import db
-from bas_app.models import Job, Company, Search, IgnoreCompany
+from bas_app.models import Job, Company, Search, CompanyUserNote
 from .columns_to_display import columns
 
 
@@ -50,16 +50,16 @@ def get_plan_apply(user_id: int):
 
 
 def get_current_data_for_models(models: List[int], user_id: int):
-    result = db.select(Job, Company) \
+    result = db.select(Job, Company, CompanyUserNote.note) \
         .join(Search.jobs) \
         .filter(Job.is_deleted == False) \
         .filter(Job.plan_apply_flag == False) \
         .filter(Job.did_apply_flag == False) \
         .filter(Search.search_model_id.in_(models)) \
         .filter(Search.user_id == user_id) \
-        .join(Job.company)\
-        .outerjoin(IgnoreCompany)\
-        .filter(IgnoreCompany.user_id == None)\
+        .join(Job.company) \
+        .outerjoin(CompanyUserNote) \
+        .filter(or_(CompanyUserNote.is_filtered == None, CompanyUserNote.is_filtered == False)) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
     df = pd.read_sql(result, db.session.bind)
     df = df.reindex(columns=columns)
@@ -83,20 +83,23 @@ def make_record_for_update(record: dict, model: Type[db.Model]):
     return record
 
 
-def update_one(record):
+def update_one(record, user_id: int = None):
     """
     updates one record but does not call db.session.commit() yet
     :returns True if success False is failed
     """
-    id = record.pop('job_id', None)  # records are prefixed with table_name_
+    job_id = record.pop('job_id', None)  # records are prefixed with table_name_
     record_for_job_update = make_record_for_update(record, Job)
     record_for_company_update = make_record_for_update(record, Company)
+    record_for_company_user_note_update = make_record_for_update(record, CompanyUserNote)
     touched = 0
+    job = Job.query.get(job_id)
     if record_for_job_update:  # empty dict evaluate to false
-        touched += db.session.query(Job).filter(Job.id == id).update(record_for_job_update)
+        touched += db.session.query(Job).filter(Job.id == job_id).update(record_for_job_update)
     if record_for_company_update:
-        job = Job.query.get(id)
         touched += db.session.query(Company).filter(Company.id == job.company_id).update(record_for_company_update)
+    if record_for_company_user_note_update:  # empty dict evaluate to false
+        touched += db.session.query(CompanyUserNote).filter(CompanyUserNote.company_id == job.company_id, CompanyUserNote.user_id ==user_id).update(record_for_company_user_note_update)
     if not touched:
         return False
     db.session.commit()
@@ -110,7 +113,16 @@ def delete_many_jobs(records):
     db.session.commit()
 
 
-def delete_one_company(company_id: int, user_id: int):
-    ignore_record = IgnoreCompany(user_id=user_id, company_id=company_id)
-    db.session.add(ignore_record)
+def update_company_user_note(company_id: int, user_id: int, fields: dict):
+    existing_company_user_note = CompanyUserNote.query.filter_by(user_id=user_id, company_id=company_id).first()
+    if existing_company_user_note:
+        for k, v in fields.items():
+            setattr(existing_company_user_note, k, v)
+    else:
+        new_company_user_note = CompanyUserNote(
+            user_id=user_id,
+            company_id=company_id,
+            **fields
+        )
+        db.session.add(new_company_user_note)
     db.session.commit()

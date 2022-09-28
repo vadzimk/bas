@@ -38,8 +38,8 @@ class BaseBeacon(ABC):
     @property
     def job_attributes_only(self) -> dict:
         """
-        :return dict containing attributes of job and not company """
-        job_attributes = {k: v for k, v in self.dict.items() if k != 'company'}  # copy only job attributes
+        :return dict containing fields of job and not company """
+        job_attributes = {k: v for k, v in self.dict.items() if k != 'company'}  # copy only job fields
         return job_attributes
 
     @abstractmethod
@@ -52,14 +52,14 @@ class BaseBeacon(ABC):
 
     @abstractmethod
     def populate_from_company_profile(self, about_company_html, about_employees_html=None):
-        """ all must be company attributes """
+        """ all must be company fields """
         pass
 
     def make_attribute_helper(self, dslice: dict, key: str, *commands: Callable):
         """
         Creates an optional attribute on the dslice
         and catches if the classname was not found by BeautifulSoap
-        :param dslice: the dictionary to put attributes on
+        :param dslice: the dictionary to put fields on
         :param key: attribute name
         :param commands:  functions as commands to extract attribute from a beacon:PageElement
         :return: None

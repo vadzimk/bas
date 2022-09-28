@@ -12,6 +12,7 @@ import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
 import {fetchResults, saveOldRecord} from "../../../reducers/resultsSlice";
 import {useDispatch} from 'react-redux'
+import {notifyTemp, Ntypes} from "../../../reducers/notificationSlice";
 
 
 const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}) => {
@@ -21,7 +22,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
     const dispatch = useDispatch()
     const [data, setData] = useState([])
     let tableRef = React.useRef()
-    const {updatedRecordsOldValues} = useSelector(state=>state.results)
+    const {updatedRecordsOldValues} = useSelector(state => state.results)
 
     // --------------------- Display Detail -------------------
     function attachDetail(row) {
@@ -35,15 +36,15 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
             company_name: "",
             boardLogo: "",
         }
-        detail.job_id = row.getData().job_id
-        detail.description = row.getData().job_description_html
-        detail.company_homepage_url = row.getData().company_homepage_url
+        detail.job_id = row.getData().Job_id
+        detail.description = row.getData().Job_description_html
+        detail.company_homepage_url = row.getData().Company_homepage_url
         if (detail.company_homepage_url?.toLowerCase().startsWith('www')) {
             detail.company_homepage_url = `http://${detail.company_homepage_url}`
         }
-        detail.job_url = row.getData().job_url
-        detail.title = row.getData().job_title
-        detail.company_name = row.getData().company_name
+        detail.job_url = row.getData().Job_url
+        detail.title = row.getData().Job_title
+        detail.company_name = row.getData().Company_name
         if (detail.job_url.includes('indeed')) {
             detail.boardLogo = indeed_logo
         } else if (detail.job_url.includes('linkedin')) {
@@ -91,7 +92,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
     }, [updatedRecordsOldValues])
 
     useEffect(() => {
-        if(table?.getData()?.length){
+        if (table?.getData()?.length) {
             table.replaceData(data)
             console.log("replaced data")
             return
@@ -120,7 +121,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
         });
 
         aTable.on('cellEdited', async function (cell) {
-            const job_id = cell.getRow().getData().job_id
+            const job_id = cell.getRow().getData().Job_id
             const oldValue = cell.getOldValue()
             const newValue = cell.getValue()
             if (
@@ -140,7 +141,10 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
             // TODO this causes the table to crash often, because it resets data while editing
             // Did not use redux here because it crashes saying job_id is read only
             const res_data = await updateRow(recordToSend, checkedModels, userId)
-
+            if (typeof recordToSend.Job_plan_apply_flag !== "undefined"
+                || typeof recordToSend.Job_did_apply_flag !== "undefined") {
+                dispatch(notifyTemp({type: Ntypes.INFO, message: "Moved to another tab"}))
+            }
             // aTable.updateData(res_data);
             aTable.replaceData(res_data);
             const oldRecord = {

@@ -6,7 +6,7 @@ from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import job
 from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply, get_did_apply, \
-    delete_many_jobs, delete_one_company
+    delete_many_jobs, update_company_user_note
 from ... import db
 from ...models import Job, Company, Search
 
@@ -52,7 +52,6 @@ def update_job():
     model_ids = [int(m_id) for m_id in request_data.get('model_ids')]
     print('record:', record)
     success = update_one(record)
-    db.session.commit()
     if not success:
         return Response(status=400)
     return jsonify(get_current_data_for_models(models=model_ids, user_id=user_id))
@@ -91,11 +90,12 @@ def update_job_did_apply():
         return Response(status=400)
     return jsonify(get_did_apply(user_id))
 
-@job.route('/api/job/company', methods=['DELETE'])
-def delete_company():
+@job.route('/api/job/company/ignore', methods=['PUT'])
+def ignore_company():
     request_data = json.loads(request.data)
     job_id = request_data.get('job_id')
     user_id = request_data.get('user_id')
+    print("request_data", request_data)
     ajob = Job.query.get(job_id)
-    delete_one_company(ajob.company_id, user_id)
-    return jsonify()
+    update_company_user_note(ajob.company_id, user_id, {"is_filtered": True})
+    return Response(status=202)

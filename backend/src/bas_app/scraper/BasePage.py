@@ -49,7 +49,7 @@ class BasePage(ABC):
         pass
 
     def save_beacons_job_db(self, user_id, search_model_id, task_id,):
-        """ saves self._beacons job attributes to Job and Search tables after the beacons on the search page have
+        """ saves self._beacons job fields to Job and Search tables after the beacons on the search page have
         been scrolled
         """
         for b in self._beacons:

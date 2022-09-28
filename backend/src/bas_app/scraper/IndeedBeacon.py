@@ -110,7 +110,7 @@ class IndeedBeacon(BaseBeacon):
 
     @override
     def populate_from_company_profile(self, about_company_html, about_employees_html=None):
-        """ all must be company attributes """
+        """ all must be company fields """
         # save_safe(about_company_html, f"{self._job_post['company']['name']}.html")
         company_soup = BeautifulSoup(about_company_html, 'html.parser')
 

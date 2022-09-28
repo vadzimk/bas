@@ -1,5 +1,6 @@
 import {getResults, updateResultsRow} from "../services/resultService";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
+import {notifyTemp} from "./notificationSlice";
 
 
 const initialState = {
@@ -52,7 +53,9 @@ export const updateData = createAsyncThunk('results/update', async (recordToSend
     getState
 }) => {
     try {
-        return await updateResultsRow(recordToSend)
+        const data =  await updateResultsRow(recordToSend)
+        console.log(recordToSend)
+        return data
     } catch (e) {
         rejectWithValue(e.response.json())
     }

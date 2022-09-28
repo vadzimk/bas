@@ -6,6 +6,7 @@ import {emptyDetail} from "../index";
 import {useSelector, useDispatch} from "react-redux"
 import {saveOldRecord, undoneLastUpdate, undoUpdateResults} from "../../../reducers/resultsSlice";
 import {updateResultsRow} from "../../../services/resultService";
+import {loginUser} from "../../../reducers/userSlice";
 
 
 export default function TableWithControls({detail, setDetail, tableContainerRef, getData, updateRow}) {
@@ -18,7 +19,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
 
     useEffect(() => {
         if (table) {
-            const isDetailInTable = Boolean(table.getRows().find(r => r.getData().job_id === detail.job_id))
+            const isDetailInTable = Boolean(table.getRows().find(r => r.getData().Job_id === detail.job_id))
             if (!isDetailInTable) {
                 setDetail(emptyDetail)
             }
@@ -152,11 +153,11 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             separator: true,
         },
         {
-            label: "<i class=\"fa-solid fa-ban\"></i> Ignore Company",
+            label: "<i class=\"fa-solid fa-ban\"></i> Filter Company",
             action: function (e, cell) {
-                const job_id = cell.getRow().getData().job_id
+                const job_id = cell.getRow().getData().Job_id
                 console.log("job_id", job_id)
-                api.delete('/job/company', {data: {job_id, user_id: state.user.id}})
+                api.put('/job/company/ignore', {job_id, user_id: state.user.id})
                     .then((res) => {
                             const checkedModels = state.searchCards.cards.filter(c => c.isChecked === true).map(c => c.model_id).filter(id => id != null)
 
@@ -166,7 +167,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
                                     table.replaceData(data)  // TODO see if it works
                                 }).catch(e => console.log(e))
                         }
-                    )
+                    ).catch(e=>console.log(e))
             }
         },
         {
@@ -176,7 +177,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             label: "<i class=\"fa-solid fa-trash-arrow-up\"></i> Delete Row In Focus",
             action: function (e, cell) {
                 const row = cell.getRow()
-                const id = row.getData().job_id
+                const id = row.getData().Job_id
                 api.delete('/job', {data: [id]})
                     .then((res) => {
                         row.delete();
@@ -194,7 +195,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
                 if (!selectedRows.length) {
                     return
                 }
-                const ids = selectedRows.map((r) => r.getData().job_id)
+                const ids = selectedRows.map((r) => r.getData().Job_id)
                 api.delete('/job', {data: ids})
                     .then((res) => {
                         selectedRows.forEach(row => row.delete())

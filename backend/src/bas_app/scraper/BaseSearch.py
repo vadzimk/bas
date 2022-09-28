@@ -148,7 +148,7 @@ class BaseSearch(ABC):
         """ generic insert or update relation into db
         inserts a new row or updates it if exists
         :Table: db.Model to insert fields
-        :fields: attributes of the row {attribute:value}
+        :fields: fields of the row {attribute:value}
         :filter_column: where column
         :filter_value: where value
         :return: query row result
@@ -167,7 +167,7 @@ class BaseSearch(ABC):
 
     # @staticmethod
     # def insert_or_update_company_db(beacon):
-    #     """ saves company attributes of the beacon to db if company not present in db"""
+    #     """ saves company fields of the beacon to db if company not present in db"""
     #     company = Company.query.filter_by(profile_url=beacon.dict['company'].get('profile_url')).first()
     #     if not company:
     #         company_attributes = beacon.dict['company']
@@ -178,7 +178,7 @@ class BaseSearch(ABC):
 
     @staticmethod
     def insert_or_update_company_db(beacon):
-        """ saves company attributes of the beacon to db if company not present in db"""
+        """ saves company fields of the beacon to db if company not present in db"""
         company = BaseSearch.insert_or_update_relation_helper(
             Table=Company,
             fields=beacon.dict['company'],
