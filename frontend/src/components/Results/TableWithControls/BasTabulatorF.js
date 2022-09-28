@@ -154,7 +154,10 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
     }, [data])
 
 
-    return <div ref={r => (tableRef = r)} style={{height: "100%"}}/>
+    return <div
+        ref={r => (tableRef = r)}
+        // style={{height: "100%"}}
+    />
 }
 
 export default BasTabulator

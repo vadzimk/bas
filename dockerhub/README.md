@@ -5,13 +5,12 @@ See **[Github page](https://github.com/vadzimk/bas)**
 
 
 ## Usage
-
+Create these two files (postgres-init-db.sh _and_ docker-compose.yml) and run commands in bash:  
 ```bash
 chmod +x postgres-init-db.sh
 docker-compose -f docker-compose.yml up
 ```
-Application will be available on `localhost:80` and 
-results page on `localhost:80/results`
+Application will be available on `localhost:80`  
 
 #### postgres-init-db.sh
 ```sh
