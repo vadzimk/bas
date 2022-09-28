@@ -5,7 +5,8 @@ from flask import jsonify, request, Response
 from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import job
-from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply, get_did_apply
+from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply, get_did_apply, \
+    delete_many_jobs, delete_one_company
 from ... import db
 from ...models import Job, Company, Search
 
@@ -36,12 +37,10 @@ def update_many_jobs():
 
 @job.route('/api/job', methods=['DELETE'])
 def delete_job():
+    """ mark deleted if job in records"""
     records = json.loads(request.data)
     print(records)
-    db.session.query(Job) \
-        .filter(Job.id.in_(tuple(records))) \
-        .update({Job.is_deleted: True})
-    db.session.commit()
+    delete_many_jobs(records)
     return jsonify(get_current_data())
 
 
@@ -71,7 +70,6 @@ def update_job_plan_apply():
     user_id = request_data.get('user_id')
     print('record:', record)
     success = update_one(record)
-    db.session.commit()
     if not success:
         return Response(status=400)
     return jsonify(get_plan_apply(user_id))
@@ -92,3 +90,12 @@ def update_job_did_apply():
     if not success:
         return Response(status=400)
     return jsonify(get_did_apply(user_id))
+
+@job.route('/api/job/company', methods=['DELETE'])
+def delete_company():
+    request_data = json.loads(request.data)
+    job_id = request_data.get('job_id')
+    user_id = request_data.get('user_id')
+    ajob = Job.query.get(job_id)
+    delete_one_company(ajob.company_id, user_id)
+    return jsonify()

@@ -37,6 +37,7 @@ to save even more time on your applications
 - Sqlite
 - Celery
 - Redis
+- GitLab CI
 
 ## Usage
 

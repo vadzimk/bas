@@ -152,6 +152,27 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             separator: true,
         },
         {
+            label: "<i class=\"fa-solid fa-ban\"></i> Ignore Company",
+            action: function (e, cell) {
+                const job_id = cell.getRow().getData().job_id
+                console.log("job_id", job_id)
+                api.delete('/job/company', {data: {job_id, user_id: state.user.id}})
+                    .then((res) => {
+                            const checkedModels = state.searchCards.cards.filter(c => c.isChecked === true).map(c => c.model_id).filter(id => id != null)
+
+                            getData(checkedModels, state.user.id)
+                                .then(data => {
+                                    const table = cell.getRow().getTable()
+                                    table.replaceData(data)  // TODO see if it works
+                                }).catch(e => console.log(e))
+                        }
+                    )
+            }
+        },
+        {
+            separator: true,
+        },
+        {
             label: "<i class=\"fa-solid fa-trash-arrow-up\"></i> Delete Row In Focus",
             action: function (e, cell) {
                 const row = cell.getRow()

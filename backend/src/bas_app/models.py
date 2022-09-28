@@ -27,10 +27,20 @@ class Company(db.Model):
     timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
     timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     jobs = db.relationship('Job', back_populates='company')
+    ignored_by_user = db.relationship('IgnoreCompany', back_populates='company')
 
     def __repr__(self):
         return f'<Post {self.name} {self.profile_url}>'
 
+class IgnoreCompany(db.Model):
+    __tablename__ = 'ignore_company'
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', back_populates='ignores_company')
+
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
+    company = db.relationship('Company', back_populates='ignored_by_user')
 
 class Job(db.Model):
     __tablename__ = 'job'
@@ -97,6 +107,7 @@ class User(db.Model):
     linkedin_password = db.Column(db.String,
                                   nullable=True)  # this is for a fake account and need access to the password value
     searches = db.relationship('Search', back_populates='user')
+    ignores_company = db.relationship('IgnoreCompany', back_populates='user')
 
 
 class Search(db.Model):  # junction table Job-SearchModel
