@@ -4,7 +4,7 @@ import api from "../../../services/api";
 import BasTabulator from "./BasTabulatorF";
 import {emptyDetail} from "../index";
 import {useSelector, useDispatch} from "react-redux"
-import {saveOldRecord, undoUpdateResults} from "../../../reducers/resultsSlice";
+import {saveOldRecord, undoneLastUpdate, undoUpdateResults} from "../../../reducers/resultsSlice";
 import {updateResultsRow} from "../../../services/resultService";
 
 
@@ -68,6 +68,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             // TODO need to pop the last value from updatedRecordsOldValues !!!! but need redux for it
             table.updateData(res_data);
             // table.replaceData(res_data);
+            dispatch(undoneLastUpdate())
 
         } catch (e) {
             console.log(e)

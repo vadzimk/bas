@@ -13,6 +13,7 @@ import {fetchResults} from "./reducers/resultsSlice";
 import {fetchCards} from "./reducers/searchCardsSlice";
 import {PlanApply} from "./components/PlanApply";
 import {getResults, updateResultsRow} from "./services/resultService";
+import {DidApply} from "./components/DidApply";
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -110,10 +111,7 @@ function App() {
                             <PlanApply/>
                         </TabPanel>
                         <TabPanel>
-                            <Results
-                                getData={getResults}
-                                updateRow={updateResultsRow}
-                            />
+                            <DidApply/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

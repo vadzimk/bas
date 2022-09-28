@@ -14,6 +14,9 @@ const resultsSlice = createSlice({
     reducers: {
         saveOldRecord: function (state, action) {
             state.updatedRecordsOldValues = [...state.updatedRecordsOldValues, action.payload]
+        },
+        undoneLastUpdate: function(state, action){
+            state.updatedRecordsOldValues = state.updatedRecordsOldValues.slice(0, -1)
         }
     },
     extraReducers: builder => {
@@ -67,14 +70,17 @@ export const undoUpdateResults = createAsyncThunk('results/undoUpdateResults', a
             .filter(c => c.isChecked === true)
             .map(c => c.model_id)
         const user_id = state.user.id
-        return await updateResultsRow(record, model_ids, user_id)
+        const res_data = await updateResultsRow(record, model_ids, user_id)
+        dispatch(undoneLastUpdate)
+        return res_data
     } catch (e) {
         rejectWithValue(e.response.json())
     }
 })
 
 export const {
-    saveOldRecord
+    saveOldRecord,
+    undoneLastUpdate,
 } = resultsSlice.actions
 
 export default resultsSlice

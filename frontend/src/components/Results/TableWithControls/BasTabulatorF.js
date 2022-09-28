@@ -21,6 +21,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
     const dispatch = useDispatch()
     const [data, setData] = useState([])
     let tableRef = React.useRef()
+    const {updatedRecordsOldValues} = useSelector(state=>state.results)
 
     // --------------------- Display Detail -------------------
     function attachDetail(row) {
@@ -87,7 +88,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
             setData(data)
         }).catch(e => console.log(e))
 
-    }, [])
+    }, [updatedRecordsOldValues])
 
     useEffect(() => {
         if(table?.getData()?.length){

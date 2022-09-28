@@ -5,7 +5,7 @@ from flask import jsonify, request, Response
 from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import job
-from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply
+from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply, get_did_apply
 from ... import db
 from ...models import Job, Company, Search
 
@@ -76,4 +76,19 @@ def update_job_plan_apply():
         return Response(status=400)
     return jsonify(get_plan_apply(user_id))
 
+@job.route('/api/jobs/did-apply')
+def did_apply():
+    user_id = int(request.args.get('user_id'))
+    return jsonify(get_did_apply(user_id))
 
+@job.route('/api/jobs/did-apply', methods=['PUT'])
+def update_job_did_apply():
+    request_data = json.loads(request.data)
+    record = request_data.get('record')
+    user_id = request_data.get('user_id')
+    print('record:', record)
+    success = update_one(record)
+    db.session.commit()
+    if not success:
+        return Response(status=400)
+    return jsonify(get_did_apply(user_id))

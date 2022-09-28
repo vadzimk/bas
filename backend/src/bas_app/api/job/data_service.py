@@ -26,22 +26,27 @@ def get_current_data():
     return table_json
 
 
-def get_plan_apply(user_id: int):
+def get_jobs_with_flags(flag: bool, user_id: int):
     stmt = db.select(Job, Company) \
         .join(Search.jobs) \
         .filter(Job.is_deleted == False) \
-        .filter(Job.plan_apply_flag == True) \
+        .filter(flag == True) \
         .filter(Search.user_id == user_id) \
         .join(Job.company) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
     df = pd.read_sql(stmt, db.session.bind)
-
     df = df.reindex(columns=columns)
-
     # logging.info(f'info: {df.info()}')
-
     table_json = json.loads(df.to_json(orient='records'))
     return table_json
+
+
+def get_did_apply(user_id: int):
+    return get_jobs_with_flags(Job.did_apply_flag, user_id)
+
+
+def get_plan_apply(user_id: int):
+    return get_jobs_with_flags(Job.plan_apply_flag, user_id)
 
 
 def get_current_data_for_models(models: List[int], user_id: int):
@@ -54,13 +59,9 @@ def get_current_data_for_models(models: List[int], user_id: int):
         .filter(Search.user_id == user_id) \
         .join(Job.company) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct().statement
-
     df = pd.read_sql(result, db.session.bind)
-
     df = df.reindex(columns=columns)
-
     # logging.info(f'info: {df.info()}')
-
     table_json = json.loads(df.to_json(orient='records'))
     return table_json
 

@@ -108,9 +108,7 @@ export default function autoColumnsDefinitions(definitions) {
             }
 
             function flipValue(cell) {
-                const oldValue = cell.getValue()
-                const newValue = !oldValue;
-                cell.setValue(newValue)
+                cell.setValue(!cell.getValue())
             }
 
             if (column.field === 'job_plan_apply_flag') {
