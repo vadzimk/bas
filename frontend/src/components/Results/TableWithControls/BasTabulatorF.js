@@ -89,7 +89,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
             setData(data)
         }).catch(e => console.log(e))
 
-    }, [updatedRecordsOldValues])
+    }, [updatedRecordsOldValues, userId])
 
     useEffect(() => {
         if (table?.getData()?.length) {

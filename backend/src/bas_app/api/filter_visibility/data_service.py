@@ -6,7 +6,9 @@ from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 from ... import db
 from ...models import Company, CompanyUserNote, Search
 
+
 def get_filtered_companies(user_id):
+    print('get_filtered_companies')
     stmt = db.select(Company.id,
                      Company.name,
                      Company.industry,
@@ -23,4 +25,5 @@ def get_filtered_companies(user_id):
     ).set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
     df = pd.read_sql(stmt, db.session.bind)
     table_json = json.loads(df.to_json(orient='records'))
+    print(table_json)
     return table_json
