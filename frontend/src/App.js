@@ -9,11 +9,11 @@ import UserHub from "./components/UserHub";
 
 import {Alert, AlertIcon, Text} from '@chakra-ui/react'
 import {Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'
-import {fetchResults} from "./reducers/resultsSlice";
 import {fetchCards} from "./reducers/searchCardsSlice";
 import {PlanApply} from "./components/PlanApply";
 import {getResults, updateResultsRow} from "./services/resultService";
 import {DidApply} from "./components/DidApply";
+import CompanyFilterVisibility from "./components/CompanyFilterVisibility";
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -86,6 +86,7 @@ function App() {
                                         <Tab mr={3}>Results</Tab>
                                         <Tab mr={3}>Plan Apply</Tab>
                                         <Tab mr={3}>Did Apply</Tab>
+                                        <Tab mr={3}>Company Visibility</Tab>
                                     </TabList>}
                             </div>
                             <div style={{
@@ -112,6 +113,9 @@ function App() {
                         </TabPanel>
                         <TabPanel>
                             <DidApply/>
+                        </TabPanel>
+                        <TabPanel>
+                            <CompanyFilterVisibility/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

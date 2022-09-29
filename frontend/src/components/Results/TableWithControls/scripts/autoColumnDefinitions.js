@@ -13,7 +13,7 @@ export default function autoColumnsDefinitions(definitions) {
         // column.headerFilter = true; // add header filter to every column
 
         // Total calculations
-        if (column.field === 'job_title'
+        if (column.field === 'Job_title'
             || column.field.includes('flag')
             || column.field.includes('note')
         ) { // show row count
@@ -24,8 +24,8 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field.includes('url')
             || column.field.includes('id')
             || column.field.includes('html')
-            || column.field === 'job_estimated_salary'
-            || column.field === 'job_hiring_insights'
+            || column.field === 'Job_estimated_salary'
+            || column.field === 'Job_hiring_insights'
             || column.field.includes('salary')
             || column.field.includes('benefits')
             || column.field.includes('rating')
@@ -47,18 +47,19 @@ export default function autoColumnsDefinitions(definitions) {
 
         // +++++++++ Format as link +++++++++++
         if (column.field.includes('title')
-            || column.field === 'company_name'
+            || column.field === 'Company_name'
             || column.field.includes('overview')) {
             const url_fields = {
-                'title': 'job_url',
-                'name': 'company_homepage_url',
-                'overview': 'company_profile_url',
+                'Job_title': 'Job_url',
+                'Company_name': 'Company_homepage_url',
+                'Company_overview': 'Company_profile_url',
             }
             // column.formatter = 'link';
             column.formatter = (cell, formatterParams, onRendered) => {
+                // TODO these urls are getting in the way when clicking uncommented for now
                 const url = cell.getRow().getData()[`${url_fields[column.field]}`]
                 if (url) {
-                    return `<a href="${url}" target="_blank">${cell.getValue()}</a>`
+                    return `<a href="${url}" target="_blank" style="color: blueviolet;">${cell.getValue()}</a>`
                 } else {
                     return cell.getValue()
                 }
@@ -74,15 +75,15 @@ export default function autoColumnsDefinitions(definitions) {
         }
 
         // TODO throws error
-        if (column.field === 'company_other_locations_employees') {
+        if (column.field === 'Company_other_locations_employees') {
             column.tooltip = makeToolTipFunction(
                 {
                     innerHtmlGetterFunction: (cell) =>
-                        cell.getRow().getData().company_other_locations_employees_html
+                        cell.getRow().getData().Company_other_locations_employees_html
                 })
         }
 
-        if (column.field === 'job_date_posted') {
+        if (column.field === 'Job_date_posted') {
             column.title = 'Posted Days Ago'
             column.formatter = function (cell, formatterParams, onRendered) {
                 return Math.floor((new Date() - new Date(cell.getValue())) / 1000 / 60 / 60 / 24)
@@ -111,21 +112,21 @@ export default function autoColumnsDefinitions(definitions) {
                 cell.setValue(!cell.getValue())
             }
 
-            if (column.field === 'job_plan_apply_flag') {
+            if (column.field === 'JobUserNote_plan_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component
                     flipValue(cell)
-                    cell.getRow().getCell('job_did_apply_flag').setValue(false)
+                    cell.getRow().getCell('JobUserNote_did_apply_flag').setValue(false)
 
 
                 }
-            } else if (column.field === 'job_did_apply_flag') {
+            } else if (column.field === 'JobUserNote_did_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component
                     flipValue(cell)
-                    cell.getRow().getCell('job_plan_apply_flag').setValue(false)
+                    cell.getRow().getCell('JobUserNote_plan_apply_flag').setValue(false)
                 }
                 column.visible = true
             }

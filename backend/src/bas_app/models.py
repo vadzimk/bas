@@ -7,8 +7,9 @@ from . import db
 from sqlalchemy.sql import expression
 from sqlalchemy.dialects.postgresql import ARRAY
 
+
 class Company(db.Model):
-    __tablename__ = 'company'
+    __tablename__ = 'Company'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     rating = db.Column(db.String, nullable=True)
@@ -23,17 +24,33 @@ class Company(db.Model):
     other_locations_employees_html = db.Column(db.String, nullable=True)
     profile_url = db.Column(db.String, index=True)
     homepage_url = db.Column(db.String, index=True, nullable=True)
-    note = db.Column(db.String, nullable=True)
     timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
     timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     jobs = db.relationship('Job', back_populates='company')
+    noted_by_user = db.relationship('CompanyUserNote', back_populates='company')
 
     def __repr__(self):
         return f'<Post {self.name} {self.profile_url}>'
 
 
+class CompanyUserNote(db.Model):
+    __tablename__ = 'CompanyUserNote'
+    id = db.Column(db.Integer, primary_key=True)
+    note = db.Column(db.String, nullable=True)
+    is_filtered = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    is_watched = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user = db.relationship('User', back_populates='notes_company')
+
+    company_id = db.Column(db.Integer, db.ForeignKey('Company.id'))
+    company = db.relationship('Company', back_populates='noted_by_user')
+
+
+
+
 class Job(db.Model):
-    __tablename__ = 'job'
+    __tablename__ = 'Job'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     job_type = db.Column(db.String, nullable=True)
@@ -49,15 +66,17 @@ class Job(db.Model):
     description_html = db.Column(db.String, nullable=True)
     hiring_insights = db.Column(db.String, nullable=True)
     url = db.Column(db.String, index=True)
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    note = db.Column(db.Text, nullable=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+    # is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    # plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    # did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    # note = db.Column(db.Text, nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('Company.id'), nullable=True)
     timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
     timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
     searches = db.relationship('Search', back_populates='jobs')
+    noted_by_user = db.relationship('JobUserNote', back_populates='job')
+
 
     @hybrid_property
     def date_posted(self):
@@ -76,9 +95,23 @@ class Job(db.Model):
     def __repr__(self):
         return f'<Job {self.date_posted} {self.title} {self.url}>'
 
+class JobUserNote(db.Model):
+    __tablename__ = 'JobUserNote'
+    id = db.Column(db.Integer, primary_key=True)
+    note = db.Column(db.Text, nullable=True)
+    plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    is_filtered = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+
+    job_id = db.Column(db.Integer, db.ForeignKey('Job.id'))
+    job = db.relationship('Job', back_populates='noted_by_user')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user = db.relationship('User', back_populates='notes_job')
+
 
 class SearchModel(db.Model):
-    __tablename__ = 'search_model'
+    __tablename__ = 'SearchModel'
     id = db.Column(db.Integer, primary_key=True)
     what = db.Column(db.String, nullable=True)
     where = db.Column(db.String, nullable=True)
@@ -90,35 +123,37 @@ class SearchModel(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, server_default="unnamed")
     linkedin_email = db.Column(db.String, nullable=True)
     linkedin_password = db.Column(db.String,
                                   nullable=True)  # this is for a fake account and need access to the password value
     searches = db.relationship('Search', back_populates='user')
+    notes_company = db.relationship('CompanyUserNote', back_populates='user')
+    notes_job = db.relationship('JobUserNote', back_populates='user')
 
 
 class Search(db.Model):  # junction table Job-SearchModel
-    __tablename__ = 'search'
+    __tablename__ = 'Search'
     id = db.Column(db.Integer, primary_key=True)
     job_board_name = db.Column(db.String)
 
-    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('Job.id'))
     jobs = db.relationship('Job', back_populates='searches')
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     user = db.relationship('User', back_populates='searches')
 
-    search_model_id = db.Column(db.Integer, db.ForeignKey('search_model.id'))
+    search_model_id = db.Column(db.Integer, db.ForeignKey('SearchModel.id'))
     search_model = db.relationship('SearchModel', back_populates='searches')
 
-    task_id = db.Column(db.String, db.ForeignKey('task.id'))
+    task_id = db.Column(db.String, db.ForeignKey('Task.id'))
     tasks = db.relationship('Task', back_populates='search')
 
 
 class Task(db.Model):
-    __tablename__ = 'task'
+    __tablename__ = 'Task'
     id = db.Column(db.String, primary_key=True)  # Celery task id
     timestamp = db.Column(db.DateTime(timezone=True), default=db.func.now())
     search = db.relationship('Search', back_populates='tasks')

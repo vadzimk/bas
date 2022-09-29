@@ -78,7 +78,7 @@ table.on("cellEditing", function (cell) {
 });
 
 table.on('cellEdited', function (cell) {
-    const job_id = cell.getRow().getData().job_id
+    const job_id = cell.getRow().getData().Job_id
     const oldValue = cell.getOldValue()
     const newValue = cell.getValue()
     if (

@@ -30,7 +30,7 @@ const sleep = (ms)=>new Promise(resolve => {setTimeout(()=>resolve(), ms)})
 
 export const notifyTemp = createAsyncThunk('notification/timed', async (conf, {dispatch})=>{
     // notification with timeout
-    // conf = {type: Ntypes, message, timeout: sec }
+    // conf = {type: Ntypes, message: String, timeout: sec }
     const {timeout, ...notification} = conf
     const ms = timeout ? timeout * 1000 : 5000
     dispatch(notify(notification))

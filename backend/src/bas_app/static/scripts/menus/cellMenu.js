@@ -69,7 +69,7 @@ const cellMenu = [
                 label: "<i class=\"fa-solid fa-trash-arrow-up\"></i> Delete Row In Focus",
                 action: function (e, cell) {
                     const row = cell.getRow()
-                    const id = row.getData().job_id
+                    const id = row.getData().Job_id
                     state.deletedRows.push([id])
                     undoDeleteButton.classList.add('is-info')
                     axios.delete('/api/job', {data: [id]})
@@ -88,7 +88,7 @@ const cellMenu = [
                     if(!selectedRows.length){
                         return
                     }
-                    const ids = selectedRows.map((r) => r.getData().job_id)
+                    const ids = selectedRows.map((r) => r.getData().Job_id)
                     axios.delete('/api/job', {data: ids})
                         .then((res) => {
                             selectedRows.forEach(row=>row.delete())

@@ -33,12 +33,14 @@ def create_app(config_name):
     from .api.job import job as job_blueprint
     from .api.search import search as search_blueprint
     from .api.card import card as card_blueprint
+    from .api.filter_visibility import filter_visibility as filter_visibility_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(job_blueprint)
     app.register_blueprint(search_blueprint)
     app.register_blueprint(card_blueprint)
+    app.register_blueprint(filter_visibility_blueprint)
 
     return app
 
