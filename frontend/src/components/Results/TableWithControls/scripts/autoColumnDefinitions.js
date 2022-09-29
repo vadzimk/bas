@@ -50,15 +50,16 @@ export default function autoColumnsDefinitions(definitions) {
             || column.field === 'Company_name'
             || column.field.includes('overview')) {
             const url_fields = {
-                'title': 'job_url',
-                'name': 'company_homepage_url',
-                'overview': 'company_profile_url',
+                'Job_title': 'Job_url',
+                'Company_name': 'Company_homepage_url',
+                'Company_overview': 'Company_profile_url',
             }
             // column.formatter = 'link';
             column.formatter = (cell, formatterParams, onRendered) => {
+                // TODO these urls are getting in the way when clicking uncommented for now
                 const url = cell.getRow().getData()[`${url_fields[column.field]}`]
                 if (url) {
-                    return `<a href="${url}" target="_blank">${cell.getValue()}</a>`
+                    return `<a href="${url}" target="_blank" style="color: blueviolet;">${cell.getValue()}</a>`
                 } else {
                     return cell.getValue()
                 }

@@ -14,6 +14,7 @@ import {fetchCards} from "./reducers/searchCardsSlice";
 import {PlanApply} from "./components/PlanApply";
 import {getResults, updateResultsRow} from "./services/resultService";
 import {DidApply} from "./components/DidApply";
+import FilterVisibility from "./components/FilterVisibility";
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -86,6 +87,7 @@ function App() {
                                         <Tab mr={3}>Results</Tab>
                                         <Tab mr={3}>Plan Apply</Tab>
                                         <Tab mr={3}>Did Apply</Tab>
+                                        <Tab mr={3}>Filter Visibility</Tab>
                                     </TabList>}
                             </div>
                             <div style={{
@@ -112,6 +114,9 @@ function App() {
                         </TabPanel>
                         <TabPanel>
                             <DidApply/>
+                        </TabPanel>
+                        <TabPanel>
+                            <FilterVisibility/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
