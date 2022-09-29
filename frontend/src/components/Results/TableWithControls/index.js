@@ -15,6 +15,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
     const [deletedRows, setDeletedRows] = useState([]) // array of arrays (each deletion pushes an array)
     const {updatedRecordsOldValues} = useSelector(state => state.results)
     const state = useSelector(state => state)
+    const user_id = state.user.id
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -64,7 +65,6 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             const model_ids = state.searchCards.cards
                 .filter(c => c.isChecked === true)
                 .map(c => c.model_id)
-            const user_id = state.user.id
             const res_data = await updateResultsRow(record, model_ids, user_id)
             // TODO need to pop the last value from updatedRecordsOldValues !!!! but need redux for it
             table.updateData(res_data);
@@ -85,7 +85,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
         }
         const idsToUnDelete = deletedRows[deletedRows.length - 1]
         unDeleteRows(idsToUnDelete) // TODO change to as a result from api call
-        setDeletedRows(deletedRows.slice(0, -1)) // remove last
+
     }
 
     function unDeleteRows(jobIds) {
@@ -95,9 +95,10 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
         }
         const records = jobIds.map(id => ({job_id: id, job_is_deleted: false}))
         console.log("records to undo", records)
-        api.put('/jobs', records)
+        api.put('/jobs', {records, user_id})
             .then((res) => {
                 table.setData(res.data)
+                setDeletedRows(deletedRows.slice(0, -1)) // remove last
             }).catch((e) => {
             console.log(e)
         })
@@ -178,7 +179,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             action: function (e, cell) {
                 const row = cell.getRow()
                 const id = row.getData().Job_id
-                api.delete('/job', {data: [id]})
+                api.delete('/job', {data: {job_ids: [id], user_id: user_id}})
                     .then((res) => {
                         row.delete();
                         setDeletedRows([...deletedRows, [id]])
@@ -196,7 +197,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
                     return
                 }
                 const ids = selectedRows.map((r) => r.getData().Job_id)
-                api.delete('/job', {data: ids})
+                api.delete('/job', {data: {job_ids: ids, user_id: user_id}})
                     .then((res) => {
                         selectedRows.forEach(row => row.delete())
                         setDeletedRows([...deletedRows, ids])

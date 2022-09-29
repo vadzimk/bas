@@ -1,14 +1,12 @@
 import json
 
-import pandas as pd
 from flask import jsonify, request, Response
-from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from . import job
 from .data_service import get_current_data, update_one, get_current_data_for_models, get_plan_apply, get_did_apply, \
     delete_many_jobs, update_company_user_note
 from ... import db
-from ...models import Job, Company, Search
+from ...models import Job
 
 
 def results_request_args():
@@ -25,23 +23,26 @@ def jobs():
 @job.route('/api/jobs', methods=['PUT'])
 def update_many_jobs():
     """ currently only undo delete jobs """
-    records = json.loads(request.data)
+    request_data = json.loads(request.data)
+    records = request_data.get("records")
+    user_id = request_data.get("user_id")
     print('records:', records)
     for rec in records:
-        success = update_one(rec)
+        success = update_one(rec, user_id)
         if not success:
             return Response(status=400)
     db.session.commit()
-    return jsonify(get_current_data())
+    return jsonify(get_current_data(user_id))
 
 
 @job.route('/api/job', methods=['DELETE'])
 def delete_job():
     """ mark deleted if job in records"""
-    records = json.loads(request.data)
-    print(records)
-    delete_many_jobs(records)
-    return jsonify(get_current_data())
+    request_data = json.loads(request.data)
+    job_ids = request_data.get('job_ids')
+    user_id = request_data.get('user_id')
+    delete_many_jobs(job_ids, user_id)
+    return jsonify(get_current_data(user_id))
 
 
 @job.route('/api/job', methods=['PUT'])
@@ -51,7 +52,7 @@ def update_job():
     user_id = request_data.get('user_id')
     model_ids = [int(m_id) for m_id in request_data.get('model_ids')]
     print('record:', record)
-    success = update_one(record)
+    success = update_one(record, user_id)
     if not success:
         return Response(status=400)
     return jsonify(get_current_data_for_models(models=model_ids, user_id=user_id))
@@ -68,7 +69,7 @@ def update_job_plan_apply():
     record = request_data.get('record')
     user_id = request_data.get('user_id')
     print('record:', record)
-    success = update_one(record)
+    success = update_one(record, user_id)
     if not success:
         return Response(status=400)
     return jsonify(get_plan_apply(user_id))
@@ -84,7 +85,7 @@ def update_job_did_apply():
     record = request_data.get('record')
     user_id = request_data.get('user_id')
     print('record:', record)
-    success = update_one(record)
+    success = update_one(record, user_id)
     db.session.commit()
     if not success:
         return Response(status=400)

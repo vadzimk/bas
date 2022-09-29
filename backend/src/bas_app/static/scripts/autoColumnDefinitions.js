@@ -112,21 +112,21 @@ export default function autoColumnsDefinitions(definitions) {
                 cell.setValue(newValue)
             }
 
-            if (column.field === 'Job_plan_apply_flag') {
+            if (column.field === 'JobUserNote_plan_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component
                     flipValue(cell)
-                    cell.getRow().getCell('did_apply_flag').setValue(false)
+                    cell.getRow().getCell('JobUserNote_did_apply_flag').setValue(false)
 
 
                 }
-            } else if (column.field === 'Job_did_apply_flag') {
+            } else if (column.field === 'JobUserNote_did_apply_flag') {
                 column.cellClick = function (e, cell) {
                     //e - the click event object
                     //cell - cell component
                     flipValue(cell)
-                    cell.getRow().getCell('plan_apply_flag').setValue(false)
+                    cell.getRow().getCell('JobUserNote_plan_apply_flag').setValue(false)
                 }
                 column.visible = true
             }

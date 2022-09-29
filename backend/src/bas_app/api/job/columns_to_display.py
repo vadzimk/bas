@@ -26,8 +26,8 @@ columns = [
     'Company_other_locations_employees_html',
     'Company_profile_url',
     'Company_homepage_url',
-    'Job_plan_apply_flag',
-    'Job_did_apply_flag',
-    'Job_note',
+    'JobUserNote_plan_apply_flag',
+    'JobUserNote_did_apply_flag',
+    'JobUserNote_note',
     'CompanyUserNote_note',
 ]

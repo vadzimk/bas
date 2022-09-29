@@ -24,7 +24,6 @@ class Company(db.Model):
     other_locations_employees_html = db.Column(db.String, nullable=True)
     profile_url = db.Column(db.String, index=True)
     homepage_url = db.Column(db.String, index=True, nullable=True)
-    # note = db.Column(db.String, nullable=True)
     timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
     timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     jobs = db.relationship('Job', back_populates='company')
@@ -37,6 +36,9 @@ class Company(db.Model):
 class CompanyUserNote(db.Model):
     __tablename__ = 'CompanyUserNote'
     id = db.Column(db.Integer, primary_key=True)
+    note = db.Column(db.String, nullable=True)
+    is_filtered = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    is_watched = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
 
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     user = db.relationship('User', back_populates='notes_company')
@@ -44,9 +46,7 @@ class CompanyUserNote(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('Company.id'))
     company = db.relationship('Company', back_populates='noted_by_user')
 
-    is_filtered = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    is_watched = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    note = db.Column(db.String, nullable=True)
+
 
 
 class Job(db.Model):
@@ -66,15 +66,17 @@ class Job(db.Model):
     description_html = db.Column(db.String, nullable=True)
     hiring_insights = db.Column(db.String, nullable=True)
     url = db.Column(db.String, index=True)
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
-    note = db.Column(db.Text, nullable=True)
+    # is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    # plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    # did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    # note = db.Column(db.Text, nullable=True)
     company_id = db.Column(db.Integer, db.ForeignKey('Company.id'), nullable=True)
     timestamp_created = db.Column(db.DateTime, default=func.now(), nullable=True)
     timestamp_updated = db.Column(db.DateTime, onupdate=func.now(), nullable=True)
     company = db.relationship('Company', back_populates='jobs')
     searches = db.relationship('Search', back_populates='jobs')
+    noted_by_user = db.relationship('JobUserNote', back_populates='job')
+
 
     @hybrid_property
     def date_posted(self):
@@ -92,6 +94,20 @@ class Job(db.Model):
 
     def __repr__(self):
         return f'<Job {self.date_posted} {self.title} {self.url}>'
+
+class JobUserNote(db.Model):
+    __tablename__ = 'JobUserNote'
+    id = db.Column(db.Integer, primary_key=True)
+    note = db.Column(db.Text, nullable=True)
+    plan_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    did_apply_flag = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+    is_filtered = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
+
+    job_id = db.Column(db.Integer, db.ForeignKey('Job.id'))
+    job = db.relationship('Job', back_populates='noted_by_user')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user = db.relationship('User', back_populates='notes_job')
 
 
 class SearchModel(db.Model):
@@ -115,6 +131,7 @@ class User(db.Model):
                                   nullable=True)  # this is for a fake account and need access to the password value
     searches = db.relationship('Search', back_populates='user')
     notes_company = db.relationship('CompanyUserNote', back_populates='user')
+    notes_job = db.relationship('JobUserNote', back_populates='user')
 
 
 class Search(db.Model):  # junction table Job-SearchModel

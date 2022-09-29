@@ -141,8 +141,8 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
             // TODO this causes the table to crash often, because it resets data while editing
             // Did not use redux here because it crashes saying job_id is read only
             const res_data = await updateRow(recordToSend, checkedModels, userId)
-            if (typeof recordToSend.Job_plan_apply_flag !== "undefined"
-                || typeof recordToSend.Job_did_apply_flag !== "undefined") {
+            if (typeof recordToSend.JobUserNote_plan_apply_flag !== "undefined"
+                || typeof recordToSend.JobUserNote_did_apply_flag !== "undefined") {
                 dispatch(notifyTemp({type: Ntypes.INFO, message: "Moved to another tab"}))
             }
             // aTable.updateData(res_data);
