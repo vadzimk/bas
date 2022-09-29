@@ -9,7 +9,7 @@ import autoColumnsDefinitions from "../Results/TableWithControls/scripts/autoCol
 //https://github.com/olifolkerd/tabulator/issues/3548
 // if (table.initialized){ table.setData(lData)} else {//make table}
 
-export default function FilterVisibility() {
+export default function CompanyFilterVisibility() {
 
     const user_id = useSelector(state => state.user.id)
     const dispatch = useDispatch()
@@ -79,11 +79,8 @@ export default function FilterVisibility() {
 
     useEffect(() => {
         if (table?.getData()?.length) {
-            console.log("replaced data")
             table.replaceData(data)
-            return
-        } else if (table?.getData()) {
-            console.log("table?.getData()-> set data")
+        } else if (table?.initialized) {
             table.setData(data)
         } else {
             const aTable = new TabulatorFull(tableRef, tableConfig)

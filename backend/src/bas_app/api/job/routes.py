@@ -86,7 +86,6 @@ def update_job_did_apply():
     user_id = request_data.get('user_id')
     print('record:', record)
     success = update_one(record, user_id)
-    db.session.commit()
     if not success:
         return Response(status=400)
     return jsonify(get_did_apply(user_id))

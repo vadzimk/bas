@@ -2,12 +2,10 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import {TabulatorFull} from "tabulator-tables"; //import Tabulator library
 
 import React, {useEffect, useState} from "react";
-import {getResults, updateResultsRow} from "../../../services/resultService";
 import {useSelector} from 'react-redux'
 import autoColumnsDefinitions from "./scripts/autoColumnDefinitions";
 import makeToolTipFunction from "./scripts/tooltip";
 import headerMenu from "./scripts/headerMenu";
-import api from "../../../services/api";
 import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
 import {fetchResults, saveOldRecord} from "../../../reducers/resultsSlice";
@@ -94,67 +92,68 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
     useEffect(() => {
         if (table?.getData()?.length) {
             table.replaceData(data)
-            console.log("replaced data")
-            return
+        } else if (table?.initialized) {
+            table.setData(data)
+        } else {
+
+            const aTable = new TabulatorFull(tableRef, tableConfig)
+            let currentRowElement;
+
+            function highlightCurrentRowElement(row) {
+                if (currentRowElement) {
+                    currentRowElement.classList.remove('current-row')
+                }
+                currentRowElement = row.getElement()
+                currentRowElement.classList.add('current-row')
+            }
+
+            aTable.on('rowClick', function (e, row) {
+                attachDetail(row)
+                highlightCurrentRowElement(row)
+            })
+
+            aTable.on("cellEditing", function (cell) {
+                const row = cell.getRow()
+                attachDetail(row)
+                highlightCurrentRowElement(row)
+            });
+
+            aTable.on('cellEdited', async function (cell) {
+                const job_id = cell.getRow().getData().Job_id
+                const oldValue = cell.getOldValue()
+                const newValue = cell.getValue()
+                if (
+                    ([null, ""].includes(oldValue) && [null, ""].includes(newValue))
+                    || oldValue?.toString().trim() === newValue?.toString().trim()) {  // no change in cell value
+                    return
+                }
+                console.log("updating", JSON.stringify(oldValue), typeof oldValue, "=>", JSON.stringify(newValue), typeof newValue)
+                const column = cell.getField()
+                const recordToSend = {
+                    job_id,
+                    [column]: newValue
+                }
+                if (!recordToSend.job_id) {
+                    return
+                }
+                // TODO this causes the table to crash often, because it resets data while editing
+                // Did not use redux here because it crashes saying job_id is read only
+                const res_data = await updateRow(recordToSend, checkedModels, userId)
+                if (typeof recordToSend.JobUserNote_plan_apply_flag !== "undefined"
+                    || typeof recordToSend.JobUserNote_did_apply_flag !== "undefined") {
+                    dispatch(notifyTemp({type: Ntypes.INFO, message: "Moved to another tab"}))
+                }
+                // aTable.updateData(res_data);
+                setData(res_data);
+                const oldRecord = {
+                    job_id,
+                    [column]: oldValue
+                }
+                dispatch(saveOldRecord(oldRecord)) // TODO this should be on success, but can't make tabulator work with redux
+
+            })
+            setTable(aTable)
         }
-
-        const aTable = new TabulatorFull(tableRef, tableConfig)
-        let currentRowElement;
-
-        function highlightCurrentRowElement(row) {
-            if (currentRowElement) {
-                currentRowElement.classList.remove('current-row')
-            }
-            currentRowElement = row.getElement()
-            currentRowElement.classList.add('current-row')
-        }
-
-        aTable.on('rowClick', function (e, row) {
-            attachDetail(row)
-            highlightCurrentRowElement(row)
-        })
-
-        aTable.on("cellEditing", function (cell) {
-            const row = cell.getRow()
-            attachDetail(row)
-            highlightCurrentRowElement(row)
-        });
-
-        aTable.on('cellEdited', async function (cell) {
-            const job_id = cell.getRow().getData().Job_id
-            const oldValue = cell.getOldValue()
-            const newValue = cell.getValue()
-            if (
-                ([null, ""].includes(oldValue) && [null, ""].includes(newValue))
-                || oldValue?.toString().trim() === newValue?.toString().trim()) {  // no change in cell value
-                return
-            }
-            console.log("updating", JSON.stringify(oldValue), typeof oldValue, "=>", JSON.stringify(newValue), typeof newValue)
-            const column = cell.getField()
-            const recordToSend = {
-                job_id,
-                [column]: newValue
-            }
-            if (!recordToSend.job_id) {
-                return
-            }
-            // TODO this causes the table to crash often, because it resets data while editing
-            // Did not use redux here because it crashes saying job_id is read only
-            const res_data = await updateRow(recordToSend, checkedModels, userId)
-            if (typeof recordToSend.JobUserNote_plan_apply_flag !== "undefined"
-                || typeof recordToSend.JobUserNote_did_apply_flag !== "undefined") {
-                dispatch(notifyTemp({type: Ntypes.INFO, message: "Moved to another tab"}))
-            }
-            // aTable.updateData(res_data);
-            aTable.replaceData(res_data);
-            const oldRecord = {
-                job_id,
-                [column]: oldValue
-            }
-            dispatch(saveOldRecord(oldRecord)) // TODO this should be on success, but can't make tabulator work with redux
-
-        })
-        setTable(aTable)
     }, [data])
 
 
