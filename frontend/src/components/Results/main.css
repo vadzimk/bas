@@ -73,11 +73,11 @@
 }
 
 .current-row {
-    background-color:rgba(127, 255, 212, 0.3) !important;
+    background-color: rgba(127, 255, 212, 0.3) !important;
 
 }
 
-.tabulator-selected{
+.tabulator-selected {
     background-color: rgba(154, 188, 234, 0.6) !important;
 }
 
@@ -121,3 +121,14 @@
     flex-direction: row;
 }
 
+
+#job-details ul {
+    list-style-type: square;
+    list-style-position: inside;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+#job-details h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
