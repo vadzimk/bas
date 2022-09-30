@@ -1,14 +1,28 @@
-import pandas as pd
-from flask import jsonify, request
+import json
+from typing import List
+
+from flask import jsonify, request, Response
 
 from . import card
-from ... import db
-from ...models import SearchModel, Search
+from .data_service import update_search_models, get_cards_for_user
+from ...models import SearchModel
 
 
 @card.route('/api/cards')
 def cards():
     user_id = int(request.args.get('user_id'))
-    stmt = db.select(SearchModel, Search.job_board_name).join(SearchModel.searches).filter(Search.user_id == user_id).distinct()
-    df = pd.read_sql(stmt, db.session.bind)
-    return jsonify(df.to_json(orient='records'))
+    return jsonify(get_cards_for_user(user_id))
+
+
+@card.route('/api/cards/', methods=['DELETE'])
+def delete_cards():
+    """ request.data = {"user_id":int, "model_ids": List[int]} """
+    request_data = json.loads(request.data)
+    print("request_data", request_data)
+    user_id: int = request_data.get('user_id')
+    model_ids: List[int] = request_data.get('model_ids')
+    if not update_search_models(user_id, model_ids, {SearchModel.is_deleted: True}):
+        return Response(status=400)
+    return Response(status=202)
+
+

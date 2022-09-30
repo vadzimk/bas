@@ -3,6 +3,7 @@ import api from "../services/api";
 import {revokeSearchTask, updateProgress} from "../services/searchService";
 import {notify, notifyTemp, Ntypes} from "./notificationSlice";
 import {fetchResults} from "./resultsSlice";
+import {func} from "prop-types";
 
 
 const initialState = {
@@ -30,7 +31,7 @@ const searchCardsSlice = createSlice({
             state.cards = [...state.cards, newCard]
             state.nextCardId = state.nextCardId + 1
         },
-        deleteSearchCard: function (state, action) {
+        deleteUnSubmittedCard: function (state, action) {
             state.cards = state.cards.filter(c => c.id !== action.payload)
         },
         updateSearchCardFormValues: function (state, action) {
@@ -98,10 +99,9 @@ const searchCardsSlice = createSlice({
                             label: c.experience[0] || 'all',
                             value: c.experience[0]
                         }
-                    }
-                    else if (c.job_board_name === 'Linkedin') {
+                    } else if (c.job_board_name === 'Linkedin') {
                         console.log("c.experience", c.experience)
-                        experience = c.experience.map(exp=>({label: exp || 'all', value: exp}))
+                        experience = c.experience.map(exp => ({label: exp || 'all', value: exp}))
                     }
 
                     const oldCard = {
@@ -123,6 +123,35 @@ const searchCardsSlice = createSlice({
                     return oldCard
                 })
             })
+            // .addCase(deleteSearchCard.fulfilled, (state, action) => {
+            //     if(!action.payload){
+            //         return state
+            //     }
+            //     state.cards = state.cards.filter(c => c.id !== action.payload)
+            // })
+    }
+})
+
+export const deleteSearchCard = createAsyncThunk('cards/delete', async (card_id, {
+    dispatch,
+    rejectWithValue,
+    getState
+}) => {
+    const state = getState()
+    const user_id = state.user.id
+    const model_id = state.searchCards.cards.find(c => c.id === card_id).model_id
+    console.log("card_id", card_id)
+    console.log("model_id", model_id)
+
+    if (!model_id) {
+        dispatch(deleteUnSubmittedCard(card_id))
+    } else {
+        try {
+            await api.delete('/cards', {data: {user_id, model_ids: [model_id]}})
+            dispatch(fetchCards())
+        } catch (e) {
+            rejectWithValue(e.response.json())
+        }
     }
 })
 
@@ -134,7 +163,7 @@ export const fetchCards = createAsyncThunk('cards/fetch', async (_, {dispatch, r
                 user_id: state.user.id
             },
         })
-        return JSON.parse(res.data)
+        return res.data
     } catch (e) {
         rejectWithValue(e.response.json())
     }
@@ -209,11 +238,11 @@ export const revokeTask = createAsyncThunk('tasks/revoke', async ({cardId, task_
 
 export const {
     addSearchCard,
-    deleteSearchCard,
     updateSearchCardFormValues,
     updateSearchCardTaskStatus,
     toggledCard,
-    setAllCardsChecked
+    setAllCardsChecked,
+    deleteUnSubmittedCard
 } = searchCardsSlice.actions
 
 export default searchCardsSlice
