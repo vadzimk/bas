@@ -27,12 +27,16 @@ export default function makeToolTipFunction({
 
         onRendered(() => {
             const {y: oldY, height: height} = el.getBoundingClientRect()
-            if (mouse_position_y - height < 0) {
-                // element above the window
-                let newY = height + mouse_position_y + scroll_position_y + 16;
-                el.style.top = `${newY}px`;
-                el.style.left = `${mouse_position_x + 16}px`
-            }
+
+            // TODO commented it because position is not consistent at all times
+
+            // if (mouse_position_y - height < 0) {
+            //     // element above the window
+            //     let newY = height + mouse_position_y + scroll_position_y + 16;
+            //     el.style.top = `${newY}px`;
+            //     el.style.left = `${mouse_position_x + 16}px`
+            // }
+
             el.style.position = 'absolute';
             el.style.opacity = "1";
         })
