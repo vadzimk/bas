@@ -93,7 +93,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
             console.log("jobIds", jobIds)
             return
         }
-        const records = jobIds.map(id => ({job_id: id, job_is_deleted: false}))
+        const records = jobIds.map(id => ({Job_id: id, JobUserNote_is_filtered: false}))
         console.log("records to undo", records)
         api.put('/jobs', {records, user_id})
             .then((res) => {
