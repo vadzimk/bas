@@ -111,7 +111,7 @@ def update_one(record, user_id: int = None):
     updates one record
     :returns True if success False is failed
     """
-    job_id = record.pop('Job_id', None)  # records are prefixed with table_name_
+    job_id = record.pop('job_id', None)  # records are prefixed with table_name_
     record_for_job_update = make_record_for_update(record, Job)
     record_for_company_update = make_record_for_update(record, Company)
     record_for_company_user_note_update = make_record_for_update(record, CompanyUserNote)
@@ -159,7 +159,7 @@ def update_one(record, user_id: int = None):
 
 
 def delete_many_jobs(job_ids, user_id):
-    records = [{"Job_id": job_id, "JobUserNote_is_filtered": True} for job_id in job_ids]
+    records = [{"job_id": job_id, "JobUserNote_is_filtered": True} for job_id in job_ids]
     for record in records:
         update_one(record, user_id)
 
