@@ -48,7 +48,7 @@ See [Docker Hub](https://hub.docker.com/r/vadzimk/bas) for usage
 ## Limitations of the current version
 - Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it does not guarantee no-blocking. There is a button [UPDATE USER] to update Linkedin credentials once the previous account gets blocked. 
 - Playwright by Microsoft has a bug that leaks memory. I did not know that before choosing an automation framework, so the headless browser may crash with error [Navigation failed because page crashed!](https://github.com/microsoft/playwright/issues/6319) hopefully they will resolve it in the future.  
-- Before filling out a search form, you better determine the "Where" location that is auto suggested on a particular job-board, for example should be "Los Angeles, California" for Linkedin and "Los Angeles, CA" for Indeed.  
+- Before filling out a search form, it's better to determine the "Where" location that is auto suggested on a particular job-board, for example should be "Los Angeles, California" for Linkedin and "Los Angeles, CA" for Indeed.  
 
 ## Development
 ```bash

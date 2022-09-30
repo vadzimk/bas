@@ -18,14 +18,14 @@ def get_current_data(user_id):
                      JobUserNote.plan_apply_flag,
                      JobUserNote.did_apply_flag) \
         .join(Search.jobs) \
+        .join(Job.company) \
+        .outerjoin(Job.noted_by_user) \
+        .outerjoin(Company.noted_by_user) \
         .filter(or_(JobUserNote.is_filtered == False, JobUserNote.is_filtered == None)) \
         .filter(or_(JobUserNote.plan_apply_flag == False, JobUserNote.plan_apply_flag == None)) \
         .filter(or_(JobUserNote.did_apply_flag == False, JobUserNote.did_apply_flag == None)) \
         .filter(Search.user_id == user_id) \
-        .join(Job.company) \
-        .outerjoin(CompanyUserNote) \
         .filter(or_(CompanyUserNote.is_filtered == None, CompanyUserNote.is_filtered == False)) \
-        .outerjoin(JobUserNote) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
     df = pd.read_sql(stmt, db.session.bind)
     df = df.reindex(columns=columns)
