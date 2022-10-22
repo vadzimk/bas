@@ -3,6 +3,7 @@ import json
 from typing import List
 
 import pandas as pd
+from sqlalchemy import func
 
 from bas_app import db
 from bas_app.models import SearchModel, Search
@@ -24,11 +25,14 @@ def update_search_models(user_id: int, model_ids: List[int], values: dict):
 
 
 def get_cards_for_user(user_id: int):
-    stmt = db.select(SearchModel, Search.job_board_name) \
+    subq = db.select(SearchModel, Search.job_board_name) \
         .join(SearchModel.searches) \
-        .filter(Search.user_id == user_id)\
-        .filter(SearchModel.is_deleted == False)\
-        .distinct()
+        .filter(Search.user_id == user_id) \
+        .filter(SearchModel.is_deleted == False) \
+        .distinct().subquery()
+    stmt = db.select(func.max(subq.c.id).label("id"), subq.c.what, subq.c.where, subq.c.age, subq.c.radius,
+                  subq.c.experience, subq.c.job_board_name) \
+        .group_by(subq.c.what, subq.c.where, subq.c.age, subq.c.radius, subq.c.experience, subq.c.job_board_name)
     df = pd.read_sql(stmt, db.session.bind)
     table_json = json.loads(df.to_json(orient='records'))
     return table_json

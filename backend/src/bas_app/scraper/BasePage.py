@@ -52,6 +52,7 @@ class BasePage(ABC):
         """ saves self._beacons job fields to Job and Search tables after the beacons on the search page have
         been scrolled
         """
+        # TODO jobs are now saved only after beacons are collected. need to save them on beacon creation. to reduce memory usage
         for b in self._beacons:
             job = Job.query.filter_by(url=b.dict.get('url')).first()
 
