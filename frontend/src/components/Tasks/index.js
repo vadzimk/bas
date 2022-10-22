@@ -86,15 +86,17 @@ export default function Tasks() {
                             style={{height: "55px"}}
                         ></Checkbox>
                         <Stack>
-                            {cards.map(card =>
-                                <SearchCardContext.Provider value={{
-                                    cardId: card.id,
-                                    onDelete: () => handleSearchCardDelete(card.id),
-                                    platform: card.job_board,
-                                }} key={card.id}>
-                                    <SearchCard/>
-                                </SearchCardContext.Provider>
-                            )}
+                            {[...cards]
+                                .sort((a, b) => a.formValues.what.localeCompare(b.formValues.what))
+                                .map(card =>
+                                    <SearchCardContext.Provider value={{
+                                        cardId: card.id,
+                                        onDelete: () => handleSearchCardDelete(card.id),
+                                        platform: card.job_board,
+                                    }} key={card.id}>
+                                        <SearchCard/>
+                                    </SearchCardContext.Provider>
+                                )}
                         </Stack>
                     </div>}
             </div>
