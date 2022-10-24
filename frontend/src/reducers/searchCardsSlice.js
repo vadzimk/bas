@@ -100,7 +100,6 @@ const searchCardsSlice = createSlice({
                             value: c.experience[0]
                         }
                     } else if (c.job_board_name === 'Linkedin') {
-                        console.log("c.experience", c.experience)
                         experience = c.experience.map(exp => ({label: exp || 'all', value: exp}))
                     }
 
