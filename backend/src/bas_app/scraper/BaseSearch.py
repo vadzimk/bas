@@ -115,7 +115,10 @@ class BaseSearch(ABC):
         """
         for page_index, p in enumerate(self._pages):
             for b_index, b in enumerate(p.beacons):
-                job_url = b.dict['url']
+                job_url = b.dict.get('url')  # TODO change to  b.dict['url'] and sometimes it will throw  KeyError('url')
+                if not job_url:
+                    logging.critical(f"url missing in {b.dict}")
+                    continue
                 job = Job.query.filter_by(
                     url=job_url).first()  # TODO monitor this returned none although the url was found in db, probably change to postgresdb
                 # indeed creates a new unique url each time you browse, now way around duplicates
