@@ -90,8 +90,11 @@ class IndeedSearch(BaseSearch):
                 raise PageCrashed(str(e))
 
     @override
-    async def create_session(self, bpage):
+    async def create_session(self,
+                             bpage,
+                             task_update_state: callable = lambda state, meta: None):
         """ logs into the website and returns the bpage"""
+        self._task_update_state = task_update_state
         return bpage
 
     def attributes(self) -> str:

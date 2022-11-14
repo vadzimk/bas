@@ -1,4 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import api from "../services/api";
 
 export const Ntypes = Object.freeze({
     ERROR: 'error',
@@ -37,6 +38,8 @@ export const notifyTemp = createAsyncThunk('notification/timed', async (conf, {d
     await sleep(ms)
     dispatch(notify({type: null, message: ''}))
 })
+
+
 
 export const {notify, clearNotification} = notificationSlice.actions
 export default notificationSlice

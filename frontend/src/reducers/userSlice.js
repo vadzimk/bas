@@ -6,6 +6,7 @@ const initialState = {
     id: null,
     status: 'idle', //  idle, loading, succeeded, failed TODO do i need this?
     linkedin_credentials: false,
+    login_verification_request: null,
 }
 
 const userSlice = createSlice({
@@ -18,6 +19,10 @@ const userSlice = createSlice({
         userLogout: function (state, action) {
             window.localStorage.removeItem('bas-user')
             return initialState
+        },
+        loginVerificationRequested(state, action){
+            // action.payload: {task_id, email}
+            state.login_verification_request = action.payload
         }
         // userRegistered: function (state, action) {
         //     state.id = action.payload
@@ -38,6 +43,9 @@ const userSlice = createSlice({
                 const {id, linkedin_credentials} = action.payload
                 state.id = id
                 state.linkedin_credentials = linkedin_credentials
+            })
+            .addCase(verifyPin.fulfilled, (state, action)=>{
+                state.login_verification_request = null
             })
     }
 })
@@ -87,5 +95,17 @@ export const updateUser = createAsyncThunk('user/update', async (userFields, {di
 
 })
 
-export const {userLoggedIn, userRegistered, userLogout} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core
+export const verifyPin = createAsyncThunk('user/handleVerifyPin', async({pin, task_id}, {dispatch, rejectWithValue})=>{
+        try {
+        const res = await api.post('/verification', {pin, task_id})
+        dispatch(notifyTemp({type: Ntypes.SUCCESS, message: res.data}))
+        return res.data
+    } catch (e) {
+        const message = e.response.data ? e.response.data : e.message
+        dispatch(notifyTemp({type: Ntypes.ERROR, message}))
+        rejectWithValue(e.response.json())
+    }
+})
+
+export const {userLoggedIn, loginVerificationRequested, userLogout} = userSlice.actions // action creators return action objects of the shape {type: 'auto-generated-id}, abstracts the case statements in redux-core
 export default userSlice

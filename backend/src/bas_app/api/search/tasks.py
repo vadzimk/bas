@@ -21,9 +21,13 @@ from bas_app import db, create_app
 from config import pwt_args
 
 
-async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
+async def async_task(
+        new_search: Type[BaseSearch],
+        task_update_state: callable,
+        ):
     """
     :param new_search: LinkedinSearch or IndeedSearch object
+    :task_update_state: update_state fuc from celery
     :return: None - result of the task is stored in db
     because of how celery.Task is configured we don't need the app_context() here
     """
@@ -31,9 +35,11 @@ async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
         browser = await pwt.chromium.launch_persistent_context(**pwt_args())
         bpage: PlayWrightPage = await browser.new_page()
 
-        bpage: PlayWrightPage = await new_search.create_session(bpage)  # one session for each task
         task_update_state(state='BEGUN')
-        await new_search.populate(bpage=bpage, task_update_state=task_update_state)  # TODO update state here
+        bpage: PlayWrightPage = await new_search.create_session(
+            bpage=bpage,
+            task_update_state=task_update_state)  # one session for each task
+        await new_search.populate(bpage=bpage)
 
         # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
         # Create a query that identifies the row for each domain with the lowest id
@@ -56,7 +62,7 @@ async def async_task(new_search: Type[BaseSearch], task_update_state: callable):
         return meta
 
 
-@shared_task(bind=True)
+@shared_task(bind=True, serializer='pickle')
 def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict, user_id: int,
                     search_model_id: int):
     """
@@ -112,21 +118,23 @@ def get_task_state(task_id):
     """
     :param task_id:
     :return: {
-    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS"
+    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS | "VERIFICATION"
     "info": {  # up-to-date version in BaseSearch.py
         "total": int,
         "current": int,
-        "job_count": int
+        "job_count": int,
+        "task_id": str?
     }
 }
     """
     task = AsyncResult(task_id)
     if task.state == 'SUCCESS':
         info = task.get()
-    elif task.state == 'PROGRESS':
+    elif task.state == 'PROGRESS' or task.state == 'VERIFICATION' or task.state == 'VERIFYING':
         info = task.info
     else:
         info = str(task.info)
+
     return {
         'state': task.state,
         'info': info

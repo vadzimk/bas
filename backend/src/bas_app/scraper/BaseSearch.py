@@ -58,17 +58,22 @@ class BaseSearch(ABC):
         return self._task_state_meta
 
     @abstractmethod
-    async def create_session(self, bpage):
-        """ logs into the website and returns the bpage"""
+    async def create_session(self,
+                             bpage,
+                             task_update_state: callable = lambda state, meta: None
+                             ):
+        """
+        logs into the website and returns the bpage
+        :param bpage: base page
+        :param task_update_state: the celery.Task.update_state() method to update task state passed from tasks
+        """
         return bpage
 
-    async def populate(self, bpage: PlayWrightPage, task_update_state: callable = lambda state, meta: None):
+    async def populate(self, bpage: PlayWrightPage ):
         """
         entry point to crawl job board pages
         :param bpage: instance of playwright page
-        :param task_update_state: the celery.Task.update_state() method to update task state passed from tasks
         """
-        self._task_update_state = task_update_state
         bpage: PlayWrightPage = await self.flip_pages(bpage)
         await self.populate_details(bpage)
 

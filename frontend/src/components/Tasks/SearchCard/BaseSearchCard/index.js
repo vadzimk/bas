@@ -18,7 +18,9 @@ const colour = {
     'PROGRESS': 'blue',
     'SUCCESS': 'green',
     'REVOKED': 'yellow',
-    'FAILURE': 'red'
+    'FAILURE': 'red',
+    'VERIFICATION': 'pink',
+    'VERIFYING': 'blue',
 }
 
 export default function BaseSearchCard() {

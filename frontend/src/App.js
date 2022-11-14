@@ -1,6 +1,6 @@
 import React, {createContext, useEffect,} from 'react';
 import {useSelector, useDispatch} from "react-redux";
-import {userLoggedIn} from "./reducers/userSlice";
+import {loginUser, userLoggedIn} from "./reducers/userSlice";
 
 
 import Tasks from "./components/Tasks";
@@ -14,6 +14,8 @@ import {PlanApply} from "./components/PlanApply";
 import {getResults, updateResultsRow} from "./services/resultService";
 import {DidApply} from "./components/DidApply";
 import CompanyFilterVisibility from "./components/CompanyFilterVisibility";
+import {VerificationDialogue} from "./components/Verification/VerificationDialogue";
+
 
 export const SearchCardContext = createContext({
     cardId: null,
@@ -27,17 +29,16 @@ function App() {
     const notification = useSelector(state => state.notification)
     const dispatch = useDispatch();
 
-
     useEffect(() => {
         const user = JSON.parse(window.localStorage.getItem('bas-user'))
         if (user?.id) {
             dispatch(userLoggedIn(user))
         }
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(fetchCards())
-    }, [user?.id])
+    }, [user?.id, dispatch])
 
 
     return (
@@ -66,6 +67,11 @@ function App() {
                                 <AlertIcon/>
                                 {notification.message}
                             </Alert>
+                        }
+                        {
+                            <VerificationDialogue
+                                isOpen={Boolean(user.login_verification_request)}
+                            />
                         }
                         <div style={{
                             display: 'flex', justifyContent: 'space-between'

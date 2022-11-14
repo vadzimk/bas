@@ -10,7 +10,7 @@ from BaseSearch import BaseSearch
 from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
 from bas_app.models import Job, Search
-from bas_app.scraper.my_searches import indeed_searches
+from bas_app.scraper.my_searches import indeed_searches, linkedin_searches
 from utils import cleanup, create_project
 from config import pwt_args
 from playwright.async_api import async_playwright
@@ -100,7 +100,10 @@ async def start_all(indeed_searches, linkedin_searches):
 
 
 def main():
-    asyncio.run(start_all(indeed_searches, linkedin_searches), debug=True)
+    asyncio.run(start_all(
+        indeed_searches,
+        linkedin_searches
+    ), debug=True)
 
 
 if __name__ == '__main__':

@@ -1,9 +1,10 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 import api from "../services/api";
 import {revokeSearchTask, updateProgress} from "../services/searchService";
-import {notify, notifyTemp, Ntypes} from "./notificationSlice";
+import {clearNotification, notify, notifyTemp, Ntypes} from "./notificationSlice";
 import {fetchResults} from "./resultsSlice";
 import {func} from "prop-types";
+import {loginVerificationRequested} from "./userSlice";
 
 
 const initialState = {
@@ -206,13 +207,22 @@ function _subscribeTask({model_id, task_id}, dispatch) {
                     dispatch(notifyTemp({type: Ntypes.ERROR, message: data.info}))
                 }
             }
+            if(data.state === 'VERIFICATION'){
+                dispatch(notify({type: Ntypes.WARNING, message: `Verification ${data.info}`}))
+                console.log({task_id:data.info.task_id, email: data.info.email})
+                dispatch(loginVerificationRequested({task_id:data.info.task_id, email: data.info.email}))
+            }
+            if(data.state === 'VERIFYING'){
+                dispatch(clearNotification())
+                dispatch(loginVerificationRequested(null))
+            }
 
             const isFinished = data &&
                 (data.state === 'SUCCESS' || data.state === 'REVOKED' || data.state === 'FAILURE')
             if (isFinished) {
                 clearInterval(timer)
             }
-        }, 5000)
+        }, 10_000)
 
     } catch (e) {
         clearInterval(timer)

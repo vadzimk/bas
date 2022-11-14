@@ -16,6 +16,7 @@ class Config(object):
                               or 'postgresql://postgres:1@localhost:5432/bas'
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'redis://127.0.0.1:6379/0'
     CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND') or 'redis://127.0.0.1:6379/0'
+    CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # send a signal to application when a change is about to be made in the db
 
     @staticmethod

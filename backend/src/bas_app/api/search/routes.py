@@ -1,3 +1,4 @@
+import asyncio
 import json
 import time
 
@@ -7,6 +8,25 @@ from . import search
 from ... import db
 from .tasks import scrape_linkedin, get_task_state, revoke_task, scrape_indeed
 from ...models import User, SearchModel, Task, Search
+
+
+def set_verification_code(task_id: str, pin: str):
+    task = Task.query.get(task_id)
+    task.verification_code = pin
+    db.session.commit()
+
+
+@search.route('/api/verification', methods=['POST'])
+def verification():
+    """handle verification request from linkedin"""
+    data = json.loads(request.data)
+    print("data", data)
+    pin = data.get('pin')
+    task_id = data.get('task_id')
+    print("pin", pin)
+    print("task_id", task_id)
+    set_verification_code(task_id, pin)
+    return Response('OK', status=200)
 
 
 @search.route('/api/search', methods=['POST'])
@@ -46,7 +66,7 @@ def search_jobs():
                 search_fields=data,
                 linkedin_credentials=linkedin_credentials,
                 user_id=user_id,
-                search_model_id=search_model.id
+                search_model_id=search_model.id,
             ).apply_async()
         case 'indeed':
             task = scrape_indeed.s(

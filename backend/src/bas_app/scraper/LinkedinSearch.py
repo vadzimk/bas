@@ -1,11 +1,13 @@
+import asyncio
 import logging
 import sys
 import urllib
 from enum import Enum
 
-from typing import List
+from typing import List, Awaitable, Callable
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 from LinkedinPage import LinkedinPage
+from bas_app.models import Task
 from utils import AccountBlocked, AccountNotFound, PageCrashed
 from utils import override
 
@@ -16,7 +18,7 @@ from dotenv import load_dotenv
 
 
 class LinkedinSearch(BaseSearch):
-    NAVIGATE_DELAY = 20
+    NAVIGATE_DELAY = 30
 
     class Filters:
         class Radius(str, Enum):
@@ -101,20 +103,47 @@ class LinkedinSearch(BaseSearch):
             if "Navigation failed because page crashed!" in str(e):
                 raise PageCrashed(str(e))
 
+    async def get_verification_code(self):
+        """ queries table Task every 2s until verification_code exists"""
+        verification_code = Task.query.get(self._task_id).verification_code
+        while not verification_code:
+            await asyncio.sleep(2)
+            verification_code = Task.query.get(self._task_id).verification_code
+        return verification_code
+
     @override
-    async def create_session(self, bpage):
+    async def create_session(self,
+                             bpage,
+                             task_update_state):
         """
         logs into the website and returns the bpage
         :raises AccountBlocked, AccountNotFound
         """
         load_dotenv()
+        self._task_update_state = task_update_state
         email = self._linkedin_credentials.get('email')
         password = self._linkedin_credentials.get('password')
         await bpage.goto(self._base_url)
         print(email, password)
         await bpage.fill('input#session_key', email)
+        await asyncio.sleep(1)
         await bpage.fill('input#session_password', password)
+        await asyncio.sleep(1)
         await bpage.click('button[type=submit]')
+
+        try:
+            await bpage.wait_for_selector('text=The login attempt seems suspicious. To finish signing in please enter the verification code we sent to your email address.', timeout=2000)
+            self._task_state_meta["task_id"] = self._task_id
+            self._task_state_meta["email"] = email
+            self._task_update_state(state='VERIFICATION', meta=self._task_state_meta)
+            print("waiting for code")
+            verification_code = await self.get_verification_code()
+            print("verification_code from db", verification_code)
+            await bpage.fill('input[name=pin]', verification_code)
+            await bpage.click('button[type=submit]')
+            self._task_update_state(state='VERIFYING', meta=self._task_state_meta)
+        except PlaywrightTimeoutError:
+            pass  # security passed
 
         try:
             await bpage.wait_for_selector('text=Access to your account has been temporarily restricted', timeout=2000)
@@ -128,7 +157,9 @@ class LinkedinSearch(BaseSearch):
             raise AccountNotFound(f"Linkedin account not found: {email}")
         except PlaywrightTimeoutError:
             pass  # account exists
+
         return bpage
+
 
     def attributes(self) -> str:
         """

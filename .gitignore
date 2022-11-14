@@ -13,3 +13,4 @@ postgres_data_dev
 .run
 my_searches.py
 out
+*.csv
