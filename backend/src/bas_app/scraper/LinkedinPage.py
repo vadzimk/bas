@@ -89,5 +89,6 @@ class LinkedinPage(BasePage):
         logging.info(f'{len(results_list)} len(results_list)')
         beacons: List[BaseBeacon] = []
         for result in results_list:
-            beacons.append(LinkedinBeacon(result))
+            if 'Promoted' not in result.text:  # Filter out Promoted listings TODO do I need a frontend flag for it?
+                beacons.append(LinkedinBeacon(result))
         return beacons
