@@ -37,8 +37,8 @@ class LinkedinBeacon(BaseBeacon):
         self.make_attribute('url', lambda: f"https://www.linkedin.com{title['href']}".split('?')[0])
 
         self.make_company_attribute('name',
-                                    lambda: self._beacon.find('a',
-                                                              class_='job-card-container__company-name').text,
+                                    lambda: self._beacon.select_one(
+                                                              '.job-card-container__company-name').text,
                                     lambda: self._beacon.find('span', class_='job-card-container__primary-description')
                                     .find('a').text
                                     )
@@ -134,7 +134,7 @@ class LinkedinBeacon(BaseBeacon):
         self.make_company_attribute('size',
                                     lambda: BaseBeacon.company_size_map.get(
                                         company_soup.find('dt', string=re.compile(".*Company size.*"))
-                                            .find_next('dd').text.replace(' employees', '').strip()))
+                                        .find_next('dd').text.replace(' employees', '').strip()))
 
         # find number of employess on linkedin from the employees section
         # self.make_attribute('company_employees_on_linkedin',
