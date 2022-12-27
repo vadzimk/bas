@@ -8,6 +8,7 @@ import makeToolTipFunction from "./scripts/tooltip";
 import headerMenu from "./scripts/headerMenu";
 import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
+import builtin_logo from "../../../assets/icon-builtin.png"
 import {fetchResults, saveOldRecord} from "../../../reducers/resultsSlice";
 import {useDispatch} from 'react-redux'
 import {notifyTemp, Ntypes} from "../../../reducers/notificationSlice";
@@ -47,6 +48,8 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
             detail.boardLogo = indeed_logo
         } else if (detail.job_url.includes('linkedin')) {
             detail.boardLogo = linkedin_logo
+        } else if (detail.job_url.includes('builtin')) {
+            detail.boardLogo = builtin_logo
         }
         setDetail(detail)
     }

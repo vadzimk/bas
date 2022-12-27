@@ -1,7 +1,7 @@
 import sys
 
 from bas_app import db
-from bas_app.models import Search
+from bas_app.models import Search, Company
 from bas_app.scraper.BaseSearch import BaseSearch
 import logging
 import time
@@ -143,7 +143,7 @@ class BuiltinSearch(BaseSearch):
                             params=request_fields.params,
                             headers=request_fields.headers)
 
-    def more_company_details(self, company):
+    def more_company_details(self, company: dict):
         alias: str = company.get("alias").replace("/company/", "")
         region_id: int = company.get("region_id")
         company_req = RequestFields(
@@ -158,10 +158,12 @@ class BuiltinSearch(BaseSearch):
         company_jobs = res.json().get("company_jobs")
         for cj in company_jobs:
             beacon_company = BuiltinBeacon()
-            company = cj.get("company")
-
-            beacon_company.parse_company(company)
-            company_in_db = self.insert_or_update_company_db(beacon_company)
+            company:dict = cj.get("company")
+            company_in_db = Company.query.filter_by(profile_url=f"https://builtin.com{company.get('alias')}").first()
+            if not company_in_db:
+                company.update(self.more_company_details(company))
+                beacon_company.parse_company(company)
+                company_in_db = self.insert_or_update_company_db(beacon_company)
             jobs = cj.get("jobs")
             for j in jobs:
                 beacon = BuiltinBeacon()
@@ -169,7 +171,6 @@ class BuiltinSearch(BaseSearch):
                 beacon.parse_job(j)
                 job_in_db = self.insert_or_update_job_db(beacon)
                 job_in_db.company_id = company_in_db.id
-                logging.info(f"self._search_model_id: -------- {self._search_model_id}")
                 search_in_db = Search(
                     job_board_name="Builtin",
                     job_id=job_in_db.id,

@@ -23,7 +23,7 @@ class BuiltinBeacon(BaseBeacon):
 
     def parse_job(self, job: dict):
         self.make_attribute('title', lambda: job.get("title"))
-        self.make_attribute('url', lambda: f'https://builtin.com{job.get("alias")}')
+        self.make_attribute('url', lambda: f'https://builtin{"la"}.com{job.get("alias")}') # TODO for other locations replace the suffix la
         self.make_attribute('description_markdown', lambda: markdownify(job.get("body")))
         self.make_attribute('description_html', lambda: job.get("body"))
         self.make_attribute('description_text', lambda: BeautifulSoup(job.get("body")).text)
@@ -36,9 +36,9 @@ class BuiltinBeacon(BaseBeacon):
         self.make_company_attribute('size', lambda: company.get("total_employees"))
         self.make_company_attribute('overview', lambda: company.get("mini_description"))
         self.make_company_attribute('number_employees', lambda: company.get("total_employees"))
-        self.make_company_attribute('location', lambda: f'{company.get("city")}, {company.get("street_address_1")}')
+        self.make_company_attribute('location', lambda: f'{company.get("state")}, {company.get("city")}, {company.get("street_address_1")}')
         self.make_company_attribute('main_country_number_employees', lambda: company.get("local_employees"))
-        self.make_company_attribute('profile_url', lambda: f'https://builtin.com/{company.get("alias")}')
+        self.make_company_attribute('profile_url', lambda: f'https://builtin.com{company.get("alias")}')
         self.make_company_attribute('homepage_url', lambda: company.get("url"))
 
 
