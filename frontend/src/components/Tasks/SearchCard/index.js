@@ -2,11 +2,13 @@ import LinkedinSearchCard from "./LinkedinSearchCard";
 import {IndeedSearchCard} from "./IndeedSearchCard";
 import linkedin_logo from "../../../assets/icons8-linkedin-2.svg"
 import indeed_logo from "../../../assets/icons8-indeed.svg"
+import builtin_logo from "../../../assets/icon-builtin.png"
 import {createContext, useContext} from "react";
 import {SearchCardContext} from "../../../App";
 import { Box, Image, Checkbox } from '@chakra-ui/react'
 import {useSelector, useDispatch} from 'react-redux'
 import {toggledCard} from "../../../reducers/searchCardsSlice";
+import {BuiltinSearchCard} from "./BuiltinSearchCard";
 
 
 export function SearchCard() {
@@ -24,7 +26,13 @@ export function SearchCard() {
             component: IndeedSearchCard,
             logo: indeed_logo,
             alt: "Indeed"
+        },
+        builtin: {
+            component: BuiltinSearchCard,
+            logo: builtin_logo,
+            alt: "Builtin"
         }
+
     }
     const handleCardCheckChange = (e)=>{
         dispatch(toggledCard(Number(e.target.value)))

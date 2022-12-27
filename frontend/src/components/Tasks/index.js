@@ -36,7 +36,9 @@ export default function Tasks() {
     const handleNewSearchCardIndeed = () => {
         dispatch(addSearchCard('indeed'))
     }
-
+    const handleNewSearchCardBuiltin = () => {
+        dispatch(addSearchCard('builtin'))
+    }
     const handleSearchCardDelete = (id) => {
         dispatch(deleteSearchCard(id))
     }
@@ -71,6 +73,12 @@ export default function Tasks() {
                         variant="outline"
                         onClick={handleNewSearchCardIndeed}>
                         New Indeed
+                    </Button>
+                    <Button
+                        rightIcon={<SearchIcon/>}
+                        variant="outline"
+                        onClick={handleNewSearchCardBuiltin}>
+                        New Builtin
                     </Button>
 
                 </div>
