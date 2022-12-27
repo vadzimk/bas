@@ -1,7 +1,4 @@
 import asyncio
-import logging
-import os
-from enum import Enum
 from typing import Type
 
 from celery import shared_task
@@ -12,17 +9,19 @@ from sqlalchemy import delete
 
 from bas_app.api.search.search_fields_reference import reference
 from bas_app.models import Job, Search
+from bas_app.scraper.BaseBrowserSearch import BaseBrowserSearch
 from bas_app.scraper.BaseSearch import BaseSearch
+from bas_app.scraper.BuiltinSearch import BuiltinSearch
 from bas_app.scraper.IndeedSearch import IndeedSearch
 from bas_app.scraper.LinkedinSearch import LinkedinSearch
-from bas_app import db, create_app
+from bas_app import db
 
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 from config import pwt_args
 
 
-async def async_task(
-        new_search: Type[BaseSearch],
+async def async_browser_task(
+        new_search: Type[BaseBrowserSearch],
         task_update_state: callable,
         ):
     """
@@ -81,7 +80,7 @@ def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict, user_
                                 search_model_id=search_model_id,
                                 task_id=self.request.id)
     # TODO it creates a new loop for each task, replace with a single loop
-    result = asyncio.run(async_task(
+    result = asyncio.run(async_browser_task(
         new_search=new_search,
         task_update_state=self.update_state
     ))
@@ -106,7 +105,29 @@ def scrape_indeed(self, search_fields: dict, user_id: int,
                               search_model_id=search_model_id,
                               task_id=self.request.id)
     # TODO it creates a new loop for each task, replace with a single loop
-    result = asyncio.run(async_task(
+    result = asyncio.run(async_browser_task(
+        new_search=new_search,
+        task_update_state=self.update_state
+    ))
+    # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
+    return result
+
+@shared_task(bind=True)
+def scrape_builtin(self, search_fields: dict, user_id: int,
+                  search_model_id: int):
+    """
+    all parameters of a celery task must be serializable
+    :param self: celery sets this argument
+    :param search_fields: for linkedin search
+    :param user_id: id of row in db table user
+    :param search_model_id: id of row in db table search_model
+    """
+    print('starting builtin search', search_fields)
+    new_search = BuiltinSearch(**search_fields,
+                              user_id=user_id,
+                              search_model_id=search_model_id,
+                              task_id=self.request.id)
+    result = asyncio.run(async_api_task(
         new_search=new_search,
         task_update_state=self.update_state
     ))
@@ -114,12 +135,24 @@ def scrape_indeed(self, search_fields: dict, user_id: int,
     return result
 
 
+async def async_api_task(
+        new_search: BaseSearch,
+        task_update_state: callable,
+):
+    """
+    :param new_search: BuiltinSearch object
+    :param task_update_state: update func from celery
+    :return: None - result of the task is stored in db
+    """
+    task_update_state(state='BEGUN')
+    new_search.run_api(task_update_state)
+
 def get_task_state(task_id):
     """
     :param task_id:
     :return: {
     "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS | "VERIFICATION"
-    "info": {  # up-to-date version in BaseSearch.py
+    "info": {  # up-to-date version in BaseBrowserSearch.py
         "total": int,
         "current": int,
         "job_count": int,

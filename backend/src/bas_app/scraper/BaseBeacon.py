@@ -1,35 +1,13 @@
 import copy
 import logging
 
-from bs4.element import PageElement
 from typing import Dict, Callable
-from abc import ABC, abstractmethod
+from abc import ABC
 
 
 class BaseBeacon(ABC):
-    company_size_map = {
-        "more than 10,000": "10001>",
-        "10,001+": "10001>",
-        "5,001 to 10,000": "5001-10000",
-        "5,001-10,000": "5001-10000",
-        "1,001-5,000": "1001-5000",
-        "1001 to 5,000": "1001-5000",
-        "501 to 1,000": "501-1000",
-        "501-1,000": "501-1000",
-        "201 to 500": "201-500",
-        "201-500": "201-500",
-        "51 to 200": "51-200",
-        "51-200": "51-200",
-        "11 to 50": "11-50",
-        "11-50": "11-50",
-        "less than 10": "2-10",
-        "2-10": "2-10",
-    }
-
-    def __init__(self, beacon: PageElement):
-        self._beacon: PageElement = beacon
+    def __init__(self):
         self._job_post: Dict[str, str | dict] = {"company": {}}
-
 
     @property
     def dict(self):
@@ -41,19 +19,6 @@ class BaseBeacon(ABC):
         :return dict containing fields of job and not company """
         job_attributes = {k: v for k, v in self.dict.items() if k != 'company'}  # copy only job fields
         return job_attributes
-
-    @abstractmethod
-    def populate_from_job_card(self):
-        pass
-
-    @abstractmethod
-    def populate_from_details(self, job_view_html):
-        pass
-
-    @abstractmethod
-    def populate_from_company_profile(self, about_company_html, about_employees_html=None):
-        """ all must be company fields """
-        pass
 
     def make_attribute_helper(self, dslice: dict, key: str, *commands: Callable):
         """

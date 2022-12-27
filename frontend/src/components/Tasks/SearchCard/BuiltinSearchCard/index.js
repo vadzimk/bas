@@ -2,7 +2,7 @@ import React from 'react';
 
 import {JobBoardContext} from "../index";
 import BaseCard from "./BaseCard";
-import MultipleSelect from "../BaseSearchCard/MultipleSelectChakra";
+import BasicSelect from "../BaseSearchCard/BasicSelectChakra";
 
 
 export function BuiltinSearchCard(props) {
@@ -25,7 +25,7 @@ export function BuiltinSearchCard(props) {
     const initialValues = {
         what: '',
         where: '',
-        jobCategory: '',
+        job_category: '',
         limit: '',
     }
 
@@ -33,7 +33,7 @@ export function BuiltinSearchCard(props) {
         <JobBoardContext.Provider value={{
             initialValues: initialValues,
             jobCategoryOptions: JOB_CATEGORY_OPTIONS,
-            JobCategorySelect: MultipleSelect
+            JobCategorySelect: BasicSelect
         }}>
             <BaseCard/>
         </JobBoardContext.Provider>

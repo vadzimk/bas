@@ -5,7 +5,7 @@ import traceback
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import PageElement, ResultSet
-from BaseBeacon import BaseBeacon
+from BaseBrowserBeacon import BaseBrowserBeacon
 from typing import List
 
 from IndeedBeacon import IndeedBeacon
@@ -37,7 +37,7 @@ class IndeedPage(BasePage):
             raise SearchResultsEmpty("Search results empty")
         self._job_count = self.count_total_jobs() if self._page_index == 0 else 0
         print('job_count', self._job_count)
-        self._beacons: List[BaseBeacon] = self.make_beacon_list()
+        self._beacons: List[BaseBrowserBeacon] = self.make_beacon_list()
         # self.save_beacons_csv()
 
     @override
@@ -57,10 +57,10 @@ class IndeedPage(BasePage):
         return BeautifulSoup(text, 'html.parser')
 
     @override
-    def make_beacon_list(self) -> List[BaseBeacon]:
+    def make_beacon_list(self) -> List[BaseBrowserBeacon]:
         results_list: ResultSet[PageElement] = self._soup.find_all('div', class_='job_seen_beacon')
         logging.info(f'len(results_list): {len(results_list)}')
-        beacons: List[BaseBeacon] = []
+        beacons: List[BaseBrowserBeacon] = []
         for result in results_list:
             beacons.append(IndeedBeacon(result))
         return beacons

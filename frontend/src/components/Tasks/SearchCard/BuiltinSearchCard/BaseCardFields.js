@@ -58,13 +58,13 @@ export default function BaseCardFields({
             </div>
 
             <div style={{width: 596}}>
-                {/*Experience*/}
+                {/*job_category*/}
                 <JobCategorySelect
                     label="Job Category"
-                    name="jobCategory"
+                    name="job_category"
                     options={jobCategoryOptions}
-                    value={formikProps.values.jobCategory}
-                    onChange={(value) => formikProps.setFieldValue('jobCategory', value)}
+                    value={formikProps.values.job_category}
+                    onChange={(value) => formikProps.setFieldValue('job_category', value)}
                     disabled={!enabledRadiusDateExperienceLimit}
 
                 />

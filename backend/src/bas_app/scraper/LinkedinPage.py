@@ -6,7 +6,7 @@ import time
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 from bs4 import BeautifulSoup
 from bs4.element import PageElement, ResultSet
-from BaseBeacon import BaseBeacon
+from BaseBrowserBeacon import BaseBrowserBeacon
 from typing import List
 
 from BasePage import BasePage
@@ -29,7 +29,7 @@ class LinkedinPage(BasePage):
         self._soup = await self.make_beacon_soup(bpage)  # beacon soup only!!!
 
         logging.info('LinkedinPage: job count: {self._job_count}')
-        self._beacons: List[BaseBeacon] = self.make_beacon_list()
+        self._beacons: List[BaseBrowserBeacon] = self.make_beacon_list()
 
 
     @override
@@ -84,10 +84,10 @@ class LinkedinPage(BasePage):
         return BeautifulSoup(search_results_html, 'html.parser')
 
     @override
-    def make_beacon_list(self) -> List[BaseBeacon]:
+    def make_beacon_list(self) -> List[BaseBrowserBeacon]:
         results_list: ResultSet[PageElement] = self._soup.find_all('li', class_='jobs-search-results__list-item')
         logging.info(f'{len(results_list)} len(results_list)')
-        beacons: List[BaseBeacon] = []
+        beacons: List[BaseBrowserBeacon] = []
         for result in results_list:
             if 'Promoted' not in result.text:  # Filter out Promoted listings TODO do I need a frontend flag for it?
                 beacons.append(LinkedinBeacon(result))

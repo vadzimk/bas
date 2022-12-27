@@ -30,9 +30,9 @@ def get_cards_for_user(user_id: int):
         .filter(Search.user_id == user_id) \
         .filter(SearchModel.is_deleted == False) \
         .distinct().subquery()
-    stmt = db.select(func.max(subq.c.id).label("id"), subq.c.what, subq.c.where, subq.c.age, subq.c.radius,
-                  subq.c.experience, subq.c.job_board_name) \
-        .group_by(subq.c.what, subq.c.where, subq.c.age, subq.c.radius, subq.c.experience, subq.c.job_board_name)
+    stmt = db.select(func.max(subq.c.id).label("id"), subq.c._what, subq.c.where, subq.c.age, subq.c.radius,
+                     subq.c.experience, subq.c.job_board_name) \
+        .group_by(subq.c._what, subq.c.where, subq.c.age, subq.c.radius, subq.c.experience, subq.c.job_board_name)
     df = pd.read_sql(stmt, db.session.bind)
     table_json = json.loads(df.to_json(orient='records'))
     return table_json

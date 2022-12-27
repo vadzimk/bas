@@ -8,10 +8,10 @@ from enum import Enum
 from typing import List
 from utils import override, PageCrashed
 from IndeedPage import IndeedPage
-from BaseSearch import BaseSearch
+from BaseBrowserSearch import BaseBrowserSearch
 
 
-class IndeedSearch(BaseSearch):
+class IndeedSearch(BaseBrowserSearch):
     class Filters:
         class Radius(str, Enum):
             EXACT = '&radius=0'

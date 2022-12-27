@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from bs4.element import PageElement
 from pprint import pprint
 
-from BaseBeacon import BaseBeacon
+from BaseBrowserBeacon import BaseBrowserBeacon
 
 from utils import override, make_soup, save_safe, replace_p_br_p, age_to_date
 from markdownify import markdownify, MarkdownConverter
@@ -15,7 +15,7 @@ def md(soup, **options):
     return MarkdownConverter(**options).convert_soup(soup)
 
 
-class IndeedBeacon(BaseBeacon):
+class IndeedBeacon(BaseBrowserBeacon):
     def __init__(self, beacon: PageElement):
         super().__init__(beacon)
         self.populate_from_job_card()
@@ -129,7 +129,7 @@ class IndeedBeacon(BaseBeacon):
                                     .find_all('div')[1].text)
 
         self.make_company_attribute('size',
-                                    lambda: BaseBeacon.company_size_map
+                                    lambda: BaseBrowserBeacon.company_size_map
                                     .get(company_soup.find(attrs={"data-testid": "companyInfo-employee"})
                                     .find_all('div')[1].text))
 

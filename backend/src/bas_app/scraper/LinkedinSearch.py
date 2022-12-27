@@ -11,13 +11,13 @@ from bas_app.models import Task
 from utils import AccountBlocked, AccountNotFound, PageCrashed
 from utils import override
 
-from BaseSearch import BaseSearch
+from BaseBrowserSearch import BaseBrowserSearch
 
 import os
 from dotenv import load_dotenv
 
 
-class LinkedinSearch(BaseSearch):
+class LinkedinSearch(BaseBrowserSearch):
     NAVIGATE_DELAY = 30
 
     class Filters:

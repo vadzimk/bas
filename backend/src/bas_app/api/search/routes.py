@@ -6,7 +6,7 @@ from flask import request, jsonify, Response
 
 from . import search
 from ... import db
-from .tasks import scrape_linkedin, get_task_state, revoke_task, scrape_indeed
+from .tasks import scrape_linkedin, get_task_state, revoke_task, scrape_indeed, scrape_builtin
 from ...models import User, SearchModel, Task, Search
 
 
@@ -43,25 +43,17 @@ def search_jobs():
     linkedin_credentials = {'email': user.linkedin_email, 'password': user.linkedin_password}
     print('linkedin_credentials', linkedin_credentials)
     # TODO update the value of job_board in search
-    experience = data.get('experience')
-    if type(experience) is str:
-        experience = [experience]
-    elif type(experience) is list:
-        pass
-    else:
-        return Response('experience must be str or list', status=400)
-    search_model = SearchModel(
-        what=data.get('what'),
-        where=data.get('where'),
-        age=data.get('age'),
-        radius=data.get('radius'),
-        experience=experience
-    )
-    db.session.add(search_model)
-    db.session.commit()
-    print("search_model.id", search_model.id)
     match job_board:
         case 'linkedin':
+            search_model = SearchModel(
+                what=data.get('what'),
+                where=data.get('where'),
+                age=data.get('age'),
+                radius=data.get('radius'),
+                experience=data.get('experience')
+            )
+            db.session.add(search_model)
+            db.session.commit()
             task = scrape_linkedin.s(
                 search_fields=data,
                 linkedin_credentials=linkedin_credentials,
@@ -69,7 +61,29 @@ def search_jobs():
                 search_model_id=search_model.id,
             ).apply_async()
         case 'indeed':
+            search_model = SearchModel(
+                what=data.get('what'),
+                where=data.get('where'),
+                age=data.get('age'),
+                radius=data.get('radius'),
+                experience=[data.get('experience')]
+            )
+            db.session.add(search_model)
+            db.session.commit()
             task = scrape_indeed.s(
+                search_fields=data,
+                user_id=user_id,
+                search_model_id=search_model.id
+            ).apply_async()
+        case 'builtin':
+            search_model = SearchModel(
+                what=data.get('what'),
+                where=data.get('where'),
+                job_category=data.get('job_category')
+            )
+            db.session.add(search_model)
+            db.session.commit()
+            task = scrape_builtin.s(
                 search_fields=data,
                 user_id=user_id,
                 search_model_id=search_model.id
@@ -79,6 +93,7 @@ def search_jobs():
     task_in_db = Task(id=task.id)
     db.session.add(task_in_db)
     db.session.commit()
+    print("search_model.id", search_model.id)
     print("task.id", task.id)
     print("task_in_db.id", task_in_db.id)
     return jsonify({'task_id': task_in_db.id, 'model_id': search_model.id}), 202

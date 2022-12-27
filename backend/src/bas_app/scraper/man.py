@@ -6,7 +6,7 @@ from typing import List
 
 from sqlalchemy import delete
 
-from BaseSearch import BaseSearch
+from BaseBrowserSearch import BaseBrowserSearch
 from IndeedSearch import IndeedSearch
 from LinkedinSearch import LinkedinSearch
 from bas_app.models import Job, Search
@@ -31,7 +31,7 @@ linkedin_credentials = {
     'password': os.getenv('LINKEDIN_PASSWORD')
 }
 
-def mk_searches(searches: dict, Type: BaseSearch) -> List[BaseSearch]:
+def mk_searches(searches: dict, Type: BaseBrowserSearch) -> List[BaseBrowserSearch]:
     result = []
     for s in searches:
         if Type is LinkedinSearch:
@@ -41,7 +41,7 @@ def mk_searches(searches: dict, Type: BaseSearch) -> List[BaseSearch]:
     return result
 
 
-async def do_search(searches: List[BaseSearch]):
+async def do_search(searches: List[BaseBrowserSearch]):
     """
     :param searches:
     :return: None - result of the task now does not contain data, it is stored in db

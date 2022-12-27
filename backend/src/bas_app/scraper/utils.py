@@ -11,8 +11,6 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from datetime import date, timedelta
 
-from BaseBeacon import BaseBeacon
-
 
 def use_cloudscraper(url):
     scraper = cloudscraper.create_scraper()

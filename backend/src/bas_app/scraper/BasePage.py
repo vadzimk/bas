@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from BaseBeacon import BaseBeacon
+from BaseBrowserBeacon import BaseBrowserBeacon
 from typing import List, Optional
 from pandas import pandas as pd
 from pandas import DataFrame
@@ -18,14 +18,14 @@ class BasePage(ABC):
         self._page_index = page_index
         self._soup: Optional[BeautifulSoup] = None
         self._job_count: Optional[int] = None
-        self._beacons: Optional[List[BaseBeacon]] = None
+        self._beacons: Optional[List[BaseBrowserBeacon]] = None
 
     @property
     def job_count(self) -> int:
         return self._job_count
 
     @property
-    def beacons(self) -> List[BaseBeacon]:
+    def beacons(self) -> List[BaseBrowserBeacon]:
         return self._beacons
 
     @abstractmethod
@@ -36,7 +36,7 @@ class BasePage(ABC):
         pass
 
     @abstractmethod
-    def make_beacon_list(self) -> List[BaseBeacon]:
+    def make_beacon_list(self) -> List[BaseBrowserBeacon]:
         pass
 
     def save_beacons_csv(self):
