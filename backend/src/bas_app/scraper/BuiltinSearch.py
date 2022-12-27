@@ -110,7 +110,7 @@ class BuiltinSearch(BaseSearch):
     def run_api(self, task_update_state):
         self._task_update_state = task_update_state
         params = self._search_base_params
-        params.update({"categories": str(self._job_category)})
+        params.update({"search": self._what, "categories": str(self._job_category)})
         jobs_search_request = RequestFields(
             path=self._search_path,
             params=params,
