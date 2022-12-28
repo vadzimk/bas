@@ -168,3 +168,8 @@ class LinkedinSearch(BaseBrowserSearch):
         """
         attributes = ",".join(self._experience)
         return f'{"&f_E=" if attributes else ""}{urllib.parse.quote(attributes)}'
+
+    @override
+    def run_api(self, task_update_state):
+        # not applicable
+        raise NotImplementedError

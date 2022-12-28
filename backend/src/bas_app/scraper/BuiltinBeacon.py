@@ -25,7 +25,7 @@ class BuiltinBeacon(BaseBeacon):
         self.make_attribute('title', lambda: job.get("title"))
         self.make_attribute('url', lambda: f'https://builtin{"la"}.com{job.get("alias")}') # TODO for other locations replace the suffix la
         self.make_attribute('description_markdown', lambda: markdownify(job.get("body")))
-        self.make_attribute('description_html', lambda: f'<a href={job.get("how_to_apply")}>{job.get("how_to_apply")}</a><br><br>{job.get("body")}')
+        self.make_attribute('description_html', lambda: f'<a target="_blank" rel="noreferrer" href={job.get("how_to_apply")}>{job.get("how_to_apply")}</a><br><br>{job.get("body")}')
         self.make_attribute('description_text', lambda: BeautifulSoup(job.get("body")).text)
         self.make_attribute('created_str', lambda: job.get("recency_count"))
         self.make_attribute('job_type', lambda: str(job.get("working_option")))

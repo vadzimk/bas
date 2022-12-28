@@ -23,7 +23,7 @@ class BaseBrowserSearch(BaseSearch, ABC):
     NAVIGATE_DELAY = 15
 
     def __init__(self, what, where, age, radius, experience, limit, user_id, search_model_id, task_id):
-        super().__init__(user_id, search_model_id, task_id)
+        super().__init__(user_id=user_id, search_model_id=search_model_id, task_id=task_id)
         self._query = what
         self._location = where
         self._age = age

@@ -55,7 +55,8 @@ class IndeedSearch(BaseBrowserSearch):
                  search_model_id: int = None,
                  task_id: str = None,
                  ):
-        super().__init__(what=what, where=where, age=age, radius=radius, experience=experience, limit=limit, user_id=user_id, search_model_id=search_model_id, task_id=task_id)
+        super().__init__(what=what, where=where, age=age, radius=radius, experience=experience, limit=limit,
+                         user_id=user_id, search_model_id=search_model_id, task_id=task_id)
 
         self._education = education or ''
         self._url = f"""https://www.indeed.com/jobs?q={urllib.parse.quote(self._query)}&l={urllib.parse.quote(self._location)}{self.attributes()}{self._radius}&fromage={self._age}"""
@@ -104,3 +105,8 @@ class IndeedSearch(BaseBrowserSearch):
         """
         attributes = f'{self._education}{self._experience}'
         return f'{"&sc=0kf%3A" if attributes else ""}{attributes}{"%3B" if attributes else ""}'
+
+    @override
+    def run_api(self, task_update_state):
+        # not applicable
+        raise NotImplementedError

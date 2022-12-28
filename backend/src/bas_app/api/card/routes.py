@@ -22,7 +22,7 @@ def delete_cards():
     user_id: int = request_data.get('user_id')
     model_ids: List[int] = request_data.get('model_ids')
     if not update_search_models(user_id, model_ids, {SearchModel.is_deleted: True}):
-        return Response(status=400)
-    return Response(status=202)
+        return Response(f'Update {model_ids} is_deleted failed', status=400)
+    return Response('OK', status=202)
 
 
