@@ -2,20 +2,15 @@
 
 ## Overview
 
-This app automates headless browser to search for jobs on Indeed/Linkedin job-boards and presents results in a tabular form such that you can see all info about companies and openings at a glance.  
+This app automates headless browser to search for jobs on Indeed/Linkedin/Builtin job-boards and presents results in a tabular form such that you can see all info about companies and openings at a glance.  
 It runs **in Docker locally** only and all data are saved to a database locally.   
 You can 
- - filter by postings to your liking  
- - remove postings that are of no interest to you  
- - save notes about postings and companies  
- - automatically ignore certain companies  
- 
+ - filter listings to your liking  
+ - remove listings that are of no interest to you  
+ - save notes about listings and companies  
+ - automatically mute certain companies  
+ - save listings mark as applied  
 
-Further you could utilize the following auto-apply browser extensions:
-[joinrhubarb](www.joinrhubarb.com),
-[easyjobs](www.easyjobs.so),
-[simplify](www.simplify.jobs)
-to save even more time on your applications
 
 
 ## Demo
@@ -35,7 +30,7 @@ to save even more time on your applications
 - Playwright
 - Flask
 - SQLAlchemy
-- Sqlite
+- Postgres
 - Celery
 - Redis
 - GitLab CI
@@ -46,9 +41,7 @@ See [Docker Hub](https://hub.docker.com/r/vadzimk/bas) for usage
 
 
 ## Limitations of the current version
-- Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it does not guarantee no-blocking. There is a button [UPDATE USER] to update Linkedin credentials once the previous account gets blocked. 
-- Playwright by Microsoft has a bug that leaks memory. I did not know that before choosing an automation framework, so the headless browser may crash with error [Navigation failed because page crashed!](https://github.com/microsoft/playwright/issues/6319) hopefully they will resolve it in the future.  
-- Before filling out a search form, it's better to determine the "Where" location that is auto suggested on a particular job-board, for example should be "Los Angeles, California" for Linkedin and "Los Angeles, CA" for Indeed.  
+- Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it does not guarantee no-blocking. There is a button [UPDATE USER] to update Linkedin credentials once the previous account "expires".
 
 ## Development
 ```bash
