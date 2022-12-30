@@ -68,7 +68,7 @@ export default function BaseCard() {
             } else if (Array.isArray(v)) {
                 data[k] = v.map(item => item.value)
             } else {
-                data[k] = v.value
+                data[k] = v?.value
             }
         }
 

@@ -77,5 +77,6 @@ export const JobBoardContext = createContext({
     radiusOptions: null,
     experienceOptions: null,
     ageOptions: null,
+    jobCategoryOptions: null,
     ExperienceSelect: null
 })
