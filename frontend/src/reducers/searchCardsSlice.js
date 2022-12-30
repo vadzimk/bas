@@ -5,7 +5,7 @@ import {clearNotification, notify, notifyTemp, Ntypes} from "./notificationSlice
 import {fetchResults} from "./resultsSlice";
 import {func} from "prop-types";
 import {loginVerificationRequested} from "./userSlice";
-
+import {JOB_CATEGORY_OPTIONS} from '../components/Tasks/SearchCard/BuiltinSearchCard'
 
 const initialState = {
     cards: [],
@@ -113,6 +113,7 @@ const searchCardsSlice = createSlice({
                             where: c.where,
                             age: {label: c.age || 'all', value: c.age},
                             radius: {label: c.radius || 'all', value: c.radius},
+                            job_category: {label: JOB_CATEGORY_OPTIONS.find(o=>o.value === c.job_category)?.label, value: c.job_category},
                             experience,
                         },
                         job_board: c.job_board_name.toLowerCase(),

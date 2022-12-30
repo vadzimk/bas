@@ -4,9 +4,8 @@ import {JobBoardContext} from "../index";
 import BaseCard from "./BaseCard";
 import BasicSelect from "../BaseSearchCard/BasicSelectChakra";
 
-
-export function BuiltinSearchCard(props) {
-    const JOB_CATEGORY_OPTIONS = [
+    export const JOB_CATEGORY_OPTIONS = [
+        {value: "", label: "ALL",},
         {value: 147, label: "Data + Analytics",},
         {value: 148, label: "Design + UX",},
         {value: 149, label: "Developer + Engineer",},
@@ -21,6 +20,9 @@ export function BuiltinSearchCard(props) {
         {value: 157, label: "Sales",},
         {value: 158, label: "Content",}
     ]
+
+export function BuiltinSearchCard(props) {
+
 
     const initialValues = {
         what: '',

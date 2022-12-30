@@ -2,6 +2,7 @@ import asyncio
 import json
 import time
 
+import celery
 from flask import request, jsonify, Response
 
 from . import search
@@ -45,49 +46,20 @@ def search_jobs():
     # TODO update the value of job_board in search
     match job_board:
         case 'linkedin':
-            search_model = SearchModel(
-                what=data.get('what'),
-                where=data.get('where'),
-                age=data.get('age'),
-                radius=data.get('radius'),
+            wanted = dict(
+                {key: data.get(key) for key in ["what", "where", "age", "radius"]},
                 experience=data.get('experience')
             )
-            db.session.add(search_model)
-            db.session.commit()
-            task = scrape_linkedin.s(
-                search_fields=data,
-                linkedin_credentials=linkedin_credentials,
-                user_id=user_id,
-                search_model_id=search_model.id,
-            ).apply_async()
+            search_model, task = register_search_model_and_task(scrape_linkedin, data, user_id, wanted, credentials=linkedin_credentials)
         case 'indeed':
-            search_model = SearchModel(
-                what=data.get('what'),
-                where=data.get('where'),
-                age=data.get('age'),
-                radius=data.get('radius'),
+            wanted = dict(
+                {key: data.get(key) for key in ["what", "where", "age", "radius"]},
                 experience=[data.get('experience')]
             )
-            db.session.add(search_model)
-            db.session.commit()
-            task = scrape_indeed.s(
-                search_fields=data,
-                user_id=user_id,
-                search_model_id=search_model.id
-            ).apply_async()
+            search_model, task = register_search_model_and_task(scrape_indeed, data, user_id, wanted)
         case 'builtin':
-            search_model = SearchModel(
-                what=data.get('what'),
-                where=data.get('where'),
-                job_category=data.get('job_category')
-            )
-            db.session.add(search_model)
-            db.session.commit()
-            task = scrape_builtin.s(
-                search_fields=data,
-                user_id=user_id,
-                search_model_id=search_model.id
-            ).apply_async()
+            wanted = {key: data.get(key) for key in ["what", "where", "job_category"]}
+            search_model, task = register_search_model_and_task(scrape_builtin, data, user_id, wanted)
         case _:
             return Response("invalid job board", status=400)
     task_in_db = Task(id=task.id)
@@ -97,6 +69,19 @@ def search_jobs():
     print("task.id", task.id)
     print("task_in_db.id", task_in_db.id)
     return jsonify({'task_id': task_in_db.id, 'model_id': search_model.id}), 202
+
+
+def register_search_model_and_task(shared_task, data, user_id, wanted, credentials=None):
+    search_model = SearchModel(**wanted)
+    db.session.add(search_model)
+    db.session.commit()
+    task = shared_task.s(
+        search_fields=dict(**wanted, limit=data.get("limit")),
+        user_id=user_id,
+        search_model_id=search_model.id,
+        credentials=credentials
+    ).apply_async()
+    return search_model, task
 
 
 @search.route('/api/status/<task_id>')

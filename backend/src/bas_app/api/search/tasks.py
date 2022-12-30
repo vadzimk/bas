@@ -23,7 +23,7 @@ from config import pwt_args
 async def async_browser_task(
         new_search: Type[BaseBrowserSearch],
         task_update_state: callable,
-        ):
+):
     """
     :param new_search: LinkedinSearch or IndeedSearch object
     :task_update_state: update_state fuc from celery
@@ -62,12 +62,12 @@ async def async_browser_task(
 
 
 @shared_task(bind=True, serializer='pickle')
-def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict, user_id: int,
-                    search_model_id: int):
+def scrape_linkedin(self, search_fields: dict, user_id: int,
+                    search_model_id: int, credentials: dict):
     """
     all parameters of a celery task must be serializable
     :param self: celery sets this argument
-    :param linkedin_credentials: fake username and password for scraping
+    :param credentials: fake username and password for scraping
     :param search_fields: for linkedin search
     :param user_id: id of row in db table user
     :param search_model_id: id of row in db table search_model
@@ -75,7 +75,7 @@ def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict, user_
     print('starting linkedin search', search_fields)
     search_fields = convert_search_fields(search_fields, 'linkedin')
     new_search = LinkedinSearch(**search_fields,
-                                linkedin_credentials=linkedin_credentials,
+                                linkedin_credentials=credentials,
                                 user_id=user_id,
                                 search_model_id=search_model_id,
                                 task_id=self.request.id)
@@ -90,7 +90,7 @@ def scrape_linkedin(self, search_fields: dict, linkedin_credentials: dict, user_
 
 @shared_task(bind=True)
 def scrape_indeed(self, search_fields: dict, user_id: int,
-                  search_model_id: int):
+                  search_model_id: int, credentials: dict = None):
     """
     all parameters of a celery task must be serializable
     :param self: celery sets this argument
@@ -112,9 +112,10 @@ def scrape_indeed(self, search_fields: dict, user_id: int,
     # https://docs.celeryq.dev/en/latest/userguide/tasks.html#success
     return result
 
+
 @shared_task(bind=True)
 def scrape_builtin(self, search_fields: dict, user_id: int,
-                  search_model_id: int):
+                   search_model_id: int, credentials: dict = None):
     """
     all parameters of a celery task must be serializable
     :param self: celery sets this argument
@@ -124,9 +125,9 @@ def scrape_builtin(self, search_fields: dict, user_id: int,
     """
     print('starting builtin search', search_fields)
     new_search = BuiltinSearch(**search_fields,
-                              user_id=user_id,
-                              search_model_id=search_model_id,
-                              task_id=self.request.id)
+                               user_id=user_id,
+                               search_model_id=search_model_id,
+                               task_id=self.request.id)
     result = asyncio.run(async_api_task(
         new_search=new_search,
         task_update_state=self.update_state
@@ -146,6 +147,7 @@ async def async_api_task(
     """
     task_update_state(state='BEGUN')
     new_search.run_api(task_update_state)
+
 
 def get_task_state(task_id):
     """
