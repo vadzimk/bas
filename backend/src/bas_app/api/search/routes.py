@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import time
 
 import celery
@@ -37,7 +38,7 @@ def search_jobs():
     print("data", data)
     user_id = data.pop('user_id', None)
     job_board = data.pop('job_board', None)
-    print("form_values", data)
+    logging.info("form_values", data)
     print('userid', user_id)
     # TODO add field search_type
     user = User.query.get_or_404(user_id)
@@ -54,7 +55,7 @@ def search_jobs():
         case 'indeed':
             wanted = dict(
                 {key: data.get(key) for key in ["what", "where", "age", "radius"]},
-                experience=[data.get('experience')]
+                experience=data.get('experience')
             )
             search_model, task = register_search_model_and_task(scrape_indeed, data, user_id, wanted)
         case 'builtin':
