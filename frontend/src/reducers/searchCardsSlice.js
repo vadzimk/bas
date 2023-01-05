@@ -113,7 +113,10 @@ const searchCardsSlice = createSlice({
                             where: c.where,
                             age: {label: c.age || 'all', value: c.age},
                             radius: {label: c.radius || 'all', value: c.radius},
-                            job_category: {label: JOB_CATEGORY_OPTIONS.find(o=>o.value === c.job_category)?.label, value: c.job_category},
+                            job_category: {
+                                label: JOB_CATEGORY_OPTIONS.find(o => o.value === c.job_category)?.label,
+                                value: c.job_category
+                            },
                             experience,
                         },
                         job_board: c.job_board_name.toLowerCase(),
@@ -124,12 +127,12 @@ const searchCardsSlice = createSlice({
                     return oldCard
                 })
             })
-            // .addCase(deleteSearchCard.fulfilled, (state, action) => {
-            //     if(!action.payload){
-            //         return state
-            //     }
-            //     state.cards = state.cards.filter(c => c.id !== action.payload)
-            // })
+        .addCase(deleteSearchCard.fulfilled, (state, action) => {
+            if(!action.payload){
+                return state
+            }
+            state.cards = state.cards.filter(c => c.id !== action.payload)
+        })
     }
 })
 
@@ -149,7 +152,9 @@ export const deleteSearchCard = createAsyncThunk('cards/delete', async (card_id,
     } else {
         try {
             await api.delete('/cards', {data: {user_id, model_ids: [model_id]}})
-            dispatch(fetchCards())
+            dispatch(notifyTemp({type: Ntypes.SUCCESS, message: `Deleted card`}))
+            // dispatch(fetchCards()) if no error then the card was deleted in db, and we only filter cards in the client
+            return card_id
         } catch (e) {
             rejectWithValue(e.response.json())
         }
@@ -177,10 +182,20 @@ export const createTask = createAsyncThunk('tasks/create', async (
         rejectWithValue,
         getState
     }) => {
-    // newSearch = formValues
     const state = getState()
+    const user_id = state.user.id
+    const old_model_id = state.searchCards.cards.find(c => c.id === cardId).model_id
+    if (old_model_id) {
+        try {
+            // replacing the contents of the old card with new search query
+            await api.delete('/cards', {data: {user_id, model_ids: [old_model_id]}})
+        } catch (e) {
+            rejectWithValue(e.response.json())
+        }
+    }
+    // newSearch = formValues
     try {
-        const res = await api.post('/search', {...newSearch, user_id: state.user.id}) // res.data={task_id:string, model_id:string}
+        const res = await api.post('/search', {...newSearch, user_id}) // res.data={task_id:string, model_id:string}
         _subscribeTask({model_id: res.data.model_id, task_id: res.data.task_id}, dispatch)
         return {
             task_id: res.data.task_id,
@@ -208,12 +223,12 @@ function _subscribeTask({model_id, task_id}, dispatch) {
                     dispatch(notifyTemp({type: Ntypes.ERROR, message: data.info}))
                 }
             }
-            if(data.state === 'VERIFICATION'){
+            if (data.state === 'VERIFICATION') {
                 dispatch(notify({type: Ntypes.WARNING, message: `Verification ${data.info}`}))
-                console.log({task_id:data.info.task_id, email: data.info.email})
-                dispatch(loginVerificationRequested({task_id:data.info.task_id, email: data.info.email}))
+                console.log({task_id: data.info.task_id, email: data.info.email})
+                dispatch(loginVerificationRequested({task_id: data.info.task_id, email: data.info.email}))
             }
-            if(data.state === 'VERIFYING'){
+            if (data.state === 'VERIFYING') {
                 dispatch(clearNotification())
                 dispatch(loginVerificationRequested(null))
             }
