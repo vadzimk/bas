@@ -94,7 +94,7 @@ class IndeedSearch(BaseBrowserSearch):
     async def create_session(self,
                              bpage,
                              task_update_state: callable = lambda state, meta: None):
-        """ logs into the website and returns the bpage"""
+        """ logs into the website and returns the playwright_page"""
         self._task_update_state = task_update_state
         return bpage
 

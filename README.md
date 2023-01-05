@@ -3,13 +3,13 @@
 ## Overview
 
 This app automates headless browser to search for jobs on Indeed/Linkedin/Builtin job-boards and presents results in a tabular form such that you can see all info about companies and openings at a glance.  
-It runs **in Docker locally** only and all data are saved to a database locally.   
+It runs **in Docker locally** only and all data are saved to your database locally.   
 You can 
- - filter listings to your liking  
- - remove listings that are of no interest to you  
+ - create crawling tasks for Indeed, Linkedin, Builtin job boards  
+ - remove unfit listings from results view    
  - save notes about listings and companies  
  - automatically mute certain companies  
- - save listings mark as applied  
+ - mark listings as 'plan apply' or 'applied'  
 
 
 
@@ -40,20 +40,20 @@ You can
 See [Docker Hub](https://hub.docker.com/r/vadzimk/bas) for usage
 
 
-## Limitations of the current version
-- Generally Linkedin blocks you if you browse too much. There is a delay on crawling, but it does not guarantee no-blocking. There is a button [UPDATE USER] to update Linkedin credentials once the previous account "expires".
+## If mock linkedin account 'expires'
+- There is a button [UPDATE USER] to update Linkedin credentials once the previous account "expires".
 
 ## Development
 ```bash
 docker-compose -f docker-compose.dev.yml up -d
 cd src  
-flask db init  # adds support to db migrations  
+flask db init  # adds support for db migrations  
 flask db migrate # creates migration script  
 flask db upgrade # applies changes to db  
 celery -A app.celery worker --loglevel=info  --concurrency=1  # process 1 concurrent task in a queue
 export FLASK_DEBUG=1
 flask run -p 5000
-python -m bas_app.scraper.man # for manual testing of selectors  
+python -m bas_app.scraper.man # separate script for manual testing of selectors, not part of application  
 ``` 
 
 

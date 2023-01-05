@@ -116,7 +116,7 @@ class LinkedinSearch(BaseBrowserSearch):
                              bpage,
                              task_update_state):
         """
-        logs into the website and returns the bpage
+        logs into the website and returns the playwright_page
         :raises AccountBlocked, AccountNotFound
         """
         load_dotenv()
