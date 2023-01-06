@@ -94,7 +94,7 @@ export default function Tasks() {
                         ></Checkbox>
                         <Stack>
                             {[...cards]
-                                .sort((a, b) => a.formValues.what.localeCompare(b.formValues.what))
+                                .sort((a, b) => (a.formValues?.what ? a.formValues.what.localeCompare(b.formValues.what) : 0))
                                 .map(card =>
                                     <SearchCardContext.Provider value={{
                                         cardId: card.id,

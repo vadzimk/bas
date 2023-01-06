@@ -92,47 +92,18 @@ const searchCardsSlice = createSlice({
 
         })
             .addCase(fetchCards.fulfilled, (state, action) => {
-
-                state.cards = action.payload.map(c => {
-                    let experience;
-                    if (c.job_board_name === 'Indeed') {
-                        experience = {
-                            label: c.experience[0] || 'all',
-                            value: c.experience[0]
-                        }
-                    } else if (c.job_board_name === 'Linkedin') {
-                        experience = c.experience.map(exp => ({label: exp || 'all', value: exp}))
-                    }
-
-                    const oldCard = {
-                        id: state.nextCardId,
-                        tasks: [],
-                        model_id: c.id,
-                        formValues: {
-                            what: c.what,
-                            where: c.where,
-                            age: {label: c.age || 'all', value: c.age},
-                            radius: {label: c.radius || 'all', value: c.radius},
-                            job_category: {
-                                label: JOB_CATEGORY_OPTIONS.find(o => o.value === c.job_category)?.label,
-                                value: c.job_category
-                            },
-                            experience,
-                        },
-                        job_board: c.job_board_name.toLowerCase(),
-                        submitSuccess: null,
-                        isChecked: true,
-                    }
-                    state.nextCardId = state.nextCardId + 1
-                    return oldCard
-                })
+                if (!action.payload.length) {
+                    return state
+                }
+                state.cards = action.payload
+                state.nextCardId = state.nextCardId + action.payload.length
             })
-        .addCase(deleteSearchCard.fulfilled, (state, action) => {
-            if(!action.payload){
-                return state
-            }
-            state.cards = state.cards.filter(c => c.id !== action.payload)
-        })
+            .addCase(deleteSearchCard.fulfilled, (state, action) => {
+                if (!action.payload) {
+                    return state
+                }
+                state.cards = state.cards.filter(c => c.id !== action.payload)
+            })
     }
 })
 
@@ -169,7 +140,49 @@ export const fetchCards = createAsyncThunk('cards/fetch', async (_, {dispatch, r
                 user_id: state.user.id
             },
         })
-        return res.data
+        const cards = res.data.map((c, i) => {
+            let experience;
+            if (c.job_board_name === 'Indeed') {
+                experience = {
+                    label: c.experience[0] || 'all',
+                    value: c.experience[0]
+                }
+            } else if (c.job_board_name === 'Linkedin') {
+                experience = c.experience.map(exp => ({label: exp || 'all', value: exp}))
+            }
+            const oldCard = {
+                id: state.searchCards.nextCardId + i,
+                tasks: [{task_id: c.task_id}],
+                model_id: c.id,
+                formValues: {
+                    what: c.what,
+                    where: c.where,
+                    age: {label: c.age || 'all', value: c.age},
+                    radius: {label: c.radius || 'all', value: c.radius},
+                    job_category: {
+                        label: JOB_CATEGORY_OPTIONS.find(o => o.value === c.job_category)?.label,
+                        value: c.job_category
+                    },
+                    experience,
+                },
+                job_board: c.job_board_name.toLowerCase(),
+                submitSuccess: true,
+                isChecked: true,
+            }
+
+            if (oldCard.tasks.length > 0) {
+                _subscribeTask(
+                    {
+                        model_id: oldCard.model_id,
+                        task_id: oldCard.tasks[oldCard.tasks.length - 1].task_id
+                    },
+                    dispatch
+                )
+            }
+
+            return oldCard // into array of cards for the redux state slice
+        })
+        return cards
     } catch (e) {
         rejectWithValue(e.response.json())
     }
@@ -209,6 +222,8 @@ export const createTask = createAsyncThunk('tasks/create', async (
 })
 
 function _subscribeTask({model_id, task_id}, dispatch) {
+    // console.log(`begin subscribe task ${task_id}`)
+
     let timer
     let data
     try {
@@ -234,15 +249,19 @@ function _subscribeTask({model_id, task_id}, dispatch) {
             }
 
             const isFinished = data &&
-                (data.state === 'SUCCESS' || data.state === 'REVOKED' || data.state === 'FAILURE')
+                (data.state === 'SUCCESS'
+                    || data.state === 'REVOKED'
+                    || data.state === 'FAILURE'
+                    || data.state === 'CLEARED')
             if (isFinished) {
                 clearInterval(timer)
             }
         }, 10_000)
-
     } catch (e) {
+        console.log(e)
         clearInterval(timer)
     }
+
     return timer
 }
 

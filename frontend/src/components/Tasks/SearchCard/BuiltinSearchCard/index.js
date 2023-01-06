@@ -1,8 +1,9 @@
 import React from 'react';
 
 import {JobBoardContext} from "../index";
-import BaseCard from "./BaseCard";
 import BasicSelect from "../BaseSearchCard/BasicSelectChakra";
+import BaseSearchCard from "../BaseSearchCard";
+import BuiltinSearchCardFields from "./BuiltinSearchCardFields";
 
     export const JOB_CATEGORY_OPTIONS = [
         {value: "", label: "ALL",},
@@ -31,13 +32,27 @@ export function BuiltinSearchCard(props) {
         limit: '',
     }
 
+    const validate = (values) => {
+        const errors = {};
+        // TODO where is not implemented and disabled
+        // if (!values.where) {
+        //     errors.where = 'Required'
+        // }
+        if (values.limit && !Number.isInteger(Number(values.limit))) {
+            errors.limit = 'Integer expected'
+        }
+        return errors
+    }
     return (
         <JobBoardContext.Provider value={{
             initialValues: initialValues,
             jobCategoryOptions: JOB_CATEGORY_OPTIONS,
-            JobCategorySelect: BasicSelect
+            JobCategorySelect: BasicSelect,
+            validate: validate,
         }}>
-            <BaseCard/>
+            <BaseSearchCard
+                CardFields={BuiltinSearchCardFields}
+            />
         </JobBoardContext.Provider>
     )
 }
