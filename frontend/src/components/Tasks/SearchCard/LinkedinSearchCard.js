@@ -2,6 +2,7 @@ import React from "react";
 import BaseSearchCard from "./BaseSearchCard";
 import MultipleSelect from "./BaseSearchCard/MultipleSelectChakra";
 import {JobBoardContext} from "./index";
+import BaseSearchCardFields from "./BaseSearchCard/BaseSearchCardFields";
 
 
 export default function LinkedinSearchCard() {
@@ -36,6 +37,19 @@ export default function LinkedinSearchCard() {
         experience: [],
         limit: '',
     }
+    const validate = (values) => {
+        const errors = {};
+        if (!values.what) {
+            errors.what = 'Required'
+        }
+        if (!values.where) {
+            errors.where = 'Required'
+        }
+        if (values.limit && !Number.isInteger(Number(values.limit))) {
+            errors.limit = 'Integer expected'
+        }
+        return errors
+    }
 
     return (
         <JobBoardContext.Provider value={{
@@ -43,9 +57,12 @@ export default function LinkedinSearchCard() {
             radiusOptions: RADIUS_OPTIONS,
             experienceOptions: EXPERIENCE_OPTIONS,
             ageOptions: AGE_OPTIONS,
-            ExperienceSelect: MultipleSelect
+            ExperienceSelect: MultipleSelect,
+            validate: validate
         }}>
-            <BaseSearchCard/>
+            <BaseSearchCard
+                CardFields={BaseSearchCardFields}
+            />
         </JobBoardContext.Provider>
     )
 }

@@ -78,5 +78,6 @@ export const JobBoardContext = createContext({
     experienceOptions: null,
     ageOptions: null,
     jobCategoryOptions: null,
-    ExperienceSelect: null
+    ExperienceSelect: null,
+    validate: null,
 })

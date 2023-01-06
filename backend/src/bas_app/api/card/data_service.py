@@ -25,14 +25,14 @@ def update_search_models(user_id: int, model_ids: List[int], values: dict):
 
 
 def get_cards_for_user(user_id: int):
-    subq = db.select(SearchModel, Search.job_board_name) \
+    subq = db.select(SearchModel, Search.job_board_name, Search.task_id) \
         .join(SearchModel.searches) \
         .filter(Search.user_id == user_id) \
         .filter(SearchModel.is_deleted == False) \
         .distinct().subquery()
     stmt = db.select(func.max(subq.c.id).label("id"), subq.c.what, subq.c.where, subq.c.age, subq.c.radius,
-                     subq.c.experience, subq.c.job_category, subq.c.job_board_name) \
-        .group_by(subq.c.what, subq.c.where, subq.c.age, subq.c.radius, subq.c.experience, subq.c.job_category, subq.c.job_board_name)
+                     subq.c.experience, subq.c.job_category, subq.c.job_board_name, subq.c.task_id) \
+        .group_by(subq.c.what, subq.c.where, subq.c.age, subq.c.radius, subq.c.experience, subq.c.job_category, subq.c.job_board_name, subq.c.task_id)
     df = pd.read_sql(stmt, db.session.bind)
     table_json = json.loads(df.to_json(orient='records'))
     return table_json

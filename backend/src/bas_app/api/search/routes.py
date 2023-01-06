@@ -5,7 +5,7 @@ import time
 
 import celery
 from flask import request, jsonify, Response
-
+from bas_app import ext_celery
 from . import search
 from ... import db
 from .tasks import scrape_linkedin, get_task_state, revoke_task, scrape_indeed, scrape_builtin
@@ -63,7 +63,7 @@ def search_jobs():
             search_model, task = register_search_model_and_task(scrape_builtin, data, user_id, wanted)
         case _:
             return Response("invalid job board", status=400)
-    task_in_db = Task(id=task.id)
+    task_in_db = Task(id=task.id, state="SENT")
     db.session.add(task_in_db)
     db.session.commit()
     print("search_model.id", search_model.id)
@@ -87,6 +87,7 @@ def register_search_model_and_task(shared_task, data, user_id, wanted, credentia
 
 @search.route('/api/status/<task_id>')
 def search_status(task_id):
+
     response = get_task_state(task_id)
     return jsonify(response)
 
@@ -99,7 +100,7 @@ def search_revoke():
     for _ in range(9):
         time.sleep(0.5)
         new_status = get_task_state(task_id)['state']
-        if new_status == 'REVOKED' or new_status == 'PENDING':
+        if new_status == 'REVOKED' or new_status == 'PENDING' or new_status == 'CLEARED':
             return jsonify({
                 "state": "REVOKED",
                 "info": "revoked"

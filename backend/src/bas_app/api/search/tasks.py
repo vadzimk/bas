@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import Type
 
 from celery import shared_task
@@ -14,7 +15,7 @@ from bas_app.scraper.BaseSearch import BaseSearch
 from bas_app.scraper.BuiltinSearch import BuiltinSearch
 from bas_app.scraper.IndeedSearch import IndeedSearch
 from bas_app.scraper.LinkedinSearch import LinkedinSearch
-from bas_app import db
+from bas_app import db, ext_celery
 
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 from config import pwt_args
@@ -149,11 +150,57 @@ async def async_api_task(
     new_search.run_api(task_update_state)
 
 
+def inspect_is_reserved(task_id: str):
+    inspect = ext_celery.celery.control.inspect()
+    print('reserved', inspect.reserved())  # have been received, but are still waiting to be executed
+    workers = inspect.reserved()
+    task_ids = []
+    if type(workers) is list:
+        task_ids = [[t.get('id') for worker in workers for t in list(worker.values())[0]]]
+    else:
+        worker_tasks = list(workers.values())[0]
+        if len(worker_tasks):
+            task_ids = [t.get('id') for t in worker_tasks]
+    print('reserved-->', task_ids)
+    return task_id in task_ids
+
+
+def inspect_is_scheduled(task_id: str):
+    inspect = ext_celery.celery.control.inspect()
+    print('scheduled', inspect.scheduled())  # waiting to be scheduled
+    workers = inspect.scheduled()
+    task_ids = []
+    if type(workers) is list:
+        workers_tasks = [wt for w in workers for wt in list(w.values())[0]]
+        task_ids = [wt.get('request').get('id') for wt in workers_tasks if wt.get('request')]
+    else:
+        worker_tasks = list(workers.values())[0]
+        if len(worker_tasks):
+            task_ids = [t.get('request').get('id') for t in worker_tasks]
+    print('scheduled-->', task_ids)
+    return task_id in task_ids
+
+
+def inspect_is_active(task_id: str):
+    inspect = ext_celery.celery.control.inspect()
+    print('active', inspect.active())
+    workers = inspect.active()
+    task_ids = []
+    if type(workers) is list:
+        task_ids = [[t.get('id') for worker in workers for t in list(worker.values())[0]]]
+    else:
+        worker_tasks = list(workers.values())[0]
+        if len(worker_tasks):
+            task_ids = [t.get('id') for t in worker_tasks]
+    print('active-->', task_ids)
+    return task_id in task_ids
+
+
 def get_task_state(task_id):
     """
     :param task_id:
     :return: {
-    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS | "VERIFICATION"
+    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS | "VERIFICATION" | "PENDING" | "SENT" | "FAILURE" | "CLEARED"
     "info": {  # up-to-date version in BaseBrowserSearch.py
         "total": int,
         "current": int,
@@ -162,8 +209,17 @@ def get_task_state(task_id):
     }
 }
     """
+    # https://docs.celeryq.dev/en/latest/userguide/workers.html#inspecting-workers
+
     task = AsyncResult(task_id)
-    if task.state == 'SUCCESS':
+    if task.state == 'PENDING':
+        if not inspect_is_active(task_id) \
+                or not inspect_is_scheduled(task_id) \
+                or not inspect_is_reserved(task_id):
+            return {
+                'state': "CLEARED"
+            }
+    elif task.state == 'SUCCESS':
         info = task.get()
     elif task.state == 'PROGRESS' or task.state == 'VERIFICATION' or task.state == 'VERIFYING':
         info = task.info
@@ -193,6 +249,8 @@ def convert_search_fields(input_fields: dict, job_board: str):
                 experience = [reference[job_board][k][exp] for exp in input_fields[k]]
                 result[k] = experience
             else:
+                # logging.info(f"k: {k}")
+                # logging.info(f"v: {v}")
                 result[k] = reference[job_board][k][v]
 
         else:

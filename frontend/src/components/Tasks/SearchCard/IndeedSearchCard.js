@@ -2,6 +2,7 @@ import React from 'react';
 import BaseSearchCard from "./BaseSearchCard";
 import BasicSelect from "./BaseSearchCard/BasicSelectChakra";
 import {JobBoardContext} from "./index";
+import BaseSearchCardFields from "./BaseSearchCard/BaseSearchCardFields";
 
 
 export function IndeedSearchCard(props) {
@@ -44,15 +45,32 @@ export function IndeedSearchCard(props) {
         limit: '',
     }
 
+    const validate = (values) => {
+        const errors = {};
+        if (!values.what) {
+            errors.what = 'Required'
+        }
+        if (!values.where) {
+            errors.where = 'Required'
+        }
+        if (values.limit && !Number.isInteger(Number(values.limit))) {
+            errors.limit = 'Integer expected'
+        }
+        return errors
+    }
+
     return (
         <JobBoardContext.Provider value={{
             initialValues: initialValues,
             radiusOptions: RADIUS_OPTIONS,
             experienceOptions: EXPERIENCE_OPTIONS,
             ageOptions: AGE_OPTIONS,
-            ExperienceSelect: BasicSelect
+            ExperienceSelect: BasicSelect,
+            validate: validate
         }}>
-            <BaseSearchCard/>
+            <BaseSearchCard
+                CardFields={BaseSearchCardFields}
+            />
         </JobBoardContext.Provider>
     )
 }

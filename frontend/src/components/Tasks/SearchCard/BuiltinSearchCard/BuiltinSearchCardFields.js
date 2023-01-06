@@ -6,17 +6,16 @@ import React, {useContext} from 'react'
 import PropTypes from "prop-types";
 import {JobBoardContext} from "../index";
 import {Input, Button} from "@chakra-ui/react";
-import BasicSelect from "../BaseSearchCard/BasicSelectChakra";
 
 
-BaseCardFields.propTypes = {
+BuiltinSearchCardFields.propTypes = {
     formikProps: PropTypes.any,
     formSubmitted: PropTypes.bool.isRequired,
     enabledRadiusDateExperienceLimit: PropTypes.bool.isRequired,
     showSubmit: PropTypes.bool.isRequired,
 }
 
-export default function BaseCardFields({
+export default function BuiltinSearchCardFields({
                                            formikProps,
                                            formSubmitted,
                                            showSubmit,

@@ -158,4 +158,6 @@ class Task(db.Model):
     id = db.Column(db.String, primary_key=True)  # Celery task id
     timestamp = db.Column(db.DateTime(timezone=True), default=db.func.now())
     verification_code = db.Column(db.String, nullable=True)
+    state = db.Column(db.String, nullable=True)
+    info = db.Column(db.JSON, nullable=True)
     search = db.relationship('Search', back_populates='tasks')
