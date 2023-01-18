@@ -20,6 +20,7 @@ const colour = {
     'FAILURE': 'red',
     'VERIFICATION': 'pink',
     'VERIFYING': 'blue',
+    'CLEARED': 'gray',
 }
 
 export default function BaseSearchCard({CardFields}) {
@@ -56,19 +57,10 @@ export default function BaseSearchCard({CardFields}) {
             ))
         setTaskDone(taskDone)
         setFormSubmitted(Boolean(card.submitSuccess))
-    }, [card])
+    }, [card, progressData])
 
 
     const handleSubmit = async (formValues) => {
-        // TODO why formdata is unUsed?
-        const formdata = {
-            ...formValues,
-            experience: Array.isArray(formValues.experience)
-                ? formValues.experience.map(item => item.value)
-                : formValues.experience?.value,
-            cardId,
-            job_board: card.job_board
-        }
         const data = {
             cardId,
             job_board: card.job_board
