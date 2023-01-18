@@ -44,17 +44,50 @@ See [Docker Hub](https://hub.docker.com/r/vadzimk/bas) for usage
 - There is a button [UPDATE USER] to update Linkedin credentials once the previous account "expires".
 
 ## Development
+
+<details>
+<summary> create the file  "/.env.dev.postgres" </summary>
+<pre>
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=1
+DATABASE_NAME=bas
+</pre>
+</details>
+
 ```bash
+# create and activate venv and install dependencies:
+cd backend
+pip insttall poetry==1.1.14
+python -m venv .venv
+. .venv/bin/activate
+poetry install
+playwright install chromium
+playwright install-deps
+
+# start dbms:
 docker-compose -f docker-compose.dev.yml up -d
-cd src  
+
+# create backend db migration:
+cd backend/src  
 flask db init  # adds support for db migrations  
 flask db migrate # creates migration script  
 flask db upgrade # applies changes to db  
+
+# start celery worker:
 celery -A app.celery worker --loglevel=info  --concurrency=1  # process 1 concurrent task in a queue
+
+# start backend:
 export FLASK_DEBUG=1
 flask run -p 5000
-python -m bas_app.scraper.man # separate script for manual testing of selectors, not part of application  
+
+# start frontend:
+export PORT=3001
+npm run start
+
+# separate script for manual testing of selectors, not part of the application
+python -m bas_app.scraper.man   
 ``` 
+
 
 
 
