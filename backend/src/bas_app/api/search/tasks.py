@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import Type
 
 from celery import shared_task
@@ -188,11 +189,15 @@ def convert_search_fields(input_fields: dict, job_board: str):
 
     result = {}
     for k, v in input_fields.items():
+        if v is None:
+            v = ''  # fixes keyError: None
         if k in reference[job_board].keys():
             if k == 'experience' and job_board == 'linkedin':
                 experience = [reference[job_board][k][exp] for exp in input_fields[k]]
                 result[k] = experience
             else:
+                logging.info(f"k: {k}")
+                logging.info(f"v: {v}")
                 result[k] = reference[job_board][k][v]
 
         else:
