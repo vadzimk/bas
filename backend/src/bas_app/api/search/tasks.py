@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from pprint import pprint
+import logging
 from typing import Type
 
 from celery import shared_task
@@ -16,7 +17,7 @@ from bas_app.scraper.BaseSearch import BaseSearch
 from bas_app.scraper.BuiltinSearch import BuiltinSearch
 from bas_app.scraper.IndeedSearch import IndeedSearch
 from bas_app.scraper.LinkedinSearch import LinkedinSearch
-from bas_app import db, ext_celery
+from bas_app import db
 
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 from config import pwt_args
@@ -207,7 +208,7 @@ def get_task_state(task_id):
     """
     :param task_id:
     :return: {
-    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS | "VERIFICATION" | "PENDING" | "SENT" | "FAILURE" | "CLEARED"
+    "state": "PROGRESS" | "BEGUN" | "REVOKED" | "SUCCESS | "VERIFICATION"
     "info": {  # up-to-date version in BaseBrowserSearch.py
         "total": int,
         "current": int,
@@ -219,18 +220,9 @@ def get_task_state(task_id):
     # https://docs.celeryq.dev/en/latest/userguide/workers.html#inspecting-workers
 
     task = AsyncResult(task_id)
-    actives = inspect_is_active(task_id)
-    scheduleds = inspect_is_scheduled(task_id)
-    reserveds = inspect_is_reserved(task_id)
-
-    if not actives and not scheduleds and not reserveds:
-        return {
-            'state': "CLEARED"
-        }
-    info = str(task.info)
     if task.state == 'SUCCESS':
         info = task.get()
-    if task.state == 'PROGRESS' or task.state == 'VERIFICATION' or task.state == 'VERIFYING':
+    elif task.state == 'PROGRESS' or task.state == 'VERIFICATION' or task.state == 'VERIFYING':
         info = task.info
 
 
@@ -258,8 +250,6 @@ def convert_search_fields(input_fields: dict, job_board: str):
                 experience = [reference[job_board][k][exp] for exp in input_fields[k]]
                 result[k] = experience
             else:
-                # logging.info(f"k: {k}")
-                # logging.info(f"v: {v}")
                 result[k] = reference[job_board][k][v]
 
         else:
