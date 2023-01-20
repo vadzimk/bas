@@ -10,8 +10,10 @@ from ...models import SearchModel
 
 @card.route('/api/cards')
 def cards():
-    user_id = int(request.args.get('user_id'))
-    return jsonify(get_cards_for_user(user_id))
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify([])
+    return jsonify(get_cards_for_user(int(user_id)))
 
 
 @card.route('/api/cards/', methods=['DELETE'])
