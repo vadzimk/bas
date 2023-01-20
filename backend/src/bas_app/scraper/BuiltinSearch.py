@@ -174,7 +174,6 @@ class BuiltinSearch(BaseSearch):
                 search_in_db = Search(
                     job_board_name="Builtin",
                     job_id=job_in_db.id,
-                    user_id=self._user_id,
                     search_model_id=self._search_model_id,
                     task_id=self._task_id
                 )

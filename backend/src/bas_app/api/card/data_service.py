@@ -11,10 +11,11 @@ from bas_app.models import SearchModel, Search
 
 def update_search_models(user_id: int, model_ids: List[int], values: dict):
     stmt = db.session.query(SearchModel.id) \
-        .join(SearchModel.searches) \
-        .filter(Search.user_id == user_id) \
+        .outerjoin(SearchModel.searches) \
+        .filter(SearchModel.user_id == user_id) \
         .filter(SearchModel.id.in_(model_ids)).distinct()
     search_models_in_db = stmt.all()
+    print(stmt)
     if not search_models_in_db:
         return False
     else:
@@ -27,7 +28,7 @@ def update_search_models(user_id: int, model_ids: List[int], values: dict):
 def get_cards_for_user(user_id: int):
     subq = db.select(SearchModel, Search.job_board_name, Search.task_id) \
         .join(SearchModel.searches) \
-        .filter(Search.user_id == user_id) \
+        .filter(SearchModel.user_id == user_id) \
         .filter(SearchModel.is_deleted == False) \
         .distinct().subquery()
     stmt = db.select(func.max(subq.c.id).label("id"), subq.c.what, subq.c.where, subq.c.age, subq.c.radius,

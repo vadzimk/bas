@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL
 
 from ... import db
-from ...models import Company, CompanyUserNote, Search
+from ...models import Company, CompanyUserNote, Search, SearchModel
 
 
 def get_filtered_companies(user_id):
@@ -20,7 +20,7 @@ def get_filtered_companies(user_id):
                      ) \
         .join(CompanyUserNote.company) \
         .filter(
-        Search.user_id == user_id,
+        CompanyUserNote.user_id == user_id,
         CompanyUserNote.is_filtered == True
     ).set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
     df = pd.read_sql(stmt, db.session.bind)
