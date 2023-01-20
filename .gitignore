@@ -14,3 +14,4 @@ postgres_data_dev
 my_searches.py
 out
 *.csv
+.history/
