@@ -1,5 +1,4 @@
 import json
-import logging
 from typing import Type, List
 
 import pandas as pd
@@ -76,6 +75,7 @@ def get_current_data_for_models(models: List[int], user_id: int):
                      JobUserNote.plan_apply_flag,
                      JobUserNote.did_apply_flag) \
         .join(Search.jobs) \
+        .join(SearchModel, SearchModel.id == Search.search_model_id) \
         .filter(or_(JobUserNote.is_filtered == False, JobUserNote.is_filtered == None)) \
         .filter(or_(JobUserNote.plan_apply_flag == False, JobUserNote.plan_apply_flag == None)) \
         .filter(or_(JobUserNote.did_apply_flag == False, JobUserNote.did_apply_flag == None)) \
@@ -86,6 +86,7 @@ def get_current_data_for_models(models: List[int], user_id: int):
         .filter(or_(CompanyUserNote.is_filtered == None, CompanyUserNote.is_filtered == False)) \
         .outerjoin(JobUserNote) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
+    print(stmt)
     df = pd.read_sql(stmt, db.session.bind)
     df = df.reindex(columns=columns)
     # logging.info(f'info: {df.info()}')
