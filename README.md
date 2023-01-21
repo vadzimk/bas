@@ -2,14 +2,15 @@
 
 ## Overview
 
-This app automates headless browser to search for jobs on Indeed/Linkedin/Builtin job-boards and presents results in a tabular form such that you can see all info about companies and openings at a glance.  
+This app automates a headless browser to search for jobs on Indeed/Linkedin/Builtin job boards and presents results in a tabular form such that you can see all info about companies and job posts at a glance.  
 It runs **in Docker locally** only and all data are saved to your database locally.   
 You can 
  - create crawling tasks for Indeed, Linkedin, Builtin job boards  
- - remove unfit listings from results view    
- - save notes about listings and companies  
- - automatically mute certain companies  
- - mark listings as 'plan apply' or 'applied'  
+ - view and remove unfit job posts from results view    
+ - save notes about job posts and companies  
+ - mute certain companies and remove all their posts from view
+ - view and unmute muted companies
+ - save job posts for later by marking them as 'plan apply' or 'applied'  
 
 
 
@@ -34,6 +35,7 @@ You can
 - Celery
 - Redis
 - GitLab CI
+- Docker
 
 ## Usage
 
@@ -84,7 +86,7 @@ flask run -p 5000
 export PORT=3001
 npm run start
 
-# separate script for manual testing of selectors, not part of the application
+# a separate script for manual testing of selectors, not part of the application
 python -m bas_app.scraper.man   
 ``` 
 
