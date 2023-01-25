@@ -86,7 +86,6 @@ def get_current_data_for_models(models: List[int], user_id: int):
         .filter(or_(CompanyUserNote.is_filtered == None, CompanyUserNote.is_filtered == False)) \
         .outerjoin(JobUserNote) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
-    print(stmt)
     df = pd.read_sql(stmt, db.session.bind)
     df = df.reindex(columns=columns)
     # logging.info(f'info: {df.info()}')
