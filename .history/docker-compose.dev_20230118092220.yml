@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
     container_name: postgres_dev
     ports:
-      - "5433:5432"
+      - "5432:5432"
     env_file:
       - .env.dev.postgres
     volumes:

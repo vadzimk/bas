@@ -13,7 +13,7 @@ class Config(object):
     # SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') \
-                              or 'postgresql://postgres:1@localhost:5433/bas'
+                              or 'postgresql://postgres:1@localhost:5432/bas'
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'redis://127.0.0.1:6379/0'
     CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND') or 'redis://127.0.0.1:6379/0'
     CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
