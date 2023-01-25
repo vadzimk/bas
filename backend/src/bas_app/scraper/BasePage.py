@@ -72,7 +72,6 @@ class BasePage(ABC):
             search_in_db = Search(
                 job_board_name=job_board_name,
                 job_id=job.id,
-                user_id=user_id,
                 search_model_id=search_model_id,
                 task_id=task_id
             )

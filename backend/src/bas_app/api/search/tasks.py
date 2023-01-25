@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from pprint import pprint
 from typing import Type
 
 from celery import shared_task
@@ -152,7 +153,8 @@ async def async_api_task(
 
 def inspect_is_reserved(task_id: str):
     inspect = ext_celery.celery.control.inspect()
-    print('reserved', inspect.reserved())  # have been received, but are still waiting to be executed
+    # print('reserved')
+    # pprint(inspect.reserved())  # have been received, but are still waiting to be executed
     workers = inspect.reserved()
     task_ids = []
     if type(workers) is list:
@@ -161,13 +163,15 @@ def inspect_is_reserved(task_id: str):
         worker_tasks = list(workers.values())[0]
         if len(worker_tasks):
             task_ids = [t.get('id') for t in worker_tasks]
-    print('reserved-->', task_ids)
+    # print('reserved-->')
+    # pprint(task_ids)
     return task_id in task_ids
 
 
 def inspect_is_scheduled(task_id: str):
     inspect = ext_celery.celery.control.inspect()
-    print('scheduled', inspect.scheduled())  # waiting to be scheduled
+    # print('scheduled')
+    # pprint(inspect.scheduled())  # waiting to be scheduled
     workers = inspect.scheduled()
     task_ids = []
     if type(workers) is list:
@@ -177,13 +181,15 @@ def inspect_is_scheduled(task_id: str):
         worker_tasks = list(workers.values())[0]
         if len(worker_tasks):
             task_ids = [t.get('request').get('id') for t in worker_tasks]
-    print('scheduled-->', task_ids)
+    # print('scheduled-->')
+    # pprint(task_ids)
     return task_id in task_ids
 
 
 def inspect_is_active(task_id: str):
     inspect = ext_celery.celery.control.inspect()
-    print('active', inspect.active())
+    # print('active')
+    # pprint(inspect.active())
     workers = inspect.active()
     task_ids = []
     if type(workers) is list:
@@ -192,7 +198,8 @@ def inspect_is_active(task_id: str):
         worker_tasks = list(workers.values())[0]
         if len(worker_tasks):
             task_ids = [t.get('id') for t in worker_tasks]
-    print('active-->', task_ids)
+    # print('active-->')
+    # pprint(task_ids)
     return task_id in task_ids
 
 
@@ -212,19 +219,21 @@ def get_task_state(task_id):
     # https://docs.celeryq.dev/en/latest/userguide/workers.html#inspecting-workers
 
     task = AsyncResult(task_id)
+
     if task.state == 'PENDING':
-        if not inspect_is_active(task_id) \
-                or not inspect_is_scheduled(task_id) \
-                or not inspect_is_reserved(task_id):
+        actives = inspect_is_active(task_id)
+        scheduleds = inspect_is_scheduled(task_id)
+        reserveds = inspect_is_reserved(task_id)
+        if not actives and not scheduleds and not reserveds:
             return {
                 'state': "CLEARED"
             }
-    elif task.state == 'SUCCESS':
+
+    info = str(task.info)
+    if task.state == 'SUCCESS':
         info = task.get()
-    elif task.state == 'PROGRESS' or task.state == 'VERIFICATION' or task.state == 'VERIFYING':
+    if task.state == 'PROGRESS' or task.state == 'VERIFICATION' or task.state == 'VERIFYING':
         info = task.info
-    else:
-        info = str(task.info)
 
     return {
         'state': task.state,
@@ -245,6 +254,8 @@ def convert_search_fields(input_fields: dict, job_board: str):
     result = {}
     for k, v in input_fields.items():
         if k in reference[job_board].keys():
+            if v is None:
+                v = ''  # fixes keyError: None
             if k == 'experience' and job_board == 'linkedin':
                 experience = [reference[job_board][k][exp] for exp in input_fields[k]]
                 result[k] = experience

@@ -99,7 +99,7 @@ const searchCardsSlice = createSlice({
                 state.nextCardId = state.nextCardId + action.payload.length
             })
             .addCase(deleteSearchCard.fulfilled, (state, action) => {
-                if (!action.payload) {
+                if (typeof action.payload == 'undefined') {
                     return state
                 }
                 state.cards = state.cards.filter(c => c.id !== action.payload)

@@ -122,6 +122,8 @@ class SearchModel(db.Model):
     is_deleted = db.Column(db.Boolean, nullable=False, default=False, server_default=expression.false())
     searches = db.relationship('Search', back_populates='search_model')
 
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user = db.relationship('User', back_populates='search_models')
 
 class User(db.Model):
     __tablename__ = 'User'
@@ -130,7 +132,7 @@ class User(db.Model):
     linkedin_email = db.Column(db.String, nullable=True)
     linkedin_password = db.Column(db.String,
                                   nullable=True)  # this is for a fake account and need access to the password value
-    searches = db.relationship('Search', back_populates='user')
+    search_models = db.relationship('SearchModel', back_populates='user')
     notes_company = db.relationship('CompanyUserNote', back_populates='user')
     notes_job = db.relationship('JobUserNote', back_populates='user')
 
@@ -142,9 +144,6 @@ class Search(db.Model):  # junction table Job-SearchModel
 
     job_id = db.Column(db.Integer, db.ForeignKey('Job.id'))
     jobs = db.relationship('Job', back_populates='searches')
-
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    user = db.relationship('User', back_populates='searches')
 
     search_model_id = db.Column(db.Integer, db.ForeignKey('SearchModel.id'))
     search_model = db.relationship('SearchModel', back_populates='searches')

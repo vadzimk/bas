@@ -73,7 +73,7 @@ def search_jobs():
 
 
 def register_search_model_and_task(shared_task, data, user_id, wanted, credentials=None):
-    search_model = SearchModel(**wanted)
+    search_model = SearchModel(**wanted, user_id=user_id)
     db.session.add(search_model)
     db.session.commit()
     task = shared_task.s(

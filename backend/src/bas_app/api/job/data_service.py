@@ -1,12 +1,11 @@
 import json
-import logging
 from typing import Type, List
 
 import pandas as pd
 from sqlalchemy import LABEL_STYLE_TABLENAME_PLUS_COL, or_
 
 from bas_app import db
-from bas_app.models import Job, Company, Search, CompanyUserNote, JobUserNote
+from bas_app.models import Job, Company, Search, CompanyUserNote, JobUserNote, SearchModel
 from .columns_to_display import columns
 
 
@@ -25,7 +24,7 @@ def get_current_data(user_id):
         .filter(or_(JobUserNote.is_filtered == False, JobUserNote.is_filtered == None)) \
         .filter(or_(JobUserNote.plan_apply_flag == False, JobUserNote.plan_apply_flag == None)) \
         .filter(or_(JobUserNote.did_apply_flag == False, JobUserNote.did_apply_flag == None)) \
-        .filter(Search.user_id == user_id) \
+        .filter(JobUserNote.user_id == user_id) \
         .filter(or_(CompanyUserNote.is_filtered == None, CompanyUserNote.is_filtered == False)) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
     df = pd.read_sql(stmt, db.session.bind)
@@ -48,7 +47,7 @@ def get_jobs_with_flags(flag: bool, user_id: int):
         .join(Search.jobs) \
         .filter(JobUserNote.is_filtered == False) \
         .filter(flag == True) \
-        .filter(Search.user_id == user_id) \
+        .filter(JobUserNote.user_id == user_id) \
         .join(Job.company) \
         .outerjoin(CompanyUserNote) \
         .outerjoin(JobUserNote) \
@@ -76,16 +75,18 @@ def get_current_data_for_models(models: List[int], user_id: int):
                      JobUserNote.plan_apply_flag,
                      JobUserNote.did_apply_flag) \
         .join(Search.jobs) \
+        .join(SearchModel, SearchModel.id == Search.search_model_id) \
         .filter(or_(JobUserNote.is_filtered == False, JobUserNote.is_filtered == None)) \
         .filter(or_(JobUserNote.plan_apply_flag == False, JobUserNote.plan_apply_flag == None)) \
         .filter(or_(JobUserNote.did_apply_flag == False, JobUserNote.did_apply_flag == None)) \
         .filter(Search.search_model_id.in_(models)) \
-        .filter(Search.user_id == user_id) \
+        .filter(SearchModel.user_id == user_id) \
         .join(Job.company) \
         .outerjoin(CompanyUserNote) \
         .filter(or_(CompanyUserNote.is_filtered == None, CompanyUserNote.is_filtered == False)) \
         .outerjoin(JobUserNote) \
         .set_label_style(LABEL_STYLE_TABLENAME_PLUS_COL).distinct()
+    print(stmt)
     df = pd.read_sql(stmt, db.session.bind)
     df = df.reindex(columns=columns)
     # logging.info(f'info: {df.info()}')
