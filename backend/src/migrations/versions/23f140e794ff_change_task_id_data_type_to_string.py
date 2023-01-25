@@ -21,14 +21,14 @@ def upgrade():
     with op.batch_alter_table('task', schema=None) as batch_op:
         batch_op.alter_column('id',
                               existing_type=sa.Integer(),
-                              type=sa.VARCHAR(),
+                              type_=sa.VARCHAR(),
                               existing_nullable=False,
                               postgresql_using="id::varchar",
                               )
     with op.batch_alter_table('search', schema=None) as batch_op:
         batch_op.alter_column('task_id',
                               existing_type=sa.Integer(),
-                              type=sa.VARCHAR(),
+                              type_=sa.VARCHAR(),
                               existing_nullable=False,
                               postgresql_using="task_id::varchar",
                               )
@@ -40,13 +40,13 @@ def downgrade():
     with op.batch_alter_table('task', schema=None) as batch_op:
         batch_op.alter_column('id',
                               existing_type=sa.VARCHAR(),
-                              type=sa.Integer(),
+                              type_=sa.Integer(),
                               existing_nullable=False,
                               )
     with op.batch_alter_table('search', schema=None) as batch_op:
         batch_op.alter_column('task_id',
                               existing_type=sa.VARCHAR(),
-                              type=sa.Integer(),
+                              type_=sa.Integer(),
                               existing_nullable=False,
                               )
     # ### end Alembic commands ###
