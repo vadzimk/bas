@@ -95,6 +95,8 @@ python -m bas_app.scraper.man
 
 ## Diagrams
 ### Use-case
-![Use case diagram](diagrams/Diagram-USE-CASE.png)
+![Use case diagram](diagrams/Diagram-USE-CASE.drawio.svg)
+### Activity
+![Use case diagram](diagrams/Diagram-ACTIVITY.drawio.svg)
 ### Entity-relationship
-![ER diagram](Screenshot%202022-09-29%20er.png)
+![ER diagram](diagrams/erd.drawio.svg)
