@@ -98,5 +98,7 @@ python -m bas_app.scraper.man
 ![Use case diagram](diagrams/Diagram-USE-CASE.drawio.svg)
 ### Activity
 ![Use case diagram](diagrams/Diagram-ACTIVITY.drawio.svg)
+### State machine for Search Card
+![Use case diagram](diagrams/Diagram-STATE-CARD.drawio.svg)
 ### Entity-relationship
 ![ER diagram](diagrams/erd.drawio.svg)
