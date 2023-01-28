@@ -41,6 +41,9 @@ export function BuiltinSearchCard(props) {
         if (values.limit && !Number.isInteger(Number(values.limit))) {
             errors.limit = 'Integer expected'
         }
+        if (!values.job_category) {
+            errors.job_category = 'Required'
+        }
         return errors
     }
     return (
