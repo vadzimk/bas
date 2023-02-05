@@ -59,7 +59,7 @@ DATABASE_NAME=bas
 ```bash
 # create and activate venv and install dependencies:
 cd backend
-pip insttall poetry==1.1.14
+pip install poetry==1.1.14
 python -m venv .venv
 . .venv/bin/activate
 poetry install
