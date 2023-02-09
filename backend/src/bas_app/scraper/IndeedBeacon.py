@@ -91,7 +91,7 @@ class IndeedBeacon(BaseBrowserBeacon):
         self.make_attribute('description_text',
                             lambda: soup.select_one('#jobDescriptionText').get_text())
 
-        if (not self._job_post['description_text']):
+        if not self._job_post.get('description_text'):
             message = f'[description_text] empty on page: {self._job_post["url"]}'
             raise RuntimeError(message)
 

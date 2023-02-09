@@ -28,7 +28,7 @@ class LinkedinPage(BasePage):
 
         self._soup = await self.make_beacon_soup(bpage)  # beacon soup only!!!
 
-        logging.info('LinkedinPage: job count: {self._job_count}')
+        logging.info(f'LinkedinPage: job count: {self._job_count}')
         self._beacons: List[BaseBrowserBeacon] = self.make_beacon_list()
 
 
@@ -79,7 +79,7 @@ class LinkedinPage(BasePage):
             search_results_html = await bpage.inner_html('.jobs-search__left-rail')
 
 
-        logging.info('beacons on this page after scroll: {num_beacons}')
+        logging.info(f'beacons on this page after scroll: {num_beacons}')
         # save_safe(search_results_html, str(self._page_index) + '.html')
         return BeautifulSoup(search_results_html, 'html.parser')
 

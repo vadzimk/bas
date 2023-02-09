@@ -58,7 +58,7 @@ DATABASE_NAME=bas
 ```bash
 # create and activate venv and install dependencies:
 cd backend
-pip insttall poetry==1.1.14
+pip install poetry==1.1.14
 python -m venv .venv
 . .venv/bin/activate
 poetry install
@@ -94,6 +94,10 @@ python -m bas_app.scraper.man
 
 ## Diagrams
 ### Use-case
-![Use case diagram](diagrams/Diagram-USE-CASE.png)
+![Use case diagram](diagrams/Diagram-USE-CASE.drawio.svg)
+### Activity
+![Use case diagram](diagrams/Diagram-ACTIVITY.drawio.svg)
+### State machine for Search Card
+![Use case diagram](diagrams/Diagram-STATE-CARD.drawio.svg)
 ### Entity-relationship
-![ER diagram](Screenshot%202022-09-29%20er.png)
+![ER diagram](diagrams/erd.drawio.svg)

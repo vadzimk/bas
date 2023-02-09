@@ -46,7 +46,7 @@ export default function BaseSearchCard({CardFields}) {
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const showSubmit = !showRevoke && !showRestart
 
-    // console.log("showProgressBar", showProgressBar, currentTask?.status, taskDone)
+    // console.log("showProgressBar", card.tasks[card.tasks.length-1], showProgressBar, currentTask?.status, taskDone)
 
     useEffect(() => {
         const taskDone = Boolean(progressData &&
