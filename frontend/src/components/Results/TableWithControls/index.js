@@ -214,7 +214,7 @@ export default function TableWithControls({detail, setDetail, getData, updateRow
     return (
 
         <div id="table-container">
-            <div style={{display: "flex", justifyContent: "start", gap: "4px", marginBottom: "8px"}}>
+            <div style={{display: "flex", justifyContent: "start", gap: "4px", padding: "8px 0"}}>
                 <div>
                     <Input
                         placeholder="Filter"

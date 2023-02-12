@@ -14,7 +14,7 @@ RightPanel.propTypes = {
     })
 }
 
-export default function RightPanel({detail, panelRef}) {
+export default function RightPanel({detail}) {
 
 
 
@@ -23,8 +23,6 @@ export default function RightPanel({detail, panelRef}) {
         <div
             id="right_panel"
             className="details-container"
-            ref={panelRef}
-            // style={{height: "auto"}}
         >
             <div id="company-references">
                 <div style={{
@@ -78,7 +76,10 @@ export default function RightPanel({detail, panelRef}) {
                         </Button>}
                 </div>
             </div>
-            <div id="detail" dangerouslySetInnerHTML={{__html: detail.description}}/>
+            <div
+                id="detail"
+                dangerouslySetInnerHTML={{__html: detail.description}}
+            />
         </div>
     )
 }

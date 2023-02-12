@@ -14,6 +14,7 @@
 #detail {
     width: 100%;
     overflow-y: auto;
+    padding: 0 8px;
 }
 
 #table-container {
@@ -47,15 +48,15 @@
     flex-direction: column;
 }
 
-#right_panel::after {
-    content: '';
-    background-color: #bec4d0;
-    position: absolute;
-    left: 0;
-    width: 8px;
-    height: 100%;
-    cursor: ew-resize;
-}
+/*#right_panel::after {*/
+/*    content: '';*/
+/*    background-color: #bec4d0;*/
+/*    position: absolute;*/
+/*    left: 0;*/
+/*    width: 8px;*/
+/*    height: 100%;*/
+/*    cursor: ew-resize;*/
+/*}*/
 
 /* keeps menu at the top of the window */
 /*.tabulator-menu.tabulator-popup-container {*/

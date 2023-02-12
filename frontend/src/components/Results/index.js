@@ -34,7 +34,7 @@ export default function Results({getData, updateRow}) {
                     updateRow={updateRow}
                 />
             </Panel>
-            <PanelResizeHandle style={{width: "8px", backgroundColor: "#bec4d0"}}/>
+            <PanelResizeHandle style={{width: "8px", backgroundColor: "#ffffff"}}/>
             <Panel defaultSize={30} minSize={1}>
                 <RightPanel
                     detail={detail}

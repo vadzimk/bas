@@ -87,8 +87,8 @@ def register_search_model_and_task(shared_task, data, user_id, wanted, credentia
 
 @search.route('/api/status/<task_id>')
 def search_status(task_id):
-
     response = get_task_state(task_id)
+    logging.info(f"{task_id} {response.get('state')}")
     return jsonify(response)
 
 

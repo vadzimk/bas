@@ -74,7 +74,7 @@ def scrape_linkedin(self, search_fields: dict, user_id: int,
     :param user_id: id of row in db table user
     :param search_model_id: id of row in db table search_model
     """
-    print('starting linkedin search', search_fields)
+    logging.info(f'{self.request.id} starting linkedin search {search_fields}')
     search_fields = convert_search_fields(search_fields, 'linkedin')
     new_search = LinkedinSearch(**search_fields,
                                 linkedin_credentials=credentials,
@@ -100,7 +100,7 @@ def scrape_indeed(self, search_fields: dict, user_id: int,
     :param user_id: id of row in db table user
     :param search_model_id: id of row in db table search_model
     """
-    print('starting indeed search', search_fields)
+    logging.info(f'{self.request.id} starting indeed search {search_fields}')
     search_fields = convert_search_fields(search_fields, 'indeed')
     new_search = IndeedSearch(**search_fields,
                               user_id=user_id,
@@ -125,7 +125,7 @@ def scrape_builtin(self, search_fields: dict, user_id: int,
     :param user_id: id of row in db table user
     :param search_model_id: id of row in db table search_model
     """
-    print('starting builtin search', search_fields)
+    logging.info(f'{self.request.id} starting builtin search {search_fields}')
     new_search = BuiltinSearch(**search_fields,
                                user_id=user_id,
                                search_model_id=search_model_id,
