@@ -9,7 +9,7 @@ import {updateResultsRow} from "../../../services/resultService";
 import {loginUser} from "../../../reducers/userSlice";
 
 
-export default function TableWithControls({detail, setDetail, tableContainerRef, getData, updateRow}) {
+export default function TableWithControls({detail, setDetail, getData, updateRow}) {
     const [table, setTable] = useState()
     const [filterValue, setFilterValue] = useState("")
     const [deletedRows, setDeletedRows] = useState([]) // array of arrays (each deletion pushes an array)
@@ -213,7 +213,7 @@ export default function TableWithControls({detail, setDetail, tableContainerRef,
 
     return (
 
-        <div id="table-container" ref={tableContainerRef}>
+        <div id="table-container">
             <div style={{display: "flex", justifyContent: "start", gap: "4px", marginBottom: "8px"}}>
                 <div>
                     <Input

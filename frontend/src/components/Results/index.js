@@ -2,7 +2,8 @@ import './main.css'
 import RightPanel from "./RightPanel";
 import TableWithControls from "./TableWithControls";
 import {useSelector} from "react-redux";
-import {useEffect, useRef, useState} from "react";
+import {useState} from "react";
+import {Panel, PanelGroup, PanelResizeHandle} from "react-resizable-panels";
 
 export const emptyDetail = {
     job_id: "",
@@ -18,54 +19,27 @@ export default function Results({getData, updateRow}) {
     const user = useSelector(state => state.user)
     const [detail, setDetail] = useState(emptyDetail)
 
-    // ------------------------- Draggable panel ----------------------------
-
-    const BORDER_SIZE = 8;
-    const panelRef = useRef()
-    const tableContainerRef = useRef()
-
-    useEffect(() => {
-        const panel = panelRef.current
-        const table_container = tableContainerRef.current
-
-        let m_pos;
-
-        function resize(e) {
-            const dx = m_pos - e.x;
-            m_pos = e.x;
-            panel.style.width = (parseInt(getComputedStyle(panel, '').width) + dx) + "px";
-            table_container.style.width = (parseInt(getComputedStyle(table_container, '').width) - dx) + "px";
-        }
-
-        panel.addEventListener("mousedown", function (e) {
-            if (e.offsetX < BORDER_SIZE) {
-                m_pos = e.x;
-                document.addEventListener("mousemove", resize, false);
-            }
-        }, false);
-
-        document.addEventListener("mouseup", function () {
-            document.removeEventListener("mousemove", resize, false);
-        }, false);
-    }, [panelRef, tableContainerRef])
+    // ------------------------- Resizable panels ----------------------------
 
 
     if (user?.id) return (
-        <div>
-            <div style={{display: "flex", flexDirection: "row", minHeight: "80vh"}}>
+        <PanelGroup direction="horizontal"
+                    style={{minHeight: "80vh"}}
+        >
+            <Panel defaultSize={70} minSize={25}>
                 <TableWithControls
                     detail={detail}
                     setDetail={setDetail}
-                    tableContainerRef={tableContainerRef}
                     getData={getData}
                     updateRow={updateRow}
                 />
+            </Panel>
+            <PanelResizeHandle style={{width: "8px", backgroundColor: "#bec4d0"}}/>
+            <Panel defaultSize={30} minSize={1}>
                 <RightPanel
                     detail={detail}
-                    panelRef={panelRef}
                 />
-            </div>
-        </div>
-
+            </Panel>
+        </PanelGroup>
     )
 }

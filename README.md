@@ -42,7 +42,7 @@ You can
 See [Docker Hub](https://hub.docker.com/r/vadzimk/bas) for usage
 
 
-## If mock linkedin account 'expires'
+#### If mock linkedin account 'expires'
 - There is a button [UPDATE USER] to update Linkedin credentials once the previous account "expires".
 
 ## Development
