@@ -24,7 +24,7 @@ export default function Results({getData, updateRow}) {
 
     if (user?.id) return (
         <PanelGroup direction="horizontal"
-                    style={{minHeight: "80vh"}}
+                    style={{height: "calc(100vh - 116px)"}}
         >
             <Panel defaultSize={70} minSize={25}>
                 <TableWithControls

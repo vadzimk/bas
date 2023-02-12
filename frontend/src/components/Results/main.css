@@ -5,11 +5,11 @@
 /*    flex-direction: row;*/
 /*}*/
 
-.details-container {
-    /*width: 100%;*/
-    display: flex;
-    flex-direction: row;
-}
+/*.details-container {*/
+/*    !*width: 100%;*!*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*}*/
 
 #detail {
     width: 100%;

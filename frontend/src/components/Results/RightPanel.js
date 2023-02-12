@@ -17,12 +17,16 @@ RightPanel.propTypes = {
 export default function RightPanel({detail}) {
 
 
-
-
     return (
         <div
             id="right_panel"
             className="details-container"
+            style={{
+                display: "flex",
+                right: 0,
+                backgroundColor: "#d6e4ea",
+                flexDirection: "column",
+            }}
         >
             <div id="company-references">
                 <div style={{
@@ -79,6 +83,7 @@ export default function RightPanel({detail}) {
             <div
                 id="detail"
                 dangerouslySetInnerHTML={{__html: detail.description}}
+                style={{overflow: "scroll"}}
             />
         </div>
     )
