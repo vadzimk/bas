@@ -56,7 +56,10 @@ export default function BuiltinSearchCardFields({
                 />
             </div>
 
-            <div style={{width: 596}}>
+            <div style={{
+                // width: 596
+                width: 252
+            }}>
                 {/*job_category*/}
                 <JobCategorySelect
                     label="Job Category"

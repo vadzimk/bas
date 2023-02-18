@@ -81,18 +81,19 @@ export default function BaseSearchCardFields({
 
                 />
             </div>
-            <div style={{width: 340}}>
-                {/*Experience*/}
-                <ExperienceSelect
-                    label="Experience"
-                    name="experience"
-                    options={experienceOptions}
-                    value={formikProps.values.experience}
-                    onChange={(value) => formikProps.setFieldValue('experience', value)}
-                    disabled={!enabledRadiusDateExperienceLimit}
+            {/*Completely useless field, they all want señores*/}
+            {/*<div style={{width: 340}}>*/}
+            {/*    /!*Experience*!/*/}
+            {/*    <ExperienceSelect*/}
+            {/*        label="Experience"*/}
+            {/*        name="experience"*/}
+            {/*        options={experienceOptions}*/}
+            {/*        value={formikProps.values.experience}*/}
+            {/*        onChange={(value) => formikProps.setFieldValue('experience', value)}*/}
+            {/*        disabled={!enabledRadiusDateExperienceLimit}*/}
 
-                />
-            </div>
+            {/*    />*/}
+            {/*</div>*/}
             <div>
                 <Input
                     placeholder="Limit"
