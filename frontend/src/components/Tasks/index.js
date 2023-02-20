@@ -61,7 +61,7 @@ export default function Tasks() {
                 }}>
                 {cards.length > 0 &&
                     <div>
-                        <div style={{display: 'flex', gap: "4px", margin: "8px 0"}}>
+                        <div style={{display: 'flex', gap: "4px", margin: "8px 0 23px 0"}}>
                             <Checkbox
                                 isChecked={allChecked}
                                 isIndeterminate={isIndeterminate}
