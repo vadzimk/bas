@@ -59,39 +59,37 @@ export default function Tasks() {
                     flexDirection: 'column',
                     // gap: "10px 0"
                 }}>
-
-                <div style={{display: 'flex', gap: "4px"}}>
-
-                    <Button
-                        rightIcon={<SearchIcon/>}
-                        variant="outline"
-                        onClick={handleNewSearchCardLinkedin}>
-                        New Linkedin
-                    </Button>
-                    <Button
-                        rightIcon={<SearchIcon/>}
-                        variant="outline"
-                        onClick={handleNewSearchCardIndeed}>
-                        New Indeed
-                    </Button>
-                    <Button
-                        rightIcon={<SearchIcon/>}
-                        variant="outline"
-                        onClick={handleNewSearchCardBuiltin}>
-                        New Builtin
-                    </Button>
-
-                </div>
                 {cards.length > 0 &&
-                    <div style={{marginTop: "16px"}}>
-                        <Checkbox
-                            isChecked={allChecked}
-                            isIndeterminate={isIndeterminate}
-                            onChange={handleToggleAllCards}
-                            size="lg"
-                            borderColor="#0088CC"
-                            style={{height: "55px"}}
-                        ></Checkbox>
+                    <div>
+                        <div style={{display: 'flex', gap: "4px", margin: "8px 0"}}>
+                            <Checkbox
+                                isChecked={allChecked}
+                                isIndeterminate={isIndeterminate}
+                                onChange={handleToggleAllCards}
+                                size="lg"
+                                borderColor="#0088CC"
+                                style={{marginRight: "42px"}}
+                            ></Checkbox>
+                            <Button
+                                rightIcon={<SearchIcon/>}
+                                variant="outline"
+                                onClick={handleNewSearchCardLinkedin}>
+                                New Linkedin
+                            </Button>
+                            <Button
+                                rightIcon={<SearchIcon/>}
+                                variant="outline"
+                                onClick={handleNewSearchCardIndeed}>
+                                New Indeed
+                            </Button>
+                            <Button
+                                rightIcon={<SearchIcon/>}
+                                variant="outline"
+                                onClick={handleNewSearchCardBuiltin}>
+                                New Builtin
+                            </Button>
+
+                        </div>
                         <Stack>
                             {[...cards]
                                 .sort((a, b) => (a.formValues?.what ? a.formValues.what.localeCompare(b.formValues.what) : 0))
