@@ -105,7 +105,12 @@ function App() {
                         </div>
                     </div>
                     <TabPanels>
-                        <TabPanel style={{display: "flex"}}>
+                        <TabPanel style={{
+                            display: "flex",
+                            maxWidth: "1600px",
+                            margin: "0 auto",
+                            padding: "0 32px",
+                        }}>
                             <Tasks/>
                         </TabPanel>
                         <TabPanel>
