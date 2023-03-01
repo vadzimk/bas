@@ -1,4 +1,5 @@
 import "tabulator-tables/dist/css/tabulator.min.css";
+import "./styles.css"
 import {TabulatorFull} from "tabulator-tables"; //import Tabulator library
 
 import React, {useEffect, useState} from "react";
