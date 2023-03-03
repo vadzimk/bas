@@ -40,7 +40,7 @@ class LinkedinBeacon(BaseBrowserBeacon):
                                     lambda: self._beacon.select_one(
                                                               '.job-card-container__company-name').text,
                                     lambda: self._beacon.find('span', class_='job-card-container__primary-description')
-                                    .find('a').text
+                                    .text
                                     )
 
         self.make_company_attribute('location',
