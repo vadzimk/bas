@@ -122,6 +122,8 @@ class BuiltinSearch(BaseSearch):
         self._page_count_with_limit = min(page_count, self._limit)
         logging.info(f"page_count {page_count}")
         self.process_request_for_search(res)
+        count_deleted = BaseSearch.remove_job_duplicates()
+        self._task_state_meta['job_duplicates_current'] += count_deleted
         self._task_state_meta['total'] = self._page_count_with_limit
         self._task_state_meta['current'] += 1
         self._task_state_meta['job_count'] = data.get("job_count", 0)

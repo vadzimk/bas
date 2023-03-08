@@ -86,7 +86,7 @@ class BaseBrowserSearch(BaseSearch, ABC):
             if not (job and job.description_text):  # not (job details and company details) are already in db
                 await asyncio.sleep(self.get_navigate_delay())
                 await self.populate_job_post_details(b, job_url, playwright_page)
-                self.insert_or_update_job_db(b)
+                job = self.insert_or_update_job_db(b)
             try:
                 company_profile_url = b.dict['company'].get('profile_url') or (
                         job and job.company and job.company.profile_url)
@@ -104,6 +104,8 @@ class BaseBrowserSearch(BaseSearch, ABC):
                 company = self.insert_or_update_company_db(b)
             job.company_id = company.id
             db.session.commit()
+            count_deleted = BaseSearch.remove_job_duplicates()
+            self._task_state_meta['job_duplicates_current'] += count_deleted
             self._task_state_meta['current'] += 1
             self.update_state()
 

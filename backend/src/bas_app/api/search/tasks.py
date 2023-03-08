@@ -41,30 +41,25 @@ async def async_browser_task(
             bpage=bpage,
             task_update_state=task_update_state)  # one session for each task
         await new_search.populate(bpage=bpage)
-
-        count_deleted = await remove_job_duplicates()
-        new_duplicates_value = new_search.meta['job_duplicates_current'] + count_deleted
-
         meta = new_search.meta.copy()
-        meta.update(job_duplicates_total=new_duplicates_value)
         return meta
 
 
-async def remove_job_duplicates():
-    # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
-    # Create a query that identifies the row for each domain with the lowest id
-    inner_q = db.session.query(db.func.min(Job.id)).group_by(Job.description_text, Job.title, Job.company_id)
-    aliased = db.alias(inner_q)
-    # Select the rows that do not match the subquery
-    q = db.session.query(Job).filter(~Job.id.in_(aliased))
-    # Delete the unmatched rows (SQLAlchemy generates a single DELETE statement from this loop)
-    count_deleted = 0
-    for job in q:
-        db.session.execute(delete(Search).where(Search.job_id == job.id))
-        db.session.delete(job)
-        count_deleted += 1
-    db.session.commit()
-    return count_deleted
+# def remove_job_duplicates():
+#     # delete duplicate rows in db https://stackoverflow.com/a/3317575/5320906
+#     # Create a query that identifies the row for each domain with the lowest id
+#     inner_q = db.session.query(db.func.min(Job.id)).group_by(Job.description_text, Job.title, Job.company_id)
+#     aliased = db.alias(inner_q)
+#     # Select the rows that do not match the subquery
+#     q = db.session.query(Job).filter(~Job.id.in_(aliased))
+#     # Delete the unmatched rows (SQLAlchemy generates a single DELETE statement from this loop)
+#     count_deleted = 0
+#     for job in q:
+#         db.session.execute(delete(Search).where(Search.job_id == job.id))
+#         db.session.delete(job)
+#         count_deleted += 1
+#     db.session.commit()
+#     return count_deleted
 
 
 @shared_task(bind=True, serializer='pickle')

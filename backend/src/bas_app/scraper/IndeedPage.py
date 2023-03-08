@@ -42,13 +42,14 @@ class IndeedPage(BasePage):
 
     @override
     def count_total_jobs(self, ) -> int:
-        count_text = (self._soup.select_one('#searchCountPages')
+        count_element = (self._soup.select_one('#searchCountPages')
                       or
-                      self._soup.select_one('.jobsearch-JobCountAndSortPane-jobCount')).text
-
-        # m = re.search(r"of (\d+) jobs", count_text)
-        m = re.search(r"(\d+) jobs", count_text)
-        return int(m.group(1))
+                      self._soup.select_one('.jobsearch-JobCountAndSortPane-jobCount'))
+        if count_element:
+            m = re.search(r"(\d+) jobs", count_element.text)
+            return int(m.group(1))
+        else:
+            return 0
 
     async def make_beacon_soup(self, bpage):
         await bpage.goto(self._url)

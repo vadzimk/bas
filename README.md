@@ -88,6 +88,9 @@ npm run start
 
 # a separate script for manual testing of selectors, not part of the application
 python -m bas_app.scraper.man   
+
+# clear redis cache when necessary
+docker exec redis_dev redis-cli -c "flushall"
 ``` 
 
 
