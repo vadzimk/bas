@@ -58,11 +58,18 @@ const searchCardsSlice = createSlice({
                 if (c.model_id === model_id) {
                     return {
                         ...c,
-                        tasks: c.tasks.map(t => t.task_id === task_id ? {
-                            ...t,
-                            status: data,
-                            progress: progress || t.progress
-                        } : {...t})
+                        tasks: c.tasks.map(t => {
+                            if (t.task_id === task_id) {
+                                const newTaskValue = {
+                                    ...t,
+                                    status: data,
+                                    progress: progress || t.progress
+                                }
+                                return newTaskValue
+                            } else {
+                                return {...t}
+                            }
+                        })
                     }
                 } else {
                     return c
@@ -271,10 +278,11 @@ export const revokeTask = createAsyncThunk('tasks/revoke', async ({cardId, task_
     rejectWithValue,
     getState
 }) => {
+    const state = getState()
+    const model_id = state.searchCards.cards.find(c => c.id === cardId).model_id
     try {
-        console.log("revoke", cardId, task_id)
         const data = await revokeSearchTask(task_id)
-        dispatch(updateSearchCardTaskStatus({cardId, task_id, data}))
+        dispatch(updateSearchCardTaskStatus({model_id, task_id, data}))
     } catch (e) {
         rejectWithValue(e.response.json())
     }
