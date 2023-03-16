@@ -99,9 +99,12 @@ class IndeedBeacon(BaseBrowserBeacon):
                             lambda: replace_p_br_p(str(soup.select_one('#jobDescriptionText'))))
 
         self.make_company_attribute('profile_url',
-                                    lambda:
+                                    lambda:  # outdated selector
                                     soup.find('div', class_='jobsearch-JobInfoHeader-subtitle').find('a')['href'].split(
-                                        '?')[0]
+                                        '?')[0],
+                                    lambda:  # new selector
+                                    soup.find('div', class_='jobsearch-CompanyInfoContainer').find('a')['href'].split(
+                                        '?')[0],
                                     )
         self.make_attribute('hiring_insights',
                             lambda: ", ".join(
