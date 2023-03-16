@@ -111,6 +111,11 @@ class IndeedBeacon(BaseBrowserBeacon):
                                 re.sub('Posted.*ago', '', p.text) for p in soup.select_one('#hiringInsightsSectionRoot').find_all('p'))
                             )
 
+        self.make_company_attribute('original_url',
+                                    lambda:
+                                    soup.find(id='originalJobLinkContainer').find('a')['href'],
+                                    )
+
     @override
     def populate_from_company_profile(self, about_company_html, about_employees_html=None):
         """ all must be company fields """
