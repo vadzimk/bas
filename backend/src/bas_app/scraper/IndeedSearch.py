@@ -78,15 +78,15 @@ class IndeedSearch(BaseBrowserSearch):
 
     @override
     @staticmethod
-    async def populate_company_details(beacon, company_url, bpage):
+    async def populate_company_details(beacon, company_profile_url, bpage):
         try:
-            await bpage.goto(f'{company_url}')
+            await bpage.goto(f'{company_profile_url}')
             about_company = bpage.locator('main')
             about_company_html = await about_company.inner_html()
 
             beacon.populate_from_company_profile(about_company_html, None)
         except Exception as e:
-            logging.error(f'Error going to {company_url} {e}')
+            logging.error(f'Error going to {company_profile_url} {e}')
             if "Navigation failed because page crashed!" in str(e):
                 raise PageCrashed(str(e))
 

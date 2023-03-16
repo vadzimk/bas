@@ -87,19 +87,19 @@ class LinkedinSearch(BaseBrowserSearch):
 
     @override
     @staticmethod
-    async def populate_company_details(beacon, company_url, bpage):
+    async def populate_company_details(beacon, company_profile_url, bpage):
         try:
-            await bpage.goto(f'{company_url}about/')
+            await bpage.goto(f'{company_profile_url}about/')
             about_company = bpage.locator('div.org-grid__content-height-enforcer')
             about_company_html = await about_company.inner_html()
-            await bpage.goto(f'{company_url}people/')
+            await bpage.goto(f'{company_profile_url}people/')
             await bpage.wait_for_selector('div.insight-container')
             about_employees = bpage.locator('div.org-grid__content-height-enforcer')
             about_employees_html = await about_employees.inner_html()
 
             beacon.populate_from_company_profile(about_company_html, about_employees_html)
         except Exception as e:
-            logging.error(f'Error going to company_url {company_url} {e}')
+            logging.error(f'Error going to company_url {company_profile_url} {e}')
             if "Navigation failed because page crashed!" in str(e):
                 raise PageCrashed(str(e))
 

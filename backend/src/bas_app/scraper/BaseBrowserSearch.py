@@ -63,7 +63,7 @@ class BaseBrowserSearch(BaseSearch, ABC):
 
     @staticmethod
     @abstractmethod
-    async def populate_company_details(beacon, company_url, bpage: PlayWrightPage):
+    async def populate_company_details(beacon, company_profile_url, bpage: PlayWrightPage):
         pass
 
     @staticmethod
@@ -102,12 +102,14 @@ class BaseBrowserSearch(BaseSearch, ABC):
                 await asyncio.sleep(self.get_navigate_delay())
                 await self.populate_company_details(b, company_profile_url, playwright_page)
                 company = self.insert_or_update_company_db(b)
+                logging.info(f'insert or update company: {company}')
             job.company_id = company.id
             db.session.commit()
             count_deleted = BaseSearch.remove_job_duplicates()
             self._task_state_meta['job_duplicates_current'] += count_deleted
             self._task_state_meta['current'] += 1
             self.update_state()
+
 
     def copy_company_details(self, from_bec, to_bec):
         to_bec.populate_company_from_bec(from_bec)

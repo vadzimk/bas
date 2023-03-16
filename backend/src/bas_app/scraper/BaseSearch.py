@@ -53,21 +53,20 @@ class BaseSearch(ABC):
         return BaseSearch.insert_or_update_relation_helper(
             Table=Job,
             fields=beacon.job_attributes_only,
-            filter_column='url',
-            filter_value=beacon.dict.get('url')
+            where={'url': beacon.dict.get('url')}
         )
 
     @staticmethod
-    def insert_or_update_relation_helper(Table: db.Model, fields: dict, filter_column: str, filter_value: str):
+    def insert_or_update_relation_helper(Table: db.Model, fields: dict, where: dict):
         """ generic insert or update relation into db
         inserts a new row or updates it if exists
         :Table: db.Model to insert fields
         :fields: fields of the row {attribute:value}
+        :where = {filter_column: filter_value}
         :filter_column: where column
         :filter_value: where value
         :return: query row result
         """
-        where = {filter_column: filter_value}
         existing_row = Table.query.filter_by(**where).first()
         if not existing_row:  # create record
             new_row = Table(**fields)
@@ -82,12 +81,23 @@ class BaseSearch(ABC):
     @staticmethod
     def insert_or_update_company_db(beacon: BaseBeacon):
         """ saves company fields of the beacon to db if company not present in db"""
-        company = BaseSearch.insert_or_update_relation_helper(
-            Table=Company,
-            fields=beacon.dict['company'],
-            filter_column='profile_url',
-            filter_value=beacon.dict['company'].get('profile_url')
-        )
+        company_profile_url = beacon.dict['company'].get('profile_url')
+        company_name = beacon.dict['company'].get('name')
+        if not company_profile_url:
+            company = BaseSearch.insert_or_update_relation_helper(
+                Table=Company,
+                fields=beacon.dict['company'],
+                where={
+                    'profile_url': None,
+                    'name': company_name
+                }
+            )
+        else:
+            company = BaseSearch.insert_or_update_relation_helper(
+                Table=Company,
+                fields=beacon.dict['company'],
+                where={'profile_url': company_profile_url}
+            )
         return company
 
     @abstractmethod
