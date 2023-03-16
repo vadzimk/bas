@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 import traceback
 
 import requests
@@ -46,7 +47,7 @@ class IndeedPage(BasePage):
                       or
                       self._soup.select_one('.jobsearch-JobCountAndSortPane-jobCount'))
         if count_element:
-            m = re.search(r"(\d+) jobs", count_element.text)
+            m = re.search(r"(\d+) job?", count_element.text)
             return int(m.group(1))
         else:
             return 0

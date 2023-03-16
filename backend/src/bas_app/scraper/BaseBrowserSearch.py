@@ -3,7 +3,9 @@ import logging
 import math
 import random
 import sys
+import time
 from abc import ABC, abstractmethod
+from pprint import pprint
 from typing import List, Optional
 
 from BasePage import BasePage
@@ -101,6 +103,8 @@ class BaseBrowserSearch(BaseSearch, ABC):
                 # continue
                 await asyncio.sleep(self.get_navigate_delay())
                 await self.populate_company_details(b, company_profile_url, playwright_page)
+                if not b.dict.get('company').get('profile_url'):  # patches missing profile_url such that a new row w/o profile_url is not added by the insert_or_update_company_db
+                    b.dict['company']['profile_url'] = company_profile_url
                 company = self.insert_or_update_company_db(b)
                 logging.info(f'insert or update company: {company}')
             job.company_id = company.id
