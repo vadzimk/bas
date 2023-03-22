@@ -16,6 +16,11 @@ RightPanel.propTypes = {
 
 export default function RightPanel({detail}) {
 
+    const descriptionHtml = detail.description
+    const element = document.createElement('div')
+    element.innerHTML = descriptionHtml
+    const descriptionLength = element.innerText.split(/\s+/).length;
+
 
     return (
         <div
@@ -80,6 +85,11 @@ export default function RightPanel({detail}) {
                         </Button>}
                 </div>
             </div>
+            {detail.description &&
+                <div style={{fontSize: "12px", textAlign: "right", padding: "0 8px"}}
+                >
+                    <span>word-count: </span><span>{descriptionLength}</span>
+                </div>}
             <div
                 id="detail"
                 dangerouslySetInnerHTML={{__html: detail.description}}
