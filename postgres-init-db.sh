@@ -1,3 +1,5 @@
 #!/bin/sh
 set -e
 psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = $DATABASE_NAME" | grep -q 1 || psql -U $POSTGRES_USER -c "CREATE DATABASE $DATABASE_NAME"
+psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = $MB_DB_DBNAME" | grep -q 1 || psql -U $POSTGRES_USER -c "CREATE DATABASE $MB_DB_DBNAME"
+psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = $SUPERSET_POSTGRES_DATABASE" | grep -q 1 || psql -U $POSTGRES_USER -c "CREATE DATABASE $SUPERSET_POSTGRES_DATABASE"

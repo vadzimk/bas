@@ -31,9 +31,39 @@ services:
 #    ports:
 #      - 8080:8080
 
-# TODO containerize celery worker
+# TODO containerise celery worker
+
+
+  metabase:
+      image: metabase/metabase:v0.45.1
+      container_name: metabase_dev
+      ports:
+      - "3002:3000"
+      env_file:
+          - .env.dev.postgres
+      depends_on:
+          - postgres
+
+  superset:
+      container_name: superset_dev
+      build:
+          context: superset
+          dockerfile: Dockerfile
+      restart: unless-stopped
+      ports:
+        - "8088:8088"
+      depends_on:
+        - postgres
+      volumes:
+#          - ./docker:/app/docker
+          - superset_home:/app/superset_home
+      env_file:
+        - .env.dev.postgres
+
 
 volumes:
   redis_data:
+  superset_home:
+
 
 
