@@ -66,8 +66,7 @@
 
 #company-references {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 1rem;
     background-color: #bec4d0;
     position: sticky;

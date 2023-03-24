@@ -89,12 +89,12 @@ const searchCardsSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(createTask.fulfilled, (state, action) => {
-            const {task_id, model_id, cardId} = action.payload
+            const {task_id, model_id, cardId, task_timestamp} = action.payload
             state.cards = state.cards.map(c => c.id === cardId ? {
                 ...c,
                 model_id,
                 submitSuccess: true,
-                tasks: [...c.tasks, {task_id}]
+                tasks: [...c.tasks, {task_id, task_timestamp}]
             } : {...c})
 
         })
@@ -220,6 +220,7 @@ export const createTask = createAsyncThunk('tasks/create', async (
         return {
             task_id: res.data.task_id,
             model_id: res.data.model_id,
+            task_timestamp: res.data.timestamp,
             cardId,
         }
     } catch (e) {

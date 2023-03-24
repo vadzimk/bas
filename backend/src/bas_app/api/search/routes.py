@@ -69,7 +69,8 @@ def search_jobs():
     print("search_model.id", search_model.id)
     print("task.id", task.id)
     print("task_in_db.id", task_in_db.id)
-    return jsonify({'task_id': task_in_db.id, 'model_id': search_model.id}), 202
+    print("task_in_db.timestamp", task_in_db.timestamp)
+    return jsonify({'task_id': task_in_db.id, 'model_id': search_model.id, 'timestamp': task_in_db.timestamp}), 202
 
 
 def register_search_model_and_task(shared_task, data, user_id, wanted, credentials=None):

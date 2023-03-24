@@ -45,6 +45,7 @@ export default function BaseSearchCard({CardFields}) {
     const showRestart = formSubmitted && taskDone
     const enabledRadiusDateExperienceLimit = !formSubmitted || taskDone
     const showSubmit = !showRevoke && !showRestart
+    const [timestamp, setTimestamp] = useState("")
 
     // console.log("showProgressBar", card.tasks[card.tasks.length-1], showProgressBar, currentTask?.status, taskDone)
 
@@ -57,6 +58,23 @@ export default function BaseSearchCard({CardFields}) {
             ))
         setTaskDone(taskDone)
         setFormSubmitted(Boolean(card.submitSuccess))
+        if (taskDone && currentTask?.task_timestamp) {
+            const date = new Date(currentTask.task_timestamp)
+            console.log("date", date)
+            const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            console.log("userTimezone", userTimezone)
+            const formattedDate = date.toLocaleString("en-GB", {
+                timeZone: userTimezone,
+                // year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            })
+            console.log("formattedDate", formattedDate)
+            setTimestamp(formattedDate)
+        }
+
     }, [card, progressData])
 
 
@@ -78,6 +96,7 @@ export default function BaseSearchCard({CardFields}) {
 
         dispatch(createTask(data))
         setFormSubmitted(true)
+        setTimestamp('')
     }
 
     const handleRevoke = () => {
@@ -92,7 +111,6 @@ export default function BaseSearchCard({CardFields}) {
     const handleFormBlur = (values) => {
         dispatch(updateSearchCardFormValues({id: cardId, values}))
     }
-
 
 
     return (
@@ -150,7 +168,7 @@ export default function BaseSearchCard({CardFields}) {
                 {
                     showProgressBar &&
                     <div style={{
-                        width: "154px",
+                        width: "100px",
                         flexShrink: 0,
                         display: "flex",
                         flexDirection: "column",
@@ -162,12 +180,25 @@ export default function BaseSearchCard({CardFields}) {
                         />
                     </div>
                 }
+                {timestamp &&
+                    <div style={{
+                        height: "32px",
+                        lineHeight: "32px",
+                        textAlign: "center",
+                        fontSize: "13px",
+                        width: "100px"
+                    }}>
+                        {timestamp}
+                    </div>
+                }
                 {message &&
                     <div style={{
                         display: "flex", maxHeight: "60px", maxWidth: "900px",
-                        overflow: "hidden"
+                        overflow: "hidden",
+                        padding: "5px 3px",
+                        fontSize: "13px",
                     }}>
-                        <Text>{message}</Text>
+                        {message}
                     </div>
                 }
             </div>

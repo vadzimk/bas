@@ -52,6 +52,7 @@ const BasTabulator = ({table, setTable, setDetail, cellMenu, getData, updateRow}
         } else if (detail.job_url.includes('builtin')) {
             detail.boardLogo = builtin_logo
         }
+        detail.Job_salary = row.getData().Job_salary
         setDetail(detail)
     }
 
