@@ -63,13 +63,13 @@ export default function BaseSearchCard({CardFields}) {
             console.log("date", date)
             const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             console.log("userTimezone", userTimezone)
-            const formattedDate = date.toLocaleString("en-GB", {
+            const formattedDate = date.toLocaleString("en-US", {
                 timeZone: userTimezone,
                 // year: "numeric",
                 month: "short",
                 day: "numeric",
                 hour: "2-digit",
-                minute: "2-digit"
+                minute: "2-digit",
             })
             console.log("formattedDate", formattedDate)
             setTimestamp(formattedDate)
@@ -186,7 +186,7 @@ export default function BaseSearchCard({CardFields}) {
                         lineHeight: "32px",
                         textAlign: "center",
                         fontSize: "13px",
-                        width: "100px"
+                        width: "120px"
                     }}>
                         {timestamp}
                     </div>

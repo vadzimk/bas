@@ -16,7 +16,7 @@ export default function LinearProgressWithLabel({progress: value, color}) {
                     <Progress height="100%" colorScheme={color} value={value} style={{margin: "auto 0"}} />
                 </Box>
                 <Box style={{width: "50px", position: "absolute", top: 3, left: 4, fontSize: "12px", fontWeight: "600"}}>
-                    <Text >{`${Math.round(
+                    <Text style={{color: "#003eaa"}} >{`${Math.round(
                         value,
                     )}%`}</Text>
                 </Box>
