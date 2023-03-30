@@ -59,51 +59,50 @@ export default function Tasks() {
                     flexDirection: 'column',
                     // gap: "10px 0"
                 }}>
-                {cards.length > 0 &&
-                    <div>
-                        <div style={{display: 'flex', gap: "4px", margin: "8px 0 23px 0"}}>
-                            <Checkbox
-                                isChecked={allChecked}
-                                isIndeterminate={isIndeterminate}
-                                onChange={handleToggleAllCards}
-                                size="lg"
-                                borderColor="#0088CC"
-                                style={{marginRight: "42px"}}
-                            ></Checkbox>
-                            <Button
-                                rightIcon={<SearchIcon/>}
-                                variant="outline"
-                                onClick={handleNewSearchCardLinkedin}>
-                                New Linkedin
-                            </Button>
-                            <Button
-                                rightIcon={<SearchIcon/>}
-                                variant="outline"
-                                onClick={handleNewSearchCardIndeed}>
-                                New Indeed
-                            </Button>
-                            <Button
-                                rightIcon={<SearchIcon/>}
-                                variant="outline"
-                                onClick={handleNewSearchCardBuiltin}>
-                                New Builtin
-                            </Button>
+                <div>
+                    <div style={{display: 'flex', gap: "4px", margin: "8px 0 23px 0"}}>
+                       <Checkbox
+                            isChecked={allChecked}
+                            isIndeterminate={isIndeterminate}
+                            onChange={handleToggleAllCards}
+                            size="lg"
+                            borderColor="#0088CC"
+                            style={{marginRight: "42px", visibility: cards.length > 0 ? 'visible' : 'hidden'}}
+                        ></Checkbox>
+                        <Button
+                            rightIcon={<SearchIcon/>}
+                            variant="outline"
+                            onClick={handleNewSearchCardLinkedin}>
+                            New Linkedin
+                        </Button>
+                        <Button
+                            rightIcon={<SearchIcon/>}
+                            variant="outline"
+                            onClick={handleNewSearchCardIndeed}>
+                            New Indeed
+                        </Button>
+                        <Button
+                            rightIcon={<SearchIcon/>}
+                            variant="outline"
+                            onClick={handleNewSearchCardBuiltin}>
+                            New Builtin
+                        </Button>
 
-                        </div>
-                        <Stack>
-                            {[...cards]
-                                .sort((a, b) => (a.formValues?.what ? a.formValues.what.localeCompare(b.formValues.what) : 0))
-                                .map(card =>
-                                    <SearchCardContext.Provider value={{
-                                        cardId: card.id,
-                                        onDelete: () => handleSearchCardDelete(card.id),
-                                        platform: card.job_board,
-                                    }} key={card.id}>
-                                        <SearchCard/>
-                                    </SearchCardContext.Provider>
-                                )}
-                        </Stack>
-                    </div>}
+                    </div>
+                    <Stack>
+                        {[...cards]
+                            .sort((a, b) => (a.formValues?.what ? a.formValues.what.localeCompare(b.formValues.what) : 0))
+                            .map(card =>
+                                <SearchCardContext.Provider value={{
+                                    cardId: card.id,
+                                    onDelete: () => handleSearchCardDelete(card.id),
+                                    platform: card.job_board,
+                                }} key={card.id}>
+                                    <SearchCard/>
+                                </SearchCardContext.Provider>
+                            )}
+                    </Stack>
+                </div>
             </div>
         )
 }
