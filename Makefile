@@ -1,5 +1,9 @@
+
 celery.dev:
 	cd backend/src && celery -A app.celery worker --loglevel=info  --concurrency=1
+
+run.celery.flower:
+	cd backend/src && celery -A app.celery flower --port=5556
 
 backend.dev:
 	cd backend/src && export FLASK_DEBUG=1 && flask run -p 5000
