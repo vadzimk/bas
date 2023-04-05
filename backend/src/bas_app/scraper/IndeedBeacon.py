@@ -130,7 +130,7 @@ class IndeedBeacon(BaseBrowserBeacon):
 
         self.make_company_attribute('homepage_url',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-companyWebsite"})
-                                    .find_all('div')[1].find('a')['href'])
+                                    .find_all('div')[1].find('a')['href'].text.rstrip("/reviews"))
 
         self.make_company_attribute('industry',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-industry"})
