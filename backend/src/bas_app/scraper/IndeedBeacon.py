@@ -104,7 +104,7 @@ class IndeedBeacon(BaseBrowserBeacon):
                                     #     '?')[0],
                                     lambda:  # new selector
                                     soup.find('div', class_='jobsearch-CompanyInfoContainer').find('a')['href'].split(
-                                        '?')[0],
+                                        '?')[0].rstrip("/reviews"),
                                     )
         self.make_attribute('hiring_insights',
                             lambda: ", ".join(
@@ -130,7 +130,7 @@ class IndeedBeacon(BaseBrowserBeacon):
 
         self.make_company_attribute('homepage_url',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-companyWebsite"})
-                                    .find_all('div')[1].find('a')['href'].text.rstrip("/reviews"))
+                                    .find_all('div')[1].find('a')['href'])
 
         self.make_company_attribute('industry',
                                     lambda: company_soup.find(attrs={"data-testid": "companyInfo-industry"})
