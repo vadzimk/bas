@@ -43,7 +43,7 @@ function App() {
 
     return (
         <div style={{position: "relative"}}>
-            <div style={{height: "100px", backgroundColor: "#d6e4ea"}}/>
+            <div style={{height: "70px", backgroundColor: "#d6e4ea"}}/>
             <div style={{position: "absolute", top: 0, left: 0, width: "100%"}}>
                 <Tabs variant='solid-rounded' isLazy={true}>
                     <div style={{
@@ -77,13 +77,13 @@ function App() {
                             display: 'flex', justifyContent: 'space-between'
                         }}>
                             <div style={{
-                                height: "100px",
+                                height: "70px",
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "space-between",
                                 flexShrink: 0,
                             }}>
-                                <Text fontSize="3xl">
+                                <Text fontSize="xl">
                                     Blanket Application Strategy
                                 </Text>
                                 {user.id &&
