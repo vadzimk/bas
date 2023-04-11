@@ -60,9 +60,7 @@ export default function BaseSearchCard({CardFields}) {
         setFormSubmitted(Boolean(card.submitSuccess))
         if (taskDone && currentTask?.task_timestamp) {
             const date = new Date(currentTask.task_timestamp)
-            console.log("date", date)
             const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            console.log("userTimezone", userTimezone)
             const formattedDate = date.toLocaleString("en-US", {
                 timeZone: userTimezone,
                 // year: "numeric",
@@ -71,7 +69,6 @@ export default function BaseSearchCard({CardFields}) {
                 hour: "2-digit",
                 minute: "2-digit",
             })
-            console.log("formattedDate", formattedDate)
             setTimestamp(formattedDate)
         }
 

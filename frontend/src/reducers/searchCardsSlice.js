@@ -151,8 +151,8 @@ export const fetchCards = createAsyncThunk('cards/fetch', async (_, {dispatch, r
             let experience;
             if (c.job_board_name === 'Indeed') {
                 experience = {
-                    label: c.experience[0] || 'all',
-                    value: c.experience[0]
+                    label: (c.experience && c.experience[0]) || 'all',
+                    value: (c.experience && c.experience[0]) || '',
                 }
             } else if (c.job_board_name === 'Linkedin') {
                 experience = c.experience.map(exp => ({label: exp || 'all', value: exp}))
@@ -176,15 +176,13 @@ export const fetchCards = createAsyncThunk('cards/fetch', async (_, {dispatch, r
                 submitSuccess: true,
                 isChecked: true,
             }
-
             if (oldCard.tasks.length > 0) {
-                _subscribeTask(
-                    {
-                        model_id: oldCard.model_id,
-                        task_id: oldCard.tasks[oldCard.tasks.length - 1].task_id
-                    },
-                    dispatch
-                )
+                const taskToSubscribe = {
+                    model_id: oldCard.model_id,
+                    task_id: oldCard.tasks[oldCard.tasks.length - 1].task_id
+                }
+                _subscribeTask(taskToSubscribe, dispatch)
+            } else {
             }
 
             return oldCard // into array of cards for the redux state slice
