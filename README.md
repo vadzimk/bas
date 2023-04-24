@@ -13,7 +13,6 @@ You can
  - save job posts for later by marking them as 'plan apply' or 'applied'  
 
 
-
 ## Demo
 
 ![Current version demo search](Screen%20Shot%202023-03-23%20at%2017.44.54app.png)
