@@ -84,7 +84,7 @@ function App() {
                                 flexShrink: 0,
                             }}>
                                 <Text fontSize="xl">
-                                    Blanket Application Strategy
+                                    BAS
                                 </Text>
                                 {user.id &&
                                     <TabList mb={2}>

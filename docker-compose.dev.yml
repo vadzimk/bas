@@ -5,6 +5,7 @@ services:
   redis:
     image: redis
     container_name: redis_dev
+    restart: unless-stopped
     ports:
       - "6379:6379"
     command: [ 'redis-server', '--appendonly', 'yes' ]
