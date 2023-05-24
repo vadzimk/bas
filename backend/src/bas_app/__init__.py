@@ -1,6 +1,8 @@
+import logging
 import os
 
 from flask import Flask
+from flask.logging import default_handler
 from flask_celeryext import FlaskCeleryExt
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 from config import config
 
 from .celery_utils import make_celery
-
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -41,6 +42,11 @@ def create_app(config_name):
     app.register_blueprint(search_blueprint)
     app.register_blueprint(card_blueprint)
     app.register_blueprint(filter_visibility_blueprint)
+
+    # Configure logging
+    # https://www.askpython.com/python-modules/flask/flask-logging
+    logging.basicConfig(level=logging.DEBUG,
+                        format=f'[%(asctime)s %(levelname)s %(name)s] %(message)s')
 
     return app
 

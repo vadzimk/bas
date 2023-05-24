@@ -107,7 +107,7 @@ def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(message)s')
     if not linkedin_credentials['email']:
         print('Linkedin credentials values are None\nByeeeeeeeeeeeeeeeeee............!')
         sys.exit(1)

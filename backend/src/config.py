@@ -65,7 +65,8 @@ def pwt_args():
         "args": [''],
         "headless": False,
         "slow_mo": 100,
-        "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.48 Safari/537.36",
+        # removed user_agent header because cloudflare did not let it pass
+        # "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
         "user_data_dir": ""
     }
 

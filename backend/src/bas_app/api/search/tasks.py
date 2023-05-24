@@ -33,7 +33,7 @@ async def async_browser_task(
     because of how celery.Task is configured we don't need the app_context() here
     """
     async with async_playwright() as pwt:
-        browser = await pwt.chromium.launch_persistent_context(**pwt_args())
+        browser = await pwt.firefox.launch_persistent_context(**pwt_args())
         bpage: PlayWrightPage = await browser.new_page()
 
         task_update_state(state='BEGUN')
